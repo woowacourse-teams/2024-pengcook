@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pengcook?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
