@@ -18,7 +18,11 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/recipes")
+    public List<RecipeResponse> readAllRecipes() {
+        return recipeService.readAllRecipes();
+    }
+
     @GetMapping("/api/home")
     public Page<HomeRecipeResponse> readHomeRecipes(@RequestBody HomeRecipeRequest request) {
         return recipeService.readHomeRecipes(request);
