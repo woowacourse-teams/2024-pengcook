@@ -6,14 +6,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.dto.HomeRecipeRequest;
+import net.pengcook.recipe.dto.HomeRecipeResponse;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
@@ -58,5 +64,23 @@ class RecipeServiceTest {
 
         assertThatThrownBy(() -> recipeService.readRecipe(id))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    @DisplayName("해당 페이지의 정보를 조회할 수 있다.")
+    void readHomeRecipes(int pageNumber) {
+        int numberOfElement = 10;
+        HomeRecipeRequest request = new HomeRecipeRequest(pageNumber, numberOfElement);
+        List<Recipe> allRecipes = recipeRepository.findAll();
+        List<HomeRecipeResponse> expected = allRecipes
+                .subList(pageNumber * numberOfElement, (pageNumber + 1) * numberOfElement)
+                .stream()
+                .map(HomeRecipeResponse::new)
+                .toList();
+
+        Page<HomeRecipeResponse> response = recipeService.readHomeRecipes(request);
+
+        assertThat(response.stream().toList()).containsAll(expected);
     }
 }
