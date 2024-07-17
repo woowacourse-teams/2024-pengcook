@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
       - name: Run ktLint
         run: ./gradlew ktlintCheck
   clean_test:
@@ -37,6 +38,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
       - name: Clean project
         run: ./gradlew clean
   build_test:
@@ -48,5 +50,6 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
       - name: Build and test
         run: ./gradlew build test
