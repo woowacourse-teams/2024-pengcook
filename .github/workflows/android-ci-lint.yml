@@ -13,8 +13,6 @@ on:
   pull_request:
     branches:
       - main
-      - an/develop
-      - an/production
 jobs:
   ktlint_check:
     runs-on: ubuntu-latest
