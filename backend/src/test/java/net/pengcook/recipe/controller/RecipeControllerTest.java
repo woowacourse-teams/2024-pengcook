@@ -1,10 +1,13 @@
 package net.pengcook.recipe.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import java.time.LocalTime;
 import java.util.List;
+import net.pengcook.recipe.dto.HomeRecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,5 +69,15 @@ class RecipeControllerTest {
                 .then().log().all()
                 .statusCode(200)
                 .body("content.size()", is(10));
+    }
+
+    @Test
+    @DisplayName("전체 레시피들을 조회한다.")
+    void readAllRecipes() {
+        RestAssured.given().log().all()
+                .when().get("/api/recipes")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(32));
     }
 }
