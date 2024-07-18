@@ -53,4 +53,18 @@ class RecipeControllerTest {
 
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    @DisplayName("특정 페이지 레시피들을 조회한다.")
+    void readHomeRecipe() {
+        HomeRecipeRequest requestBody = new HomeRecipeRequest(1, 10);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when().get("/api/home")
+                .then().log().all()
+                .statusCode(200)
+                .body("content.size()", is(10));
+    }
 }
