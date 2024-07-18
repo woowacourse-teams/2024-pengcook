@@ -1,5 +1,6 @@
 package net.pengcook.recipe.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.HomeRecipeRequest;
@@ -15,6 +16,13 @@ import org.springframework.stereotype.Service;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+
+    public List<RecipeResponse> readAllRecipes() {
+        return recipeRepository.findAll()
+                .stream()
+                .map(RecipeResponse::new)
+                .toList();
+    }
 
     public Page<HomeRecipeResponse> readHomeRecipes(HomeRecipeRequest request) {
         PageRequest pageable = PageRequest.of(request.pageNumber(), request.numberOfElements());
