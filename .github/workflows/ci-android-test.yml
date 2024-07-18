@@ -1,4 +1,4 @@
-name: Android CI Pipeline
+name: Android Test CI Pipeline
 
 on:
   push:
