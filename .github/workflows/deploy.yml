@@ -58,9 +58,12 @@ jobs:
     steps:
       - name: Pull Docker image from DockerHub
         run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${{ github.sha }}
+        
       - name: Stop existing Docker container
         run: docker stop ${{ secrets.DOCKERHUB_CONTAINER_NAME }} || true
+        
       - name: Remove existing Docker container
         run: docker rm ${{ secrets.DOCKERHUB_CONTAINER_NAME }} || true
+        
       - name: Run new Docker container
         run: docker run -d --name ${{ secrets.DOCKERHUB_CONTAINER_NAME }} -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:${{ github.sha }}
