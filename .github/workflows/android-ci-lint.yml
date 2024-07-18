@@ -1,0 +1,31 @@
+name: Android CI
+on:
+  push:
+    branches:
+      - an/feature/**
+      - an/fix/**
+      - an/ci/**
+      - an/cd/**
+      - an/refactor/**
+      - an/build/**
+      - an/perf/**
+      - an/chore/**
+  pull_request:
+    branches:
+      - main
+      - an/develop
+      - an/production
+jobs:
+  ktlint_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run ktLint
+        run: ./gradlew ktlintCheck
+        working-directory: ./android
