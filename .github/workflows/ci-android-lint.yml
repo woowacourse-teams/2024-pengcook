@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - main
-      - an/prod/**
-      - an/dev/**
-      - an/feat/**
-      - an/ci/**
-      - an/release/**
+      - an/**
   pull_request:
     branches:
       - main
