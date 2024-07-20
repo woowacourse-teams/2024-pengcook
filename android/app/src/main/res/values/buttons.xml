@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BasicButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="BasicButton.RadiusButton">
+        <item name="android:background">@drawable/bg_radius_button</item>
+    </style>
+
+    <style name="BasicButton.RadiusButton.SignInButton" parent="BasicButton.RadiusButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_100</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>
