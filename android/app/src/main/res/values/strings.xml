@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">pengcook</string>
     <string name="hello_blank_fragment">hello world</string>
+
     <string name="likes_format_singular">%d like</string>
     <string name="likes_format_plural">%,d likes</string>
     <string name="likes_format_zero"> </string>
     <string name="time_format_required">%d mins</string>
     <string name="ingredients_separator">, </string>
+
+    <string name="onboarding_app_title">PengCook</string>
+    <string name="onboarding_introduction">Easy Cook!\nYour Recipe!</string>
+    <string name="onboarding_google_sign_in">Sign In with Google</string>
+    <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
+    <string name="onboarding_logo_image_desc">logo</string>
 </resources>
