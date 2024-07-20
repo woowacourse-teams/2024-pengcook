@@ -1,6 +1,10 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
     id("kotlin-kapt")
     id("kotlin-parcelize")
 }
@@ -17,6 +21,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        properties.load(FileInputStream(rootProject.file("local.properties")))
+
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", properties.getProperty("google_web_client_id"))
+
     }
 
     buildTypes {
@@ -38,9 +48,13 @@ android {
     dataBinding {
         enable = true
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
+    implementation(libs.firebase.auth)
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
     val retrofitVersion = "2.11.0"
@@ -74,4 +88,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("androidx.core:core-ktx:$coreKtx")
     implementation("androidx.activity:activity-ktx:1.8.2")
+
+    // Firebase Authentication
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }
