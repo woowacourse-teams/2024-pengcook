@@ -82,9 +82,10 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> $GITHUB_ENV
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
-          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> $GITHUB_ENV
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" > .env
+          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
 
       - name: Download docker-compose
         uses: actions/download-artifact@v4
