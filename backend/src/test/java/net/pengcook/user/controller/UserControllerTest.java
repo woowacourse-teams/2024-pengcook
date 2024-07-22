@@ -3,6 +3,7 @@ package net.pengcook.user.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import java.time.LocalDate;
 import net.pengcook.user.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,7 @@ class UserControllerTest {
         );
 
         UserResponse actual = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
                 .when().get("/api/user/" + id)
                 .then().log().all()
                 .statusCode(200)
