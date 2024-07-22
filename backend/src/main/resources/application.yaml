@@ -2,3 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_PASSWORD}

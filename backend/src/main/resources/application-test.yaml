@@ -14,3 +14,7 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+
+jwt:
+  secret: ENC(wPKyaKf5NJF/OWAcvIr9qid9h9I7Woxa8AmzLTTP5YV/+84XB26jD1u7IDa7sfFcso9uKkz5DXKRspG8a+SrHznvUBrQNp92Uhl23DjKHnXCja8bmL/u5jXiOlSuXQIvH+xjJ8n8j/ZTP88IS51IOJJZNYlRTP0lV9KICf3GOOjj+dVslJftF5rGDv4+sZ2DU13JYjh5asuQezSOltDuhXJSELeqAY8m+sep7uOScF8=)
+  expire-in-millis: 86400000
