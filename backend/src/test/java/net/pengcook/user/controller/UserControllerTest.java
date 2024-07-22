@@ -31,12 +31,11 @@ class UserControllerTest {
         long id = 1L;
         UserResponse expected = new UserResponse(
                 id,
-                "loki@loki.com",
+                "loki@pengcook.net",
                 "loki",
                 "로키",
                 "loki.jpg",
                 LocalDate.of(1999, 8, 8),
-                "MALE",
                 "KOREA"
         );
 

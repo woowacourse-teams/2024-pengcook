@@ -10,7 +10,6 @@ public record UserResponse(
         String nickname,
         String image,
         LocalDate birth,
-        String gender,
         String region
 ) {
 
@@ -22,7 +21,6 @@ public record UserResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getBirth(),
-                user.getGender(),
                 user.getRegion()
         );
     }
