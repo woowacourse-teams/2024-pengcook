@@ -6,12 +6,11 @@ spring:
     password: root
 
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
+    show-sql: true
     hibernate:
-      ddl-auto: create-drop
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
