@@ -4,4 +4,4 @@ ARG JARFILE=build/libs/*.jar
 
 COPY ${JARFILE} /app.jar
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "/app.jar"]
+CMD ["java", "-jar", "/app.jar", "--spring.profiles.active=dev"]
