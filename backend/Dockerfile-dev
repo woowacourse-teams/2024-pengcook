@@ -1,0 +1,7 @@
+FROM openjdk:21
+
+ARG JARFILE=build/libs/*.jar
+
+COPY ${JARFILE} /app.jar
+
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "/app.jar"]
