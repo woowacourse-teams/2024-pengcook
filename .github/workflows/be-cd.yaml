@@ -79,7 +79,6 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "PROFILE=${{ env.ENVIRONMENT }}" >> $GITHUB_ENV
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> $GITHUB_ENV
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> $GITHUB_ENV
           echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> $GITHUB_ENV
