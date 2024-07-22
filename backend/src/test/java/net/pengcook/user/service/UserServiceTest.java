@@ -32,16 +32,14 @@ class UserServiceTest {
         long id = 1L;
         UserResponse expected = new UserResponse(
                 id,
-                "loki@loki.com",
+                "loki@pengcook.net",
                 "loki",
                 "로키",
                 "loki.jpg",
                 LocalDate.of(1999, 8, 8),
-                "MALE",
                 "KOREA"
         );
 
-        System.out.println("expected = " + (userRepository.findAll()));
         UserResponse actual = userService.getUserById(id);
 
         assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
