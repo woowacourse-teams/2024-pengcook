@@ -10,6 +10,6 @@ spring:
     hibernate:
       ddl-auto: update
 
-jasypt:
-  encryptor:
-    password: ${JASYPT_PASSWORD}
+jwt:
+  secret: ENC(+tXNIDNrGAWDx/vMv+AO5KkhPG5iY/mkjagusXWcO16RVHEBI9rq40GukA/RU6X7mEcBPYgWHhlmA5ql6XQU349AIhsJ6Hd3g9f4FD4zcvkHDmJtRV8CAvr9XaMQbtSvCRWMoipYKbTFs5SobwGO1xWntcFIX8LCWxM0wi58Hzz4eJvo7naZiSg3Hqp39zH0pAR8LRP5qbhfyFKH7pIX6AB7q2SqYJIre3T7JIeU5U4=)
+  expire-in-millis: 86400000
