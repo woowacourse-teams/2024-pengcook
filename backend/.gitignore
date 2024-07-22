@@ -35,7 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### Properties ###
-application-*.yaml
-backend/src/main/resources/application-dev.yaml
