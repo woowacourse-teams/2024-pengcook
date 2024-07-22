@@ -44,3 +44,7 @@ test {
 	useJUnitPlatform()
 	systemProperty 'spring.profiles.active', 'test'
 }
+
+jar {
+    enabled = false
+}
