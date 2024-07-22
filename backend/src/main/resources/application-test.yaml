@@ -16,5 +16,5 @@ spring:
         use_sql_comments: true
 
 jwt:
-  secret: ENC(wPKyaKf5NJF/OWAcvIr9qid9h9I7Woxa8AmzLTTP5YV/+84XB26jD1u7IDa7sfFcso9uKkz5DXKRspG8a+SrHznvUBrQNp92Uhl23DjKHnXCja8bmL/u5jXiOlSuXQIvH+xjJ8n8j/ZTP88IS51IOJJZNYlRTP0lV9KICf3GOOjj+dVslJftF5rGDv4+sZ2DU13JYjh5asuQezSOltDuhXJSELeqAY8m+sep7uOScF8=)
+  secret: ENC(s7RMs5p5vqjqalSV1nneb/LRNJ2OzFgKq5lx3Cs1xVS9c62jl3ffw3Gi6gsZzVHHbktbJk+JnL+wfhJs2zd331MhwqXAlfeI5vxpCLYJzMwo5QHwZZnU0G4UmkreUrYpa6teH/Sm58o4myn5r8Y+99wf4YsbBahn6NJCd7WfQ7J42wP0++qYwxBrP7EsvrIcjG2A6lhrTiMRbKAw4lQg4eKvBOztRKvNXHy0sE/Tpt0=)
   expire-in-millis: 86400000
