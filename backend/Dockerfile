@@ -1,7 +1,8 @@
 FROM openjdk:21
 
 ARG JARFILE=build/libs/*.jar
-ARG PROFILE=dev
+
+ENV PROFILE=dev
 
 COPY ${JARFILE} /app.jar
 
