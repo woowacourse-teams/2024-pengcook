@@ -19,7 +19,6 @@ services:
     image: pengcook/pengcook:dev
     restart: unless-stopped
     environment:
-      PROFILE: dev
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
     ports:
       - 7848:8080
