@@ -4,7 +4,7 @@ on:
     branches:
       - be/feat/29
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
