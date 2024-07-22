@@ -1,5 +1,8 @@
 package net.pengcook.authentication.util;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TokenExtractor {
 
     private static final String BEARER = "Bearer ";
