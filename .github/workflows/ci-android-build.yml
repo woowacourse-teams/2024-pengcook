@@ -20,6 +20,21 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+      - name: Set up environment variable for BuildConfig
+        env:
+          BUILD_CONFIG_STRING: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          echo "BUILD_CONFIG_STRING=$BUILD_CONFIG_STRING" >> $GITHUB_ENV
       - name: Build and test
         run: ./gradlew build test
         working-directory: ./android
+      - name: Use BuildConfig string in a script
+        run: |
+          echo "The BuildConfig string is: $GOOGLE_WEB_CLIENT_ID"
+        env:
+          BUILD_CONFIG_STRING: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
