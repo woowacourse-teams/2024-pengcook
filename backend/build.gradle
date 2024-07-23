@@ -46,5 +46,14 @@ test {
 }
 
 jar {
-    enabled = false
+	enabled = false
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = false
+    }
 }
