@@ -26,7 +26,6 @@ android {
         properties.load(FileInputStream(rootProject.file("local.properties")))
 
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", properties.getProperty("google_web_client_id"))
-
     }
 
     buildTypes {
