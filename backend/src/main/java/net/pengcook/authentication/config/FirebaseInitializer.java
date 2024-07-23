@@ -7,30 +7,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
+@EnableConfigurationProperties(FirebaseProperty.class)
 public class FirebaseInitializer {
-    private final String firebaseServiceAccount;
-    private final String projectName;
 
-    public FirebaseInitializer(
-            @Value("${firebase.config.service-account}") String firebaseServiceAccount,
-            @Value("${firebase.project.name}") String projectName
-    ) {
-        this.firebaseServiceAccount = firebaseServiceAccount;
-        this.projectName = projectName;
-    }
+    private final FirebaseProperty firebaseProperty;
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        try (InputStream serviceAccount = new ByteArrayInputStream(firebaseServiceAccount.getBytes())) {
+        try (InputStream serviceAccountStream = new ByteArrayInputStream(firebaseProperty.getServiceAccount().getBytes())) {
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setProjectId(projectName)
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
+                    .setProjectId(firebaseProperty.getProjectName())
                     .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
