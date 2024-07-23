@@ -1,4 +1,4 @@
-package net.pengcook.android.detail
+package net.pengcook.android.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

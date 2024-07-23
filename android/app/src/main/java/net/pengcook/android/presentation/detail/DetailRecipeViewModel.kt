@@ -1,4 +1,4 @@
-package net.pengcook.android.detail
+package net.pengcook.android.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import net.pengcook.android.domain.model.Recipe

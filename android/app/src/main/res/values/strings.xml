@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">pengcook</string>
     <string name="hello_blank_fragment">hello world</string>
+    <string name="likes_format_singular">%d like</string>
+    <string name="likes_format_plural">%,d likes</string>
+    <string name="likes_format_zero"> </string>
+    <string name="time_format_required">%d mins</string>
+    <string name="ingredients_separator">, </string>
 </resources>

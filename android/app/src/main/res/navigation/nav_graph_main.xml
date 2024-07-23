@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/detailRecipeFragment"
-        android:name="net.pengcook.android.detail.DetailRecipeFragment"
+        android:name="net.pengcook.android.presentation.detail.DetailRecipeFragment"
         android:label="fragment_detail_recipe"
         tools:layout="@layout/fragment_detail_recipe" />
 </navigation>

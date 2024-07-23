@@ -1,6 +1,9 @@
-package net.pengcook.android.domain.model
+package net.pengcook.android.presentation.uimodel
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Recipe(
     val title: String,
     val category: String,
@@ -11,4 +14,4 @@ data class Recipe(
     val timeRequired: Int,
     val difficulty: String,
     val introduction: String,
-)
+) : Parcelable
