@@ -13,7 +13,6 @@ import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
@@ -21,8 +20,9 @@ class HomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
