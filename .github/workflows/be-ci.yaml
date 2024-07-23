@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: test
     permissions:
       pull-requests: write
 
@@ -34,6 +35,8 @@ jobs:
 
       - name: Generate test report
         working-directory: ./backend
+        env:
+          JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
         run: |
           chmod +x ./gradlew
           ./gradlew jacocoTestReport
