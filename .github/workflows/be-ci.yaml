@@ -1,10 +1,10 @@
-name: Test
+name: Backend Test
 
 on:
   pull_request:
     types: [opened, ready_for_review]
     branches:
-      - be/feat/54
+      - be/test/ci
 
 jobs:
   test:
