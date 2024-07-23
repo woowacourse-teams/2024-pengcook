@@ -24,12 +24,12 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo "$GOOGLE_SERVICES_JSON" > ./android/app/google-services.json
+          echo $GOOGLE_SERVICES_JSON > ./android/app/google-services.json
       - name: Set up environment variable for BuildConfig
         env:
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
         run: |
-          echo "google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
+          echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
       - name: Build and test
         run: ./gradlew build test
         working-directory: ./android
