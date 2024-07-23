@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-coverage-pr-opened:
-    if: startsWith(github.head_ref, 'be-')
+    if: startsWith(github.head_ref, 'be/')
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
