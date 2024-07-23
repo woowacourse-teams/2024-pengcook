@@ -3,6 +3,7 @@ package net.pengcook.authentication.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import net.pengcook.authentication.exception.AuthenticationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,8 +27,8 @@ class TokenExtractorTest {
         String authorizationHeader = null;
 
         assertThatThrownBy(() -> tokenExtractor.extractToken(authorizationHeader))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Authorization header is required.");
+                .isInstanceOf(AuthenticationException.class)
+                .hasMessage("인증 헤더가 존재하지 않습니다.");
     }
 
     @Test
@@ -36,7 +37,7 @@ class TokenExtractorTest {
         String authorizationHeader = "Not Bearer token";
 
         assertThatThrownBy(() -> tokenExtractor.extractToken(authorizationHeader))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid Authorization header.");
+                .isInstanceOf(AuthenticationException.class)
+                .hasMessage("인증 헤더는 Bearer로 시작해야 합니다.");
     }
 }

@@ -141,6 +141,6 @@ class LoginControllerTest {
                 .body(request)
                 .when().post("/api/oauth/google/sign-up")
                 .then().log().all()
-                .statusCode(500); // TODO : Exception Handler 생성후 적절한 상태코드로 변경
+                .statusCode(400);
     }
 }
