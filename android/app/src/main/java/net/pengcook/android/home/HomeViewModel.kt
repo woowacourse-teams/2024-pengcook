@@ -30,5 +30,4 @@ class HomeViewModel : ViewModel(), FeedItemEventListener {
     override fun onNavigateToDetail(feedInfo: Feed) {
         // Navigate to detail page
     }
-
 }

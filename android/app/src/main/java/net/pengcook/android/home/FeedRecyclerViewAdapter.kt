@@ -14,14 +14,19 @@ import net.pengcook.android.model.Feed
 
 class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) :
     PagingDataAdapter<Feed, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemFeedBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = getItem(position)
         if (item != null) {
             holder.bind(item)
@@ -36,15 +41,22 @@ class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) 
     }
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<Feed>() {
-            override fun areItemsTheSame(oldItem: Feed, newItem: Feed): Boolean {
-                return oldItem.id == newItem.id
-            }
+        val diffCallback =
+            object : DiffUtil.ItemCallback<Feed>() {
+                override fun areItemsTheSame(
+                    oldItem: Feed,
+                    newItem: Feed,
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-            override fun areContentsTheSame(oldItem: Feed, newItem: Feed): Boolean {
-                return oldItem == newItem
+                override fun areContentsTheSame(
+                    oldItem: Feed,
+                    newItem: Feed,
+                ): Boolean {
+                    return oldItem == newItem
+                }
             }
-        }
     }
 }
 

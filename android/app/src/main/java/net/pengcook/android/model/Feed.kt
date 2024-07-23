@@ -7,5 +7,5 @@ data class Feed(
     val recipeImageUrl: String,
     val recipeTitle: String,
     val likeCount: Int,
-    val commentCount: Int
+    val commentCount: Int,
 )
