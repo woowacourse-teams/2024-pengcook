@@ -1,6 +1,7 @@
 package net.pengcook.android
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -16,5 +17,12 @@ class MainActivity : AppCompatActivity() {
         val bottomNav =
             findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_nav)
         NavigationUI.setupWithNavController(bottomNav, navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.homeFragment -> bottomNav.visibility = View.VISIBLE
+                else -> bottomNav.visibility = View.GONE
+            }
+        }
     }
 }
