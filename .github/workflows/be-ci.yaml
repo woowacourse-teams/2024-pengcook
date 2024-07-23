@@ -7,8 +7,7 @@ on:
       - be/feat/54
 
 jobs:
-  test-coverage-pr-opened:
-    if: startsWith(github.head_ref, 'refs/heads/be/')
+  test:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
