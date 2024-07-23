@@ -20,6 +20,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Set up environment variable for BuildConfig
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+        run: |
+          echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
       - name: Clean project
         run: ./gradlew clean
         working-directory: ./android
