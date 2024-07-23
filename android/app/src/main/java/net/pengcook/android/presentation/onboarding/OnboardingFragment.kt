@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -23,16 +25,9 @@ class OnboardingFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                try {
-                    val account = task.getResult(ApiException::class.java)
-                    val token = account.idToken
-                    val serverAuthCode = account.serverAuthCode
-                } catch (e: ApiException) {
-                    // Google Sign In failed, update UI appropriately
-                }
+                handleGoogleSignInResult(task)
             }
         }
-    private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private var _binding: FragmentOnboardingBinding? = null
     private val binding: FragmentOnboardingBinding
@@ -45,7 +40,6 @@ class OnboardingFragment : Fragment() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-        auth = Firebase.auth
     }
 
     override fun onCreateView(
@@ -61,6 +55,16 @@ class OnboardingFragment : Fragment() {
         val signInIntent = googleSignInClient.signInIntent
         binding.btnGoogleSignIn.btnSignIn.setOnClickListener {
             googleSignInLauncher.launch(signInIntent)
+        }
+    }
+
+    private fun handleGoogleSignInResult(task: Task<GoogleSignInAccount>) {
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val token = account.idToken
+            // TODO send token to server
+        } catch (e: ApiException) {
+            // TODO Google Sign In failed, update UI appropriately
         }
     }
 }
