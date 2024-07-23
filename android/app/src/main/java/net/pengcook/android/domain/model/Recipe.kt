@@ -1,6 +1,5 @@
 package net.pengcook.android.domain.model
 
-
 data class Recipe(
     val title: String,
     val category: String,
