@@ -42,6 +42,6 @@ public class User {
     private String region;
 
     public User(String email, String username, String nickname, String image, LocalDate birth, String region) {
-        this(0, email, username, nickname, image, birth, region);
+        this(0L, email, username, nickname, image, birth, region);
     }
 }
