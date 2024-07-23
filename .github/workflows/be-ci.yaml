@@ -41,7 +41,7 @@ jobs:
           chmod +x ./gradlew
           ./gradlew jacocoTestReport
 
-      - name: Add test coverage comment to PR
+      - name: Add comment to PR with test coverage
         uses: madrapps/jacoco-report@v1.6.1
         with:
           paths: ${{ github.workspace }}/**/build/reports/jacoco/test/jacocoTestReport.xml
