@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - be/dev
-      - be/feat/66
 
 jobs:
   build:
