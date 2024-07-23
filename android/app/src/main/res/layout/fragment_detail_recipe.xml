@@ -41,6 +41,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@android:color/transparent"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/ic_arrow_back_24"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintDimensionRatio="1:1"
@@ -144,8 +145,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0"
-                        app:imageUrl="@{Recipe.thumbnail}"
-                        tools:src="@drawable/img_kimchisoup" />
+                        app:imageUrl="@{Recipe.thumbnail}" />
 
                     <ImageView
                         android:layout_width="wrap_content"
