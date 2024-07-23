@@ -1,9 +1,9 @@
-name: Backend Test
+name: Backend CI
 
 on:
   pull_request:
     branches:
-      - be/feat/54
+      - be/**
 
 jobs:
   test:
