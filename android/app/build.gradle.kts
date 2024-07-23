@@ -47,6 +47,8 @@ dependencies {
     val gsonVersion = "2.11.0"
     val coreKtx = "1.13.1"
 
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

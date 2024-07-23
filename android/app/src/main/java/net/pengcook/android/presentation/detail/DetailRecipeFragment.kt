@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import net.pengcook.android.MainFragment
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
 import net.pengcook.android.domain.model.Recipe
 import net.pengcook.android.domain.model.User
@@ -49,6 +48,7 @@ class DetailRecipeFragment : Fragment() {
                 thumbnail = "https://static01.nyt.com/images/2021/02/14/dining/carbonara-horizontal/carbonara-horizontal-square640-v2.jpg",
                 user =
                     User(
+                        id = 1L,
                         username = "John Doe",
                         profile = "https://cdn.download.ams.birds.cornell.edu/api/v2/asset/612763581/900",
                     ),
@@ -65,13 +65,5 @@ class DetailRecipeFragment : Fragment() {
                 difficulty = "Easy",
                 introduction = "Spaghetti Carbonara is a classic Italian pasta dish.",
             )
-
-        fun newInstance(recipe: Recipe): MainFragment =
-            MainFragment().apply {
-                arguments =
-                    Bundle().apply {
-                        putParcelable(RECIPE_KEY, recipe)
-                    }
-            }
     }
 }
