@@ -18,7 +18,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Import(UserService.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = "/data/user.sql")
+@Sql(scripts = "/data/users.sql")
 class UserServiceTest {
 
     @Autowired

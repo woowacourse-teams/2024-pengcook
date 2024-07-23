@@ -28,7 +28,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @Import({LoginService.class, JwtTokenManager.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Sql(scripts = "/data/user.sql")
+@Sql(scripts = "/data/users.sql")
 class LoginServiceTest {
 
     @MockBean
