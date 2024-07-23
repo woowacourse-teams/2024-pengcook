@@ -1,0 +1,7 @@
+FROM --platform=linux/arm64 openjdk:21-jdk-slim
+
+ARG JARFILE=build/libs/*.jar
+
+COPY ${JARFILE} /app.jar
+
+CMD ["java", "-jar", "/app.jar", "--spring.profiles.active=dev"]
