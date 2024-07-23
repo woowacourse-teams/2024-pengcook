@@ -17,9 +17,9 @@
         android:title="MakeRecipe" />
 
     <item
-        android:id="@+id/bellFragment"
-        android:icon="@drawable/ic_bell"
-        android:title="Bell" />
+        android:id="@+id/categoryFragment"
+        android:icon="@drawable/ic_category"
+        android:title="Category" />
 
     <item
         android:id="@+id/profileFragment"

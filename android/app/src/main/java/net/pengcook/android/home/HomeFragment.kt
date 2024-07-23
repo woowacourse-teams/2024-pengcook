@@ -25,10 +25,20 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
-        binding.homeRcView.adapter = adapter
+        return binding.root
+    }
 
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initBinding()
+        observeFeedData()
+    }
+
+    private fun observeFeedData() {
         viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
@@ -36,7 +46,11 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
-        return binding.root
+    private fun initBinding() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        binding.homeRcView.adapter = adapter
     }
 }
