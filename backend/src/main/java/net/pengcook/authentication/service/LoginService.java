@@ -9,11 +9,11 @@ import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
 import net.pengcook.authentication.dto.TokenPayload;
-import net.pengcook.authentication.exception.AuthenticationException;
+import net.pengcook.authentication.exception.DuplicationException;
+import net.pengcook.authentication.exception.FirebaseTokenException;
 import net.pengcook.authentication.util.JwtTokenManager;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +41,7 @@ public class LoginService {
         User user = createUser(googleSignUpRequest);
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new AuthenticationException(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다.");
+            throw new DuplicationException("이미 가입된 이메일입니다.");
         }
 
         User savedUser = userRepository.save(user);
@@ -67,7 +67,7 @@ public class LoginService {
         try {
             return firebaseAuth.verifyIdToken(idToken);
         } catch (FirebaseAuthException e) {
-            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "구글 인증에 실패했습니다.");
+            throw new FirebaseTokenException("구글 인증에 실패했습니다.");
         }
     }
 }
