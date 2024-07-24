@@ -5,20 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalTime;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.jdbc.Sql;
-
 import net.pengcook.ingredient.domain.Ingredient;
 import net.pengcook.ingredient.domain.IngredientRecipe;
 import net.pengcook.ingredient.domain.IngredientSubstitution;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.ingredient.exception.InvalidNameException;
 import net.pengcook.ingredient.repository.IngredientRecipeRepository;
 import net.pengcook.ingredient.repository.IngredientRepository;
 import net.pengcook.ingredient.repository.IngredientSubstitutionRepository;
@@ -26,6 +18,13 @@ import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
 @Import({
@@ -89,7 +88,7 @@ class IngredientServiceTest {
         );
 
         assertThatThrownBy(() -> ingredientService.register(requests, saved))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidNameException.class);
     }
 
     @Test
@@ -100,7 +99,7 @@ class IngredientServiceTest {
         );
 
         assertThatThrownBy(() -> ingredientService.register(requests, saved))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(InvalidNameException.class);
     }
 
     @Test
