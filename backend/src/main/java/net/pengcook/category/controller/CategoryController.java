@@ -6,6 +6,7 @@ import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.service.CategoryService;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<MainRecipeResponse> readRecipesOfCategory(
-            @RequestParam String category,
-            @RequestParam int pageNumber,
-            @RequestParam int pageSize) {
-        RecipeOfCategoryRequest request = new RecipeOfCategoryRequest(category, pageNumber, pageSize);
+    public List<MainRecipeResponse> readRecipesOfCategory(@ModelAttribute RecipeOfCategoryRequest request) {
         return categoryService.readRecipesOfCategory(request);
     }
 }
