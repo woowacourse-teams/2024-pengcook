@@ -20,7 +20,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
 @Import(CategoryService.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = "/data/category.sql")
 class CategoryServiceTest {
 
