@@ -1,22 +1,19 @@
 package net.pengcook.ingredient.service;
 
-import static net.pengcook.ingredient.domain.Requirement.ALTERNATIVE;
-
-import java.util.HashSet;
-import java.util.List;
 
 import jakarta.transaction.Transactional;
-
-import org.springframework.stereotype.Service;
-
-import net.pengcook.ingredient.domain.Ingredient;
-import net.pengcook.ingredient.domain.IngredientRecipe;
-import net.pengcook.ingredient.dto.IngredientCreateRequest;
-import net.pengcook.ingredient.repository.IngredientRepository;
-import net.pengcook.recipe.domain.Recipe;
-
+import java.util.HashSet;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.ingredient.domain.Ingredient;
+import net.pengcook.ingredient.domain.IngredientRecipe;
+import net.pengcook.ingredient.domain.Requirement;
+import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.ingredient.exception.InvalidNameException;
+import net.pengcook.ingredient.repository.IngredientRepository;
+import net.pengcook.recipe.domain.Recipe;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -36,25 +33,26 @@ public class IngredientService {
     }
 
     private void registerOne(IngredientCreateRequest request, Recipe recipe) {
-        Ingredient ingredient = registerIngredient(request.name());
+        Ingredient ingredient = registerOrGetIngredient(request.name());
         IngredientRecipe ingredientRecipe = registerIngredientRecipe(recipe, request, ingredient);
 
-        if (request.requirement() == ALTERNATIVE) {
+        if (request.requirement() == Requirement.ALTERNATIVE) {
             registerSubstitution(request, ingredientRecipe);
         }
     }
 
-    private Ingredient registerIngredient(String ingredientName) {
+    private Ingredient registerOrGetIngredient(String ingredientName) {
         String name = ingredientName.toLowerCase();
 
-        if (ingredientRepository.existsByName(name)) {
-            return ingredientRepository.findByName(name);
-        }
-
-        return ingredientRepository.save(new Ingredient(name));
+        return ingredientRepository.findByName(name)
+                .orElseGet(() -> ingredientRepository.save(new Ingredient(name)));
     }
 
-    private IngredientRecipe registerIngredientRecipe(Recipe recipe, IngredientCreateRequest request, Ingredient ingredient) {
+    private IngredientRecipe registerIngredientRecipe(
+            Recipe recipe,
+            IngredientCreateRequest request,
+            Ingredient ingredient
+    ) {
         return ingredientRecipeService.save(ingredient, recipe, request.requirement());
     }
 
@@ -63,7 +61,7 @@ public class IngredientService {
         validateDuplicateNames(substitutionNames);
 
         for (String substitutionName : substitutionNames) {
-            Ingredient substitution = registerIngredient(substitutionName);
+            Ingredient substitution = registerOrGetIngredient(substitutionName);
             registerIngredientSubstitution(ingredientRecipe, substitution);
         }
     }
@@ -74,13 +72,13 @@ public class IngredientService {
 
     private void validateDuplicateNames(List<String> names) {
         if (hasDuplicateName(names)) {
-            throw new IllegalArgumentException("ingredient name duplicated");
+            throw new InvalidNameException("ingredient name duplicated");
         }
     }
 
     private List<String> getIngredientNames(List<IngredientCreateRequest> requests) {
         return requests.stream()
-                .map((IngredientCreateRequest::name))
+                .map(IngredientCreateRequest::name)
                 .map(String::toLowerCase)
                 .toList();
     }
