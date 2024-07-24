@@ -4,9 +4,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.category.domain.Category;
 import net.pengcook.category.domain.CategoryRecipe;
+import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.repository.CategoryRepository;
 import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.dto.MainRecipeResponse;
+import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.service.RecipeService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,9 +22,20 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryRecipeRepository categoryRecipeRepository;
+    private final RecipeRepository recipeRepository;
+    private final RecipeService recipeService;
 
     public void saveCategories(Recipe recipe, List<String> categories) {
         categories.forEach(category -> saveCategoryRecipe(recipe, category));
+    }
+
+    public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
+        String categoryName = request.category();
+        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        List<Long> recipeIds = categoryRecipeRepository.findRecipeIdsByCategoryName(categoryName, pageable);
+
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
+        return recipeService.convertToMainRecipeResponses(recipeDataResponses);
     }
 
     private void saveCategoryRecipe(Recipe recipe, String name) {
