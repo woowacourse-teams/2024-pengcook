@@ -9,7 +9,6 @@ import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
-import net.pengcook.recipe.dto.MainRecipeRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
@@ -26,8 +25,8 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
 
-    public List<MainRecipeResponse> readRecipes(MainRecipeRequest request) {
-        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+    public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         List<Long> recipeIds = recipeRepository.findRecipeIds(pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
