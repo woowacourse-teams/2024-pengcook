@@ -34,7 +34,7 @@ public class RecipeService {
     }
 
     public List<RecipeStepResponse> readRecipeSteps(long id) {
-        List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeId(id);
+        List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(id);
         return convertToRecipeStepResponses(recipeSteps);
     }
 
