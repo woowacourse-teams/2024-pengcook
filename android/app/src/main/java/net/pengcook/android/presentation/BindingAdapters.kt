@@ -103,21 +103,21 @@ fun setSpinnerListener(
         return
     }
 
-    val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>,
-            view: View?,
-            position: Int,
-            id: Long,
-        ) {
-            listener.onChange()
-        }
+    val onItemSelectedListener =
+        object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long,
+            ) {
+                listener.onChange()
+            }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {
-            // do nothing
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // do nothing
+            }
         }
-    }
 
     spinner.onItemSelectedListener = onItemSelectedListener
 }
-
