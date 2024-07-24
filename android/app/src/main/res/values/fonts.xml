@@ -24,6 +24,9 @@
         <item name="android:fontFamily">@font/notosans_regular</item>
     </style>
     <style name="Body.B1" parent="Body">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Body.B2" parent="Body">
         <item name="android:textSize">16sp</item>
     </style>
 </resources>

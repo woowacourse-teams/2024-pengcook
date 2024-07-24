@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BasicButton" parent="Widget.AppCompat.Button">
+    <style name="BasicButton" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="BasicButton.RadiusButton" parent="BasicButton">
+    <style name="BasicButton.RadiusButton">
         <item name="android:background">@drawable/bg_radius_button</item>
     </style>
 
@@ -13,6 +13,14 @@
         <item name="android:textColor">@color/black_100</item>
         <item name="android:fontFamily">@font/notosans_bold</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="BasicButton.RadiusButton.BottomButton" parent="BasicButton.RadiusButton">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_100</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/bg_radius</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>
