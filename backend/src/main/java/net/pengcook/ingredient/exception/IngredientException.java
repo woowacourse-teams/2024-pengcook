@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class IngredientException extends DomainException {
 
-    public IngredientException(HttpStatus httpStatus, String title, String message) {
-        super(httpStatus, title, message);
+    public IngredientException(HttpStatus httpStatus, String message) {
+        super(httpStatus, message);
     }
 }

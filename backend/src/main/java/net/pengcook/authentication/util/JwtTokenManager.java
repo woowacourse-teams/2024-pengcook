@@ -46,7 +46,7 @@ public class JwtTokenManager {
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
             return getTokenPayload(decodedJWT);
         } catch (JWTVerificationException e) {
-            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "토큰 검증 실패", "유효하지 않은 토큰입니다.");
+            throw new AuthenticationException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
         }
     }
 

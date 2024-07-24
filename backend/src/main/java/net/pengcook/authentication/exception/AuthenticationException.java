@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class AuthenticationException extends DomainException {
 
-    public AuthenticationException(HttpStatus httpStatus, String title, String message) {
-        super(httpStatus, title, message);
+    public AuthenticationException(HttpStatus httpStatus, String message) {
+        super(httpStatus, message);
     }
 }
