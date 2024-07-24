@@ -34,4 +34,15 @@ class RecipeControllerTest {
                 .then().log().all()
                 .body("size()", is(3));
     }
+
+    @Test
+    @DisplayName("레시피 상세 스텝을 조회한다.")
+    void readRecipeSteps() {
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/recipes/1/steps")
+                .then().log().all()
+                .body("size()", is(3));
+    }
 }
