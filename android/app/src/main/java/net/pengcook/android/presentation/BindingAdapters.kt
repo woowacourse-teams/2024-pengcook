@@ -1,5 +1,6 @@
 package net.pengcook.android.presentation
 
+import android.net.Uri
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -21,6 +22,19 @@ fun loadImage(
         Glide
             .with(view.context)
             .load(url)
+            .into(view)
+    }
+}
+
+@BindingAdapter("app:imageUri")
+fun loadImage(
+    view: ImageView,
+    uri: Uri?,
+) {
+    if (uri != null) {
+        Glide
+            .with(view.context)
+            .load(uri)
             .into(view)
     }
 }
