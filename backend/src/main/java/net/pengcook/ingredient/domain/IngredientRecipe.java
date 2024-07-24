@@ -26,4 +26,10 @@ public class IngredientRecipe {
 
     @Enumerated(EnumType.STRING)
     private Requirement requirement;
+
+    public IngredientRecipe(Ingredient ingredient, Recipe recipe, Requirement requirement) {
+        this.ingredient = ingredient;
+        this.recipe = recipe;
+        this.requirement = requirement;
+    }
 }

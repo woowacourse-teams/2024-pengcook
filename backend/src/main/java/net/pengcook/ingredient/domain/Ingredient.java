@@ -18,4 +18,8 @@ public class Ingredient {
     private long id;
 
     private String name;
+
+    public Ingredient(String name) {
+        this.name = name;
+    }
 }

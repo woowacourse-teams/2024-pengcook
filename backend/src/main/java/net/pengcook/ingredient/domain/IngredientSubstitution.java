@@ -21,4 +21,9 @@ public class IngredientSubstitution {
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
+
+    public IngredientSubstitution(IngredientRecipe ingredientRecipe, Ingredient ingredient) {
+        this.ingredientRecipe = ingredientRecipe;
+        this.ingredient = ingredient;
+    }
 }
