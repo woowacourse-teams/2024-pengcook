@@ -1,14 +1,24 @@
 package net.pengcook.ingredient.domain;
 
-import jakarta.persistence.*;
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
 
-import net.pengcook.recipe.domain.Recipe;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.pengcook.recipe.domain.Recipe;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 @Getter
 public class IngredientRecipe {
 
@@ -28,8 +38,6 @@ public class IngredientRecipe {
     private Requirement requirement;
 
     public IngredientRecipe(Ingredient ingredient, Recipe recipe, Requirement requirement) {
-        this.ingredient = ingredient;
-        this.recipe = recipe;
-        this.requirement = requirement;
+        this(0L, ingredient, recipe, requirement);
     }
 }
