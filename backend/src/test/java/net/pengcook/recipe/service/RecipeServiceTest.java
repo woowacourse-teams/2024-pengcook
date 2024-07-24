@@ -3,7 +3,6 @@ package net.pengcook.recipe.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import net.pengcook.recipe.dto.MainRecipeRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,9 +24,7 @@ class RecipeServiceTest {
     @CsvSource(value = {"0,2,4", "1,2,2", "1,3,1"})
     @DisplayName("요청받은 페이지의 레시피 개요 목록을 조회한다.")
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
-        MainRecipeRequest request = new MainRecipeRequest(pageNumber, pageSize);
-
-        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(request);
+        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageNumber, pageSize);
 
         assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
     }
