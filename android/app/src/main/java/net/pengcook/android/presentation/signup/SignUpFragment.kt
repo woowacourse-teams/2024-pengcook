@@ -23,7 +23,6 @@ class SignUpFragment : Fragment() {
             try {
                 viewModel.changeProfileImage(uri)
             } catch (e: RuntimeException) {
-
             }
         }
 
@@ -108,7 +107,6 @@ class SignUpFragment : Fragment() {
                     findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
                 }
                 is SignUpEvent.Error -> {
-
                 }
                 is SignUpEvent.NavigateBack -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_onboardingFragment)
@@ -117,4 +115,3 @@ class SignUpFragment : Fragment() {
         }
     }
 }
-
