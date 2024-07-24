@@ -1,5 +1,6 @@
 package net.pengcook.authentication.util;
 
+import net.pengcook.authentication.exception.AuthorizationHeaderException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,10 +10,10 @@ public class TokenExtractor {
 
     public String extractToken(String authorizationHeader) {
         if (authorizationHeader == null) {
-            throw new IllegalArgumentException("Authorization header is required.");
+            throw new AuthorizationHeaderException("인증 헤더가 존재하지 않습니다.");
         }
         if (!authorizationHeader.startsWith(BEARER)) {
-            throw new IllegalArgumentException("Invalid Authorization header.");
+            throw new AuthorizationHeaderException("인증 헤더는 Bearer로 시작해야 합니다.");
         }
         return authorizationHeader.substring(BEARER.length());
     }

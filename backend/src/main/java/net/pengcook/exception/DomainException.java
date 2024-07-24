@@ -1,14 +1,15 @@
 package net.pengcook.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class DomainException extends RuntimeException {
 
-    private final String title;
+    private final HttpStatus httpStatus;
 
-    public DomainException(String title, String message) {
+    public DomainException(HttpStatus httpStatus, String message) {
         super(message);
-        this.title = title;
+        this.httpStatus = httpStatus;
     }
 }

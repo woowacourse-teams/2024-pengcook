@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 import net.pengcook.authentication.dto.TokenPayload;
+import net.pengcook.authentication.exception.JwtTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +43,9 @@ public class JwtTokenManager {
         JWTVerifier jwtVerifier = JWT.require(secretAlgorithm).build();
         try {
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
-
             return getTokenPayload(decodedJWT);
         } catch (JWTVerificationException e) {
-            throw new IllegalArgumentException(e);
+            throw new JwtTokenException("유효하지 않은 토큰입니다.");
         }
     }
 
