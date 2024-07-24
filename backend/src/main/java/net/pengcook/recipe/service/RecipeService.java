@@ -30,7 +30,7 @@ public class RecipeService {
         return convertToMainRecipeResponses(recipeDataResponses);
     }
 
-    private List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
+    public List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
         Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
                 .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
                 .values();
