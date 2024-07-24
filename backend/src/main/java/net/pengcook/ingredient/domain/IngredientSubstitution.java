@@ -1,12 +1,21 @@
 package net.pengcook.ingredient.domain;
 
-import jakarta.persistence.*;
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 @Getter
 public class IngredientSubstitution {
 
@@ -23,7 +32,6 @@ public class IngredientSubstitution {
     private Ingredient ingredient;
 
     public IngredientSubstitution(IngredientRecipe ingredientRecipe, Ingredient ingredient) {
-        this.ingredientRecipe = ingredientRecipe;
-        this.ingredient = ingredient;
+        this(0L, ingredientRecipe, ingredient);
     }
 }

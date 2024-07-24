@@ -1,15 +1,19 @@
 package net.pengcook.ingredient.domain;
 
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 @Getter
 public class Ingredient {
 
@@ -20,6 +24,6 @@ public class Ingredient {
     private String name;
 
     public Ingredient(String name) {
-        this.name = name;
+        this(0L, name);
     }
 }
