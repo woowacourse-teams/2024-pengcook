@@ -28,6 +28,6 @@ public class CategoryRecipe {
     private Recipe recipe;
 
     public CategoryRecipe(Category category, Recipe recipe) {
-        this(0, category, recipe);
+        this(0L, category, recipe);
     }
 }
