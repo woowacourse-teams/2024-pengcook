@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="icon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="appbarEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarActionEventListener" />
+    </data>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_default"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:layout_anchor="@+id/abl_default">
+
+            <ImageView
+                android:id="@+id/iv_start_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> appbarEventListener.onNavigateBack()}"
+                android:padding="16dp"
+                android:src="@{icon}"
+                tools:src="@drawable/ic_back_24" />
+
+            <TextView
+                style="@style/Body.B1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@{title}"
+                tools:text="Sign Up" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</layout>
