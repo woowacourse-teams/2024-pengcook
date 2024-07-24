@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="net.pengcook.android.home.HomeViewModel" />
+            type="net.pengcook.android.presentation.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="@color/white"
-        tools:context=".MainActivity">
+        tools:context=".presentation.MainActivity">
 
         <!-- Logo and Recipe Input -->
         <ImageView

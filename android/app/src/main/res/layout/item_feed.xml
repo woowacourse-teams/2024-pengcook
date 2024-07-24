@@ -7,7 +7,7 @@
 
         <variable
             name="feed"
-            type="net.pengcook.android.model.Feed" />
+            type="net.pengcook.android.presentation.core.model.Feed" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            app:image="@{feed.profileImageUrl}"
+            app:imageUrl="@{feed.profileImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_foreground" />
@@ -47,7 +47,7 @@
             android:layout_height="200dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:image="@{feed.recipeImageUrl}"
+            app:imageUrl="@{feed.recipeImageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profile_image" />

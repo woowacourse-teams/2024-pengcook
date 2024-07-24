@@ -1,9 +1,10 @@
-package net.pengcook.android
+package net.pengcook.android.presentation
 
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import net.pengcook.android.R
 
 @BindingAdapter("app:imageUrl")
 fun loadImage(

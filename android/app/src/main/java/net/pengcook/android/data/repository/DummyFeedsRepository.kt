@@ -1,6 +1,6 @@
 package net.pengcook.android.data.repository
 
-import net.pengcook.android.model.Feed
+import net.pengcook.android.presentation.core.model.Feed
 
 class DummyFeedsRepository {
     suspend fun fetchFeeds(

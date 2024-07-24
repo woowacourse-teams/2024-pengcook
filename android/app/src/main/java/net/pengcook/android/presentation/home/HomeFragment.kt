@@ -1,4 +1,4 @@
-package net.pengcook.android.home
+package net.pengcook.android.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
