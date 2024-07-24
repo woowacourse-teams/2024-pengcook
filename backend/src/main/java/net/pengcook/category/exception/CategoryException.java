@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class CategoryException extends DomainException {
 
-    public CategoryException(HttpStatus httpStatus, String title, String message) {
-        super(httpStatus, title, message);
+    public CategoryException(HttpStatus httpStatus, String message) {
+        super(httpStatus, message);
     }
 }

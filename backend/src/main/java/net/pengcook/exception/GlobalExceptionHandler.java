@@ -16,7 +16,6 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getHttpStatus());
-        problemDetail.setTitle(ex.getTitle());
         problemDetail.setDetail(ex.getMessage());
         return ResponseEntity.status(ex.getHttpStatus()).body(problemDetail);
     }
