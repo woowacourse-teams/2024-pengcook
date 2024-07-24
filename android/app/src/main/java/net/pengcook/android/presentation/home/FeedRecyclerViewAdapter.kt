@@ -1,16 +1,13 @@
-package net.pengcook.android.home
+package net.pengcook.android.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import net.pengcook.android.databinding.ItemFeedBinding
-import net.pengcook.android.listner.FeedItemEventListener
-import net.pengcook.android.model.Feed
+import net.pengcook.android.presentation.core.model.Feed
+import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) :
     PagingDataAdapter<Feed, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
@@ -58,12 +55,4 @@ class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) 
                 }
             }
     }
-}
-
-@BindingAdapter("app:image")
-fun ImageView.image(url: String?) {
-    if (url == null) return
-    Glide.with(this.context)
-        .load(url)
-        .into(this)
 }

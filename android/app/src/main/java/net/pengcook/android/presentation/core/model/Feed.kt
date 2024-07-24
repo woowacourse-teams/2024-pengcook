@@ -1,4 +1,4 @@
-package net.pengcook.android.model
+package net.pengcook.android.presentation.core.model
 
 data class Feed(
     val id: Long,

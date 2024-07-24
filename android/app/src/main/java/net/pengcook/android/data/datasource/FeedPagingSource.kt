@@ -1,8 +1,8 @@
-package net.pengcook.android.data
+package net.pengcook.android.data.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import net.pengcook.android.model.Feed
+import net.pengcook.android.presentation.core.model.Feed
 
 class FeedPagingSource(
     private val initialPageNumber: Int = 0,

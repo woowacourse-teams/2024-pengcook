@@ -1,4 +1,4 @@
-package net.pengcook.android.home
+package net.pengcook.android.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +8,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
-import net.pengcook.android.data.FeedPagingSource
+import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.DummyFeedsRepository
-import net.pengcook.android.listner.FeedItemEventListener
-import net.pengcook.android.model.Feed
+import net.pengcook.android.presentation.core.model.Feed
+import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class HomeViewModel : ViewModel(), FeedItemEventListener {
     private val dummyFeedsRepository = DummyFeedsRepository()

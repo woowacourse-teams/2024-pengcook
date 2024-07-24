@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.uimodel
+package net.pengcook.android.presentation.core.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
