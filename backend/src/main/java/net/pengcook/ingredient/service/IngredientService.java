@@ -30,10 +30,6 @@ public class IngredientService {
 
     public void register(List<IngredientCreateRequest> requests, Recipe recipe) {
         validateDuplicateNames(getIngredientNames(requests));
-        registerIngredientRecipe(requests, recipe);
-    }
-
-    private void registerIngredientRecipe(List<IngredientCreateRequest> requests, Recipe recipe) {
         for (IngredientCreateRequest request : requests) {
             registerOne(request, recipe);
         }
