@@ -19,6 +19,6 @@ public class Category {
     private String name;
 
     public Category(String name) {
-        this(0, name);
+        this(0L, name);
     }
 }
