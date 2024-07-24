@@ -14,7 +14,7 @@ import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
-import net.pengcook.authentication.exception.AuthenticationException;
+import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.util.JwtTokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -118,7 +118,7 @@ class LoginServiceTest {
         when(firebaseAuth.verifyIdToken(idToken)).thenReturn(firebaseToken);
 
         assertThatThrownBy(() -> loginService.signUpWithGoogle(request))
-                .isInstanceOf(AuthenticationException.class)
+                .isInstanceOf(DuplicationException.class)
                 .hasMessage("이미 가입된 이메일입니다.");
     }
 }

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import net.pengcook.authentication.dto.TokenPayload;
-import net.pengcook.authentication.exception.AuthenticationException;
+import net.pengcook.authentication.exception.JwtTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +41,7 @@ class JwtTokenManagerTest {
         String accessToken = "fakefakefakefakefake.accessaccessaccessaccess.tokentokentokentokentoken";
 
         assertThatThrownBy(() -> jwtTokenManager.extract(accessToken))
-                .isInstanceOf(AuthenticationException.class)
+                .isInstanceOf(JwtTokenException.class)
                 .hasMessage("유효하지 않은 토큰입니다.");
     }
 }
