@@ -51,7 +51,15 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initBinding()
+        observing()
+    }
+
+    private fun observing() {
         observeFeedData()
+        observeUiEvent()
+    }
+
+    private fun observeUiEvent() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
