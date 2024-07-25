@@ -32,6 +32,7 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 	implementation 'com.google.firebase:firebase-admin:9.3.0'
 	implementation 'com.auth0:java-jwt:4.4.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	runtimeOnly 'com.h2database:h2'
@@ -39,11 +40,24 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.rest-assured:rest-assured'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
 	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
 	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+ext {
+	profile = project.hasProperty('profile') ? project.profile : 'local'
+	serverUrl = 'http://localhost:8080'
+
+	switch (profile) {
+		case 'dev':
+			serverUrl = 'https://dev.pengcook.net'
+			break
+		case 'prod':
+			serverUrl = 'https://www.pengcook.net'
+			break
+	}
 }
 
 test {
@@ -52,11 +66,22 @@ test {
 }
 
 openapi3 {
-	server = 'https://localhost:8080'
-	title = 'My API'
-	description = 'My API description'
+	server = serverUrl
+	title = 'Pengcook API'
+	description = 'Pengcook API description'
 	version = '0.1.0'
 	format = 'yaml'
+}
+
+tasks.register("copyOasToSwagger", Copy) {
+	dependsOn("openapi3")
+
+	from layout.buildDirectory.file("api-spec/openapi3.yaml").get().asFile
+	into "src/main/resources/static"
+}
+
+bootJar {
+	dependsOn copyOasToSwagger
 }
 
 jar {
