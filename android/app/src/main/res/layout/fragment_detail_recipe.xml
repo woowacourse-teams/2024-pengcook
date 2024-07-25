@@ -8,6 +8,10 @@
         <variable
             name="Recipe"
             type="net.pengcook.android.presentation.core.model.Recipe" />
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.detail.DetailRecipeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -241,10 +245,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:text="@{Recipe.cookingTime}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_required_time_title"
-                            android:text="@{Recipe.cookingTime}"
                             tools:text="60mins" />
 
                         <TextView
@@ -294,11 +298,13 @@
                             tools:text="Hard to cook, but worth the effort" />
 
                         <TextView
+                            android:id="@+id/tv_making_step_title"
                             android:layout_width="0dp"
                             android:layout_height="52dp"
                             android:layout_marginTop="20dp"
                             android:background="@drawable/shape_button_round_corner"
                             android:gravity="center"
+                            android:onClick="@{() -> vm.onNavigateToMakingStep()}"
                             android:text="Start"
                             android:textColor="@color/black"
                             android:textSize="20sp"
