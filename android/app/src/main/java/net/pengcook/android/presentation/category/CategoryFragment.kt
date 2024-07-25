@@ -37,7 +37,7 @@ class CategoryFragment : Fragment() {
                 Category(
                     id.toLong(),
                     "category ${id + 1}",
-                    "https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_auto,w_1500,ar_3:2/k%2FPhoto%2FSeries%2F2023-11-how-to-make-kimchi%2Fhow-to-make-kimchi-259",
+                    "https://www.alphafoodie.com/wp-content/uploads/2021/06/Authentic-Kimchi-1-of-1-2.jpeg",
                 )
             }
         adapter.submitList(categories)
