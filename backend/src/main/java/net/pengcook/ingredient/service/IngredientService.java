@@ -70,17 +70,17 @@ public class IngredientService {
         ingredientSubstitutionService.save(ingredientRecipe, substitution);
     }
 
-    private void validateDuplicateNames(List<String> names) {
-        if (hasDuplicateName(names)) {
-            throw new InvalidNameException("ingredient name duplicated");
-        }
-    }
-
     private List<String> getIngredientNames(List<IngredientCreateRequest> requests) {
         return requests.stream()
                 .map(IngredientCreateRequest::name)
                 .map(String::toLowerCase)
                 .toList();
+    }
+
+    private void validateDuplicateNames(List<String> names) {
+        if (hasDuplicateName(names)) {
+            throw new InvalidNameException("ingredient name duplicated");
+        }
     }
 
     private boolean hasDuplicateName(List<String> names) {
