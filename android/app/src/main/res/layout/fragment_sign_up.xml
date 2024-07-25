@@ -43,7 +43,7 @@
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
-                    android:background="@drawable/bg_radius"
+                    android:background="@drawable/bg_radius_outlined"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
