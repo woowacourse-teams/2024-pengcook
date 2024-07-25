@@ -30,3 +30,8 @@ VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', '1999-08-08', 'KOREA'
        ('km@pengcook.net', 'km', '케이엠', 'km.jpg', '2024-07-22', 'KOREA'),
        ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', '2024-07-22', 'KOREA');
 
+INSERT INTO recipe (title, author_id, cooking_time, thumbnail, difficulty, like_count, description)
+VALUES ('김밥', 1, '01:00:00', '김밥이미지.jpg', 8, 1, '김밥 조리법'),
+       ('김치볶음밥', 2, '00:30:00', '김치볶음밥이미지.jpg', 3, 2, '김치볶음밥 조리법'),
+       ('간장계란밥', 3, '00:10:00', '간장계란밥이미지.jpg', 1, 3, '간장계란밥 조리법'),
+       ('흰쌀밥', 1, '00:40:00', '흰쌀밥이미지.jpg', 2, 4, '흰쌀밥 조리법');
