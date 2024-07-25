@@ -4,36 +4,29 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemFeedBinding
 import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.home.holder.FeedViewHolder
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) :
-    PagingDataAdapter<Recipe, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
+    PagingDataAdapter<Recipe, FeedViewHolder>(diffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): ViewHolder {
+    ): FeedViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemFeedBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding)
+        return FeedViewHolder(binding, eventListener)
     }
 
     override fun onBindViewHolder(
-        holder: ViewHolder,
+        holder: FeedViewHolder,
         position: Int,
     ) {
         val item = getItem(position)
         if (item != null) {
             holder.bind(item)
-        }
-    }
-
-    class ViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Recipe) {
-            binding.recipe = item
-            binding.executePendingBindings()
         }
     }
 
