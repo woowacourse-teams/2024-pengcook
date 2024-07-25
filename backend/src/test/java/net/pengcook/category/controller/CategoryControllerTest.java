@@ -1,32 +1,22 @@
 package net.pengcook.category.controller;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
+import net.pengcook.RestDocsSetting;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Sql(value = "/data/category.sql")
-class CategoryControllerTest {
-
-    @LocalServerPort
-    private int port;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+class CategoryControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("레시피 개요 목록을 조회한다.")
     void readRecipes() {
-        RestAssured.given().log().all()
+        RestAssured.given(spec).log().all()
+                .filter(document("카테고리 목록 조회 API"))
                 .queryParam("category", "한식")
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 3)
