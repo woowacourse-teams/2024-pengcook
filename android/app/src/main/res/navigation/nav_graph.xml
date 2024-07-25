@@ -56,4 +56,10 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
 
+    <fragment
+        android:id="@+id/recipeStepFragment"
+        android:name="net.pengcook.android.presentation.step.RecipeStepFragment"
+        android:label="fragment_recipe_step"
+        tools:layout="fragment_recipe_step" />
+
 </navigation>
