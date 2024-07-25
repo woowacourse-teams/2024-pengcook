@@ -6,16 +6,18 @@ import net.pengcook.android.presentation.core.model.Feed
 
 class FeedPagingSource(
     private val initialPageNumber: Int = 0,
-    private val fetchFeeds: suspend (pageNumber: Int, size: Int) -> List<Feed>,
+    private val fetchFeeds: suspend (pageNumber: Int, size: Int) -> Result<List<Feed>>,
 ) : PagingSource<Int, Feed>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Feed> {
         val pageNumber = params.key ?: initialPageNumber
         return runCatching {
             val feeds = fetchFeeds(pageNumber, params.loadSize)
+            val pageData = feeds.getOrNull() ?: emptyList()
+            val nextKey = if (pageData.size < params.loadSize) null else pageNumber + 1
             LoadResult.Page(
-                data = feeds,
+                data = pageData,
                 prevKey = if (pageNumber == initialPageNumber) null else pageNumber - 1,
-                nextKey = pageNumber + 1,
+                nextKey = nextKey,
             )
         }.onFailure { throwable ->
             LoadResult.Error<Int, Feed>(throwable)
