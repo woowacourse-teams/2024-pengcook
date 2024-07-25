@@ -7,7 +7,7 @@
 
         <variable
             name="Recipe"
-            type="net.pengcook.android.domain.model.Recipe" />
+            type="net.pengcook.android.presentation.core.model.Recipe" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,63 +15,15 @@
         android:layout_height="match_parent"
         tools:context=".presentation.detail.DetailRecipeFragment">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <include
             android:id="@+id/abl_detail_recipe"
+            layout="@layout/appbar_custom"
             android:layout_width="0dp"
             android:layout_height="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_home"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                app:contentInsetEnd="0dp"
-                app:contentInsetStart="0dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageButton
-                        android:id="@+id/btn_back"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@android:color/transparent"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_arrow_back_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <TextView
-                        android:id="@+id/tv_toolbar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="@{Recipe.title}"
-                        tools:text="Kimchi Soup" />
-
-
-                    <com.google.android.material.divider.MaterialDivider
-                        style="@style/CustomDivider"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:recipeTitle="@{Recipe.title}" />
 
         <ScrollView
             android:layout_width="0dp"
@@ -116,8 +68,8 @@
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
                         android:src="@drawable/penguin"
-                        app:imageUrl="@{Recipe.user.profile}"
                         android:translationZ="2dp"
+                        app:imageUrl="@{Recipe.user.profile}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,12 +78,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
+                        android:text="@{Recipe.user.username}"
                         android:textStyle="bold"
                         android:translationZ="1dp"
                         app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"
                         app:layout_constraintStart_toEndOf="@id/iv_user_profile"
                         app:layout_constraintTop_toTopOf="@id/iv_user_profile"
-                        android:text="@{Recipe.user.username}"
                         tools:text="Crong" />
 
                     <ImageView
@@ -139,13 +91,13 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:scaleType="fitXY"
+                        app:imageUrl="@{Recipe.thumbnail}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:imageUrl="@{Recipe.thumbnail}" />
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -180,9 +132,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="12dp"
+                            app:category="@{Recipe.category}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:text="@{Recipe.category}"
                             tools:text="Category : Korean" />
 
                         <TextView
@@ -190,12 +142,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:text="@{Recipe.title}"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_category_recipe"
-                            android:text="@{Recipe.title}"
                             tools:text="Kimchi Soup" />
 
                         <TextView
@@ -206,10 +158,10 @@
                             android:layout_marginBottom="14dp"
                             android:textColor="@color/black"
                             android:textSize="13sp"
+                            app:favoriteCount="@{Recipe.favoriteCount}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
-                            app:favoriteCount="@{Recipe.favoriteCount}"
                             tools:text="1,200 likes" />
 
                         <ImageView
@@ -267,9 +219,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:textColor="@color/black"
+                            app:ingredients="@{Recipe.ingredients}"
                             app:layout_constraintStart_toStartOf="@id/tv_ingredients_title"
                             app:layout_constraintTop_toBottomOf="@id/tv_ingredients_title"
-                            app:ingredients="@{Recipe.ingredients}"
                             tools:text="Ingredient1, Ingredient2, Ingredient3" />
 
                         <TextView
@@ -291,8 +243,8 @@
                             android:layout_marginTop="6dp"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:timeRequired="@{Recipe.timeRequired}"
                             app:layout_constraintTop_toBottomOf="@id/tv_required_time_title"
+                            android:text="@{Recipe.cookingTime}"
                             tools:text="60mins" />
 
                         <TextView
@@ -312,10 +264,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:text="@{Recipe.difficulty}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_difficulty_title"
-                            android:text="@{Recipe.difficulty}"
                             tools:text="very high" />
 
                         <TextView
@@ -335,10 +287,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:text="@{Recipe.introduction}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_introduction_title"
-                            android:text="@{Recipe.introduction}"
                             tools:text="Hard to cook, but worth the effort" />
 
                         <TextView
@@ -359,10 +311,10 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:visibility="gone"
                     android:id="@+id/cl_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cl_thumbnail_recipe">
@@ -377,9 +329,9 @@
                         <TextView
                             android:id="@+id/tv_count_comment"
                             android:layout_width="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:layout_marginStart="12dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="12dp"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -391,36 +343,34 @@
                             android:id="@+id/et_custom_comment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
                             android:layout_marginTop="12dp"
                             android:background="@drawable/custom_edittext"
                             android:hint="Have a comment?"
                             android:inputType="text"
-                            android:layout_marginHorizontal="12dp"
                             android:textSize="16sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_count_comment" />
 
                         <ImageView
-                            app:layout_constraintEnd_toEndOf="@id/et_custom_comment"
-                            app:layout_constraintTop_toTopOf="@id/et_custom_comment"
-                            app:layout_constraintBottom_toBottomOf="@id/et_custom_comment"
-                            android:src="@drawable/ic_mention"
-                            android:layout_marginEnd="12dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            android:src="@drawable/ic_mention"
+                            app:layout_constraintBottom_toBottomOf="@id/et_custom_comment"
+                            app:layout_constraintEnd_toEndOf="@id/et_custom_comment"
+                            app:layout_constraintTop_toTopOf="@id/et_custom_comment" />
+
                         <com.google.android.material.divider.MaterialDivider
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/et_custom_comment"
+                            style="@style/CustomDivider"
                             android:layout_marginTop="20dp"
-                            style="@style/CustomDivider"/>
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/et_custom_comment" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

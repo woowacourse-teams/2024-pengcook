@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="recipeStep"
+            type="net.pengcook.android.presentation.core.model.RecipeStep" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.step.RecipeStepFragment">
+
+        <include
+            android:id="@+id/appbar"
+            layout="@layout/appbar_custom"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Kimchi Soup" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_step_recipe"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/dots_indicator"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintTop_toBottomOf="@id/appbar" />
+
+        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+            android:id="@+id/dots_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dotsColor="#A695C5"
+            app:dotsCornerRadius="8dp"
+            app:dotsSize="16dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="2.5"
+            app:selectedDotColor="@color/black_100"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            app:progressMode="true"  />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
