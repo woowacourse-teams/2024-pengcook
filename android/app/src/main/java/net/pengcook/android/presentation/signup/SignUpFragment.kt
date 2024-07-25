@@ -54,8 +54,8 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -75,7 +75,7 @@ class SignUpFragment : Fragment() {
             ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                List(100) { (it + 1820).toString() },
+                List(100) { (it + 1920).toString() },
             )
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.formBirthDate.spFormContent1.spDefault.adapter = yearAdapter
