@@ -19,12 +19,12 @@
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_default"
+        android:id="@+id/abl_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_default"
+            android:id="@+id/tb_action"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp"
