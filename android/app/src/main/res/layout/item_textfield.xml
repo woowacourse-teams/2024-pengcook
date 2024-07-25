@@ -30,7 +30,7 @@
             android:padding="16dp"
             android:text="@={content}"
             app:layout_constraintTop_toTopOf="parent"
-            tools:hint="Write Username" />
+            tools:hint="Hint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

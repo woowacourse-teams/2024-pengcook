@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="@{title}"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Username" />
+            tools:text="Title" />
 
         <include
             android:id="@+id/et_form_text_content"
