@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.attribution.decodeBuildTaskAttributions
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -10,6 +11,9 @@ plugins {
 }
 
 android {
+    val properties = Properties()
+    properties.load(FileInputStream(rootProject.file("local.properties")))
+
     namespace = "net.pengcook.android"
     compileSdk = 34
 
@@ -21,9 +25,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        val properties = Properties()
-        properties.load(FileInputStream(rootProject.file("local.properties")))
 
         buildConfigField(
             "String",
@@ -39,6 +40,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            buildConfigField("String", "BASE_URL", properties.getProperty("base_url_release"))
+        }
+
+        debug {
+            buildConfigField("String", "BASE_URL", properties.getProperty("base_url_dev"))
         }
     }
     compileOptions {
