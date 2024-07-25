@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
 
 class RecipeMakingFragment : Fragment() {
@@ -29,11 +30,22 @@ class RecipeMakingFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val newEvent = event.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is MakingEvent.NavigateToStep -> onNextClicked()
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun onNextClicked() {
+        val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToMakingStepFragment()
+        findNavController().navigate(action)
     }
 
     private fun initBinding() {
