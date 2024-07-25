@@ -12,8 +12,8 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/makeRecipeFragment"
-        android:icon="@drawable/ic_plus"
+        android:id="@+id/recipeMakingFragment"
+        android:icon="@drawable/ic_add_recipe"
         android:title="MakeRecipe" />
 
     <item

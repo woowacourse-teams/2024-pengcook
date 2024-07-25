@@ -7,7 +7,7 @@ import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class FeedViewHolder(
     private val binding: ItemFeedBinding,
-    private val eventListener: FeedItemEventListener
+    private val eventListener: FeedItemEventListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Recipe) {
         binding.recipe = item
