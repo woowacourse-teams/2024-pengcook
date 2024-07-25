@@ -3,10 +3,10 @@ package net.pengcook.android.data.repository.feed
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.feed.step.RecipeStepResponse
-import net.pengcook.android.data.util.mapper.toFeed
+import net.pengcook.android.data.util.mapper.toRecipe
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
-import net.pengcook.android.presentation.core.model.Feed
+import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.detail.RecipeStep
 import retrofit2.Response
 
@@ -16,10 +16,10 @@ class DefaultFeedRepository(
     override suspend fun fetchRecipes(
         pageNumber: Int,
         pageSize: Int,
-    ): Result<List<Feed>> {
+    ): Result<List<Recipe>> {
         return runCatching {
             val response = feedRemoteDataSource.fetchRecipes(pageNumber, pageSize)
-            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toFeed)
+            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
         }
     }
 
@@ -34,11 +34,11 @@ class DefaultFeedRepository(
         pageNumber: Int,
         pageSize: Int,
         category: String,
-    ): Result<List<Feed>> {
+    ): Result<List<Recipe>> {
         return runCatching {
             val response =
                 feedRemoteDataSource.fetchRecipesByCategory(pageNumber, pageSize, category)
-            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toFeed)
+            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
         }
     }
 

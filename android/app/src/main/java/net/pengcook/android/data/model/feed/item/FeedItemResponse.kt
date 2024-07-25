@@ -7,7 +7,7 @@ data class FeedItemResponse(
     val description: String,
     val difficulty: Int,
     val ingredient: List<IngredientResponse>,
-    val likeCount: Int,
+    val likeCount: Long,
     val recipeId: Long,
     val thumbnail: String,
     val title: String,
