@@ -9,7 +9,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import net.pengcook.android.data.datasource.FeedPagingSource
-import net.pengcook.android.data.repository.DummyFeedsRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Feed
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener

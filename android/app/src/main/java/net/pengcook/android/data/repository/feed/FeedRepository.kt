@@ -1,7 +1,5 @@
 package net.pengcook.android.data.repository.feed
 
-import net.pengcook.android.data.model.feed.item.FeedItemResponse
-import net.pengcook.android.data.model.feed.step.RecipeStepResponse
 import net.pengcook.android.presentation.core.model.Feed
 import net.pengcook.android.presentation.detail.RecipeStep
 
@@ -11,9 +9,7 @@ interface FeedRepository {
         pageSize: Int,
     ): Result<List<Feed>>
 
-    suspend fun fetchRecipeSteps(
-        recipeId: Long
-    ): Result<List<RecipeStep>>
+    suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>>
 
     suspend fun fetchRecipesByCategory(
         pageNumber: Int,

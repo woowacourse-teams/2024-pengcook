@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
-import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
@@ -26,10 +25,10 @@ class HomeFragment : Fragment() {
             DefaultFeedRepository(
                 DefaultFeedRemoteDataSource(
                     RetrofitClient.service(
-                        FeedService::class.java
-                    )
-                )
-            )
+                        FeedService::class.java,
+                    ),
+                ),
+            ),
         )
     }
     private lateinit var binding: FragmentHomeBinding

@@ -16,7 +16,7 @@ interface FeedService {
 
     @GET("/api/recipes/{recipeId}/steps")
     suspend fun fetchRecipeSteps(
-        @Path("recipeId") recipeId: Long
+        @Path("recipeId") recipeId: Long,
     ): Response<List<RecipeStepResponse>>
 
     @GET("/api/categories")
