@@ -27,8 +27,8 @@ jobs:
           BASE_URL_API: ${{ secrets.BASE_URL_API }}
         run: |
           echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
-          echo base_url_dev=\"$BASE_URL_DEV\" > ./android/local.properties
-          echo base_url_release=\"$BASE_URL_API\" > ./android/local.properties
+          echo base_url_dev=\"$BASE_URL_DEV\" >> ./android/local.properties
+          echo base_url_release=\"$BASE_URL_API\" >> ./android/local.properties
       - name: Run ktLint
         run: ./gradlew ktlintCheck
         working-directory: ./android
@@ -51,10 +51,12 @@ jobs:
       - name: Set up environment variable for BuildConfig
         env:
           GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          BASE_URL_DEV: ${{ secrets.BASE_URL_DEV }}
+          BASE_URL_API: ${{ secrets.BASE_URL_API }}
         run: |
           echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
-          echo base_url_dev=\"$BASE_URL_DEV\" > ./android/local.properties
-          echo base_url_release=\"$BASE_URL_API\" > ./android/local.properties
+          echo base_url_dev=\"$BASE_URL_DEV\" >> ./android/local.properties
+          echo base_url_release=\"$BASE_URL_API\" >> ./android/local.properties
       - name: Build and test
         run: ./gradlew build test
         working-directory: ./android
