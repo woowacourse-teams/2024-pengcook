@@ -1,8 +1,5 @@
 package net.pengcook;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
-
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -13,14 +10,17 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
+
 @ExtendWith(RestDocumentationExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class RestDocsSetting {
 
     protected static final String DEFAULT_RESTDOCS_PATH = "{class_name}/{method_name}/";
 
     protected RequestSpecification spec;
-
     @LocalServerPort
     int port;
 
@@ -31,12 +31,22 @@ public abstract class RestDocsSetting {
 
     @BeforeEach
     void setUpRestDocs(RestDocumentationContextProvider restDocumentation) {
-        this.spec = new RequestSpecBuilder()
-                .setPort(port)
+        spec = new RequestSpecBuilder()
                 .addFilter(documentationConfiguration(restDocumentation)
                         .operationPreprocessors()
-                        .withRequestDefaults(prettyPrint())
-                        .withResponseDefaults(prettyPrint()))
+                        .withRequestDefaults(prettyPrint(), modifyHeaders()
+                                .remove("Host")
+                                .remove("Content-Length")
+                        )
+                        .withResponseDefaults(prettyPrint(), modifyHeaders()
+                                .remove("Transfer-Encoding")
+                                .remove("Keep-Alive")
+                                .remove("Date")
+                                .remove("Connection")
+                                .remove("Content-Length")
+                        )
+                )
+                .setPort(port)
                 .build();
     }
 }

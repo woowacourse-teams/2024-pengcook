@@ -1,19 +1,9 @@
-import org.hidetake.gradle.swagger.generator.GenerateSwaggerUI
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
-buildscript {
-	ext {
-		restdocsApiSpecVersion = '0.16.2'
-	}
-}
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.7'
 	id 'io.spring.dependency-management' version '1.1.5'
 	id 'jacoco'
-	id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
-	id 'org.hidetake.swagger.generator' version '2.18.2'
+	id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'net.pengcook'
@@ -35,20 +25,6 @@ repositories {
 	mavenCentral()
 }
 
-swaggerSources {
-	sample {
-		setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
-	}
-}
-
-openapi3 {
-	setServer("http://localhost:8080")
-	title = "restdocs-swagger API Documentation"
-	description = "Spring REST Docs with SwaggerUI."
-	version = "0.0.1"
-	format = "yaml"
-}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -63,14 +39,23 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured'
-	testImplementation "com.epages:restdocs-api-spec-restassured:${restdocsApiSpecVersion}"
+	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
+	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	swaggerUI 'org.webjars:swagger-ui:4.11.1'
 }
 
 test {
 	useJUnitPlatform()
 	systemProperty 'spring.profiles.active', 'test'
+}
+
+openapi3 {
+	server = 'https://localhost:8080'
+	title = 'My API'
+	description = 'My API description'
+	version = '0.1.0'
+	format = 'yaml'
 }
 
 jar {
@@ -84,19 +69,4 @@ jacocoTestReport {
 		csv.required = false
 		html.required = false
 	}
-}
-
-tasks.withType(GenerateSwaggerUI) {
-	dependsOn 'openapi3'
-}
-
-tasks.register('copySwaggerUI', Copy) {
-	dependsOn 'generateSwaggerUISample'
-	def generateSwaggerUISampleTask = tasks.named('generateSwaggerUISample', GenerateSwaggerUI).get()
-	from("${generateSwaggerUISampleTask.outputDir}")
-	into("${project.buildDir}/resources/main/static/docs")
-}
-
-tasks.withType(BootJar) {
-	dependsOn 'copySwaggerUI'
 }
