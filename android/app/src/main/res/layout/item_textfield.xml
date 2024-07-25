@@ -20,7 +20,7 @@
 
         <EditText
             android:id="@+id/et_default"
-            style="@style/Body.B2"
+            style="@style/Body.Regular.B2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_radius_outlined"

@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/tv_app_introduction"
-                style="@style/Body.B1"
+                style="@style/Body.Regular.B1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

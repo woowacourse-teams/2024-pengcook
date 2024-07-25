@@ -40,7 +40,7 @@
                 tools:src="@drawable/ic_back_24" />
 
             <TextView
-                style="@style/Body.B1"
+                style="@style/Body.Regular.B1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
