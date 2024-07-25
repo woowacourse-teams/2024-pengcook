@@ -6,56 +6,8 @@
     <data>
 
         <variable
-            name="title"
-            type="String" />
-
-        <variable
-            name="title_hint"
-            type="String" />
-
-        <variable
-            name="title_content"
-            type="String" />
-
-        <variable
-            name="ingredient"
-            type="String" />
-
-        <variable
-            name="ingredient_hint"
-            type="String" />
-
-        <variable
-            name="ingredient_content"
-            type="String" />
-
-        <variable
-            name="category"
-            type="String" />
-
-        <variable
-            name="category_selectedValue"
-            type="String" />
-
-        <variable
-            name="difficulty"
-            type="String" />
-
-        <variable
-            name="difficulty_selectedValue"
-            type="String" />
-
-        <variable
-            name="introduction"
-            type="String" />
-
-        <variable
-            name="introduction_hint"
-            type="String" />
-
-        <variable
-            name="introduction_content"
-            type="String" />
+            name="vm"
+            type="net.pengcook.android.presentation.making.RecipeMakingViewModel" />
     </data>
 
 
@@ -92,10 +44,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Recipe title" />
 
-            <!-- Recipe Image Placeholder -->
-
-            <!-- Recipe Title EditText -->
-
             <ImageView
                 android:id="@+id/makingRecipeThumbnail"
                 android:layout_width="343dp"
@@ -122,20 +70,20 @@
                 app:layout_constraintTop_toTopOf="center"
                 tools:layout_editor_absoluteY="214dp" />
 
-            <!-- Category Spinner -->
             <include
                 android:id="@+id/makingRecipeEditTitle"
                 layout="@layout/item_form_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:content="@={title_content}"
-                app:hintContent="@{title_hint}"
+                app:content="@={vm.titleContent}"
+                app:hintContent="@{vm.titleHint}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeThumbnail"
-                app:title="@{title}" />
+                app:title="@{vm.title}" />
 
+            <!-- Category Spinner -->
             <include
                 android:id="@+id/makingRecipeCategory"
                 layout="@layout/item_form_spinner"
@@ -145,8 +93,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
-                app:selectedValue="@={category_selectedValue}"
-                app:title="@{category}" />
+                app:selectedValue="@={vm.categorySelectedValue}"
+                app:title="@{vm.category}" />
 
             <!-- Ingredient EditText -->
             <include
@@ -155,12 +103,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:content="@={ingredient_content}"
-                app:hintContent="@{ingredient_hint}"
+                app:content="@={vm.ingredientContent}"
+                app:hintContent="@{vm.ingredientHint}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
-                app:title="@{ingredient}" />
+                app:title="@{vm.ingredient}" />
 
 
             <!-- Difficulty Spinner -->
@@ -173,8 +121,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
-                app:selectedValue="@={difficulty_selectedValue}"
-                app:title="@{difficulty}" />
+                app:selectedValue="@={vm.difficultySelectedValue}"
+                app:title="@{vm.difficulty}" />
 
             <!-- Introduction EditText -->
             <include
@@ -183,12 +131,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:content="@={introduction_content}"
-                app:hintContent="@{introduction_hint}"
+                app:content="@={vm.introductionContent}"
+                app:hintContent="@{vm.introductionHint}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
-                app:title="@{introduction}" />
+                app:title="@{vm.introduction}" />
 
             <!-- Next Button -->
             <Button

@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="net.pengcook.android.presentation.making.step.MakingStepViewModel" />
+            type="net.pengcook.android.presentation.making.step.StepMakingViewModel" />
     </data>
 
     <ScrollView
