@@ -1,6 +1,5 @@
 package net.pengcook.android.presentation.making
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
