@@ -9,12 +9,12 @@ import net.pengcook.android.presentation.core.util.Event
 class SignUpViewModel :
     ViewModel(),
     BottomButtonClickListener {
-    var usernameContent: MutableLiveData<String> = MutableLiveData("")
-    var nicknameContent: MutableLiveData<String> = MutableLiveData("")
-    var year: MutableLiveData<String> = MutableLiveData("")
-    var month: MutableLiveData<String> = MutableLiveData("")
-    var day: MutableLiveData<String> = MutableLiveData("")
-    var country: MutableLiveData<String> = MutableLiveData("")
+    val usernameContent: MutableLiveData<String> = MutableLiveData()
+    val nicknameContent: MutableLiveData<String> = MutableLiveData()
+    val year: MutableLiveData<String> = MutableLiveData()
+    val month: MutableLiveData<String> = MutableLiveData()
+    val day: MutableLiveData<String> = MutableLiveData()
+    val country: MutableLiveData<String> = MutableLiveData()
     private var _imageUri: MutableLiveData<Uri> = MutableLiveData()
     val imageUri: LiveData<Uri>
         get() = _imageUri
