@@ -31,7 +31,7 @@ public class LoginService {
         if (!userRepository.existsByEmail(email)) {
             return new GoogleLoginResponse(false, null);
         }
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow();
         String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail()));
 
         return new GoogleLoginResponse(true, accessToken);
