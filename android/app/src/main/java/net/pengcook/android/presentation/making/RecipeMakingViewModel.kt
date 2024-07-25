@@ -1,10 +1,16 @@
 package net.pengcook.android.presentation.making
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
 
 class RecipeMakingViewModel : ViewModel(), RecipeMakingEventListener {
+    private val _uiEvent: MutableLiveData<Event<MakingEvent>> = MutableLiveData()
+    val uiEvent: LiveData<Event<MakingEvent>>
+        get() = _uiEvent
+
     val titleContent = MutableLiveData<String>()
 
     val categorySelectedValue = MutableLiveData<String>()
@@ -16,6 +22,10 @@ class RecipeMakingViewModel : ViewModel(), RecipeMakingEventListener {
     val introductionContent = MutableLiveData<String>()
 
     override fun onNavigateToStep() {
-        // TODO: Implement navigation logic
+        _uiEvent.value = Event(MakingEvent.NavigateToStep)
     }
+}
+
+sealed interface MakingEvent {
+    data object NavigateToStep : MakingEvent
 }
