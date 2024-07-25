@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,6 +16,7 @@ import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentHomeBinding
+import net.pengcook.android.presentation.core.model.Recipe
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels {
@@ -50,6 +52,14 @@ class HomeFragment : Fragment() {
 
         initBinding()
         observeFeedData()
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val newEvent = event.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is HomeEvent.NavigateToDetail -> {
+                    onSingleMovieClicked(newEvent.recipe)
+                }
+            }
+        }
     }
 
     private fun observeFeedData() {
@@ -60,6 +70,11 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun onSingleMovieClicked(recipe: Recipe) {
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailRecipeFragment(recipe)
+        findNavController().navigate(action)
     }
 
     private fun initBinding() {
