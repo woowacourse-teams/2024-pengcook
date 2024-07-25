@@ -31,8 +31,6 @@ class SearchPagingSource : PagingSource<Int, SearchData>() {
             val prevKey = if (page == 0) null else page - 1
             val nextKey = if (data.isEmpty()) null else page + 1
 
-            println("nextKey : $nextKey")
-
             LoadResult.Page(
                 data = data,
                 prevKey = prevKey,
