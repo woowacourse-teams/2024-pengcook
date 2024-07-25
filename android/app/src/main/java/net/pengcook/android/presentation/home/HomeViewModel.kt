@@ -10,21 +10,23 @@ import androidx.paging.cachedIn
 import androidx.paging.liveData
 import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.DummyFeedsRepository
+import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Feed
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
-class HomeViewModel : ViewModel(), FeedItemEventListener {
-    private val dummyFeedsRepository = DummyFeedsRepository()
+class HomeViewModel(
+    private val feedRepository: FeedRepository,
+) : ViewModel(), FeedItemEventListener {
     val feedData: LiveData<PagingData<Feed>> =
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { FeedPagingSource(fetchFeeds = dummyFeedsRepository::fetchFeeds) },
+            pagingSourceFactory = { FeedPagingSource(fetchFeeds = feedRepository::fetchRecipes) },
         )
             .liveData
             .cachedIn(viewModelScope)
 
     companion object {
-        private const val PAGE_SIZE = 3
+        private const val PAGE_SIZE = 10
     }
 
     override fun onNavigateToDetail(feedInfo: Feed) {
