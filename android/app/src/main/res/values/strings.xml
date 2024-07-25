@@ -22,6 +22,7 @@
     <string name="signup_birth_date_title">Birth Date</string>
     <string name="signup_country_title">Country</string>
     <string name="signup_button_next">Next</string>
+    <string name="edit_recipe_title">Write Recipe title</string>
 
     <string name="category_appbar">Category</string>
 
