@@ -14,16 +14,19 @@ class StepMakingFragment : Fragment() {
         get() = _binding!!
     private val viewModel: StepMakingViewModel by viewModels()
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMakingStepBinding.inflate(inflater)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
     }
@@ -32,7 +35,6 @@ class StepMakingFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     private fun initBinding() {
         binding.lifecycleOwner = this
