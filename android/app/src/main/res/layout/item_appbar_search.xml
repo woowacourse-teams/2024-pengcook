@@ -15,13 +15,13 @@
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_default"
+        android:id="@+id/abl_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/tb_default"
+            android:id="@+id/ctb_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
@@ -29,7 +29,7 @@
             app:layout_scrollFlags="scroll|snap">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/tb_search"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
