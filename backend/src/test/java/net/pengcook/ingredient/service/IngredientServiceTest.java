@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import net.pengcook.ingredient.domain.Ingredient;
-import net.pengcook.ingredient.domain.IngredientRecipe;
-import net.pengcook.ingredient.domain.IngredientSubstitution;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.ingredient.exception.InvalidNameException;
@@ -57,8 +55,8 @@ class IngredientServiceTest {
     }
 
     @Test
-    @DisplayName("재료를 등록 할 때, 중복된 이름이 요청으로 들어온다면 예외를 발생한다.")
-    void validateDuplicatedIngredientName() {
+    @DisplayName("재료 등록 시, 중복된 재료 이름이 요청으로 들어온다면 예외가 발생한다.")
+    void registerWhenRequestContainsDuplicatedIngredientName() {
         requests = List.of(
                 new IngredientCreateRequest("Kimchi", Requirement.REQUIRED, null),
                 new IngredientCreateRequest("Kimchi", Requirement.REQUIRED, null)
@@ -69,8 +67,8 @@ class IngredientServiceTest {
     }
 
     @Test
-    @DisplayName("대체 재료 이름 중복 검증")
-    void validateDuplicatedSubstitutionName() {
+    @DisplayName("재료 등록 시, 중복된 대체 재료 이름이 요청으로 들어온다면 예외가 발생한다.")
+    void registerWhenRequestContainsDuplicatedSubstitutionName() {
         requests = List.of(
                 new IngredientCreateRequest("beef", Requirement.ALTERNATIVE, List.of("chicken", "chicken"))
         );
@@ -80,8 +78,8 @@ class IngredientServiceTest {
     }
 
     @Test
-    @DisplayName("재료 등록")
-    void registerFromIngredientCreateRequest() {
+    @DisplayName("재료 등록 시, Ingredient와 IngredientRecipe에 데이터를 등록한다.")
+    void register() {
         requests = List.of(
                 new IngredientCreateRequest("Rice", Requirement.REQUIRED, null),
                 new IngredientCreateRequest("cheese", Requirement.REQUIRED, null),
@@ -91,12 +89,10 @@ class IngredientServiceTest {
 
         ingredientService.register(requests, recipe);
 
-        List<Ingredient> ingredients = ingredientRepository.findAll();
-        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAll();
-        List<String> ingredientNames = ingredients.stream()
+        List<String> ingredientNames = ingredientRepository.findAll().stream()
                 .map(Ingredient::getName)
                 .toList();
-        List<String> ingredientRecipeNames = ingredientRecipes.stream()
+        List<String> ingredientRecipeNames = ingredientRecipeRepository.findAll().stream()
                 .map(ingredientRecipe -> ingredientRecipe.getIngredient().getName())
                 .toList();
 
@@ -104,11 +100,10 @@ class IngredientServiceTest {
                 .isEqualTo(List.of("rice", "cheese", "kimchi", "pork", "beef", "chicken", "fish"));
         assertThat(ingredientRecipeNames).usingRecursiveComparison()
                 .isEqualTo(List.of("rice", "cheese", "kimchi", "pork"));
-
     }
 
     @Test
-    @DisplayName("대체 재료 등록")
+    @DisplayName("재료 등록 시, Requirement가 ALTERNATIVE라면 IngredientSubstitution에 데이터를 등록한다.")
     void registerSubstitution() {
         requests = List.of(
                 new IngredientCreateRequest("Rice", Requirement.REQUIRED, null),
@@ -119,8 +114,7 @@ class IngredientServiceTest {
 
         ingredientService.register(requests, recipe);
 
-        List<IngredientSubstitution> substitutions = ingredientSubstitutionRepository.findAll();
-        List<String> substitutionNames = substitutions.stream()
+        List<String> substitutionNames = ingredientSubstitutionRepository.findAll().stream()
                 .map(ingredientSubstitution -> ingredientSubstitution.getIngredient().getName())
                 .toList();
 
