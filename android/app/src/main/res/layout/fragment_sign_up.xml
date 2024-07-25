@@ -57,9 +57,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:content="@={viewModel.usernameContent}"
-                    app:hintContent="@{`Write Username`}"
+                    app:hintContent="@{@string/signup_username_hint}"
                     app:layout_constraintTop_toBottomOf="@id/iv_profile_image"
-                    app:title="@{`Username`}" />
+                    app:title="@{@string/signup_username_title}" />
 
                 <include
                     android:id="@+id/form_nickname"
@@ -68,9 +68,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:content="@={viewModel.nicknameContent}"
-                    app:hintContent="@{`Write Nickname`}"
+                    app:hintContent="@{@string/signup_nickname_hint}"
                     app:layout_constraintTop_toBottomOf="@id/form_username"
-                    app:title="@{`Nickname`}" />
+                    app:title="@{@string/signup_nickname_title}" />
 
                 <include
                     android:id="@+id/form_birth_date"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintTop_toBottomOf="@id/form_nickname"
-                    app:title="@{`Birth Date`}"
+                    app:title="@{@string/signup_birth_date_title}"
                     bind:selectedValue1="@{viewModel.year}"
                     bind:selectedValue2="@{viewModel.month}"
                     bind:selectedValue3="@{viewModel.day}" />
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintTop_toBottomOf="@id/form_birth_date"
-                    app:title="@{`Country`}"
+                    app:title="@{@string/signup_country_title}"
                     bind:selectedValue="@{viewModel.country}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -106,7 +106,7 @@
             android:layout_marginBottom="12dp"
             android:layout_marginHorizontal="16dp"
             app:buttonClickListener="@{viewModel}"
-            app:buttonText="@{`Next`}"
+            app:buttonText="@{@string/signup_button_next}"
             app:enabled="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_sign_up" />
