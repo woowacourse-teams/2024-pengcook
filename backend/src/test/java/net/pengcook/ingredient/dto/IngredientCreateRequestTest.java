@@ -32,7 +32,7 @@ class IngredientCreateRequestTest {
             "''",
             "' '",
     })
-    @DisplayName("재료 이름에 공백 또는 null은 허용하지 않는다.")
+    @DisplayName("재료 이름에 공백 또는 null이 입력되면 예외가 발생한다.")
     void validateName(String name) {
         assertThatThrownBy(() -> new IngredientCreateRequest(name, Requirement.ALTERNATIVE, List.of("wheat")))
                 .isInstanceOf(InvalidNameException.class);
@@ -40,14 +40,14 @@ class IngredientCreateRequestTest {
 
     @ParameterizedTest
     @MethodSource("substitutions")
-    @DisplayName("ALTERNATIVE 상태일 때, 대체 재료 이름에 공백 또는 null은 허용하지 않는다.")
+    @DisplayName("ALTERNATIVE 상태일 때, 대체 재료 이름에 공백 또는 null이 입력되면 예외가 발생한다.")
     void validateSubstitutionName(List<String> substitutions) {
         assertThatThrownBy(() -> new IngredientCreateRequest("rice", Requirement.ALTERNATIVE, substitutions))
                 .isInstanceOf(InvalidNameException.class);
     }
 
     @Test
-    @DisplayName("ALTERNATIVE 상태일 때, 대체 재료 리스트에 null은 허용하지 않는다.")
+    @DisplayName("ALTERNATIVE 상태일 때, 대체 재료 리스트에 null이 입력되면 예외가 발생한다.")
     void validateSubstitutionIsNull() {
         assertThatThrownBy(() -> new IngredientCreateRequest("rice", Requirement.ALTERNATIVE, null))
                 .isInstanceOf(InvalidNameException.class);
