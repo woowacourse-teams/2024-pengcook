@@ -6,7 +6,7 @@
     <string name="likes_format_plural">%,d likes</string>
     <string name="likes_format_zero"> </string>
     <string name="time_format_required">%d mins</string>
-    <string name="ingredients_separator">, </string>
+    <string name="separator">,&#160;</string>
 
     <string name="onboarding_app_title">PengCook</string>
     <string name="onboarding_introduction">Easy Cook!\nYour Recipe!</string>
