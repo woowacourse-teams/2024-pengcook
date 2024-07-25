@@ -20,7 +20,7 @@
         <item name="android:textColor">@color/black_100</item>
         <item name="android:fontFamily">@font/notosans_bold</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:background">@drawable/bg_radius</item>
+        <item name="android:background">@drawable/bg_radius_outlined</item>
         <item name="android:gravity">center</item>
     </style>
 </resources>
