@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="feed"
-            type="net.pengcook.android.presentation.core.model.Feed" />
+            name="recipe"
+            type="net.pengcook.android.presentation.core.model.Recipe" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -25,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{feed.recipeImageUrl}"
+                app:imageUrl="@{recipe.thumbnail}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
                 app:shapeAppearanceOverlay="@style/roundImageView"
-                app:imageUrl="@{feed.profileImageUrl}"
+                app:imageUrl="@{recipe.user.profile}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/ic_launcher_background"
@@ -54,7 +54,7 @@
                 android:id="@+id/username"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{feed.username}"
+                android:text="@{recipe.user.username}"
                 style="@style/Body.Medium.B2"
                 android:layout_marginHorizontal="8dp"
                 tools:text="Username"
@@ -82,7 +82,7 @@
                 android:id="@+id/recipe_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{feed.recipeTitle}"
+                android:text="@{recipe.title}"
                 style="@style/Headline.H4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_image"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{String.valueOf(feed.likeCount)}"
+                android:text="@{String.valueOf(recipe.favoriteCount)}"
                 tools:text="1200"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{String.valueOf(feed.commentCount)}"
+                android:text="@{String.valueOf(recipe.commentCount)}"
                 tools:text="800"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
