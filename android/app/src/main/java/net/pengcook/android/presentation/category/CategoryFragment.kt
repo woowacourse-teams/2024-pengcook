@@ -41,13 +41,12 @@ class CategoryFragment : Fragment() {
                 )
             }
         adapter.submitList(categories)
-
         val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing_category)
-        binding.rvCategory.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels, false))
+        binding.rvCategory.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }
