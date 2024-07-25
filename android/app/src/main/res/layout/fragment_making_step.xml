@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.making.step.StepMakingViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Close Button -->
+            <ImageView
+                android:id="@+id/stepRecipeCloseButton"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Recipe Title Text -->
+            <TextView
+                android:id="@+id/stepRecipeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Recipe title" />
+
+            <ImageView
+                android:id="@+id/stepRecipeThumbnail"
+                android:layout_width="343dp"
+                android:layout_height="343dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:background="#EFEFEF"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stepRecipeTitle"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.8" />
+
+
+            <ImageView
+                android:id="@+id/stepAddImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_photo"
+                app:layout_constraintBottom_toBottomOf="@+id/stepRecipeThumbnail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/stepRecipeThumbnail"
+                tools:layout_editor_absoluteY="214dp" />
+
+            <include
+                android:id="@+id/stepRecipeEditTitle"
+                layout="@layout/item_form_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:content="@={vm.introductionContent}"
+                app:hintContent="@{@string/step_making_hint}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stepRecipeThumbnail"
+                app:title="@{vm.stepNumber}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

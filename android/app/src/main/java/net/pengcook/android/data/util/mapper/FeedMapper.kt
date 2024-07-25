@@ -7,8 +7,8 @@ import net.pengcook.android.data.model.feed.item.IngredientResponse
 import net.pengcook.android.data.model.feed.step.RecipeStepResponse
 import net.pengcook.android.presentation.core.model.Ingredient
 import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeStep
 import net.pengcook.android.presentation.core.model.User
-import net.pengcook.android.presentation.detail.RecipeStep
 
 fun FeedItemResponse.toRecipe(): Recipe =
     Recipe(

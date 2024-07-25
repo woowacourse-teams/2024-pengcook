@@ -6,7 +6,7 @@
     <string name="likes_format_plural">%,d likes</string>
     <string name="likes_format_zero"> </string>
     <string name="time_format_required">%d mins</string>
-    <string name="ingredients_separator">, </string>
+    <string name="separator">,&#160;</string>
 
     <string name="onboarding_app_title">PengCook</string>
     <string name="onboarding_introduction">Easy Cook!\nYour Recipe!</string>
@@ -22,10 +22,18 @@
     <string name="signup_birth_date_title">Birth Date</string>
     <string name="signup_country_title">Country</string>
     <string name="signup_button_next">Next</string>
+    <string name="edit_recipe_title">Write Recipe title</string>
 
     <string name="category_appbar">Category</string>
 
     <string name="search_appbar">Search</string>
     <string name="search_searchbar_hint">Search</string>
+
+    <string name="step_making_hint">Write Recipe Introduction</string>
+
+    <string name="making_write_recipe_title">Write Recipe Title</string>
+    <string name="making_write_ingredient">Write Ingredient</string>
+    <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
+    <string name="making_next">Next</string>
 
 </resources>

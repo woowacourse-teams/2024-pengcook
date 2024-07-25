@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.making.RecipeMakingViewModel" />
+    </data>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- Close Button -->
+            <ImageView
+                android:id="@+id/makingRecipeCloseButton"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Recipe Title Text -->
+            <TextView
+                android:id="@+id/makingRecipeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@{`Recipe title`}" />
+
+            <ImageView
+                android:id="@+id/makingRecipeThumbnail"
+                android:layout_width="343dp"
+                android:layout_height="343dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:background="#EFEFEF"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeTitle"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.8" />
+
+
+            <ImageView
+                android:id="@+id/makingRecipeAddImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_photo"
+                app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail"
+                tools:layout_editor_absoluteY="214dp" />
+
+            <include
+                android:id="@+id/makingRecipeEditTitle"
+                layout="@layout/item_form_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:content="@={vm.titleContent}"
+                app:hintContent="@{@string/making_write_recipe_title}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeThumbnail"
+                app:title="@{`Recipe Title`}" />
+
+            <!-- Category Spinner -->
+            <include
+                android:id="@+id/makingRecipeCategory"
+                layout="@layout/item_form_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
+                app:selectedValue="@={vm.categorySelectedValue}"
+                app:title="@{`Category`}" />
+
+            <!-- Ingredient EditText -->
+            <include
+                android:id="@+id/makingRecipeIngredient"
+                layout="@layout/item_form_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:content="@={vm.ingredientContent}"
+                app:hintContent="@{@string/making_write_ingredient}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
+                app:title="@{`Ingredient`}" />
+
+
+            <!-- Difficulty Spinner -->
+            <include
+                android:id="@+id/makingRecipeDifficulty"
+                layout="@layout/item_form_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
+                app:selectedValue="@={vm.difficultySelectedValue}"
+                app:title="@{`Difficulty`}" />
+
+            <!-- Introduction EditText -->
+            <include
+                android:id="@+id/makingRecipeIntroduction"
+                layout="@layout/item_form_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:content="@={vm.introductionContent}"
+                app:hintContent="@{@string/step_making_hint}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
+                app:title="@{`Introduction`}" />
+
+            <!-- Next Button -->
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:backgroundTint="@color/gray_300"
+                android:text="@string/making_next"
+                android:textColor="@color/black_100"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/makingRecipeIntroduction" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

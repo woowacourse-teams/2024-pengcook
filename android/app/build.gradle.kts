@@ -67,6 +67,7 @@ android {
 
 dependencies {
     implementation(libs.firebase.auth)
+    implementation(libs.androidx.material3.android)
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
     val retrofitVersion = "2.11.0"
@@ -104,4 +105,10 @@ dependencies {
     // Firebase Authentication
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+
+    // Indicator animation open source
+    implementation("com.tbuonomo:dotsindicator:5.0")
 }
