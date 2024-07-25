@@ -27,8 +27,6 @@
                 android:layout_height="28dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_close"
-                app:layout_constraintMarginStart="16dp"
-                app:layout_constraintMarginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +40,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Recipe title" />
+                tools:text="@{`Recipe title`}" />
 
             <ImageView
                 android:id="@+id/makingRecipeThumbnail"
@@ -64,10 +62,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_photo"
+                app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="center"
+                app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail"
                 tools:layout_editor_absoluteY="214dp" />
 
             <include
@@ -77,11 +76,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:content="@={vm.titleContent}"
-                app:hintContent="@{vm.titleHint}"
+                app:hintContent="@{@string/making_write_recipe_title}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeThumbnail"
-                app:title="@{vm.title}" />
+                app:title="@{`Recipe Title`}" />
 
             <!-- Category Spinner -->
             <include
@@ -94,7 +93,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
                 app:selectedValue="@={vm.categorySelectedValue}"
-                app:title="@{vm.category}" />
+                app:title="@{`Category`}" />
 
             <!-- Ingredient EditText -->
             <include
@@ -104,11 +103,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:content="@={vm.ingredientContent}"
-                app:hintContent="@{vm.ingredientHint}"
+                app:hintContent="@{@string/making_write_ingredient}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
-                app:title="@{vm.ingredient}" />
+                app:title="@{`Ingredient`}" />
 
 
             <!-- Difficulty Spinner -->
@@ -122,7 +121,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
                 app:selectedValue="@={vm.difficultySelectedValue}"
-                app:title="@{vm.difficulty}" />
+                app:title="@{`Difficulty`}" />
 
             <!-- Introduction EditText -->
             <include
@@ -132,11 +131,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:content="@={vm.introductionContent}"
-                app:hintContent="@{vm.introductionHint}"
+                app:hintContent="@{@string/step_making_hint}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
-                app:title="@{vm.introduction}" />
+                app:title="@{`Introduction`}" />
 
             <!-- Next Button -->
             <Button
@@ -146,7 +145,7 @@
                 android:layout_margin="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:backgroundTint="@color/gray_300"
-                android:text="Next"
+                android:text="@string/making_next"
                 android:textColor="@color/black_100"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

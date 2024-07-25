@@ -29,4 +29,11 @@
     <string name="search_appbar">Search</string>
     <string name="search_searchbar_hint">Search</string>
 
+    <string name="step_making_hint">Write Recipe Introduction</string>
+
+    <string name="making_write_recipe_title">Write Recipe Title</string>
+    <string name="making_write_ingredient">Write Ingredient</string>
+    <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
+    <string name="making_next">Next</string>
+
 </resources>
