@@ -6,11 +6,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemFeedBinding
-import net.pengcook.android.presentation.core.model.Feed
+import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) :
-    PagingDataAdapter<Feed, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
+    PagingDataAdapter<Recipe, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -31,25 +31,25 @@ class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) 
     }
 
     class ViewHolder(private val binding: ItemFeedBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Feed) {
-            binding.feed = item
+        fun bind(item: Recipe) {
+            binding.recipe = item
             binding.executePendingBindings()
         }
     }
 
     companion object {
         val diffCallback =
-            object : DiffUtil.ItemCallback<Feed>() {
+            object : DiffUtil.ItemCallback<Recipe>() {
                 override fun areItemsTheSame(
-                    oldItem: Feed,
-                    newItem: Feed,
+                    oldItem: Recipe,
+                    newItem: Recipe,
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem.recipeId == newItem.recipeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: Feed,
-                    newItem: Feed,
+                    oldItem: Recipe,
+                    newItem: Recipe,
                 ): Boolean {
                     return oldItem == newItem
                 }
