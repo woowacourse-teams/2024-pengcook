@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> categoryEventListener.onNavigateToRecipesByCategory(category.id)}">
+        android:onClick="@{() -> categoryEventListener.onCategorySelect(category.id)}">
 
         <ImageView
             android:id="@+id/iv_category"
