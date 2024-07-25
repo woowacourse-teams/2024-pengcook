@@ -12,7 +12,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -55,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{feed.username}"
                 style="@style/Body.Medium.B2"
-                android:layout_marginStart="8dp"
+                android:layout_marginHorizontal="8dp"
                 tools:text="Username"
                 app:layout_constraintStart_toEndOf="@id/profile_image"
                 app:layout_constraintTop_toTopOf="@id/profile_image"
@@ -106,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{feed.likeCount}"
+                android:text="@{String.valueOf(feed.likeCount)}"
                 tools:text="1200"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
@@ -128,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{feed.commentCount}"
+                android:text="@{String.valueOf(feed.commentCount)}"
                 tools:text="800"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
