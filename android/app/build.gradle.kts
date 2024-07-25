@@ -39,7 +39,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField("String", "BASE_URL", properties.getProperty("base_url_release"))
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                properties.getProperty("base_url_release")
+            )
         }
 
         debug {
