@@ -1,6 +1,5 @@
 package net.pengcook.android.data.model.feed.item
 
-
 import com.google.gson.annotations.SerializedName
 
 data class AuthorResponse(
@@ -9,5 +8,5 @@ data class AuthorResponse(
     @SerializedName("authorImage")
     val authorImage: String,
     @SerializedName("authorName")
-    val authorName: String
+    val authorName: String,
 )

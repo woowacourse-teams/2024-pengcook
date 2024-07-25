@@ -1,6 +1,5 @@
 package net.pengcook.android.data.model.feed.item
 
-
 import com.google.gson.annotations.SerializedName
 
 data class FeedItemResponse(
@@ -23,5 +22,5 @@ data class FeedItemResponse(
     @SerializedName("thumbnail")
     val thumbnail: String,
     @SerializedName("title")
-    val title: String
+    val title: String,
 )

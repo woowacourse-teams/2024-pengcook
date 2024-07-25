@@ -10,9 +10,7 @@ interface FeedRemoteDataSource {
         pageSize: Int,
     ): Response<List<FeedItemResponse>>
 
-    suspend fun fetchRecipeSteps(
-        recipeId: Long
-    ): Response<List<RecipeStepResponse>>
+    suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>>
 
     suspend fun fetchRecipesByCategory(
         pageNumber: Int,

@@ -1,6 +1,5 @@
 package net.pengcook.android.data.model.feed.step
 
-
 import com.google.gson.annotations.SerializedName
 
 data class RecipeStepResponse(
@@ -13,5 +12,5 @@ data class RecipeStepResponse(
     @SerializedName("recipeId")
     val recipeId: Int,
     @SerializedName("sequence")
-    val sequence: Int
+    val sequence: Int,
 )

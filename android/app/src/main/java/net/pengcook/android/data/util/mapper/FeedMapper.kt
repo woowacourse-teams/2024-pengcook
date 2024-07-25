@@ -13,7 +13,7 @@ fun FeedItemResponse.toFeed(): Feed =
         recipeImageUrl = thumbnail,
         recipeTitle = title,
         likeCount = likeCount,
-        commentCount = 0
+        commentCount = 0,
     )
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =
@@ -22,5 +22,5 @@ fun RecipeStepResponse.toRecipeStep(): RecipeStep =
         recipeId = recipeId,
         description = description,
         image = image,
-        sequence = sequence
+        sequence = sequence,
     )

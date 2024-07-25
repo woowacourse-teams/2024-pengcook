@@ -6,9 +6,12 @@ import net.pengcook.android.data.remote.api.FeedService
 import retrofit2.Response
 
 class DefaultFeedRemoteDataSource(
-    private val feedService: FeedService
+    private val feedService: FeedService,
 ) : FeedRemoteDataSource {
-    override suspend fun fetchRecipes(pageNumber: Int, pageSize: Int): Response<List<FeedItemResponse>> {
+    override suspend fun fetchRecipes(
+        pageNumber: Int,
+        pageSize: Int,
+    ): Response<List<FeedItemResponse>> {
         return feedService.fetchRecipes(pageNumber, pageSize)
     }
 
@@ -19,7 +22,7 @@ class DefaultFeedRemoteDataSource(
     override suspend fun fetchRecipesByCategory(
         pageNumber: Int,
         pageSize: Int,
-        category: String
+        category: String,
     ): Response<List<FeedItemResponse>> {
         return feedService.fetchRecipesByCategory(pageNumber, pageSize, category)
     }

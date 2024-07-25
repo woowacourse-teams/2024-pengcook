@@ -15,7 +15,7 @@ class DefaultFeedRepository(
 ) : FeedRepository, NetworkResponseHandler {
     override suspend fun fetchRecipes(
         pageNumber: Int,
-        pageSize: Int
+        pageSize: Int,
     ): Result<List<Feed>> {
         return runCatching {
             val response = feedRemoteDataSource.fetchRecipes(pageNumber, pageSize)
@@ -33,7 +33,7 @@ class DefaultFeedRepository(
     override suspend fun fetchRecipesByCategory(
         pageNumber: Int,
         pageSize: Int,
-        category: String
+        category: String,
     ): Result<List<Feed>> {
         return runCatching {
             val response =
@@ -42,7 +42,10 @@ class DefaultFeedRepository(
         }
     }
 
-    override fun <T> body(response: Response<T>, validHttpCode: Int): T {
+    override fun <T> body(
+        response: Response<T>,
+        validHttpCode: Int,
+    ): T {
         val code = response.code()
         val body = response.body()
         if (code != validHttpCode) throw RuntimeException(EXCEPTION_HTTP_CODE)
@@ -56,5 +59,3 @@ class DefaultFeedRepository(
         private const val RESPONSE_CODE_SUCCESS = 200
     }
 }
-
-

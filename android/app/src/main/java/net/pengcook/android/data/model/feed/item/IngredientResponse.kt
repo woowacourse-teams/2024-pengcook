@@ -1,6 +1,5 @@
 package net.pengcook.android.data.model.feed.item
 
-
 import com.google.gson.annotations.SerializedName
 
 data class IngredientResponse(
@@ -9,5 +8,5 @@ data class IngredientResponse(
     @SerializedName("ingredientName")
     val ingredientName: String,
     @SerializedName("requirement")
-    val requirement: String
+    val requirement: String,
 )
