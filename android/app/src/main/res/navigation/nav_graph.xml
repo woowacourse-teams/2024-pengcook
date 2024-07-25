@@ -21,7 +21,7 @@
         android:id="@+id/onboardingFragment"
         android:name="net.pengcook.android.presentation.onboarding.OnboardingFragment"
         android:label="fragment_onboarding"
-        tools:layout="@layout/fragment_onboarding" >
+        tools:layout="@layout/fragment_onboarding">
         <action
             android:id="@+id/action_onboardingFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -31,17 +31,29 @@
         android:id="@+id/signUpFragment"
         android:name="net.pengcook.android.presentation.signup.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/onboardingFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_signUpFragment_to_onboardingFragment"
             app:destination="@id/onboardingFragment"
             app:popUpTo="@id/onboardingFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="false" />
     </fragment>
+
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="net.pengcook.android.presentation.category.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="net.pengcook.android.presentation.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 
 </navigation>

@@ -24,4 +24,9 @@
     <string name="signup_button_next">Next</string>
     <string name="edit_recipe_title">Write Recipe title</string>
 
+    <string name="category_appbar">Category</string>
+
+    <string name="search_appbar">Search</string>
+    <string name="search_searchbar_hint">Search</string>
+
 </resources>

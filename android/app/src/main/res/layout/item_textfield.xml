@@ -23,7 +23,7 @@
             style="@style/Body.B2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_radius"
+            android:background="@drawable/bg_radius_outlined"
             android:hint="@{hintContent}"
             android:importantForAutofill="no"
             android:inputType="text"
