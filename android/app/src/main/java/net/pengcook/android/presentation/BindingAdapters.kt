@@ -12,6 +12,7 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.bumptech.glide.Glide
 import net.pengcook.android.R
+import net.pengcook.android.presentation.core.model.Ingredient
 
 @BindingAdapter("app:imageUrl")
 fun loadImage(
@@ -60,11 +61,15 @@ fun favoriteCountText(
 @BindingAdapter("app:ingredients")
 fun splitIngredients(
     view: TextView,
-    ingredients: List<String>?,
+    ingredients: List<Ingredient>?,
 ) {
     val context = view.context
     if (ingredients.isNullOrEmpty()) return
-    view.text = ingredients.joinToString(context.getString(R.string.ingredients_separator))
+    val ingredientsText =
+        ingredients.joinToString(context.getString(R.string.separator)) {
+            it.ingredientName
+        }
+    view.text = ingredientsText
 }
 
 @BindingAdapter("app:timeRequired")
@@ -74,6 +79,16 @@ fun timeRequiredText(
 ) {
     val context = view.context
     view.text = context.getString(R.string.time_format_required).format(time)
+}
+
+@BindingAdapter("app:category")
+fun categoryText(
+    view: TextView,
+    category: List<String>?,
+) {
+    val context = view.context
+    if (category.isNullOrEmpty()) return
+    view.text = category.joinToString(context.getString(R.string.separator))
 }
 
 @BindingAdapter("bind:selectedValue")
@@ -89,9 +104,7 @@ fun bindSpinnerData(
 }
 
 @InverseBindingAdapter(attribute = "bind:selectedValue", event = "bind:selectedValueAttrChanged")
-fun captureSelectedValue(spinner: Spinner): String {
-    return spinner.selectedItem as String
-}
+fun captureSelectedValue(spinner: Spinner): String = spinner.selectedItem as String
 
 @BindingAdapter("bind:selectedValueAttrChanged")
 fun setSpinnerListener(
