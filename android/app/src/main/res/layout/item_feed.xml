@@ -8,12 +8,17 @@
         <variable
             name="recipe"
             type="net.pengcook.android.presentation.core.model.Recipe" />
+
+        <variable
+            name="eventListener"
+            type="net.pengcook.android.presentation.home.listener.FeedItemEventListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:onClick="@{() -> eventListener.onNavigateToDetail(recipe)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,70 +29,69 @@
                 android:id="@+id/recipe_image"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
+                android:background="@color/gray_300"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{recipe.thumbnail}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/gray_300" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- User profile picture -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profile_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="@dimen/item_feed_padding"
+                android:layout_marginTop="@dimen/item_feed_padding"
                 android:layout_marginEnd="8dp"
-                app:shapeAppearanceOverlay="@style/roundImageView"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
                 app:imageUrl="@{recipe.user.profile}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="@dimen/item_feed_padding"
-                android:layout_marginStart="@dimen/item_feed_padding"
-                />
+                app:shapeAppearanceOverlay="@style/roundImageView"
+                tools:src="@drawable/ic_launcher_background" />
 
             <!-- Username -->
             <TextView
                 android:id="@+id/username"
+                style="@style/Body.Medium.B2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{recipe.user.username}"
-                style="@style/Body.Medium.B2"
                 android:layout_marginHorizontal="8dp"
-                tools:text="Username"
-                app:layout_constraintStart_toEndOf="@id/profile_image"
-                app:layout_constraintTop_toTopOf="@id/profile_image"
+                android:maxLines="1"
+                android:text="@{recipe.user.username}"
                 app:layout_constraintBottom_toBottomOf="@id/profile_image"
                 app:layout_constraintEnd_toStartOf="@id/btn_menu"
-                android:maxLines="1"/>
+                app:layout_constraintStart_toEndOf="@id/profile_image"
+                app:layout_constraintTop_toTopOf="@id/profile_image"
+                tools:text="Username" />
 
             <ImageButton
                 android:id="@+id/btn_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/profile_image"
+                android:layout_marginEnd="@dimen/item_feed_padding"
+                android:background="@android:color/transparent"
+                android:padding="12dp"
+                android:src="@drawable/ic_menu_dots"
                 app:layout_constraintBottom_toBottomOf="@id/profile_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_menu_dots"
-                android:padding="12dp"
-                android:layout_marginEnd="@dimen/item_feed_padding"/>
+                app:layout_constraintTop_toTopOf="@id/profile_image" />
 
 
             <!-- Recipe title -->
             <TextView
                 android:id="@+id/recipe_title"
+                style="@style/Headline.H4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/item_feed_padding"
                 android:text="@{recipe.title}"
-                style="@style/Headline.H4"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/recipe_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="@dimen/item_feed_padding"
                 tools:text="Homemade Gimbap" />
 
             <!-- Like icon and count -->
@@ -96,11 +100,11 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/item_feed_padding"
                 android:src="@drawable/ic_heart"
-                app:layout_constraintStart_toStartOf="@id/recipe_title"
-                app:layout_constraintTop_toBottomOf="@id/recipe_title"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/item_feed_padding"/>
+                app:layout_constraintStart_toStartOf="@id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@id/recipe_title" />
 
             <TextView
                 android:id="@+id/like_count"
@@ -108,10 +112,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{String.valueOf(recipe.favoriteCount)}"
-                tools:text="1200"
+                app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
-                app:layout_constraintBottom_toBottomOf="@id/like_icon"/>
+                tools:text="1200" />
 
             <!-- Comment icon and count -->
             <ImageView
@@ -130,10 +134,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@{String.valueOf(recipe.commentCount)}"
-                tools:text="800"
+                app:layout_constraintBottom_toBottomOf="@id/comment_icon"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
-                app:layout_constraintBottom_toBottomOf="@id/comment_icon"/>
+                tools:text="800" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
