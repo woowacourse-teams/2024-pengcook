@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
 import net.pengcook.android.presentation.core.model.Recipe
@@ -21,17 +22,29 @@ class DetailRecipeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = binding.root
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fetchRecipe()
+        observeNavigationEvent()
+    }
+
+    private fun observeNavigationEvent() {
+        viewModel.navigateToStepEvent.observe(viewLifecycleOwner) { shouldNavigate ->
+            if (shouldNavigate) {
+                navigateToStep()
+            }
+        }
     }
 
     private fun fetchRecipe() {
-        recipe = args.recipe
-        binding.recipe = recipe
+        binding.recipe = args.recipe
+        binding.vm = viewModel
+    }
+
+
+    private fun navigateToStep() {
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment()
+        findNavController().navigate(action)
     }
 
     companion object {
