@@ -70,14 +70,4 @@ class RecipeStepFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    companion object {
-        fun newInstance(recipeId: Long): RecipeStepFragment {
-            val fragment = RecipeStepFragment()
-            val args = Bundle()
-            args.putLong("recipeId", recipeId)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 }
