@@ -21,11 +21,11 @@ class RecipeMakingViewModel : ViewModel(), RecipeMakingEventListener {
 
     val introductionContent = MutableLiveData<String>()
 
-    override fun onNavigateToStep() {
-        _uiEvent.value = Event(MakingEvent.NavigateToStep)
+    override fun onNavigateToMakingStep() {
+        _uiEvent.value = Event(MakingEvent.NavigateToMakingStep)
     }
 }
 
 sealed interface MakingEvent {
-    data object NavigateToStep : MakingEvent
+    data object NavigateToMakingStep : MakingEvent
 }

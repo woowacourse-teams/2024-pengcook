@@ -33,7 +33,7 @@ class RecipeMakingFragment : Fragment() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
-                is MakingEvent.NavigateToStep -> onNextClicked()
+                is MakingEvent.NavigateToMakingStep -> onNextClicked()
             }
         }
     }
