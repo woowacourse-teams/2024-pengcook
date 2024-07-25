@@ -1,7 +1,7 @@
 package net.pengcook.android.presentation.home.listener
 
-import net.pengcook.android.presentation.core.model.Feed
+import net.pengcook.android.presentation.core.model.Recipe
 
 interface FeedItemEventListener {
-    fun onNavigateToDetail(feedInfo: Feed)
+    fun onNavigateToDetail(recipe: Recipe)
 }

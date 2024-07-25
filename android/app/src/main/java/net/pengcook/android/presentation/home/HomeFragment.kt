@@ -10,10 +10,24 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
+import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.repository.feed.DefaultFeedRepository
+import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(
+            DefaultFeedRepository(
+                DefaultFeedRemoteDataSource(
+                    RetrofitClient.service(
+                        FeedService::class.java,
+                    ),
+                ),
+            ),
+        )
+    }
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
         FeedRecyclerViewAdapter(viewModel)
