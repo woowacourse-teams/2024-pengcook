@@ -58,4 +58,3 @@ class SearchFragment : Fragment() {
         binding.viewModel = viewModel
     }
 }
-
