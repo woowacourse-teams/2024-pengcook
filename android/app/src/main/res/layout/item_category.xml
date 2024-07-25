@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/tv_category"
-            style="@style/Body.B2"
+            style="@style/Body.Regular.B2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
