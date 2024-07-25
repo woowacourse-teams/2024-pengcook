@@ -9,7 +9,20 @@
         android:id="@+id/homeFragment"
         android:name="net.pengcook.android.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailRecipeFragment2"
+            app:destination="@id/detailRecipeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailRecipeFragment"
@@ -48,13 +61,28 @@
         android:id="@+id/categoryFragment"
         android:name="net.pengcook.android.presentation.category.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="net.pengcook.android.presentation.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/recipeMakingFragment"
         android:name="net.pengcook.android.presentation.making.RecipeMakingFragment"
