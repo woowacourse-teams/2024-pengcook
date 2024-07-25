@@ -22,7 +22,10 @@ class DetailRecipeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = binding.root
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         fetchRecipe()
         observeNavigationEvent()
@@ -40,7 +43,6 @@ class DetailRecipeFragment : Fragment() {
         binding.recipe = args.recipe
         binding.vm = viewModel
     }
-
 
     private fun navigateToStep() {
         val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment()
