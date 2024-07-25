@@ -1,7 +1,7 @@
 package net.pengcook.android.data.repository.feed
 
 import net.pengcook.android.presentation.core.model.Recipe
-import net.pengcook.android.presentation.detail.RecipeStep
+import net.pengcook.android.presentation.core.model.RecipeStep
 
 interface FeedRepository {
     suspend fun fetchRecipes(
