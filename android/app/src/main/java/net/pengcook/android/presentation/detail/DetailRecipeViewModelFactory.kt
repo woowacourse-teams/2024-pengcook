@@ -2,7 +2,7 @@ package net.pengcook.android.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import net.pengcook.android.domain.model.Recipe
+import net.pengcook.android.presentation.core.model.Recipe
 
 class DetailRecipeViewModelFactory(
     private val recipe: Recipe,
