@@ -147,6 +147,7 @@
                 android:backgroundTint="@color/gray_300"
                 android:text="@string/making_next"
                 android:textColor="@color/black_100"
+                android:onClick="@{() -> vm.onNavigateToMakingStep()}"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
