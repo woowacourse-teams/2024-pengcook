@@ -18,6 +18,9 @@ ALTER TABLE category_recipe ALTER COLUMN id RESTART;
 TRUNCATE TABLE ingredient_recipe;
 ALTER TABLE ingredient_recipe ALTER COLUMN id RESTART;
 
+TRUNCATE TABLE recipe_step;
+ALTER TABLE recipe_step ALTER COLUMN id RESTART;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 INSERT INTO users (email, username, nickname, image, birth, region)
@@ -76,3 +79,8 @@ VALUES (1, 1, 'REQUIRED'),
        (3, 3, 'REQUIRED'),
        (7, 3, 'REQUIRED'),
        (2, 4, 'REQUIRED');
+
+INSERT INTO recipe_step (recipe_id, image, description, sequence)
+VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
+       (1, '레시피1 설명3 이미지', '레시피1 설명3', 3),
+       (1, '레시피1 설명2 이미지', '레시피1 설명2', 2);

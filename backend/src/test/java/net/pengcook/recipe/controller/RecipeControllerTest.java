@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.is;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import net.pengcook.recipe.dto.MainRecipeRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,13 +27,21 @@ class RecipeControllerTest {
     @Test
     @DisplayName("레시피 개요 목록을 조회한다.")
     void readRecipes() {
-        MainRecipeRequest request = new MainRecipeRequest(0, 3);
-
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(request)
                 .when()
-                .get("/api/recipes")
+                .get("/api/recipes?pageNumber=0&pageSize=3")
+                .then().log().all()
+                .body("size()", is(3));
+    }
+
+    @Test
+    @DisplayName("레시피 상세 스텝을 조회한다.")
+    void readRecipeSteps() {
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/recipes/1/steps")
                 .then().log().all()
                 .body("size()", is(3));
     }
