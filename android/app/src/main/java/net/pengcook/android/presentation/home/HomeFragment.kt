@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +13,6 @@ import kotlinx.coroutines.withContext
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
-import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentHomeBinding
 
@@ -69,16 +66,5 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.homeRcView.adapter = adapter
-    }
-}
-
-class HomeViewModelFactory(
-    private val feedRepository: FeedRepository,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(feedRepository) as T
-        }
-        throw IllegalArgumentException()
     }
 }

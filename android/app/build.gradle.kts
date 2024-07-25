@@ -42,7 +42,7 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL",
-                properties.getProperty("base_url_release")
+                properties.getProperty("base_url_release"),
             )
         }
 
