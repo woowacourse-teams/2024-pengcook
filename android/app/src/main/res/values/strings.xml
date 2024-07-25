@@ -15,4 +15,12 @@
     <string name="onboarding_logo_image_desc">logo</string>
 
     <string name="signup_appbar">Sign Up</string>
+    <string name="signup_username_title">Username</string>
+    <string name="signup_username_hint">Write Username</string>
+    <string name="signup_nickname_title">Nickname</string>
+    <string name="signup_nickname_hint">Write Nickname</string>
+    <string name="signup_birth_date_title">Birth Date</string>
+    <string name="signup_country_title">Country</string>
+    <string name="signup_button_next">Next</string>
+
 </resources>
