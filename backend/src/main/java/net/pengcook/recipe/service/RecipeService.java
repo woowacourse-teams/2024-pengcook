@@ -5,13 +5,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
-import net.pengcook.recipe.dto.MainRecipeRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.repository.RecipeStepRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,25 @@ import org.springframework.stereotype.Service;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeStepRepository recipeStepRepository;
 
-    public List<MainRecipeResponse> readRecipes(MainRecipeRequest request) {
-        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+    public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         List<Long> recipeIds = recipeRepository.findRecipeIds(pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
         return convertToMainRecipeResponses(recipeDataResponses);
+    }
+
+    public List<RecipeStepResponse> readRecipeSteps(long id) {
+        List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(id);
+        return convertToRecipeStepResponses(recipeSteps);
+    }
+
+    private List<RecipeStepResponse> convertToRecipeStepResponses(List<RecipeStep> recipeSteps) {
+        return recipeSteps.stream()
+                .map(RecipeStepResponse::new)
+                .toList();
     }
 
     public List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
