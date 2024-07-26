@@ -6,7 +6,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import net.pengcook.android.databinding.ItemFeedBinding
 import net.pengcook.android.presentation.core.model.Recipe
-import net.pengcook.android.presentation.home.FeedRecyclerViewAdapter
 import net.pengcook.android.presentation.home.holder.FeedViewHolder
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
