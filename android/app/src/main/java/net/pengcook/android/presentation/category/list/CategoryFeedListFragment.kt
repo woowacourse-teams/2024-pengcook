@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,14 +22,15 @@ class CategoryFeedListFragment : Fragment() {
     private var _binding: FragmentCategoryFeedListBinding? = null
     private val binding: FragmentCategoryFeedListBinding
         get() = _binding!!
+    private val args: CategoryFeedListFragmentArgs by navArgs()
     private val viewModel: CategoryFeedListViewModel by viewModels {
         CategoryFeedListViewModelFactory(
             DefaultFeedRepository(DefaultFeedRemoteDataSource(RetrofitClient.service(FeedService::class.java))),
-            "Dessert",
+            args.category,
         )
     }
     private val adapter: CategoryFeedListAdapter by lazy {
-        CategoryFeedListAdapter()
+        CategoryFeedListAdapter(viewModel)
     }
 
     override fun onCreateView(
@@ -56,7 +59,7 @@ class CategoryFeedListFragment : Fragment() {
 
     private fun setUpBindingVariables() {
         binding.viewModel = viewModel
-        binding.categoryName = "Dessert"
+        binding.categoryName = args.category
         binding.adapter = adapter
     }
 
@@ -75,10 +78,15 @@ class CategoryFeedListFragment : Fragment() {
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
                 is CategoryFeedListUiEvent.NavigateBack -> {
-                    // TODO implement navigation
+                    findNavController().navigateUp()
                 }
+
                 is CategoryFeedListUiEvent.NavigateToDetail -> {
-                    // TODO implement navigation
+                    val action =
+                        CategoryFeedListFragmentDirections.actionCategoryFeedListFragmentToDetailRecipeFragment(
+                            newEvent.recipe,
+                        )
+                    findNavController().navigate(action)
                 }
             }
         }
