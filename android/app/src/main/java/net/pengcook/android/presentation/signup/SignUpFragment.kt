@@ -31,7 +31,7 @@ class SignUpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSignUpBinding.inflate(inflater)
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root

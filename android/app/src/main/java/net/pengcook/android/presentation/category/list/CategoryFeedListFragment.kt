@@ -6,13 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
+import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.repository.feed.DefaultFeedRepository
+import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentCategoryFeedListBinding
 
 class CategoryFeedListFragment : Fragment() {
     private var _binding: FragmentCategoryFeedListBinding? = null
     private val binding: FragmentCategoryFeedListBinding
         get() = _binding!!
-    private val viewModel: CategoryFeedListViewModel by viewModels()
+    private val viewModel: CategoryFeedListViewModel by viewModels {
+        CategoryFeedListViewModelFactory(
+            DefaultFeedRepository(DefaultFeedRemoteDataSource(RetrofitClient.service(FeedService::class.java))),
+            "Dessert",
+        )
+    }
     private val adapter: CategoryFeedListAdapter by lazy {
         CategoryFeedListAdapter()
     }
@@ -22,7 +35,7 @@ class CategoryFeedListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCategoryFeedListBinding.inflate(inflater)
+        _binding = FragmentCategoryFeedListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,12 +44,43 @@ class CategoryFeedListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = viewModel
-        binding.categoryName = "smapleCategory"
+        setUpBindingVariables()
+        observeFeedData()
+        observeEvent()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setUpBindingVariables() {
+        binding.viewModel = viewModel
+        binding.categoryName = "Dessert"
+        binding.adapter = adapter
+    }
+
+    private fun observeFeedData() {
+        viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    adapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
+    private fun observeEvent() {
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val newEvent = event.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is CategoryFeedListUiEvent.NavigateBack -> {
+                    // TODO implement navigation
+                }
+                is CategoryFeedListUiEvent.NavigateToDetail -> {
+                    // TODO implement navigation
+                }
+            }
+        }
     }
 }

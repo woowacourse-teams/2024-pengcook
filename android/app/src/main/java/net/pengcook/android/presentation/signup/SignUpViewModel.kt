@@ -19,11 +19,11 @@ class SignUpViewModel :
     val imageUri: LiveData<Uri>
         get() = _imageUri
 
-    private var _signUpUiState: MutableLiveData<SignUpUiState> = MutableLiveData(SignUpUiState())
+    private val _signUpUiState: MutableLiveData<SignUpUiState> = MutableLiveData(SignUpUiState())
     val signUpUiState: LiveData<SignUpUiState>
         get() = _signUpUiState
 
-    private var _signUpEvent: MutableLiveData<Event<SignUpEvent>> = MutableLiveData()
+    private val _signUpEvent: MutableLiveData<Event<SignUpEvent>> = MutableLiveData()
     val signUpEvent: LiveData<Event<SignUpEvent>>
         get() = _signUpEvent
 

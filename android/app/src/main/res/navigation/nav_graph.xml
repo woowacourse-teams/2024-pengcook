@@ -118,4 +118,15 @@
         android:label="StepMakingFragment" />
 
 
+    <fragment
+        android:id="@+id/categoryFeedListFragment"
+        android:name="net.pengcook.android.presentation.category.list.CategoryFeedListFragment"
+        android:label="fragment_category_feed_list"
+        tools:layout="@layout/fragment_category_feed_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
 </navigation>
