@@ -6,3 +6,8 @@ spring:
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
+
+springdoc:
+  enable-default-api-docs: false
+  api-docs:
+    path: /openapi3.yaml
