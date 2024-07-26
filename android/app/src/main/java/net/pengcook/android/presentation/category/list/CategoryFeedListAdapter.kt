@@ -7,20 +7,24 @@ import androidx.recyclerview.widget.DiffUtil
 import net.pengcook.android.databinding.ItemFeedBinding
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.home.FeedRecyclerViewAdapter
+import net.pengcook.android.presentation.home.holder.FeedViewHolder
+import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
-class CategoryFeedListAdapter :
-    PagingDataAdapter<Recipe, FeedRecyclerViewAdapter.ViewHolder>(diffCallback) {
+class CategoryFeedListAdapter(
+    private val eventListener: FeedItemEventListener,
+) :
+    PagingDataAdapter<Recipe, FeedViewHolder>(diffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): FeedRecyclerViewAdapter.ViewHolder {
+    ): FeedViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemFeedBinding.inflate(layoutInflater, parent, false)
-        return FeedRecyclerViewAdapter.ViewHolder(binding)
+        return FeedViewHolder(binding, eventListener)
     }
 
     override fun onBindViewHolder(
-        holder: FeedRecyclerViewAdapter.ViewHolder,
+        holder: FeedViewHolder,
         position: Int,
     ) {
         val item = getItem(position) ?: return

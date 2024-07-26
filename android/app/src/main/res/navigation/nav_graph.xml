@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_categoryFragment_to_recipeMakingFragment"
             app:destination="@id/recipeMakingFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_categoryFeedListFragment"
+            app:destination="@id/categoryFeedListFragment" />
     </fragment>
 
     <fragment
@@ -127,6 +130,9 @@
             android:name="category"
             app:argType="string"
             android:defaultValue="" />
+        <action
+            android:id="@+id/action_categoryFeedListFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment" />
     </fragment>
 
 </navigation>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCategoryBinding
 import net.pengcook.android.presentation.core.style.GridSpacingItemDecoration
@@ -46,7 +47,11 @@ class CategoryFragment : Fragment() {
             val uiEvent = event.getContentIfNotHandled() ?: return@observe
             when (uiEvent) {
                 is CategoryUiEvent.NavigateToList -> {
-                    // TODO Navigation
+                    val action =
+                        CategoryFragmentDirections.actionCategoryFragmentToCategoryFeedListFragment(
+                            uiEvent.categoryCode,
+                        )
+                    findNavController().navigate(action)
                 }
             }
         }
