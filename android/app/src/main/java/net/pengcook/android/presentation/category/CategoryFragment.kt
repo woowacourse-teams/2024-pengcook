@@ -32,21 +32,70 @@ class CategoryFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.adapter = adapter
-        val categories =
-            List(17) { id ->
-                Category(
-                    id.toLong(),
-                    "category ${id + 1}",
-                    "https://www.alphafoodie.com/wp-content/uploads/2021/06/Authentic-Kimchi-1-of-1-2.jpeg",
-                )
-            }
-        adapter.submitList(categories)
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing_category)
-        binding.rvCategory.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
+        setUpCategories()
+        observeEvents()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun observeEvents() {
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val uiEvent = event.getContentIfNotHandled() ?: return@observe
+            when (uiEvent) {
+                is CategoryUiEvent.NavigateToList -> {
+                    // TODO Navigation
+                }
+            }
+        }
+    }
+
+    private fun setUpCategories() {
+        val categories = categories()
+        adapter.submitList(categories)
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing_category)
+        binding.rvCategory.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
+    }
+
+    private fun categories() =
+        listOf(
+            Category(
+                1,
+                "Dessert",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "dessert",
+            ),
+            Category(
+                2,
+                "Chicken",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "chicken",
+            ),
+            Category(
+                3,
+                "Vegetarian",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "vegetarian",
+            ),
+            Category(
+                4,
+                "Miscellaneous",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "miscellaneous",
+            ),
+            Category(
+                5,
+                "Seafood",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "seafood",
+            ),
+            Category(
+                6,
+                "French",
+                "https://flexible.img.hani.co.kr/flexible/normal/640/427/imgdb/original/2024/0522/20240522501170.jpg",
+                "french",
+            ),
+        )
 }
