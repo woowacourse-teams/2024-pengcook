@@ -44,7 +44,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun onNextClicked() {
-        val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToMakingStepFragment()
+        val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment()
         findNavController().navigate(action)
     }
 
