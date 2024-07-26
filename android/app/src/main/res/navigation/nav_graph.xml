@@ -106,7 +106,11 @@
     <fragment
         android:id="@+id/recipeStepFragment"
         android:name="net.pengcook.android.presentation.step.RecipeStepFragment"
-        android:label="RecipeStepFragment" />
+        android:label="RecipeStepFragment" >
+        <action
+            android:id="@+id/action_recipeStepFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/makingStepFragment"
         android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"

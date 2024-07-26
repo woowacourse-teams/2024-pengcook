@@ -14,7 +14,7 @@ class DetailRecipeFragment : Fragment() {
     private val args: DetailRecipeFragmentArgs by navArgs()
     private val binding by lazy { FragmentDetailRecipeBinding.inflate(layoutInflater) }
     private val viewModel by lazy { DetailRecipeViewModel(recipe) }
-    private lateinit var recipe: Recipe
+    private val recipe: Recipe by lazy { args.recipe }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,8 +32,9 @@ class DetailRecipeFragment : Fragment() {
     }
 
     private fun observeNavigationEvent() {
-        viewModel.navigateToStepEvent.observe(viewLifecycleOwner) { shouldNavigate ->
-            if (shouldNavigate) {
+        viewModel.navigateToStepEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            val navigationAvailable = navigationEvent.getContentIfNotHandled() ?: return@observe
+            if (navigationAvailable) {
                 navigateToStep()
             }
         }
