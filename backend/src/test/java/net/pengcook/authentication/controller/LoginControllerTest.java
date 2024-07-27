@@ -11,13 +11,19 @@ import com.google.firebase.auth.FirebaseToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
+import java.util.Map;
+import net.pengcook.authentication.domain.JwtTokenManager;
+import net.pengcook.authentication.domain.TokenPayload;
+import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
+import net.pengcook.authentication.dto.TokenRefreshResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,6 +38,8 @@ class LoginControllerTest {
     int port;
     @MockBean
     private FirebaseAuth firebaseAuth;
+    @Autowired
+    private JwtTokenManager jwtTokenManager;
 
     @BeforeEach
     void setUp() {
@@ -144,5 +152,25 @@ class LoginControllerTest {
                 .when().post("/api/oauth/google/sign-up")
                 .then().log().all()
                 .statusCode(400);
+    }
+
+    @Test
+    @DisplayName("refresh token으로 access token을 재발급한다.")
+    void refresh() {
+        String refreshToken = jwtTokenManager.createToken(new TokenPayload(1L, "tester@pengcook.net", TokenType.REFRESH));
+
+        TokenRefreshResponse response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(Map.of("refreshToken", refreshToken))
+                .when().post("/api/token/refresh")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(TokenRefreshResponse.class);
+
+        assertAll(
+                () -> assertThat(response.accessToken()).isNotBlank(),
+                () -> assertThat(response.refreshToken()).isNotSameAs(refreshToken)
+        );
     }
 }

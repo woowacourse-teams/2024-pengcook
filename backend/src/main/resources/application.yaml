@@ -7,6 +7,12 @@ jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
 
+jwt:
+  access-token:
+    expire-in-millis: 86400000
+  refresh-token:
+    expire-in-millis: 2419200000
+
 springdoc:
   enable-default-api-docs: false
   api-docs:

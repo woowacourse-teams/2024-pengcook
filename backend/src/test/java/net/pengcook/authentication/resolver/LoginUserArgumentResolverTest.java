@@ -5,12 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import net.pengcook.authentication.domain.JwtTokenManager;
+import net.pengcook.authentication.domain.TokenExtractor;
+import net.pengcook.authentication.domain.TokenPayload;
+import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.authentication.dto.TokenPayload;
 import net.pengcook.authentication.exception.JwtTokenException;
-import net.pengcook.authentication.util.JwtTokenManager;
-import net.pengcook.authentication.util.TokenExtractor;
-import net.pengcook.authentication.util.TokenType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

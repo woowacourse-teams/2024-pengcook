@@ -1,12 +1,10 @@
 package net.pengcook.authentication.resolver;
 
 import lombok.AllArgsConstructor;
+import net.pengcook.authentication.domain.JwtTokenManager;
+import net.pengcook.authentication.domain.TokenExtractor;
+import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.authentication.dto.TokenPayload;
-import net.pengcook.authentication.exception.JwtTokenException;
-import net.pengcook.authentication.util.JwtTokenManager;
-import net.pengcook.authentication.util.TokenExtractor;
-import net.pengcook.authentication.util.TokenType;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -40,9 +38,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         String accessToken = tokenExtractor.extractToken(authorizationHeader);
 
         TokenPayload tokenPayload = jwtTokenManager.extract(accessToken);
-        if (tokenPayload.tokenType() != TokenType.ACCESS) {
-            throw new JwtTokenException("헤더에 토큰이 access token이 아닙니다.");
-        }
+        tokenPayload.validateAccessToken("헤더에 토큰이 access token이 아닙니다.");
 
         return new UserInfo(tokenPayload.userId(), tokenPayload.email());
     }

@@ -6,6 +6,8 @@ import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
+import net.pengcook.authentication.dto.TokenRefreshRequest;
+import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,5 +30,10 @@ public class LoginController {
     @ResponseStatus(HttpStatus.CREATED)
     public GoogleSignUpResponse sighUpWithGoogle(@RequestBody @Valid GoogleSignUpRequest googleSignUpRequest) {
         return LoginService.signUpWithGoogle(googleSignUpRequest);
+    }
+
+    @PostMapping("/api/token/refresh")
+    public TokenRefreshResponse refresh(@RequestBody @Valid TokenRefreshRequest tokenRefreshRequest) {
+        return LoginService.refresh(tokenRefreshRequest.refreshToken());
     }
 }

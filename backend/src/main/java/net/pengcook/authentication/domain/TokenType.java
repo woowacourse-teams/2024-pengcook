@@ -1,4 +1,4 @@
-package net.pengcook.authentication.util;
+package net.pengcook.authentication.domain;
 
 public enum TokenType {
 

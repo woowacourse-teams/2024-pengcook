@@ -3,7 +3,9 @@ package net.pengcook.authentication.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import net.pengcook.authentication.dto.TokenPayload;
+import net.pengcook.authentication.domain.JwtTokenManager;
+import net.pengcook.authentication.domain.TokenPayload;
+import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.authentication.exception.JwtTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class JwtTokenManagerTest {
     private static final String JWT_REGEX = "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$";
 
-    private final JwtTokenManager jwtTokenManager = new JwtTokenManager("testSecretKey", 3600000L);
+    private final JwtTokenManager jwtTokenManager = new JwtTokenManager("testSecretKey", 3600000L, 86400000L);
 
     @Test
     @DisplayName("access token을 생성한다.")

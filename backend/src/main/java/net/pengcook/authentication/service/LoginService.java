@@ -4,15 +4,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.AllArgsConstructor;
+import net.pengcook.authentication.domain.JwtTokenManager;
+import net.pengcook.authentication.domain.TokenPayload;
+import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
-import net.pengcook.authentication.dto.TokenPayload;
+import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
-import net.pengcook.authentication.util.JwtTokenManager;
-import net.pengcook.authentication.util.TokenType;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,16 @@ public class LoginService {
                 new TokenPayload(savedUser.getId(), savedUser.getEmail(), TokenType.REFRESH));
 
         return new GoogleSignUpResponse(savedUser, accessToken, refreshToken);
+    }
+
+    public TokenRefreshResponse refresh(String refreshToken) {
+        TokenPayload tokenPayload = jwtTokenManager.extract(refreshToken);
+        tokenPayload.validateRefreshToken("refresh token이 아닙니다.");
+
+        return new TokenRefreshResponse(
+                jwtTokenManager.createToken(new TokenPayload(tokenPayload.userId(), tokenPayload.email(), TokenType.ACCESS)),
+                jwtTokenManager.createToken(tokenPayload)
+        );
     }
 
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {

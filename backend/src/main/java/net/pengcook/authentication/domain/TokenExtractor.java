@@ -1,4 +1,4 @@
-package net.pengcook.authentication.util;
+package net.pengcook.authentication.domain;
 
 import net.pengcook.authentication.exception.AuthorizationHeaderException;
 import org.springframework.stereotype.Component;
