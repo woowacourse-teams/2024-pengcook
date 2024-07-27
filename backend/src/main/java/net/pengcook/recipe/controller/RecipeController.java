@@ -2,10 +2,12 @@ package net.pengcook.recipe.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.service.RecipeService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,5 +28,10 @@ public class RecipeController {
     @GetMapping("/{id}/steps")
     public List<RecipeStepResponse> readRecipeSteps(@PathVariable long id) {
         return recipeService.readRecipeSteps(id);
+    }
+
+    @GetMapping("/search")
+    public List<MainRecipeResponse> readRecipesOfCategory(@ModelAttribute RecipeOfCategoryRequest request) {
+        return recipeService.readRecipesOfCategory(request);
     }
 }
