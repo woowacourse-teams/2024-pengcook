@@ -16,7 +16,7 @@ class JwtTokenManagerTest {
     @Test
     @DisplayName("access token을 생성한다.")
     void createToken() {
-        TokenPayload payload = new TokenPayload(1L, "test@pengcook.net");
+        TokenPayload payload = new TokenPayload(1L, "test@pengcook.net", TokenType.ACCESS);
 
         String accessToken = jwtTokenManager.createToken(payload);
 
@@ -26,8 +26,8 @@ class JwtTokenManagerTest {
     @Test
     @DisplayName("access token의 정보를 추출한다.")
     void extract() {
-        TokenPayload expected = new TokenPayload(1L, "test@pengcook.net");
-        TokenPayload payload = new TokenPayload(1L, "test@pengcook.net");
+        TokenPayload expected = new TokenPayload(1L, "test@pengcook.net", TokenType.ACCESS);
+        TokenPayload payload = new TokenPayload(1L, "test@pengcook.net", TokenType.ACCESS);
         String accessToken = jwtTokenManager.createToken(payload);
 
         TokenPayload actual = jwtTokenManager.extract(accessToken);

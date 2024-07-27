@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenManager {
 
     private static final String CLAIM_EMAIL = "email";
+    private static final String CLAIM_TOKEN_TYPE = "tokenType";
 
     private final Algorithm secretAlgorithm;
     private final long tokenExpirationMills;
@@ -34,6 +35,7 @@ public class JwtTokenManager {
         return JWT.create()
                 .withSubject(String.valueOf(payload.userId()))
                 .withClaim(CLAIM_EMAIL, payload.email())
+                .withClaim(CLAIM_TOKEN_TYPE, payload.tokenType().name())
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiresAt)
                 .sign(secretAlgorithm);
@@ -52,7 +54,8 @@ public class JwtTokenManager {
     private TokenPayload getTokenPayload(DecodedJWT decodedJWT) {
         long userId = Long.parseLong(decodedJWT.getSubject());
         String email = decodedJWT.getClaim(CLAIM_EMAIL).asString();
+        TokenType tokenType = TokenType.valueOf(decodedJWT.getClaim(CLAIM_TOKEN_TYPE).asString());
 
-        return new TokenPayload(userId, email);
+        return new TokenPayload(userId, email, tokenType);
     }
 }

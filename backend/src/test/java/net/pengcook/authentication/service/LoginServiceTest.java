@@ -19,7 +19,6 @@ import net.pengcook.authentication.util.JwtTokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -28,7 +27,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
 @Import({LoginService.class, JwtTokenManager.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = "/data/users.sql")
 class LoginServiceTest {
 

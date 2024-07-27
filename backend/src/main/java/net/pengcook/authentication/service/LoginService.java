@@ -12,6 +12,7 @@ import net.pengcook.authentication.dto.TokenPayload;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
 import net.pengcook.authentication.util.JwtTokenManager;
+import net.pengcook.authentication.util.TokenType;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,13 @@ public class LoginService {
         String email = decodedToken.getEmail();
 
         if (!userRepository.existsByEmail(email)) {
-            return new GoogleLoginResponse(false, null);
+            return new GoogleLoginResponse(false, null, null);
         }
         User user = userRepository.findByEmail(email);
-        String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail()));
+        String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
+        String refreshToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.REFRESH));
 
-        return new GoogleLoginResponse(true, accessToken);
+        return new GoogleLoginResponse(true, accessToken, refreshToken);
     }
 
     public GoogleSignUpResponse signUpWithGoogle(GoogleSignUpRequest googleSignUpRequest) {
@@ -45,9 +47,12 @@ public class LoginService {
         }
 
         User savedUser = userRepository.save(user);
-        String accessToken = jwtTokenManager.createToken(new TokenPayload(savedUser.getId(), savedUser.getEmail()));
+        String accessToken = jwtTokenManager.createToken(
+                new TokenPayload(savedUser.getId(), savedUser.getEmail(), TokenType.ACCESS));
+        String refreshToken = jwtTokenManager.createToken(
+                new TokenPayload(savedUser.getId(), savedUser.getEmail(), TokenType.REFRESH));
 
-        return new GoogleSignUpResponse(savedUser, accessToken);
+        return new GoogleSignUpResponse(savedUser, accessToken, refreshToken);
     }
 
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {

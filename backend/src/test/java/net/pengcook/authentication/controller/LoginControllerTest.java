@@ -39,7 +39,7 @@ class LoginControllerTest {
     }
 
     @Test
-    @DisplayName("이미 가입된 계정으로 로그인하면 이미 가입되었다고 알리고 access token을 반환한다.")
+    @DisplayName("이미 가입된 계정으로 로그인하면 이미 가입되었다고 알리고 access token과 refresh token을 반환한다.")
     void loginWithGoogleWithEmailAlreadyRegistered() throws FirebaseAuthException {
         String email = "loki@pengcook.net";
         String idToken = "test.id.token";
@@ -59,12 +59,13 @@ class LoginControllerTest {
 
         assertAll(
                 () -> assertThat(actual.accessToken()).isNotNull(),
+                () -> assertThat(actual.refreshToken()).isNotNull(),
                 () -> assertThat(actual.registered()).isTrue()
         );
     }
 
     @Test
-    @DisplayName("처음 로그인하면 가입되어 있지 않음을 알리고 access token을 반환하지 않는다.")
+    @DisplayName("처음 로그인하면 가입되어 있지 않음을 알리고 access token과 refresh token을 반환하지 않는다.")
     void loginWithGoogleWithEmailNotRegistered() throws FirebaseAuthException {
         String email = "new_face@pengcook.net";
         String idToken = "test.id.token";
@@ -84,6 +85,7 @@ class LoginControllerTest {
 
         assertAll(
                 () -> assertThat(actual.accessToken()).isNull(),
+                () -> assertThat(actual.refreshToken()).isNull(),
                 () -> assertThat(actual.registered()).isFalse()
         );
     }
