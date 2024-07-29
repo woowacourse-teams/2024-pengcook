@@ -3,7 +3,8 @@ name: Backend CD
 on:
   push:
     branches:
-      - be/dev
+#      - be/dev
+      - be/feat/118
 
 jobs:
   build:
