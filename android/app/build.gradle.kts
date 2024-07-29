@@ -112,4 +112,7 @@ dependencies {
 
     // Indicator animation open source
     implementation("com.tbuonomo:dotsindicator:5.0")
+
+    // Preferences Datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
