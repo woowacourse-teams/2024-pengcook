@@ -80,20 +80,12 @@ tasks.register("copyOasToSwagger", Copy) {
 	into "src/main/resources/static"
 }
 
-tasks.named("processResources") {
-	dependsOn copyOasToSwagger
-}
-
-tasks.named("bootJar") {
-	dependsOn copyOasToSwagger
-}
-
 tasks.named("jar") {
 	enabled = false
 }
 
 jacocoTestReport {
-	dependsOn test
+	dependsOn("test")
 	reports {
 		xml.required = true
 		csv.required = false
