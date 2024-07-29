@@ -128,4 +128,7 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Image Cropper
+    implementation("commons-io:commons-io:2.4")
 }
