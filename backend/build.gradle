@@ -76,15 +76,19 @@ openapi3 {
 tasks.register("copyOasToSwagger", Copy) {
 	dependsOn("openapi3")
 
-	from layout.buildDirectory.file("api-spec/openapi3.yaml").get().asFile
+	from layout.buildDirectory.file("api-spec/openapi3.yaml").get()
 	into "src/main/resources/static"
 }
 
-bootJar {
+tasks.named("processResources") {
 	dependsOn copyOasToSwagger
 }
 
-jar {
+tasks.named("bootJar") {
+	dependsOn copyOasToSwagger
+}
+
+tasks.named("jar") {
 	enabled = false
 }
 
