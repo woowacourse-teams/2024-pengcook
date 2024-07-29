@@ -46,27 +46,13 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-ext {
-	profile = project.hasProperty('profile') ? project.profile : 'local'
-	serverUrl = 'http://localhost:8080'
-
-	switch (profile) {
-		case 'dev':
-			serverUrl = 'https://dev.pengcook.net'
-			break
-		case 'prod':
-			serverUrl = 'https://www.pengcook.net'
-			break
-	}
-}
-
 test {
 	useJUnitPlatform()
 	systemProperty 'spring.profiles.active', 'test'
 }
 
 openapi3 {
-	server = serverUrl
+	servers = [{ url = "https://dev.pengcook.net" }, { url = "http://localhost:8080" }]
 	title = 'Pengcook API'
 	description = 'Pengcook API description'
 	version = '0.1.0'
