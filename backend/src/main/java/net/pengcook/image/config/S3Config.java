@@ -1,4 +1,4 @@
-package net.pengcook.image;
+package net.pengcook.image.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

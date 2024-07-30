@@ -22,5 +22,6 @@ cloud:
   aws:
     S3:
       bucket: ENC(3HINhuTYrePvhmhbckzbLLj1qaqG76bu77acZFETqegesjtrfoQb06gVHJmPFOyyfzK99gN3koThEn9aOV0wQA==)
+      path: ENC(kKCH6o2grAvEPGMPukQh7EcDGmf0YqRFikMo+n7nSr2xx17KBKbLqZMfSfFeFzZw)
     region:
       static: ENC(a7sCLLXDx5Fn76E+NLdyxLoL3MEp6x1J/OcoFyg0ejxLrGAQ/O+82ZoDr6LXcRAt)

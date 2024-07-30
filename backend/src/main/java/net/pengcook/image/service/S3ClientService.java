@@ -1,4 +1,4 @@
-package net.pengcook.image;
+package net.pengcook.image.service;
 
 import java.net.URL;
 import java.time.Duration;
@@ -13,7 +13,6 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 @RequiredArgsConstructor
 public class S3ClientService {
 
-    private static final String IMAGE_PATH = "pengcook/image/";
     private static final int DURATION_MINUTES = 10;
 
     private final S3Presigner s3Presigner;
@@ -21,11 +20,14 @@ public class S3ClientService {
     @Value("${cloud.aws.S3.bucket}")
     private String bucketName;
 
+    @Value("${cloud.aws.S3.path}")
+    private String imagePath;
+
     public URL generatePresignedPutUrl(String keyName) {
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(IMAGE_PATH + keyName)
+                .key(imagePath + keyName)
                 .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
