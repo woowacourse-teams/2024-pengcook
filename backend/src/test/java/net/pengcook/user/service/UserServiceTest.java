@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import net.pengcook.user.dto.UserResponse;
+import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,5 +53,25 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.getUserById(id))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+    
+    @Test
+    @DisplayName("중복되지 않은 username을 입력하면 사용 가능하다")
+    void checkUsername() {
+        String username = "new_face";
+
+        UsernameCheckResponse usernameCheckResponse = userService.checkUsername(username);
+
+        assertThat(usernameCheckResponse.available()).isTrue();
+    }
+
+    @Test
+    @DisplayName("중복된 username을 입력하면 사용 불가능하다")
+    void checkUsernameWhenDuplicatedUsername() {
+        String username = "loki";
+
+        UsernameCheckResponse usernameCheckResponse = userService.checkUsername(username);
+
+        assertThat(usernameCheckResponse.available()).isFalse();
     }
 }

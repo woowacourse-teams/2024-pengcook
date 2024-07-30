@@ -12,6 +12,7 @@ import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.user.dto.UserResponse;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,5 +60,43 @@ class UserControllerTest extends RestDocsSetting {
                 .as(UserResponse.class);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("username이 중복되지 않으면 사용 가능하다.")
+    void checkUsername() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "username이 중복되면 사용 불가능하다.",
+                        "사용자 이름 중복 체크 API",
+                        responseFields(
+                                fieldWithPath("available").description("사용 가능 여부")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .queryParam("username", "new_face")
+                .when().get("/api/user/username/check")
+                .then().log().all()
+                .statusCode(200)
+                .body("available", Matchers.is(true));
+    }
+
+    @Test
+    @DisplayName("username이 중복되면 사용 불가능하다.")
+    void checkUsernameWhenDuplicateUsername() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "username이 중복되면 사용 불가능하다.",
+                        "사용자 이름 중복 체크 API",
+                        responseFields(
+                                fieldWithPath("available").description("사용 가능 여부")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .queryParam("username", "loki")
+                .when().get("/api/user/username/check")
+                .then().log().all()
+                .statusCode(200)
+                .body("available", Matchers.is(false));
     }
 }
