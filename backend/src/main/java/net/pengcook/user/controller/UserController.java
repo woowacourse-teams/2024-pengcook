@@ -15,7 +15,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/api/user/me")
-    public UserResponse getUserById(@LoginUser UserInfo userInfo) {
+    public UserResponse getUserProfile(@LoginUser UserInfo userInfo) {
         return userService.getUserById(userInfo.getId());
     }
 }
