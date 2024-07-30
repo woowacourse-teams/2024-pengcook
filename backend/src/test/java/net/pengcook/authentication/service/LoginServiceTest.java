@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.TokenType;
@@ -34,6 +35,8 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts = "/data/users.sql")
 class LoginServiceTest {
 
+    private static final Pattern JWT_PATTERN = Pattern.compile("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$");
+
     @MockBean
     private FirebaseAuth firebaseAuth;
     @Autowired
@@ -55,7 +58,7 @@ class LoginServiceTest {
         GoogleLoginResponse googleLoginResponse = loginService.loginWithGoogle(request);
 
         assertAll(
-                () -> assertThat(googleLoginResponse.accessToken()).isNotNull(),
+                () -> assertThat(googleLoginResponse.accessToken()).matches(JWT_PATTERN),
                 () -> assertThat(googleLoginResponse.registered()).isTrue()
         );
     }
@@ -134,8 +137,8 @@ class LoginServiceTest {
         TokenRefreshResponse refresh = loginService.refresh(refreshToken);
 
         assertAll(
-                () -> assertThat(refresh.accessToken()).isNotNull(),
-                () -> assertThat(refresh.refreshToken()).isNotNull().isNotSameAs(refreshToken)
+                () -> assertThat(refresh.accessToken()).matches(JWT_PATTERN),
+                () -> assertThat(refresh.refreshToken()).matches(JWT_PATTERN).isNotSameAs(refreshToken)
         );
     }
 

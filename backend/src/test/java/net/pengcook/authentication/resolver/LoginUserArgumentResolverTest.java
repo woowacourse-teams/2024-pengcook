@@ -5,25 +5,35 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.restassured.RestAssured;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenExtractor;
 import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.exception.JwtTokenException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.web.context.request.NativeWebRequest;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoginUserArgumentResolverTest {
 
+    @LocalServerPort
+    int port;
     @Autowired
     private JwtTokenManager jwtTokenManager;
     @Autowired
     private TokenExtractor tokenExtractor;
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.port = port;
+    }
 
     @Test
     @DisplayName("로그인한 사용자 정보를 추출한다.")
