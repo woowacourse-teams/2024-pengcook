@@ -28,5 +28,7 @@ cloud:
     S3:
       bucket: ENC(iVVeReCZ/bHbKBz+rN8IKQXzA8iXLkIXo2xA3HwY2CNO3eN9+6L/HX/upMR1/T1ksvlVdyCerSFtdPg1u4oDpw==)
       path: ENC(bnlkihj5Dgkmv6QHbWYv/RZypOHzWhskNOvdA/EnYFUM7odMDy0A3RxHF3ctIRF0)
+      s3-url: ENC(lMS8O3e3Nk1/oBeXgxcvPOlaMYm3j/tu1j+i6mhfKjCTXNvnfHM2Tk6EYlGPYsiKvwdO2XbsRkHU6koYQaClviyiMM83p7A4sx0rfgQxDq86LVJkdB50iuHuchQfPz3K)
+      cloudfront-url: ENC(DuM42WWxJpwG8VCgXpsJhTKAyWNkQToUbN+Bk/NoBXDo3AwZ/Bm8VbMChdc5wfNRHLTkc7poRJsekoPGmdB4Qvz6uJw3yGMxLJ5GNmgUufQ=)
     region:
       static: ENC(ucd7wzvhDVyi6NQfORb/onMVHFgCMW0+Z0a/ocjoVp3hG93nVRoaE9+KuQzImjK/)
