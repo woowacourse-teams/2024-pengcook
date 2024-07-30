@@ -24,8 +24,13 @@ class RecipeMakingViewModel : ViewModel(), RecipeMakingEventListener {
     override fun onNavigateToMakingStep() {
         _uiEvent.value = Event(MakingEvent.NavigateToMakingStep)
     }
+
+    override fun onAddImage() {
+        _uiEvent.value = Event(MakingEvent.AddImage)
+    }
 }
 
 sealed interface MakingEvent {
     data object NavigateToMakingStep : MakingEvent
+    data object AddImage : MakingEvent
 }

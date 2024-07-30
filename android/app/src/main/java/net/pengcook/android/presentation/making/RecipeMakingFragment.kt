@@ -1,9 +1,14 @@
 package net.pengcook.android.presentation.making
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,6 +19,21 @@ class RecipeMakingFragment : Fragment() {
     private val binding: FragmentRecipeMakingBinding
         get() = _binding!!
     private val viewModel: RecipeMakingViewModel by viewModels()
+
+    private val permissionArray =
+        arrayOf(
+            Manifest.permission.CAMERA
+        )
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +54,24 @@ class RecipeMakingFragment : Fragment() {
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
                 is MakingEvent.NavigateToMakingStep -> onNextClicked()
+                is MakingEvent.AddImage -> onAddImageClicked()
             }
         }
     }
+
+    private fun onAddImageClicked() {
+        if (permissionArray.all {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }) {
+            Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

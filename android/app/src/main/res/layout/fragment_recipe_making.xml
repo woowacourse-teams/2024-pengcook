@@ -49,6 +49,7 @@
                 android:layout_margin="16dp"
                 android:layout_marginTop="16dp"
                 android:background="#EFEFEF"
+                android:onClick="@{() -> vm.onAddImage()}"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
