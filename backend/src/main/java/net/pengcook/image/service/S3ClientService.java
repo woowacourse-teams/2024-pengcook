@@ -52,12 +52,13 @@ public class S3ClientService {
     public ImageUrlResponse getImageUrl(String keyName) {
         GetUrlRequest request = GetUrlRequest.builder()
                 .bucket(bucketName)
-                .key(keyName)
+                .key(imagePath + keyName)
                 .build();
 
         String savedUrl = s3Client.utilities()
                 .getUrl(request)
-                .toString();
+                .toString()
+                .replace(s3Url, cloudFrontUrl);
 
         return new ImageUrlResponse(savedUrl);
     }
