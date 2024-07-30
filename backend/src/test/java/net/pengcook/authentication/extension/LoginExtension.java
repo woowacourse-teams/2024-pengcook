@@ -1,6 +1,7 @@
 package net.pengcook.authentication.extension;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import java.time.LocalDate;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.domain.JwtTokenManager;
@@ -9,16 +10,15 @@ import net.pengcook.authentication.domain.TokenType;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-public class LoginExtension implements BeforeEachCallback, AfterTestExecutionCallback {
+public class LoginExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     @Override
-    public void beforeEach(ExtensionContext context) {
+    public void beforeTestExecution(ExtensionContext context) {
 
         WithLoginUser annotation = context.getRequiredTestMethod().getAnnotation(WithLoginUser.class);
         if (annotation != null) {
@@ -29,8 +29,7 @@ public class LoginExtension implements BeforeEachCallback, AfterTestExecutionCal
             User user = findOrSaveUser(annotation, userRepository);
             String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
 
-            RestAssured.port = ((ServletWebServerApplicationContext) applicationContext).getWebServer().getPort();
-            RestAssured.requestSpecification = RestAssured.given().header("Authorization", "Bearer " + accessToken);
+            RestAssured.requestSpecification = new RequestSpecBuilder().build().header("Authorization", "Bearer " + accessToken);
         }
     }
 
