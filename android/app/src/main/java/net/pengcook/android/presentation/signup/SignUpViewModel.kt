@@ -4,16 +4,15 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 
 class SignUpViewModel :
     ViewModel(),
-    BottomButtonClickListener {
+    BottomButtonClickListener,
+    SpinnerItemChangeListener {
     val usernameContent: MutableLiveData<String> = MutableLiveData()
     val nicknameContent: MutableLiveData<String> = MutableLiveData()
-    val year: MutableLiveData<String> = MutableLiveData()
-    val month: MutableLiveData<String> = MutableLiveData()
-    val day: MutableLiveData<String> = MutableLiveData()
     val country: MutableLiveData<String> = MutableLiveData()
     private var _imageUri: MutableLiveData<Uri> = MutableLiveData()
     val imageUri: LiveData<Uri>
@@ -35,5 +34,9 @@ class SignUpViewModel :
         _signUpUiState.value = signUpUiState.value?.copy(isLoading = true)
         _signUpEvent.value = Event(SignUpEvent.NavigateToMain("", ""))
         _signUpUiState.value = signUpUiState.value?.copy(isLoading = false)
+    }
+
+    override fun onSelectionChange(item: String) {
+        country.value = item
     }
 }
