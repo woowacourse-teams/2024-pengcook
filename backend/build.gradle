@@ -33,6 +33,7 @@ dependencies {
 	implementation 'com.google.firebase:firebase-admin:9.3.0'
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
 
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	runtimeOnly 'com.h2database:h2'
