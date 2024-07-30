@@ -51,6 +51,8 @@ class LoginControllerTest extends RestDocsSetting {
 
         GoogleLoginResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "이미 가입된 계정으로 로그인하여 토큰을 반환합니다.",
+                        "구글 로그인 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token")
                         ),
@@ -87,6 +89,8 @@ class LoginControllerTest extends RestDocsSetting {
 
         GoogleLoginResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "처음 로그인하여 등록되지 않은 계정을 알립니다.",
+                        "구글 로그인 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token")
                         ),
@@ -131,6 +135,8 @@ class LoginControllerTest extends RestDocsSetting {
 
         GoogleSignUpResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "구글 계정으로 새로운 사용자를 등록합니다.",
+                        "구글 회원가입 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
@@ -181,6 +187,8 @@ class LoginControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "이미 등록된 계정으로 회원가입 시도 시 예외를 발생합니다.",
+                        "구글 회원가입 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
@@ -203,6 +211,8 @@ class LoginControllerTest extends RestDocsSetting {
 
         TokenRefreshResponse response = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "Refresh token을 사용하여 새로운 access token과 refresh token을 발급합니다.",
+                        "토큰 재발급 API",
                         requestFields(
                                 fieldWithPath("refreshToken").description("JWT Refresh Token")
                         ),
