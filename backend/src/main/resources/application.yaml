@@ -9,9 +9,9 @@ jasypt:
 
 jwt:
   access-token:
-    expire-in-millis: 86400000
+    expire-in-days: 1d
   refresh-token:
-    expire-in-millis: 2419200000
+    expire-in-days: 30d
 
 springdoc:
   enable-default-api-docs: false

@@ -5,9 +5,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import net.pengcook.authentication.exception.JwtTokenException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.convert.DurationUnit;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,17 +20,19 @@ public class JwtTokenManager {
     private static final String CLAIM_TOKEN_TYPE = "tokenType";
 
     private final Algorithm secretAlgorithm;
-    private final long accessTokenExpirationMills;
-    private final long refreshTokenExpirationMills;
+    @DurationUnit(ChronoUnit.DAYS)
+    private final Duration accessTokenExpirationDays;
+    @DurationUnit(ChronoUnit.DAYS)
+    private final Duration refreshTokenExpirationDays;
 
     public JwtTokenManager(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.access-token.expire-in-millis}") long accessTokenExpirationMills,
-            @Value("${jwt.refresh-token.expire-in-millis}") long refreshTokenExpirationMills
+            @Value("${jwt.access-token.expire-in-days}") Duration accessTokenExpirationDays,
+            @Value("${jwt.refresh-token.expire-in-days}") Duration refreshTokenExpirationDays
     ) {
         this.secretAlgorithm = Algorithm.HMAC512(secret);
-        this.accessTokenExpirationMills = accessTokenExpirationMills;
-        this.refreshTokenExpirationMills = refreshTokenExpirationMills;
+        this.accessTokenExpirationDays = accessTokenExpirationDays;
+        this.refreshTokenExpirationDays = refreshTokenExpirationDays;
     }
 
     public String createToken(TokenPayload payload) {
@@ -55,9 +60,9 @@ public class JwtTokenManager {
 
     private Date getExpiresAt(TokenPayload payload) {
         if (payload.tokenType() == TokenType.REFRESH) {
-            return new Date(System.currentTimeMillis() + refreshTokenExpirationMills);
+            return new Date(System.currentTimeMillis() + refreshTokenExpirationDays.toMillis());
         }
-        return new Date(System.currentTimeMillis() + accessTokenExpirationMills);
+        return new Date(System.currentTimeMillis() + accessTokenExpirationDays.toMillis());
     }
 
     private TokenPayload getTokenPayload(DecodedJWT decodedJWT) {
