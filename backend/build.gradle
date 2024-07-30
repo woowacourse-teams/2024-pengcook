@@ -44,6 +44,9 @@ dependencies {
 	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
 	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation platform('software.amazon.awssdk:bom:2.17.89')
+	implementation 'software.amazon.awssdk:s3'
 }
 
 test {
