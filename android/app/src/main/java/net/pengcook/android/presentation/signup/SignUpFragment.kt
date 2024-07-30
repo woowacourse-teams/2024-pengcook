@@ -42,7 +42,6 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setUpBirthDateSpinner()
         setUpCountrySpinner()
         setUpClickListener()
         observeViewModel()
@@ -68,35 +67,6 @@ class SignUpFragment : Fragment() {
             )
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.formCountry.spFormContent.spDefault.adapter = countryAdapter
-    }
-
-    private fun setUpBirthDateSpinner() {
-        val yearAdapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                List(100) { (it + 1920).toString() },
-            )
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.formBirthDate.spFormContent1.spDefault.adapter = yearAdapter
-
-        val monthAdapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                List(12) { (it + 1).toString() },
-            )
-        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.formBirthDate.spFormContent2.spDefault.adapter = monthAdapter
-
-        val dayAdapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                List(31) { (it + 1).toString() },
-            )
-        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.formBirthDate.spFormContent3.spDefault.adapter = dayAdapter
     }
 
     private fun observeViewModel() {

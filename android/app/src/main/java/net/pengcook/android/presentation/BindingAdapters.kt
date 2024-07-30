@@ -8,10 +8,9 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import com.bumptech.glide.Glide
 import net.pengcook.android.R
+import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.model.Ingredient
 
 @BindingAdapter("app:imageUrl")
@@ -92,45 +91,22 @@ fun categoryText(
 }
 
 @BindingAdapter("bind:selectedValue")
-fun bindSpinnerData(
-    spinner: Spinner,
-    newValue: String?,
-) {
-    val adapter = spinner.adapter as? ArrayAdapter<String>
-    val position = adapter?.getPosition(newValue)
-    if (position != null && position != spinner.selectedItemPosition) {
-        spinner.setSelection(position, true)
-    }
+fun Spinner.bindSpinnerValue(value: Any?) {
+    if (adapter == null) return
+    val adapter = adapter as ArrayAdapter<Any>
+    val position = adapter.getPosition(value)
+    setSelection(position, false)
+    tag = position
 }
 
-@InverseBindingAdapter(attribute = "bind:selectedValue", event = "bind:selectedValueAttrChanged")
-fun captureSelectedValue(spinner: Spinner): String = spinner.selectedItem as String
-
-@BindingAdapter("bind:selectedValueAttrChanged")
-fun setSpinnerListener(
-    spinner: Spinner,
-    listener: InverseBindingListener?,
-) {
-    if (listener == null) {
-        spinner.onItemSelectedListener = null
-        return
-    }
-
-    val onItemSelectedListener =
-        object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long,
-            ) {
-                listener.onChange()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // do nothing
-            }
+@BindingAdapter("bind:spinnerItemChangeListener")
+fun Spinner.setInverseBindingListener(spinnerItemChangeListener: SpinnerItemChangeListener?) {
+    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            val item = parent.getItemAtPosition(position) as String
+            spinnerItemChangeListener?.onSelectionChange(item)
         }
 
-    spinner.onItemSelectedListener = onItemSelectedListener
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+    }
 }

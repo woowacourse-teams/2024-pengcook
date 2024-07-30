@@ -7,6 +7,10 @@
         <variable
             name="selectedValue"
             type="String" />
+
+        <variable
+            name="spinnerItemChangeListener"
+            type="net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             bind:selectedValue="@{selectedValue}"
+            bind:spinnerItemChangeListener="@{spinnerItemChangeListener}"
             android:padding="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="net.pengcook.android.presentation.signup.SignUpViewModel" />
@@ -48,6 +50,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:scaleType="centerCrop"
                     app:imageUri="@{viewModel.imageUri}"/>
 
                 <include
@@ -73,26 +76,15 @@
                     app:title="@{@string/signup_nickname_title}" />
 
                 <include
-                    android:id="@+id/form_birth_date"
-                    layout="@layout/item_form_spinner_triple"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/form_nickname"
-                    app:title="@{@string/signup_birth_date_title}"
-                    bind:selectedValue1="@{viewModel.year}"
-                    bind:selectedValue2="@{viewModel.month}"
-                    bind:selectedValue3="@{viewModel.day}" />
-
-                <include
                     android:id="@+id/form_country"
                     layout="@layout/item_form_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@id/form_birth_date"
+                    app:layout_constraintTop_toBottomOf="@id/form_nickname"
                     app:title="@{@string/signup_country_title}"
-                    bind:selectedValue="@{viewModel.country}"/>
+                    app:selectedValue="@{viewModel.country}"
+                    app:spinnerItemChangeListener="@{viewModel}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,9 +99,16 @@
             android:layout_marginHorizontal="16dp"
             app:buttonClickListener="@{viewModel}"
             app:buttonText="@{@string/signup_button_next}"
-            app:enabled="@{true}"
+            app:enabled="@{viewModel.signUpUiState.fulfilled}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_sign_up" />
+
+        <include
+            layout="@layout/item_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visibility="@{viewModel.signUpUiState.loading ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
