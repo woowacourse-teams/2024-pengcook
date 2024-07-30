@@ -57,8 +57,7 @@ public class S3ClientService {
 
         String savedUrl = s3Client.utilities()
                 .getUrl(request)
-                .toString()
-                .replace(s3Url, cloudFrontUrl);
+                .toString();
 
         return new ImageUrlResponse(savedUrl);
     }
