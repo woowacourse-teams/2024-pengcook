@@ -1,8 +1,8 @@
 package net.pengcook.image.service;
 
-import java.net.URL;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.image.dto.PresignedUrlResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -23,7 +23,7 @@ public class S3ClientService {
     @Value("${cloud.aws.S3.path}")
     private String imagePath;
 
-    public URL generatePresignedPutUrl(String keyName) {
+    public PresignedUrlResponse generatePresignedPutUrl(String keyName) {
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -35,6 +35,6 @@ public class S3ClientService {
                 .putObjectRequest(putObjectRequest)
                 .build();
 
-        return s3Presigner.presignPutObject(presignRequest).url();
+        return new PresignedUrlResponse(s3Presigner.presignPutObject(presignRequest).url());
     }
 }
