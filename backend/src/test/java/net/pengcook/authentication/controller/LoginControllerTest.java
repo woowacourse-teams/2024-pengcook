@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
@@ -33,6 +34,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 @Sql("/data/users.sql")
 class LoginControllerTest extends RestDocsSetting {
+
+    private static final Pattern JWT_PATTERN = Pattern.compile("^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$");
 
     @MockBean
     private FirebaseAuth firebaseAuth;
@@ -71,8 +74,8 @@ class LoginControllerTest extends RestDocsSetting {
                 .as(GoogleLoginResponse.class);
 
         assertAll(
-                () -> assertThat(actual.accessToken()).isNotNull(),
-                () -> assertThat(actual.refreshToken()).isNotNull(),
+                () -> assertThat(actual.accessToken()).matches(JWT_PATTERN),
+                () -> assertThat(actual.refreshToken()).matches(JWT_PATTERN),
                 () -> assertThat(actual.registered()).isTrue()
         );
     }
@@ -230,7 +233,7 @@ class LoginControllerTest extends RestDocsSetting {
                 .as(TokenRefreshResponse.class);
 
         assertAll(
-                () -> assertThat(response.accessToken()).isNotBlank(),
+                () -> assertThat(response.accessToken()).matches(JWT_PATTERN),
                 () -> assertThat(response.refreshToken()).isNotSameAs(refreshToken)
         );
     }
