@@ -29,21 +29,21 @@ class RecipeRepositoryTest {
 
         List<Long> recipeIds = repository.findRecipeIds(pageable);
 
-        assertThat(recipeIds).containsExactly(4L, 3L, 2L);
+        assertThat(recipeIds).containsExactly(15L, 14L, 13L);
     }
 
     @Test
     @DisplayName("레시피 id에 해당되는 세부 정보를 반환한다.")
     void findRecipeData() {
         List<Long> recipeIds = List.of(4L, 3L);
-        RecipeDataResponse expectedData = new RecipeDataResponse(4, "흰쌀밥", 1, "loki", "loki.jpg", LocalTime.of(0, 40),
-                "흰쌀밥이미지.jpg", 2, 4, "흰쌀밥 조리법", 3, "채식", 2, "쌀", REQUIRED
+        RecipeDataResponse expectedData = new RecipeDataResponse(4, "토마토스파게티", 1, "loki", "loki.jpg", LocalTime.of(0, 30),
+                "토마토스파게티이미지.jpg", 3, 2, "토마토스파게티 조리법", 2, "양식", 2, "쌀", REQUIRED
         );
 
         List<RecipeDataResponse> recipeData = repository.findRecipeData(recipeIds);
 
         assertAll(
-                () -> assertThat(recipeData).hasSize(8),
+                () -> assertThat(recipeData).hasSize(6 + 3),
                 () -> assertThat(recipeData).contains(expectedData)
         );
     }

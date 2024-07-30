@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.category.dto.RecipeOfCategoryRequest;
+import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
@@ -24,6 +26,7 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
+    private final CategoryRecipeRepository categoryRecipeRepository;
 
     public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -38,13 +41,22 @@ public class RecipeService {
         return convertToRecipeStepResponses(recipeSteps);
     }
 
+    public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
+        String categoryName = request.category();
+        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        List<Long> recipeIds = categoryRecipeRepository.findRecipeIdsByCategoryName(categoryName, pageable);
+
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
+        return convertToMainRecipeResponses(recipeDataResponses);
+    }
+
     private List<RecipeStepResponse> convertToRecipeStepResponses(List<RecipeStep> recipeSteps) {
         return recipeSteps.stream()
                 .map(RecipeStepResponse::new)
                 .toList();
     }
 
-    public List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
+    private List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
         Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
                 .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
                 .values();

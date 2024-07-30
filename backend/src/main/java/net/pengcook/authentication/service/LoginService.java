@@ -30,10 +30,11 @@ public class LoginService {
         FirebaseToken decodedToken = decodeIdToken(googleLoginRequest.idToken());
         String email = decodedToken.getEmail();
 
-        if (!userRepository.existsByEmail(email)) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
             return new GoogleLoginResponse(false, null, null);
         }
-        User user = userRepository.findByEmail(email);
         String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
         String refreshToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.REFRESH));
 
