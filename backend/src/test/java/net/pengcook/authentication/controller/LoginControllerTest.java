@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.domain.JwtTokenManager;
@@ -127,7 +126,6 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "new_face",
                 "신입",
-                LocalDate.of(2000, 1, 1),
                 "KOREA"
         );
 
@@ -144,7 +142,6 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("birthday").description("생년월일"),
                                 fieldWithPath("country").description("국가")
                         ),
                         responseFields(
@@ -153,7 +150,6 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
-                                fieldWithPath("birthday").description("사용자 생년월일"),
                                 fieldWithPath("country").description("사용자 국가"),
                                 fieldWithPath("accessToken").description("JWT Access Token"),
                                 fieldWithPath("refreshToken").description("JWT Refresh Token")
@@ -179,7 +175,6 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "loki",
                 "로키",
-                LocalDate.of(1999, 8, 8),
                 "KOREA"
         );
 
@@ -196,7 +191,6 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("birthday").description("생년월일"),
                                 fieldWithPath("country").description("국가")
                         )
                 ))

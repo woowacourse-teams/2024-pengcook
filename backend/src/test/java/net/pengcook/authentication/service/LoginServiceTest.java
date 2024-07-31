@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
@@ -91,7 +90,6 @@ class LoginServiceTest {
                 idToken,
                 "new_face",
                 "신입",
-                LocalDate.of(2000, 1, 1),
                 "KOREA"
         );
 
@@ -115,7 +113,6 @@ class LoginServiceTest {
                 idToken,
                 "loki",
                 "로키",
-                LocalDate.of(1999, 8, 8),
                 "KOREA"
         );
 

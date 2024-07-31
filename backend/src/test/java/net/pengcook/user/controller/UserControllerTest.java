@@ -9,7 +9,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.time.LocalDate;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
@@ -36,7 +35,6 @@ class UserControllerTest extends RestDocsSetting {
                 "loki",
                 "로키",
                 "loki.jpg",
-                LocalDate.of(1999, 8, 8),
                 "KOREA"
         );
 
@@ -50,7 +48,6 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
-                                fieldWithPath("birth").description("사용자 생년월일"),
                                 fieldWithPath("region").description("사용자 국가")
                         )
                 ))

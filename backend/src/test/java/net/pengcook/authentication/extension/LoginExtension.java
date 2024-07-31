@@ -2,7 +2,6 @@ package net.pengcook.authentication.extension;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import java.time.LocalDate;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
@@ -49,7 +48,6 @@ public class LoginExtension implements BeforeTestExecutionCallback, AfterTestExe
                 annotation.username(),
                 annotation.nickname(),
                 annotation.image(),
-                LocalDate.parse(annotation.birth()),
                 annotation.region()
         );
         return userRepository.save(user);

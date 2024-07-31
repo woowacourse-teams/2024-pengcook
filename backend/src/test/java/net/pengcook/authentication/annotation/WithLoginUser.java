@@ -17,7 +17,5 @@ public @interface WithLoginUser {
 
     String image() default "tester.jpg";
 
-    String birth() default "2000-01-01";
-
     String region() default "KOREA";
 }
