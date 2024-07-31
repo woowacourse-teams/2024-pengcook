@@ -28,8 +28,8 @@ ALTER TABLE ingredient_recipe
 SET
 REFERENTIAL_INTEGRITY TRUE;
 
-INSERT INTO users (email, username, nickname, image, birth, region)
-VALUES ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', '2024-07-22', 'KOREA');
+INSERT INTO users (email, username, nickname, image, region)
+VALUES ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA');
 
 INSERT INTO category (name)
 VALUES ('한식'),

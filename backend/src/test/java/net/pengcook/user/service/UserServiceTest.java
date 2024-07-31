@@ -3,7 +3,6 @@ package net.pengcook.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
@@ -37,7 +36,6 @@ class UserServiceTest {
                 "loki",
                 "로키",
                 "loki.jpg",
-                LocalDate.of(1999, 8, 8),
                 "KOREA"
         );
 
@@ -54,7 +52,7 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUserById(id))
                 .isInstanceOf(NoSuchElementException.class);
     }
-    
+
     @Test
     @DisplayName("중복되지 않은 username을 입력하면 사용 가능하다")
     void checkUsername() {

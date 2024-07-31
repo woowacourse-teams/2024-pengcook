@@ -75,7 +75,6 @@ public class LoginService {
                 googleSignUpRequest.username(),
                 googleSignUpRequest.nickname(),
                 decodedToken.getPicture(),
-                googleSignUpRequest.birthday(),
                 googleSignUpRequest.country()
         );
     }

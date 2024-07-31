@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,12 +35,9 @@ public class User {
     private String image;
 
     @Column(nullable = false)
-    private LocalDate birth;
-
-    @Column(nullable = false)
     private String region;
 
-    public User(String email, String username, String nickname, String image, LocalDate birth, String region) {
-        this(0L, email, username, nickname, image, birth, region);
+    public User(String email, String username, String nickname, String image, String region) {
+        this(0L, email, username, nickname, image, region);
     }
 }
