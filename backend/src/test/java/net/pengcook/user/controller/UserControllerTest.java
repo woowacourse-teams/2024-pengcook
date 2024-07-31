@@ -4,6 +4,8 @@ import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.do
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -88,6 +90,9 @@ class UserControllerTest extends RestDocsSetting {
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "username이 중복되면 사용 불가능하다.",
                         "사용자 이름 중복 체크 API",
+                        queryParameters(
+                                parameterWithName("username").description("사용자 이름")
+                        ),
                         responseFields(
                                 fieldWithPath("available").description("사용 가능 여부")
                         )
