@@ -102,6 +102,22 @@ class RecipeMakingFragment : Fragment() {
                 uploadImageToS3(uri)
             }
         })
+
+        // Observer to handle the upload success
+        viewModel.uploadSuccess.observe(viewLifecycleOwner, Observer { success ->
+            if (success == true) {
+                Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
+            } else if (success == false) {
+                Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Observer to handle upload error
+        viewModel.uploadError.observe(viewLifecycleOwner, Observer { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun onAddImageClicked() {
