@@ -3,6 +3,7 @@ package net.pengcook.authentication.util;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import net.pengcook.authentication.domain.TokenExtractor;
 import net.pengcook.authentication.exception.AuthorizationHeaderException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

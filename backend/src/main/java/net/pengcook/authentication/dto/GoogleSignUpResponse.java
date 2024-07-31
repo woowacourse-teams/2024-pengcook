@@ -10,9 +10,10 @@ public record GoogleSignUpResponse(
         String image,
         String birthday,
         String country,
-        String accessToken
+        String accessToken,
+        String refreshToken
 ) {
-    public GoogleSignUpResponse(User user, String accessToken) {
+    public GoogleSignUpResponse(User user, String accessToken, String refreshToken) {
         this(
                 user.getId(),
                 user.getEmail(),
@@ -21,7 +22,8 @@ public record GoogleSignUpResponse(
                 user.getImage(),
                 user.getBirth().toString(),
                 user.getRegion(),
-                accessToken
+                accessToken,
+                refreshToken
         );
     }
 }

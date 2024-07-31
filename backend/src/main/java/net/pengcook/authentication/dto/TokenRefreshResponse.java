@@ -1,7 +1,6 @@
 package net.pengcook.authentication.dto;
 
-public record GoogleLoginResponse(
-        boolean registered,
+public record TokenRefreshResponse(
         String accessToken,
         String refreshToken
 ) {
