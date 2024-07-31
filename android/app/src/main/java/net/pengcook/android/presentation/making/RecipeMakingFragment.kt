@@ -1,6 +1,7 @@
 package net.pengcook.android.presentation.making
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +20,7 @@ import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemo
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
+import net.pengcook.android.presentation.core.util.FileUtils
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -44,7 +46,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private lateinit var photoUri: Uri
-    private lateinit var currentPhotoPath: String
+    private var currentPhotoPath: String? = null
 
     private val permissionArray =
         arrayOf(
@@ -56,9 +58,25 @@ class RecipeMakingFragment : Fragment() {
     ) { isGranted: Boolean ->
         if (isGranted) {
             Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
-            takePicture()
+            showImageSourceDialog()
         } else {
             Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val getContentLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            photoUri = it
+            currentPhotoPath = FileUtils.getPathFromUri(requireContext(), it)
+            if (currentPhotoPath != null) {
+                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+            } else {
+                Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        } ?: run {
+            Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -67,7 +85,7 @@ class RecipeMakingFragment : Fragment() {
         ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            viewModel.fetchImageUri(File(currentPhotoPath).name)
+            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
         } else {
             Toast.makeText(requireContext(), "사진을 찍는데 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -127,11 +145,23 @@ class RecipeMakingFragment : Fragment() {
                     it
                 ) == PackageManager.PERMISSION_GRANTED
             }) {
-            Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
-            takePicture()
+            showImageSourceDialog()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("카메라로 사진 찍기", "앨범에서 사진 선택")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("이미지 소스 선택")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> takePicture()
+                    1 -> selectImageFromAlbum()
+                }
+            }
+            .show()
     }
 
     private fun takePicture() {
@@ -142,6 +172,10 @@ class RecipeMakingFragment : Fragment() {
             photoFile
         )
         takePictureLauncher.launch(photoUri)
+    }
+
+    private fun selectImageFromAlbum() {
+        getContentLauncher.launch("image/*")
     }
 
     @Throws(IOException::class)
@@ -158,7 +192,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun uploadImageToS3(presignedUrl: String) {
-        val file = File(currentPhotoPath)
+        val file = File(currentPhotoPath!!)
         viewModel.uploadImageToS3(presignedUrl, file)
     }
 
@@ -168,7 +202,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun onNextClicked() {
-        // val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(File(currentPhotoPath).name)
+        // val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(File(currentPhotoPath!!).name)
         // findNavController().navigate(action)
     }
 
