@@ -14,6 +14,7 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -142,5 +143,42 @@ class UserControllerTest extends RestDocsSetting {
                 .body("reporteeId", is(1))
                 .body("reason", is("SPAM"))
                 .body("details", is("스팸 컨텐츠입니다."));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자를 차단한다.")
+    void blockUser() {
+        UserBlockRequest userBlockRequest = new UserBlockRequest(2L);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 차단합니다.",
+                        "사용자 차단 API",
+                        requestFields(
+                                fieldWithPath("blockeeId").description("차단할 사용자 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("blocker.id").description("차단자 ID"),
+                                fieldWithPath("blocker.email").description("차단자 이메일"),
+                                fieldWithPath("blocker.username").description("차단자 아이디"),
+                                fieldWithPath("blocker.nickname").description("차단자 닉네임"),
+                                fieldWithPath("blocker.image").description("차단자 프로필 이미지"),
+                                fieldWithPath("blocker.region").description("차단자 국가"),
+                                fieldWithPath("blockee.id").description("차단대상 ID"),
+                                fieldWithPath("blockee.email").description("차단대상 이메일"),
+                                fieldWithPath("blockee.username").description("차단대상 아이디"),
+                                fieldWithPath("blockee.nickname").description("차단대상 닉네임"),
+                                fieldWithPath("blockee.image").description("차단대상 프로필 이미지"),
+                                fieldWithPath("blockee.region").description("차단대상 국가")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .body(userBlockRequest)
+                .when().post("/api/user/block")
+                .then().log().all()
+                .statusCode(201)
+                .body("blocker.id", is(1))
+                .body("blockee.id", is(2));
     }
 }

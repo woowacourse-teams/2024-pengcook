@@ -1,11 +1,14 @@
 package net.pengcook.user.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserReportResponse;
+import net.pengcook.user.dto.UserBlockRequest;
+import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.service.UserService;
@@ -37,5 +40,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserReportResponse report(@LoginUser UserInfo userInfo, @RequestBody UserReportRequest userReportRequest) {
         return userService.reportUser(userInfo.getId(), userReportRequest);
+    }
+
+    @PostMapping("/api/user/block")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserBlockResponse blockUser(@LoginUser UserInfo userInfo, @RequestBody @Valid UserBlockRequest userBlockRequest) {
+        return userService.blockUser(userInfo.getId(), userBlockRequest.blockeeId());
     }
 }
