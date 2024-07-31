@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.NoSuchElementException;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.UserReportRequest;
+import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.repository.UserReportRepository;
+import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +58,8 @@ class UserServiceTest {
         long id = 2000L;
 
         assertThatThrownBy(() -> userService.getUserById(id))
-                .isInstanceOf(NoSuchElementException.class);
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자를 찾을 수 없습니다.");
     }
 
     @Test
@@ -96,5 +99,42 @@ class UserServiceTest {
                 () -> assertThat(actual.getReason()).isEqualTo("SPAM"),
                 () -> assertThat(actual.getDetails()).isEqualTo("스팸 컨텐츠입니다.")
         );
+    }
+
+    @Test
+    @DisplayName("사용자를 차단할 수 있다.")
+    void blockUser() {
+        long blockerId = 1L;
+        long blockeeId = 2L;
+        UserBlockResponse expected = new UserBlockResponse(
+                new UserResponse(blockerId, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA"),
+                new UserResponse(blockeeId, "ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA")
+        );
+
+        UserBlockResponse actual = userService.blockUser(blockerId, blockeeId);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("차단하는 사용자가 존재하지 않으면 예외가 발생한다.")
+    void blockUserWhenNotExistBlocker() {
+        long blockerId = 2000L;
+        long blockeeId = 2L;
+
+        assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("차단하는 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("차단할 사용자가 존재하지 않으면 예외가 발생한다.")
+    void blockUserWhenNotExistBlockee() {
+        long blockerId = 1L;
+        long blockeeId = 2000L;
+
+        assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("차단할 사용자를 찾을 수 없습니다.");
     }
 }
