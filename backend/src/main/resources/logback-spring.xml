@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProfile name="local">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+
+    <springProfile name="dev">
+        <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+    </springProfile>
+
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
         <http>
-            <url>http://localhost:3100/loki/api/v1/push</url>
+            <url>${LOKI_URL}</url>
         </http>
         <format>
             <label>
@@ -24,6 +32,6 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="LOKI" />
+        <appender-ref ref="LOKI"/>
     </root>
 </configuration>
