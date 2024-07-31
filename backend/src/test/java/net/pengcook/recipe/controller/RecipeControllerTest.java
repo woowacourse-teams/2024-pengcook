@@ -86,6 +86,8 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipesOfCategory() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 카테고리 페이지의 레시피 목록을 조회합니다.",
+                        "카테고리별 레시피 조회 API",
                         queryParameters(
                                 parameterWithName("category").description("카테고리"),
                                 parameterWithName("pageNumber").description("페이지 번호"),
