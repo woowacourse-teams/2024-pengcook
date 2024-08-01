@@ -5,6 +5,6 @@ import androidx.datastore.preferences.preferencesDataStore
 
 private const val AUTHORIZATION_PREFERENCES = "authorization_preferences"
 
-private val Context.dataStore by preferencesDataStore(
+val Context.dataStore by preferencesDataStore(
     name = AUTHORIZATION_PREFERENCES,
 )
