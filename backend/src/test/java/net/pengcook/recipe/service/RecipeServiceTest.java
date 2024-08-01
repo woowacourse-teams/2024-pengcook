@@ -6,12 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.service.CategoryService;
+import net.pengcook.ingredient.domain.Requirement;
+import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.ingredient.service.IngredientSubstitutionService;
 import net.pengcook.recipe.dto.MainRecipeResponse;
+import net.pengcook.recipe.dto.RecipeRequest;
+import net.pengcook.recipe.dto.RecipeResponse;
+import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +49,32 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("새로운 레시피를 생성한다.")
+    void createRecipe() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        List<String> categories = List.of("Dessert", "NewCategory");
+        List<String> substitutions = List.of("Water", "Orange");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("Apple", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
+        );
+        RecipeRequest recipeRequest = new RecipeRequest(
+                "새로운 레시피 제목",
+                "00:30:00",
+                "레시피 썸네일.jpg",
+                4,
+                "새로운 레시피 설명",
+                categories,
+                ingredients
+        );
+
+        RecipeResponse recipe = recipeService.createRecipe(userInfo, recipeRequest);
+
+        assertThat(recipe.recipeId()).isEqualTo(16L);
+    }
+
+    @Test
     @DisplayName("특정 레시피의 스텝을 sequence 순서로 조회한다.")
     void readRecipeSteps() {
         long recipeId = 1L;
@@ -55,6 +87,31 @@ class RecipeServiceTest {
         List<RecipeStepResponse> recipeStepResponses = recipeService.readRecipeSteps(recipeId);
 
         assertThat(recipeStepResponses).isEqualTo(expectedRecipeStepResponses);
+    }
+
+    @Test
+    @DisplayName("특정 레시피의 특정 레시피 스텝을 조회한다.")
+    void readRecipeStep() {
+        RecipeStepResponse recipeStepResponse = recipeService.readRecipeStep(1L, 1L);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.recipeId()).isEqualTo(1L),
+                () -> assertThat(recipeStepResponse.description()).isEqualTo("레시피1 설명1")
+        );
+
+    }
+
+    @Test
+    @DisplayName("특정 레시피의 레시피 스텝을 생성한다.")
+    void createRecipeStep() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("새로운 스텝 이미지.jpg", "새로운 스텝 설명", 1, "00:05:00");
+
+        RecipeStepResponse recipeStepResponse = recipeService.createRecipeStep(2L, recipeStepRequest);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.recipeId()).isEqualTo(2L),
+                () -> assertThat(recipeStepResponse.description()).isEqualTo("새로운 스텝 설명")
+        );
     }
 
     @ParameterizedTest
