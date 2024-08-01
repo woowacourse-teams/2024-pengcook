@@ -4,6 +4,10 @@
         <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
     </springProfile>
 
+    <springProfile name="test">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+
     <springProfile name="dev">
         <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
     </springProfile>
