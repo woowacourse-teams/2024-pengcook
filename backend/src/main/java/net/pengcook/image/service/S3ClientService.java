@@ -1,7 +1,9 @@
 package net.pengcook.image.service;
 
+import java.net.URL;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.pengcook.image.dto.ImageUrlResponse;
 import net.pengcook.image.dto.PresignedUrlResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3ClientService {
 
     private static final int DURATION_MINUTES = 10;
@@ -46,7 +49,10 @@ public class S3ClientService {
                 .putObjectRequest(putObjectRequest)
                 .build();
 
-        return new PresignedUrlResponse(s3Presigner.presignPutObject(presignRequest).url());
+        URL url = s3Presigner.presignPutObject(presignRequest).url();
+        log.info("Generated URL: {}", url);
+
+        return new PresignedUrlResponse(url);
     }
 
     public ImageUrlResponse getImageUrl(String keyName) {
