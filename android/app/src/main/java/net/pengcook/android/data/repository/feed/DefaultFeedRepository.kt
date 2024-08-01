@@ -13,7 +13,7 @@ import retrofit2.Response
 class DefaultFeedRepository(
     private val feedRemoteDataSource: FeedRemoteDataSource,
 ) : FeedRepository,
-    NetworkResponseHandler {
+    NetworkResponseHandler() {
     override suspend fun fetchRecipes(
         pageNumber: Int,
         pageSize: Int,
@@ -40,20 +40,7 @@ class DefaultFeedRepository(
             body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
         }
 
-    override fun <T> body(
-        response: Response<T>,
-        validHttpCode: Int,
-    ): T {
-        val code = response.code()
-        val body = response.body()
-        if (code != validHttpCode) throw RuntimeException(EXCEPTION_HTTP_CODE)
-        if (body == null) throw RuntimeException(EXCEPTION_NULL_BODY)
-        return body
-    }
-
     companion object {
-        private const val EXCEPTION_HTTP_CODE = "Http code is not appropriate."
-        private const val EXCEPTION_NULL_BODY = "Response body is null."
         private const val RESPONSE_CODE_SUCCESS = 200
     }
 }
