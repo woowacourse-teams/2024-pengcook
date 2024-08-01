@@ -7,7 +7,7 @@ import net.pengcook.ingredient.dto.IngredientCreateRequest;
 
 public record RecipeRequest(
         String title,
-        LocalTime cookingTime,
+        String cookingTime,
         String thumbnail,
         int difficulty,
         String description,

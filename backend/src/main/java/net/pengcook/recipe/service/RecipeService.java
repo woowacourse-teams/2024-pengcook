@@ -1,5 +1,6 @@
 package net.pengcook.recipe.service;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -53,7 +54,7 @@ public class RecipeService {
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
-        Recipe recipe = new Recipe(recipeRequest.title(), author, recipeRequest.cookingTime(),
+        Recipe recipe = new Recipe(recipeRequest.title(), author, LocalTime.parse(recipeRequest.cookingTime()),
                 recipeRequest.thumbnail(), recipeRequest.difficulty(), recipeRequest.description());
 
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -80,7 +81,7 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피가 없습니다."));
 
         RecipeStep recipeStep = new RecipeStep(recipe, recipeStepRequest.image(), recipeStepRequest.description(),
-                recipeStepRequest.sequence(), recipeStepRequest.cookingTime());
+                recipeStepRequest.sequence(), LocalTime.parse(recipeStepRequest.cookingTime()));
 
         RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
 
