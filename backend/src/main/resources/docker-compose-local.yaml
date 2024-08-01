@@ -1,5 +1,6 @@
 volumes:
   db:
+  prometheus:
 
 services:
   db:
@@ -23,6 +24,26 @@ services:
       - 3100:3100
     command: -config.file=/etc/loki/local-config.yaml
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - prometheus:/prometheus
+    ports:
+      - 9090:9090
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /prometheus/prometheus.yml
+        scrape_configs:
+          - job_name: 'pengcook'
+            metrics_path: '/actuator/prometheus'
+            scrape_interval: 15s
+            static_configs:
+              - targets: ['host.docker.internal:8080']
+        EOF
+        /bin/prometheus
+
   grafana:
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
@@ -44,6 +65,15 @@ services:
           basicAuth: false
           isDefault: true
           version: 1
+          editable: false
+
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: false
           editable: false
         EOF
         /run.sh

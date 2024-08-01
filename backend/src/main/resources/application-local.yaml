@@ -31,3 +31,12 @@ cloud:
       cloudfront-url: ENC(IsdQvQFcMFygCGIL76tqMxwmjKrwmANRzQWsX8kqbNb1l81Nbx8q1k910t+DvHUBgKTdTJkfs/ZMPIEuDAksb7BG6zY0+TTTLaPM0Bh0NoE=)
     region:
       static: ENC(+TXuroM2fUTZ5CpylDnJfO672+ZFCdA+AVKRDLKoCWKJm+0gQ8/GH+QtS7jLG2v9)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
