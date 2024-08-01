@@ -69,11 +69,14 @@ android {
 dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.androidx.material3.android)
+    implementation(libs.core)
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
     val retrofitVersion = "2.11.0"
+    val okHttpVersion = "4.12.0"
     val gsonVersion = "2.11.0"
     val coreKtx = "1.13.1"
+    val coroutineVersion = "1.8.1"
 
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
@@ -90,6 +93,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
+
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
@@ -98,6 +103,8 @@ dependencies {
 
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
     implementation("com.google.code.gson:gson:$gsonVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("androidx.core:core-ktx:$coreKtx")
@@ -115,4 +122,11 @@ dependencies {
 
     // Preferences Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("org.robolectric:robolectric:4.13")
 }
