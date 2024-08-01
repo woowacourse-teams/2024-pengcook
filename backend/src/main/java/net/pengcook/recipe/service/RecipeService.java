@@ -54,8 +54,7 @@ public class RecipeService {
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
         Recipe recipe = new Recipe(recipeRequest.title(), author, recipeRequest.cookingTime(),
-                recipeRequest.thumbnail(),
-                recipeRequest.difficulty(), recipeRequest.likeCount(), recipeRequest.description());
+                recipeRequest.thumbnail(), recipeRequest.difficulty(), recipeRequest.description());
 
         Recipe savedRecipe = recipeRepository.save(recipe);
         categoryService.saveCategories(savedRecipe, recipeRequest.categories());
