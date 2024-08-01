@@ -5,6 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="net.pengcook.android.presentation.onboarding.OnboardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,6 +87,12 @@
                 android:text="@string/onboarding_terms" />
 
         </LinearLayout>
+
+        <include
+            android:id="@+id/pb_onboarding"
+            layout="@layout/item_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
