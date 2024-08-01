@@ -42,6 +42,11 @@ public class RecipeController {
         return recipeService.readRecipeSteps(id);
     }
 
+    @GetMapping("/{recipeId}/steps/{sequence}")
+    public RecipeStepResponse readRecipeStep(@PathVariable long recipeId, @PathVariable long sequence) {
+        return recipeService.readRecipeStep(recipeId, sequence);
+    }
+
     @PostMapping("/{recipeId}/steps")
     public RecipeStepResponse createRecipeStep(@PathVariable long recipeId,
                                                @RequestBody RecipeStepRequest recipeStepRequest) {
