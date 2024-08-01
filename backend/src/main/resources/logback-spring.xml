@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
     <springProfile name="local">
         <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
     </springProfile>
-
     <springProfile name="test">
         <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
     </springProfile>
-
     <springProfile name="dev">
         <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
     </springProfile>
@@ -35,7 +35,14 @@
         </format>
     </appender>
 
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="LOKI"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
