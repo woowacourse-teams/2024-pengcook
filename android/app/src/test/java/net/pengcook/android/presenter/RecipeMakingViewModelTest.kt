@@ -24,7 +24,6 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class RecipeMakingViewModelTest {
-
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
@@ -51,72 +50,77 @@ class RecipeMakingViewModelTest {
     }
 
     @Test
-    fun `fetchImageUri success`() = runTest {
-        val keyName = "test-key"
-        val url = "http://example.com/image.jpg"
+    fun `fetchImageUri success`() =
+        runTest {
+            val keyName = "test-key"
+            val url = "http://example.com/image.jpg"
 
-        coEvery { repository.fetchImageUri(keyName) } returns url
+            coEvery { repository.fetchImageUri(keyName) } returns url
 
-        viewModel.imageUri.observeForever(imageUriObserver)
-        viewModel.fetchImageUri(keyName)
+            viewModel.imageUri.observeForever(imageUriObserver)
+            viewModel.fetchImageUri(keyName)
 
-        testDispatcher.scheduler.advanceUntilIdle()
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        verify { imageUriObserver.onChanged(url) }
-        coVerify { repository.fetchImageUri(keyName) }
-    }
-
-    @Test
-    fun `fetchImageUri failure`() = runTest {
-        val keyName = "test-key"
-        val errorMessage = "Pre-signed URL 요청 실패"
-
-        coEvery { repository.fetchImageUri(keyName) } throws RuntimeException(errorMessage)
-
-        viewModel.uploadError.observeForever(uploadErrorObserver)
-
-        viewModel.fetchImageUri(keyName)
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        verify { uploadErrorObserver.onChanged("Pre-signed URL 요청 실패: $errorMessage") }
-        coVerify { repository.fetchImageUri(keyName) }
-    }
+            verify { imageUriObserver.onChanged(url) }
+            coVerify { repository.fetchImageUri(keyName) }
+        }
 
     @Test
-    fun `uploadImageToS3 success`() = runTest {
-        val presignedUrl = "http://example.com/upload"
-        val file = File("path/to/file")
+    fun `fetchImageUri failure`() =
+        runTest {
+            val keyName = "test-key"
+            val errorMessage = "Pre-signed URL 요청 실패"
 
-        coJustRun { repository.uploadImageToS3(presignedUrl, file) }
+            coEvery { repository.fetchImageUri(keyName) } throws RuntimeException(errorMessage)
 
-        viewModel.uploadSuccess.observeForever(uploadSuccessObserver)
+            viewModel.uploadError.observeForever(uploadErrorObserver)
 
-        viewModel.uploadImageToS3(presignedUrl, file)
+            viewModel.fetchImageUri(keyName)
 
-        testDispatcher.scheduler.advanceUntilIdle()
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        verify { uploadSuccessObserver.onChanged(true) }
-        coVerify { repository.uploadImageToS3(presignedUrl, file) }
-    }
+            verify { uploadErrorObserver.onChanged("Pre-signed URL 요청 실패: $errorMessage") }
+            coVerify { repository.fetchImageUri(keyName) }
+        }
 
     @Test
-    fun `uploadImageToS3 failure`() = runTest {
-        val presignedUrl = "http://example.com/upload"
-        val file = File("path/to/file")
-        val errorMessage = "이미지 업로드 실패"
+    fun `uploadImageToS3 success`() =
+        runTest {
+            val presignedUrl = "http://example.com/upload"
+            val file = File("path/to/file")
 
-        coEvery { repository.uploadImageToS3(presignedUrl, file) } throws RuntimeException(
-            errorMessage
-        )
+            coJustRun { repository.uploadImageToS3(presignedUrl, file) }
 
-        viewModel.uploadError.observeForever(uploadErrorObserver)
+            viewModel.uploadSuccess.observeForever(uploadSuccessObserver)
 
-        viewModel.uploadImageToS3(presignedUrl, file)
+            viewModel.uploadImageToS3(presignedUrl, file)
 
-        testDispatcher.scheduler.advanceUntilIdle()
+            testDispatcher.scheduler.advanceUntilIdle()
 
-        verify { uploadErrorObserver.onChanged("이미지 업로드 실패: $errorMessage") }
-        coVerify { repository.uploadImageToS3(presignedUrl, file) }
-    }
+            verify { uploadSuccessObserver.onChanged(true) }
+            coVerify { repository.uploadImageToS3(presignedUrl, file) }
+        }
+
+    @Test
+    fun `uploadImageToS3 failure`() =
+        runTest {
+            val presignedUrl = "http://example.com/upload"
+            val file = File("path/to/file")
+            val errorMessage = "이미지 업로드 실패"
+
+            coEvery { repository.uploadImageToS3(presignedUrl, file) } throws
+                RuntimeException(
+                    errorMessage,
+                )
+
+            viewModel.uploadError.observeForever(uploadErrorObserver)
+
+            viewModel.uploadImageToS3(presignedUrl, file)
+
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            verify { uploadErrorObserver.onChanged("이미지 업로드 실패: $errorMessage") }
+            coVerify { repository.uploadImageToS3(presignedUrl, file) }
+        }
 }

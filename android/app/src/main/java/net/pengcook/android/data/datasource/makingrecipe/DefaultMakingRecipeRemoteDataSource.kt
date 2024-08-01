@@ -6,9 +6,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class DefaultMakingRecipeRemoteDataSource(
-    private val makingRecipeService: MakingRecipeService
+    private val makingRecipeService: MakingRecipeService,
 ) : MakingRecipeRemoteDataSource {
-
     override suspend fun fetchImageUri(keyName: String): String {
         val response = makingRecipeService.fetchImageUri(keyName)
         if (response.isSuccessful) {
@@ -18,7 +17,10 @@ class DefaultMakingRecipeRemoteDataSource(
         }
     }
 
-    override suspend fun uploadImageToS3(presignedUrl: String, file: File) {
+    override suspend fun uploadImageToS3(
+        presignedUrl: String,
+        file: File,
+    ) {
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val response = makingRecipeService.uploadImageToS3(presignedUrl, requestFile)
         if (!response.isSuccessful) {

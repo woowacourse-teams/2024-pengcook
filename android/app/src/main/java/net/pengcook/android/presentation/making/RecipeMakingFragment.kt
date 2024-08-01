@@ -26,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class RecipeMakingFragment : Fragment() {
     private var _binding: FragmentRecipeMakingBinding? = null
@@ -34,10 +34,11 @@ class RecipeMakingFragment : Fragment() {
         get() = _binding!!
 
     private val viewModel: RecipeMakingViewModel by viewModels {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit =
+            Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
         val makingRecipeService = retrofit.create(MakingRecipeService::class.java)
         val remoteDataSource = DefaultMakingRecipeRemoteDataSource(makingRecipeService)
@@ -50,46 +51,49 @@ class RecipeMakingFragment : Fragment() {
 
     private val permissionArray =
         arrayOf(
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
         )
 
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
-            showImageSourceDialog()
-        } else {
-            Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private val getContentLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            photoUri = it
-            currentPhotoPath = FileUtils.getPathFromUri(requireContext(), it)
-            if (currentPhotoPath != null) {
-                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
+                showImageSourceDialog()
             } else {
+                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private val getContentLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+        ) { uri: Uri? ->
+            uri?.let {
+                photoUri = it
+                currentPhotoPath = FileUtils.getPathFromUri(requireContext(), it)
+                if (currentPhotoPath != null) {
+                    viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+                } else {
+                    Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
                 Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-        } ?: run {
-            Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
-    }
 
     // 사진 촬영 ActivityResultLauncher
-    private val takePictureLauncher = registerForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { success ->
-        if (success) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            Toast.makeText(requireContext(), "사진을 찍는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+    private val takePictureLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.TakePicture(),
+        ) { success ->
+            if (success) {
+                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+            } else {
+                Toast.makeText(requireContext(), "사진을 찍는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,36 +119,46 @@ class RecipeMakingFragment : Fragment() {
         }
 
         // Observer to handle the pre-signed URL response
-        viewModel.imageUri.observe(viewLifecycleOwner, Observer { uri ->
-            if (uri != null) {
-                uploadImageToS3(uri)
-            }
-        })
+        viewModel.imageUri.observe(
+            viewLifecycleOwner,
+            Observer { uri ->
+                if (uri != null) {
+                    uploadImageToS3(uri)
+                }
+            },
+        )
 
         // Observer to handle the upload success
-        viewModel.uploadSuccess.observe(viewLifecycleOwner, Observer { success ->
-            if (success == true) {
-                Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
-            } else if (success == false) {
-                Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
-            }
-        })
+        viewModel.uploadSuccess.observe(
+            viewLifecycleOwner,
+            Observer { success ->
+                if (success == true) {
+                    Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
+                } else if (success == false) {
+                    Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
+                }
+            },
+        )
 
         // Observer to handle upload error
-        viewModel.uploadError.observe(viewLifecycleOwner, Observer { errorMessage ->
-            if (errorMessage != null) {
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-            }
-        })
+        viewModel.uploadError.observe(
+            viewLifecycleOwner,
+            Observer { errorMessage ->
+                if (errorMessage != null) {
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            },
+        )
     }
 
     private fun onAddImageClicked() {
         if (permissionArray.all {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
-                    it
+                    it,
                 ) == PackageManager.PERMISSION_GRANTED
-            }) {
+            }
+        ) {
             showImageSourceDialog()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -166,11 +180,12 @@ class RecipeMakingFragment : Fragment() {
 
     private fun takePicture() {
         val photoFile: File = createImageFile()
-        photoUri = FileProvider.getUriForFile(
-            requireContext(),
-            "net.pengcook.android.fileprovider",
-            photoFile
-        )
+        photoUri =
+            FileProvider.getUriForFile(
+                requireContext(),
+                "net.pengcook.android.fileprovider",
+                photoFile,
+            )
         takePictureLauncher.launch(photoUri)
     }
 
@@ -185,7 +200,7 @@ class RecipeMakingFragment : Fragment() {
         return File.createTempFile(
             "JPEG_${timeStamp}_",
             ".jpg",
-            storageDir
+            storageDir,
         ).apply {
             currentPhotoPath = absolutePath
         }
