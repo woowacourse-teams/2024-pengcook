@@ -19,13 +19,16 @@ import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
+import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
+import net.pengcook.recipe.exception.RecipeException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -64,6 +67,18 @@ public class RecipeService {
     public List<RecipeStepResponse> readRecipeSteps(long id) {
         List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(id);
         return convertToRecipeStepResponses(recipeSteps);
+    }
+
+    public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피가 없습니다."));
+
+        RecipeStep recipeStep = new RecipeStep(recipe, recipeStepRequest.image(), recipeStepRequest.description(),
+                recipeStepRequest.sequence(), recipeStepRequest.cookingTime());
+
+        RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
+
+        return new RecipeStepResponse(savedRecipeStep);
     }
 
     public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {

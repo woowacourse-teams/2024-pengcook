@@ -8,6 +8,7 @@ import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
+import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.service.RecipeService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,12 @@ public class RecipeController {
     @GetMapping("/{id}/steps")
     public List<RecipeStepResponse> readRecipeSteps(@PathVariable long id) {
         return recipeService.readRecipeSteps(id);
+    }
+
+    @PostMapping("/{recipeId}/steps")
+    public RecipeStepResponse createRecipeStep(@PathVariable long recipeId,
+                                               @RequestBody RecipeStepRequest recipeStepRequest) {
+        return recipeService.createRecipeStep(recipeId, recipeStepRequest);
     }
 
     @GetMapping("/search")
