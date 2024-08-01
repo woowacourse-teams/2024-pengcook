@@ -52,9 +52,8 @@ public class Recipe {
             LocalTime cookingTime,
             String thumbnail,
             int difficulty,
-            int likeCount,
             String description
     ) {
-        this(0L, title, author, cookingTime, thumbnail, difficulty, likeCount, description);
+        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, description);
     }
 }

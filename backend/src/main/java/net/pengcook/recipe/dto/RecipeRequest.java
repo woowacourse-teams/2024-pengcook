@@ -10,7 +10,6 @@ public record RecipeRequest(
         LocalTime cookingTime,
         String thumbnail,
         int difficulty,
-        int likeCount,
         String description,
         List<String> categories,
         List<IngredientCreateRequest> ingredients
