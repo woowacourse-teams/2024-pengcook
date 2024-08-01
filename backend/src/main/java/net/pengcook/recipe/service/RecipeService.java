@@ -69,6 +69,13 @@ public class RecipeService {
         return convertToRecipeStepResponses(recipeSteps);
     }
 
+    public RecipeStepResponse readRecipeStep(long recipeId, long sequence) {
+        RecipeStep recipeStep = recipeStepRepository.findByRecipeIdAndSequence(recipeId, sequence)
+                .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피 스텝 정보가 없습니다."));
+
+        return new RecipeStepResponse(recipeStep);
+    }
+
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피가 없습니다."));
