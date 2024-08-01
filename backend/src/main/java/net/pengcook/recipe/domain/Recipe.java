@@ -45,4 +45,16 @@ public class Recipe {
 
     @Column(nullable = true)
     private String description;
+
+    public Recipe(
+            String title,
+            User author,
+            LocalTime cookingTime,
+            String thumbnail,
+            int difficulty,
+            int likeCount,
+            String description
+    ) {
+        this(0L, title, author, cookingTime, thumbnail, difficulty, likeCount, description);
+    }
 }

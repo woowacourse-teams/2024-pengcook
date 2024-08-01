@@ -5,17 +5,25 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.repository.CategoryRecipeRepository;
+import net.pengcook.category.service.CategoryService;
+import net.pengcook.ingredient.service.IngredientService;
+import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeRequest;
+import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
+import net.pengcook.user.domain.User;
+import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +35,10 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeStepRepository recipeStepRepository;
     private final CategoryRecipeRepository categoryRecipeRepository;
+    private final UserRepository userRepository;
+
+    private final CategoryService categoryService;
+    private final IngredientService ingredientService;
 
     public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -34,6 +46,19 @@ public class RecipeService {
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
         return convertToMainRecipeResponses(recipeDataResponses);
+    }
+
+    public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
+        User author = userRepository.findById(userInfo.getId()).orElseThrow();
+        Recipe recipe = new Recipe(recipeRequest.title(), author, recipeRequest.cookingTime(),
+                recipeRequest.thumbnail(),
+                recipeRequest.difficulty(), recipeRequest.likeCount(), recipeRequest.description());
+
+        Recipe savedRecipe = recipeRepository.save(recipe);
+        categoryService.saveCategories(savedRecipe, recipeRequest.categories());
+        ingredientService.register(recipeRequest.ingredients(), savedRecipe);
+
+        return new RecipeResponse(savedRecipe);
     }
 
     public List<RecipeStepResponse> readRecipeSteps(long id) {

@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
+import net.pengcook.category.service.CategoryService;
+import net.pengcook.ingredient.service.IngredientRecipeService;
+import net.pengcook.ingredient.service.IngredientService;
+import net.pengcook.ingredient.service.IngredientSubstitutionService;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +25,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Import(RecipeService.class)
+@Import({RecipeService.class, CategoryService.class, IngredientService.class, IngredientRecipeService.class,
+        IngredientSubstitutionService.class})
 @Sql(value = "/data/recipe.sql")
 class RecipeServiceTest {
 
