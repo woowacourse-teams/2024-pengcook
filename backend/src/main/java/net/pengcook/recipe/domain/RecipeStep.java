@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,13 @@ public class RecipeStep {
 
     private int sequence;
 
+    private LocalTime cookingTime;
+
     public long recipeId() {
         return recipe.getId();
+    }
+
+    public RecipeStep(Recipe recipe, String image, String description, int sequence, LocalTime cookingTime) {
+        this(0L, recipe, image, description, sequence, cookingTime);
     }
 }
