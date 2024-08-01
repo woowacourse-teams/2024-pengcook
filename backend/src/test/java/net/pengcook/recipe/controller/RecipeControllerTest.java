@@ -3,17 +3,26 @@ package net.pengcook.recipe.controller;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import java.util.List;
 import net.pengcook.RestDocsSetting;
+import net.pengcook.authentication.annotation.WithLoginUser;
+import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.ingredient.domain.Requirement;
+import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.recipe.dto.RecipeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
 
+@WithLoginUserTest
 @Sql(value = "/data/recipe.sql")
 class RecipeControllerTest extends RestDocsSetting {
 
@@ -55,6 +64,52 @@ class RecipeControllerTest extends RestDocsSetting {
                 .get("/api/recipes")
                 .then().log().all()
                 .body("size()", is(3));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("새로운 레시피를 생성한다.")
+    void createRecipe() {
+        List<String> categories = List.of("Dessert", "NewCategory");
+        List<String> substitutions = List.of("Water", "Orange");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("Apple", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
+        );
+        RecipeRequest recipeRequest = new RecipeRequest(
+                "새로운 레시피 제목",
+                "00:30:00",
+                "레시피 썸네일.jpg",
+                4,
+                "새로운 레시피 설명",
+                categories,
+                ingredients
+        );
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "새로운 레시피 개요를 등록합니다.",
+                        "신규 레시피 생성 API",
+                        requestFields(
+                                fieldWithPath("title").description("레시피 제목"),
+                                fieldWithPath("cookingTime").description("조리 시간"),
+                                fieldWithPath("thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("difficulty").description("난이도"),
+                                fieldWithPath("description").description("레시피 설명"),
+                                fieldWithPath("categories").description("카테고리 목록"),
+                                fieldWithPath("ingredients[]").description("재료 목록"),
+                                fieldWithPath("ingredients[].name").description("재료 이름"),
+                                fieldWithPath("ingredients[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("ingredients[].substitutions").description("대체 재료 목록").optional()
+                        ), responseFields(
+                                fieldWithPath("recipeId").description("생성된 레시피 아이디")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeRequest)
+                .when().post("/api/recipes")
+                .then().log().all()
+                .statusCode(201)
+                .body("recipeId", is(16));
     }
 
     @Test
