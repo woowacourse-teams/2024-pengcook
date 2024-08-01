@@ -1,5 +1,6 @@
 volumes:
   db:
+  prometheus:
 
 services:
   db:
@@ -30,6 +31,26 @@ services:
     image: grafana/loki
     command: -config.file=/etc/loki/local-config.yaml
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - prometheus:/prometheus
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /prometheus/prometheus.yml
+        scrape_configs:
+          - job_name: 'pengcook'
+            metrics_path: '/actuator/prometheus'
+            scrape_interval: 15s
+            static_configs:
+              - targets: ['app:8080']
+        EOF
+        /bin/prometheus
+    links:
+      - app
+
   grafana:
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
@@ -52,6 +73,15 @@ services:
           isDefault: true
           version: 1
           editable: false
+
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: false
+          editable: false
         EOF
         /run.sh
     image: grafana/grafana
@@ -59,3 +89,4 @@ services:
       - 3000:3000
     links:
       - loki
+      - prometheus
