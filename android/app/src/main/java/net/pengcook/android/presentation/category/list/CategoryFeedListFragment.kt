@@ -15,8 +15,8 @@ import kotlinx.coroutines.withContext
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
-import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentCategoryFeedListBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 
 class CategoryFeedListFragment : Fragment() {
     private var _binding: FragmentCategoryFeedListBinding? = null
@@ -24,8 +24,10 @@ class CategoryFeedListFragment : Fragment() {
         get() = _binding!!
     private val args: CategoryFeedListFragmentArgs by navArgs()
     private val viewModel: CategoryFeedListViewModel by viewModels {
+        val appModule =
+            (requireContext().applicationContext as DefaultPengcookApplication).appModule
         CategoryFeedListViewModelFactory(
-            DefaultFeedRepository(DefaultFeedRemoteDataSource(RetrofitClient.service(FeedService::class.java))),
+            appModule.feedRepository,
             args.category,
         )
     }

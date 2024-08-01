@@ -13,6 +13,7 @@
     <string name="onboarding_google_sign_in">Sign In with Google</string>
     <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
     <string name="onboarding_logo_image_desc">logo</string>
+    <string name="onboarding_network_error">An unexpected error occurred.</string>
 
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
@@ -22,6 +23,25 @@
     <string name="signup_birth_date_title">Birth Date</string>
     <string name="signup_country_title">Country</string>
     <string name="signup_button_next">Next</string>
+    <string name="signup_message_invalid_username">The length of username is invalid.</string>
+    <string name="signup_message_duplicated_username">The username already exists.</string>
+    <string name="signup_message_invalid_nickname">The length of nickname is invalid.</string>
+    <string name="signup_message_error">Server error occurred.</string>
+    <string-array name="signup_countries">
+        <item>Belgian</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Indian</item>
+        <item>Indonesian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Turkish</item>
+        <item>Thai</item>
+        <item>Vietnam</item>
+    </string-array>
+
     <string name="edit_recipe_title">Write Recipe title</string>
 
     <string name="category_appbar">Category</string>

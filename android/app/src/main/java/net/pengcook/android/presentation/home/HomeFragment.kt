@@ -11,24 +11,14 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
-import net.pengcook.android.data.remote.api.FeedService
-import net.pengcook.android.data.repository.feed.DefaultFeedRepository
-import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentHomeBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory(
-            DefaultFeedRepository(
-                DefaultFeedRemoteDataSource(
-                    RetrofitClient.service(
-                        FeedService::class.java,
-                    ),
-                ),
-            ),
-        )
+        val appModule = (requireContext().applicationContext as DefaultPengcookApplication).appModule
+        HomeViewModelFactory(appModule.feedRepository)
     }
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
