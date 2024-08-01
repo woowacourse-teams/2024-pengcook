@@ -137,6 +137,31 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @DisplayName("특정 레시피의 특정 스텝을 조회한다.")
+    void readRecipeStep() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 특정 스텝을 조회합니다.",
+                        "특정 레시피 특정 스텝 조회 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("조회할 레시피 아이디"),
+                                parameterWithName("sequence").description("조회할 스텝 순서")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("레시피 스텝 아이디"),
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서")
+                        )))
+                .when()
+                .get("/api/recipes/{recipeId}/steps/{sequence}", 1L, 1L)
+                .then().log().all()
+                .statusCode(200)
+                .body("description", is("레시피1 설명1"));
+    }
+
+    @Test
     @DisplayName("카테고리별 레시피 개요 목록을 조회한다.")
     void readRecipesOfCategory() {
         RestAssured.given(spec).log().all()
