@@ -18,6 +18,7 @@ import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
+import net.pengcook.recipe.dto.RecipeStepRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
@@ -159,6 +160,39 @@ class RecipeControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(200)
                 .body("description", is("레시피1 설명1"));
+    }
+
+    @Test
+    @DisplayName("특정 레시피의 레시피 스텝을 생성한다.")
+    void createRecipeStep() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "신규 스텝 설명", 4, "00:05:00");
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 레시피 스텝을 생성합니다.",
+                        "특정 레시피 레시피 스텝 생성 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("레시피 스텝 아이디"),
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeStepRequest)
+                .when()
+                .post("/api/recipes/{recipeId}/steps", 1L)
+                .then().log().all()
+                .statusCode(201);
     }
 
     @Test
