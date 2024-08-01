@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="local">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+
+    <springProfile name="test">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+
+    <springProfile name="dev">
+        <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+    </springProfile>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>${LOKI_URL}</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=Pengcook,host=${HOSTNAME},level=%level</pattern>
+                <readMarkers>true</readMarkers>
+            </label>
+            <message>
+                <pattern>
+                    {
+                    "level":"%level",
+                    "class":"%logger{36}",
+                    "thread":"%thread",
+                    "message": "%message",
+                    "requestId": "%X{X-Request-ID}"
+                    }
+                </pattern>
+            </message>
+        </format>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOKI"/>
+    </root>
+</configuration>
