@@ -55,7 +55,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
     }
 
     // Function to upload image to S3
-    fun uploadImageToS3(presignedUrl: String, file: File) {
+    fun uploadImageToS3(
+        presignedUrl: String,
+        file: File,
+    ) {
         viewModelScope.launch {
             try {
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
@@ -71,5 +74,6 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
 
 sealed interface MakingEvent {
     data object NavigateToMakingStep : MakingEvent
+
     data object AddImage : MakingEvent
 }

@@ -10,7 +10,7 @@ class RecipeMakingViewModelFactory(private val makingRecipeRepository: MakingRec
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipeMakingViewModel::class.java)) {
             return RecipeMakingViewModel(
-                makingRecipeRepository = makingRecipeRepository
+                makingRecipeRepository = makingRecipeRepository,
             ) as T
         } else {
             throw IllegalArgumentException()

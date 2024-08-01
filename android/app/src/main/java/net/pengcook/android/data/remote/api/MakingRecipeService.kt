@@ -9,19 +9,18 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface MakingRecipeService {
-
     @GET("/image")
     suspend fun fetchImageUri(
-        @Query("keyName") keyName: String
+        @Query("keyName") keyName: String,
     ): Response<PresignedUrlResponse>
 
     @PUT
     suspend fun uploadImageToS3(
         @Url url: String,
-        @Body image: RequestBody
+        @Body image: RequestBody,
     ): Response<Unit>
 }
 
 data class PresignedUrlResponse(
-    val url: String
+    val url: String,
 )
