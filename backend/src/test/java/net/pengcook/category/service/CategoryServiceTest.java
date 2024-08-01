@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-@Import({CategoryService.class, RecipeService.class})
+@Import(CategoryService.class)
 @Sql(scripts = "/data/category.sql")
 class CategoryServiceTest {
 
