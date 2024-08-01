@@ -1,37 +1,66 @@
 package net.pengcook.android.data.repository.auth
 
-import kotlinx.coroutines.flow.Flow
-import net.pengcook.android.data.datasource.auth.AuthorizationLocalDataSource
-import net.pengcook.android.data.model.auth.Authorization
-import net.pengcook.android.data.model.auth.Platform
+import net.pengcook.android.data.datasource.auth.AuthorizationRemoteDataSource
+import net.pengcook.android.data.model.auth.request.IdTokenRequest
+import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
+import net.pengcook.android.data.util.mapper.toRefreshedTokens
+import net.pengcook.android.data.util.mapper.toSignIn
+import net.pengcook.android.data.util.mapper.toSignUp
+import net.pengcook.android.data.util.mapper.toSignUpRequest
+import net.pengcook.android.data.util.mapper.toUserInformation
+import net.pengcook.android.data.util.mapper.toUsernameAvailable
+import net.pengcook.android.data.util.network.NetworkResponseHandler
+import net.pengcook.android.domain.model.auth.RefreshedTokens
+import net.pengcook.android.domain.model.auth.SignIn
+import net.pengcook.android.domain.model.auth.SignUp
+import net.pengcook.android.domain.model.auth.UserInformation
+import net.pengcook.android.domain.model.auth.UserSignUpForm
 
 class DefaultAuthorizationRepository(
-    private val authorizationLocalDataSource: AuthorizationLocalDataSource,
-) : AuthorizationRepository {
-    override val authorizationData: Flow<Authorization> =
-        authorizationLocalDataSource.authorizationData
-
-    override suspend fun updatePlatformToken(platformToken: String?) {
-        authorizationLocalDataSource.updatePlatformToken(platformToken)
+    private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
+) : AuthorizationRepository, NetworkResponseHandler() {
+    override suspend fun signIn(platformName: String, idToken: String): Result<SignIn> {
+        return runCatching {
+            val response =
+                authorizationRemoteDataSource.signIn(platformName, IdTokenRequest(idToken))
+            body(response, RESPONSE_CODE_SUCCESS).toSignIn()
+        }
     }
 
-    override suspend fun updateAccessToken(accessToken: String?) {
-        authorizationLocalDataSource.updateAccessToken(accessToken)
+    override suspend fun signUp(platformName: String, userSignUpForm: UserSignUpForm): Result<SignUp> {
+        return runCatching {
+            val response = authorizationRemoteDataSource.signUp(
+                platformName = platformName,
+                signUpData = userSignUpForm.toSignUpRequest()
+            )
+            body(response, RESPONSE_CODE_SIGN_IN_SUCCESS).toSignUp()
+        }
     }
 
-    override suspend fun updateRefreshToken(refreshToken: String?) {
-        authorizationLocalDataSource.updateRefreshToken(refreshToken)
+    override suspend fun fetchUsernameDuplication(username: String): Result<Boolean> {
+        return runCatching {
+            val response = authorizationRemoteDataSource.fetchUsernameDuplication(username)
+            body(response, RESPONSE_CODE_SUCCESS).toUsernameAvailable()
+        }
     }
 
-    override suspend fun updateFcmToken(fcmToken: String?) {
-        authorizationLocalDataSource.updateFcmToken(fcmToken)
+    override suspend fun fetchAccessToken(refreshToken: String): Result<RefreshedTokens> {
+        return runCatching {
+            val response =
+                authorizationRemoteDataSource.fetchAccessToken(RefreshTokenRequest(refreshToken))
+            body(response, RESPONSE_CODE_SUCCESS).toRefreshedTokens()
+        }
     }
 
-    override suspend fun updateCurrentPlatform(platform: Platform) {
-        authorizationLocalDataSource.updateCurrentPlatform(platform)
+    override suspend fun fetchUserInformation(accessToken: String): Result<UserInformation> {
+        return runCatching {
+            val response = authorizationRemoteDataSource.fetchUserInformation(accessToken)
+            body(response, RESPONSE_CODE_SUCCESS).toUserInformation()
+        }
     }
 
-    override suspend fun clearAll() {
-        authorizationLocalDataSource.clearAll()
+    companion object {
+        private const val RESPONSE_CODE_SUCCESS = 200
+        private const val RESPONSE_CODE_SIGN_IN_SUCCESS = 201
     }
 }

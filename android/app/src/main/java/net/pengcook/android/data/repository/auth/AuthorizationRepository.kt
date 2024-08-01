@@ -1,21 +1,31 @@
 package net.pengcook.android.data.repository.auth
 
-import kotlinx.coroutines.flow.Flow
-import net.pengcook.android.data.model.auth.Authorization
-import net.pengcook.android.data.model.auth.Platform
+import net.pengcook.android.domain.model.auth.RefreshedTokens
+import net.pengcook.android.domain.model.auth.SignIn
+import net.pengcook.android.domain.model.auth.SignUp
+import net.pengcook.android.domain.model.auth.UserInformation
+import net.pengcook.android.domain.model.auth.UserSignUpForm
 
 interface AuthorizationRepository {
-    val authorizationData: Flow<Authorization>
+    suspend fun signIn(
+        platformName: String,
+        idToken: String,
+    ): Result<SignIn>
 
-    suspend fun updatePlatformToken(platformToken: String?)
+    suspend fun signUp(
+        platformName: String,
+        userSignUpForm: UserSignUpForm,
+    ): Result<SignUp>
 
-    suspend fun updateAccessToken(accessToken: String?)
+    suspend fun fetchUsernameDuplication(
+        username: String,
+    ): Result<Boolean>
 
-    suspend fun updateRefreshToken(refreshToken: String?)
+    suspend fun fetchAccessToken(
+        refreshToken: String,
+    ): Result<RefreshedTokens>
 
-    suspend fun updateFcmToken(fcmToken: String?)
-
-    suspend fun updateCurrentPlatform(platform: Platform)
-
-    suspend fun clearAll()
+    suspend fun fetchUserInformation(
+        accessToken: String,
+    ): Result<UserInformation>
 }

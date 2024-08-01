@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import net.pengcook.android.data.model.auth.Authorization
-import net.pengcook.android.data.model.auth.Platform
+import net.pengcook.android.domain.model.auth.Platform
 
-class DefaultAuthorizationLocalDataSource(
+class DefaultTokenLocalDataSource(
     private val dataStore: DataStore<Preferences>,
-) : AuthorizationLocalDataSource {
+) : TokenLocalDataSource {
     override val authorizationData: Flow<Authorization> =
         dataStore
             .data
