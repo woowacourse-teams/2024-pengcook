@@ -8,7 +8,6 @@ import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.model.RecipeStep
-import retrofit2.Response
 
 class DefaultFeedRepository(
     private val feedRemoteDataSource: FeedRemoteDataSource,

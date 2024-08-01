@@ -15,7 +15,7 @@ import net.pengcook.android.data.repository.auth.FakeTokenRepository
 import net.pengcook.android.data.repository.auth.TokenRepository
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,66 +43,70 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun signIn_success_navigatesToMain() = runTest {
-        // given
-        authorizationRepository =
-            FakeAuthorizationRepository(true, emptyList(), FakeTokenLocalDataSource())
-        viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+    fun signIn_success_navigatesToMain() =
+        runTest {
+            // given
+            authorizationRepository =
+                FakeAuthorizationRepository(true, emptyList(), FakeTokenLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
 
-        // when
-        viewModel.signIn("google", "googleToken")
-        advanceUntilIdle()
+            // when
+            viewModel.signIn("google", "googleToken")
+            advanceUntilIdle()
 
-        // then
-        val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
-        assertEquals(OnboardingUiEvent.NavigateToMain, actual)
-    }
-
-    @Test
-    fun signIn_userDoesNotExist_navigatesToSignUp() = runTest {
-        // given
-        authorizationRepository =
-            FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-        viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
-
-        // when
-        viewModel.signIn("google", "googleToken")
-        advanceUntilIdle()
-
-        // then
-        val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
-        assertEquals(OnboardingUiEvent.NavigateToSignUp("google"), actual)
-    }
+            // then
+            val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
+            assertEquals(OnboardingUiEvent.NavigateToMain, actual)
+        }
 
     @Test
-    fun signIn_failureDueToInvalidPlatformToken_notifiesError() = runTest {
-        // given
-        authorizationRepository =
-            FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-        viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+    fun signIn_userDoesNotExist_navigatesToSignUp() =
+        runTest {
+            // given
+            authorizationRepository =
+                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
 
-        // when
-        viewModel.signIn("google", "invalidGoogleToken")
-        advanceUntilIdle()
+            // when
+            viewModel.signIn("google", "googleToken")
+            advanceUntilIdle()
 
-        // then
-        val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
-        assertEquals(OnboardingUiEvent.Error, actual)
-    }
+            // then
+            val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
+            assertEquals(OnboardingUiEvent.NavigateToSignUp("google"), actual)
+        }
 
     @Test
-    fun signIn_failureDueToInvalidPlatformName_notifiesError() = runTest {
-        // given
-        authorizationRepository =
-            FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-        viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+    fun signIn_failureDueToInvalidPlatformToken_notifiesError() =
+        runTest {
+            // given
+            authorizationRepository =
+                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
 
-        // when
-        viewModel.signIn("gogle", "googleToken")
-        advanceUntilIdle()
+            // when
+            viewModel.signIn("google", "invalidGoogleToken")
+            advanceUntilIdle()
 
-        // then
-        val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
-        assertEquals(OnboardingUiEvent.Error, actual)
-    }
+            // then
+            val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
+            assertEquals(OnboardingUiEvent.Error, actual)
+        }
+
+    @Test
+    fun signIn_failureDueToInvalidPlatformName_notifiesError() =
+        runTest {
+            // given
+            authorizationRepository =
+                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+
+            // when
+            viewModel.signIn("gogle", "googleToken")
+            advanceUntilIdle()
+
+            // then
+            val actual = viewModel.uiEvent.getOrAwaitValue().getContentIfNotHandled()
+            assertEquals(OnboardingUiEvent.Error, actual)
+        }
 }

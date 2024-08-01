@@ -1,8 +1,8 @@
 package net.pengcook.android.data.util.mapper
 
+import net.pengcook.android.data.model.auth.request.SignUpRequest
 import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
 import net.pengcook.android.data.model.auth.response.SignInResponse
-import net.pengcook.android.data.model.auth.request.SignUpRequest
 import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
@@ -16,7 +16,7 @@ fun SignInResponse.toSignIn(): SignIn =
     SignIn(
         accessToken = accessToken,
         refreshToken = refreshToken,
-        registered = registered
+        registered = registered,
     )
 
 fun SignUpResponse.toSignUp(): SignUp =
@@ -28,7 +28,7 @@ fun SignUpResponse.toSignUp(): SignUp =
         image = image,
         nickname = nickname,
         refreshToken = refreshToken,
-        username = username
+        username = username,
     )
 
 fun UserSignUpForm.toSignUpRequest(): SignUpRequest =
@@ -36,7 +36,7 @@ fun UserSignUpForm.toSignUpRequest(): SignUpRequest =
         country = country,
         idToken = idToken,
         nickname = nickname,
-        username = username
+        username = username,
     )
 
 fun UsernameDuplicationResponse.toUsernameAvailable(): Boolean = available
@@ -54,5 +54,5 @@ fun UserInformationResponse.toUserInformation(): UserInformation =
         image = image,
         nickname = nickname,
         region = region,
-        username = username
+        username = username,
     )

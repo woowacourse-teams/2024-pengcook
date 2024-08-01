@@ -16,4 +16,3 @@ class OnboardingViewModelFactory(
         throw IllegalArgumentException()
     }
 }
-

@@ -24,11 +24,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import net.pengcook.android.BuildConfig
 import net.pengcook.android.R
-import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.databinding.FragmentOnboardingBinding
+import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.DefaultPengcookApplication
 
 class OnboardingFragment : Fragment() {
@@ -102,7 +101,7 @@ class OnboardingFragment : Fragment() {
                     Snackbar.make(
                         binding.root,
                         R.string.onboarding_network_error,
-                        Snackbar.LENGTH_SHORT
+                        Snackbar.LENGTH_SHORT,
                     ).show()
                 }
 
@@ -157,4 +156,3 @@ class OnboardingFragment : Fragment() {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 }
-

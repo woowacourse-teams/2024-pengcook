@@ -21,7 +21,7 @@ class SignUpViewModelFactory(
                 authorizationRepository,
                 tokenRepository,
                 validateUsernameUseCase,
-                validateNicknameUseCase
+                validateNicknameUseCase,
             ) as T
         }
         throw IllegalArgumentException()

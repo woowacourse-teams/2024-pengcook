@@ -12,9 +12,6 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
-import net.pengcook.android.data.remote.api.FeedService
-import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.databinding.FragmentCategoryFeedListBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 

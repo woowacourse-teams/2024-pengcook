@@ -17,7 +17,10 @@ class FakeAuthorizationRepository(
     private val validPlatform = "google"
     private val validToken = "googleToken"
 
-    override suspend fun signIn(platformName: String, idToken: String): Result<SignIn> {
+    override suspend fun signIn(
+        platformName: String,
+        idToken: String,
+    ): Result<SignIn> {
         return runCatching {
             if (platformName != validPlatform || idToken != validToken) throw IllegalArgumentException()
             val accessToken = if (registered) "accessToken" else null
@@ -38,14 +41,15 @@ class FakeAuthorizationRepository(
             val accessToken = "accessToken"
             val refreshToken = "refreshToken"
 
-            userInformation = UserInformation(
-                region = userSignUpForm.country,
-                email = "kmkim2689@gmail.com",
-                id = 1L,
-                image = "image",
-                nickname = userSignUpForm.nickname,
-                username = userSignUpForm.username,
-            )
+            userInformation =
+                UserInformation(
+                    region = userSignUpForm.country,
+                    email = "kmkim2689@gmail.com",
+                    id = 1L,
+                    image = "image",
+                    nickname = userSignUpForm.nickname,
+                    username = userSignUpForm.username,
+                )
 
             SignUp(
                 accessToken = accessToken,
@@ -68,8 +72,8 @@ class FakeAuthorizationRepository(
         return runCatching {
             refreshTrial++
             RefreshedTokens(
-                accessToken = "accessToken${refreshTrial}",
-                refreshToken = "refreshToken${refreshTrial}"
+                accessToken = "accessToken$refreshTrial",
+                refreshToken = "refreshToken$refreshTrial",
             )
         }
     }
@@ -78,4 +82,3 @@ class FakeAuthorizationRepository(
         return runCatching { userInformation ?: throw IllegalStateException() }
     }
 }
-
