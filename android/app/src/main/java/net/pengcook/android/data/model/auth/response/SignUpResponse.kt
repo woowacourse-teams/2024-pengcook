@@ -1,6 +1,5 @@
 package net.pengcook.android.data.model.auth.response
 
-
 data class SignUpResponse(
     val accessToken: String,
     val country: String,
@@ -9,5 +8,5 @@ data class SignUpResponse(
     val image: String,
     val nickname: String,
     val refreshToken: String,
-    val username: String
+    val username: String,
 )

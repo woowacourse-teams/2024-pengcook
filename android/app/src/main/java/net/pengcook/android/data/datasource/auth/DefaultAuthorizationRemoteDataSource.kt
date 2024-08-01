@@ -2,10 +2,10 @@ package net.pengcook.android.data.datasource.auth
 
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
-import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.SignInResponse
+import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
 import net.pengcook.android.data.remote.api.AuthorizationService
@@ -14,11 +14,17 @@ import retrofit2.Response
 class DefaultAuthorizationRemoteDataSource(
     private val authorizationService: AuthorizationService,
 ) : AuthorizationRemoteDataSource {
-    override suspend fun signIn(platformName: String, idToken: IdTokenRequest): Response<SignInResponse> {
+    override suspend fun signIn(
+        platformName: String,
+        idToken: IdTokenRequest,
+    ): Response<SignInResponse> {
         return authorizationService.signIn(platformName, idToken)
     }
 
-    override suspend fun signUp(platformName: String, signUpData: SignUpRequest): Response<SignUpResponse> {
+    override suspend fun signUp(
+        platformName: String,
+        signUpData: SignUpRequest,
+    ): Response<SignUpResponse> {
         return authorizationService.signUp(platformName, signUpData)
     }
 

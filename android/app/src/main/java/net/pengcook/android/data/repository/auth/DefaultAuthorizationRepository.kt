@@ -19,7 +19,10 @@ import net.pengcook.android.domain.model.auth.UserSignUpForm
 class DefaultAuthorizationRepository(
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
 ) : AuthorizationRepository, NetworkResponseHandler() {
-    override suspend fun signIn(platformName: String, idToken: String): Result<SignIn> {
+    override suspend fun signIn(
+        platformName: String,
+        idToken: String,
+    ): Result<SignIn> {
         return runCatching {
             val response =
                 authorizationRemoteDataSource.signIn(platformName, IdTokenRequest(idToken))
@@ -27,12 +30,16 @@ class DefaultAuthorizationRepository(
         }
     }
 
-    override suspend fun signUp(platformName: String, userSignUpForm: UserSignUpForm): Result<SignUp> {
+    override suspend fun signUp(
+        platformName: String,
+        userSignUpForm: UserSignUpForm,
+    ): Result<SignUp> {
         return runCatching {
-            val response = authorizationRemoteDataSource.signUp(
-                platformName = platformName,
-                signUpData = userSignUpForm.toSignUpRequest()
-            )
+            val response =
+                authorizationRemoteDataSource.signUp(
+                    platformName = platformName,
+                    signUpData = userSignUpForm.toSignUpRequest(),
+                )
             body(response, RESPONSE_CODE_SIGN_IN_SUCCESS).toSignUp()
         }
     }

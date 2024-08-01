@@ -2,10 +2,10 @@ package net.pengcook.android.data.remote.api
 
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
-import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.SignInResponse
+import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
 import retrofit2.Response

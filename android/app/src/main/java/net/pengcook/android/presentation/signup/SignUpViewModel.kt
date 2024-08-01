@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserSignUpForm
 import net.pengcook.android.domain.usecase.ValidateNicknameUseCase
@@ -78,7 +78,8 @@ class SignUpViewModel(
                 tokenRepository.authorizationData.first().platformToken ?: return@launch
 
             authorizationRepository.signUp(
-                platformName, UserSignUpForm(platformToken, country, nickname, username)
+                platformName,
+                UserSignUpForm(platformToken, country, nickname, username),
             ).onSuccess { signUpResult ->
                 onSignUpSuccessful(signUpResult)
             }.onFailure {

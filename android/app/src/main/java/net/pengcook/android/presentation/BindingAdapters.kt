@@ -101,12 +101,18 @@ fun Spinner.bindSpinnerValue(value: Any?) {
 
 @BindingAdapter("bind:spinnerItemChangeListener")
 fun Spinner.setInverseBindingListener(spinnerItemChangeListener: SpinnerItemChangeListener?) {
-    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-            val item = parent.getItemAtPosition(position) as String
-            spinnerItemChangeListener?.onSelectionChange(item)
-        }
+    onItemSelectedListener =
+        object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long,
+            ) {
+                val item = parent.getItemAtPosition(position) as String
+                spinnerItemChangeListener?.onSelectionChange(item)
+            }
 
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-    }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 }
