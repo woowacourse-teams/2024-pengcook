@@ -34,11 +34,11 @@ public class RecipeStep {
 
     private LocalTime cookingTime;
 
-    public long recipeId() {
-        return recipe.getId();
-    }
-
     public RecipeStep(Recipe recipe, String image, String description, int sequence, LocalTime cookingTime) {
         this(0L, recipe, image, description, sequence, cookingTime);
+    }
+
+    public long recipeId() {
+        return recipe.getId();
     }
 }
