@@ -1,6 +1,5 @@
 package net.pengcook.image.service;
 
-import java.net.URL;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +33,14 @@ public class S3ClientService {
     @Value("${cloud.aws.S3.s3-url}")
     private String s3Url;
 
-    @Value("${cloud.aws.S3.cloudfront-url}")
-    private String cloudFrontUrl;
+    @Value("${cloud.aws.S3.cloudfront-cname}")
+    private String cloudFrontCname;
 
-    public PresignedUrlResponse generatePresignedPutUrl(String keyName) {
+    public PresignedUrlResponse generatePresignedPutUrl(String fileName) {
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(imagePath + keyName)
+                .key(imagePath + fileName)
                 .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
@@ -49,22 +48,21 @@ public class S3ClientService {
                 .putObjectRequest(putObjectRequest)
                 .build();
 
-        URL url = s3Presigner.presignPutObject(presignRequest).url();
-        log.info("Generated URL: {}", url);
+        String url = s3Presigner.presignPutObject(presignRequest).url().toString();
 
         return new PresignedUrlResponse(url);
     }
 
-    public ImageUrlResponse getImageUrl(String keyName) {
+    public ImageUrlResponse getImageUrl(String fileName) {
         GetUrlRequest request = GetUrlRequest.builder()
                 .bucket(bucketName)
-                .key(imagePath + keyName)
+                .key(imagePath + fileName)
                 .build();
 
         String savedUrl = s3Client.utilities()
                 .getUrl(request)
                 .toString()
-                .replace(s3Url, cloudFrontUrl);
+                .replace(s3Url, cloudFrontCname);
 
         return new ImageUrlResponse(savedUrl);
     }
