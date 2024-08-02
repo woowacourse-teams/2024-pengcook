@@ -1,5 +1,6 @@
 volumes:
   db:
+  grafana:
   prometheus:
 
 services:
@@ -49,6 +50,8 @@ services:
   grafana:
     image: grafana/grafana
     restart: unless-stopped
+    volumes:
+      - grafana:/var/lib/grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
