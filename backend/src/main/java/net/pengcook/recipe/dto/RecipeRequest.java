@@ -1,15 +1,16 @@
 package net.pengcook.recipe.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 
 public record RecipeRequest(
-        String title,
-        String cookingTime,
-        String thumbnail,
-        int difficulty,
-        String description,
-        List<String> categories,
-        List<IngredientCreateRequest> ingredients
+        @NotBlank String title,
+        @NotBlank String cookingTime,
+        @NotBlank String thumbnail,
+        @NotBlank int difficulty,
+        @NotBlank String description,
+        @NotBlank List<String> categories,
+        @NotBlank List<IngredientCreateRequest> ingredients
 ) {
 }

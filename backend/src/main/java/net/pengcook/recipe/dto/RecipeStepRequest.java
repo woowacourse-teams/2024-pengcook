@@ -1,4 +1,12 @@
 package net.pengcook.recipe.dto;
 
-public record RecipeStepRequest(String image, String description, int sequence, String cookingTime) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+public record RecipeStepRequest(
+        String image,
+        @NotBlank String description,
+        @Positive int sequence,
+        @NotBlank String cookingTime
+) {
 }
