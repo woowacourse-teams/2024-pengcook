@@ -22,8 +22,8 @@ cloud:
     S3:
       bucket: ENC(3HINhuTYrePvhmhbckzbLLj1qaqG76bu77acZFETqegesjtrfoQb06gVHJmPFOyyfzK99gN3koThEn9aOV0wQA==)
       path: ENC(kKCH6o2grAvEPGMPukQh7EcDGmf0YqRFikMo+n7nSr2xx17KBKbLqZMfSfFeFzZw)
-      s3-url: ENC(cbVmI4ehJqlJoreRlvPZDD3VjxpLpeiSfYPq3GQbvudFHUe37JL/aftF0zlpT+f/daKOUYAoJmEe60yTbFJZqkp8O5YrB51ZBS2m8hAMKGGO030hIGBpjylfvd90jlK0)
-      cloudfront-url: ENC(iiXL7OqsrKOHtg/V1STwsxeVZ32c5aVHfbTg/sYxLOPxhxdnOrzU2zGohfrzEty2q74q88gEqS0+cUhH2jIIu1+9ZzbBlRizNEGBr180icM=)
+      s3-url: ENC(OKOlrO7h3rFyezy4xSAvDBIrPUPgE/I7FZ34nzcdc9M7A5T1Qp4be8aVQ3M1Z4wuG0GKqBsiMVUfg48eTRU3/T+MBjByqi9eBsKWeVtlw1zG6zzdjRXxWLhhhWiuGaCm)
+      cloudfront-cname: ENC(74un+Yr6O9u4VwCyLGWBTLMU862azaovIEJP8+3ouJ2jxk+zTNDD6OFQLjzeBqK/vINfMT8DDt5AbOb18wAiAg==)
     region:
       static: ENC(a7sCLLXDx5Fn76E+NLdyxLoL3MEp6x1J/OcoFyg0ejxLrGAQ/O+82ZoDr6LXcRAt)
 
