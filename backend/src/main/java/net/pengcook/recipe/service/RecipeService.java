@@ -22,14 +22,13 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
-import net.pengcook.recipe.exception.RecipeException;
+import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,14 +72,14 @@ public class RecipeService {
 
     public RecipeStepResponse readRecipeStep(long recipeId, long sequence) {
         RecipeStep recipeStep = recipeStepRepository.findByRecipeIdAndSequence(recipeId, sequence)
-                .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피 스텝 정보가 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당되는 레시피 스텝 정보가 없습니다."));
 
         return new RecipeStepResponse(recipeStep);
     }
 
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RecipeException(HttpStatus.NO_CONTENT, "해당되는 레시피가 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
 
         RecipeStep recipeStep = new RecipeStep(recipe, recipeStepRequest.image(), recipeStepRequest.description(),
                 recipeStepRequest.sequence(), LocalTime.parse(recipeStepRequest.cookingTime()));
