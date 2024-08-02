@@ -1,6 +1,4 @@
 package net.pengcook.image.dto;
 
-import java.net.URL;
-
-public record PresignedUrlResponse(URL url) {
+public record PresignedUrlResponse(String url) {
 }
