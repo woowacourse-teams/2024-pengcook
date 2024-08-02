@@ -1,7 +1,6 @@
 package net.pengcook.image.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.pengcook.image.dto.ImageUrlResponse;
 import net.pengcook.image.dto.PresignedUrlResponse;
 import net.pengcook.image.service.S3ClientService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +16,7 @@ public class S3Controller {
     private final S3ClientService s3ClientService;
 
     @GetMapping
-    public PresignedUrlResponse getPresignedURL(@RequestParam String keyName) {
-        return s3ClientService.generatePresignedPutUrl(keyName);
-    }
-
-    @GetMapping("/name")
-    public ImageUrlResponse getImageURL(@RequestParam String keyName){
-        return s3ClientService.getImageUrl(keyName);
+    public PresignedUrlResponse getPresignedURL(@RequestParam String fileName) {
+        return s3ClientService.generatePresignedPutUrl(fileName);
     }
 }
