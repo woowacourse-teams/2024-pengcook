@@ -46,10 +46,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         viewModelScope.launch {
             try {
                 val uri = makingRecipeRepository.fetchImageUri(keyName)
-                _imageUri.postValue(uri)
+                _imageUri.value = uri
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uploadError.postValue("Pre-signed URL 요청 실패: ${e.message}")
+                _uploadError.value = "Pre-signed URL 요청 실패: ${e.message}"
             }
         }
     }
@@ -62,18 +62,12 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         viewModelScope.launch {
             try {
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
-                _uploadSuccess.postValue(true)
+                _uploadSuccess.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uploadSuccess.postValue(false)
-                _uploadError.postValue("이미지 업로드 실패: ${e.message}")
+                _uploadSuccess.value = false
+                _uploadError.value = "이미지 업로드 실패: ${e.message}"
             }
         }
     }
-}
-
-sealed interface MakingEvent {
-    data object NavigateToMakingStep : MakingEvent
-
-    data object AddImage : MakingEvent
 }
