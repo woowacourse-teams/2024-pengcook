@@ -1,5 +1,6 @@
 package net.pengcook.android.data.remote.api
 
+import net.pengcook.android.data.model.PresignedUrlResponse
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,7 +21,3 @@ interface MakingRecipeService {
         @Body image: RequestBody,
     ): Response<Unit>
 }
-
-data class PresignedUrlResponse(
-    val url: String,
-)
