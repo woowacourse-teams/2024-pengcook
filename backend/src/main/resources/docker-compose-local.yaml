@@ -20,12 +20,14 @@ services:
 
   loki:
     image: grafana/loki
+    restart: unless-stopped
     ports:
       - 3100:3100
     command: -config.file=/etc/loki/local-config.yaml
 
   prometheus:
     image: prom/prometheus
+    restart: unless-stopped
     volumes:
       - prometheus:/prometheus
     ports:
@@ -45,6 +47,8 @@ services:
         /bin/prometheus
 
   grafana:
+    image: grafana/grafana
+    restart: unless-stopped
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -77,7 +81,6 @@ services:
           editable: false
         EOF
         /run.sh
-    image: grafana/grafana
     ports:
       - 3000:3000
     links:
