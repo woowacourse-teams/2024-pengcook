@@ -65,7 +65,7 @@ class RecipeMakingFragment : Fragment() {
             }
         }
 
-    private val getContentLauncher =
+    private val contentLauncher =
         registerForActivityResult(
             ActivityResultContracts.GetContent(),
         ) { uri: Uri? ->
@@ -200,7 +200,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun selectImageFromAlbum() {
-        getContentLauncher.launch("image/*")
+        contentLauncher.launch("image/*")
     }
 
     @Throws(IOException::class)
