@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import net.pengcook.android.BuildConfig
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
 import net.pengcook.android.data.remote.api.MakingRecipeService
@@ -110,6 +109,49 @@ class RecipeMakingFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
+        observeData()
+    }
+
+    private fun observeData() {
+        observeUiEvent()
+        observeImageUri()
+        observeUploadSuccess()
+        observeUploadError()
+    }
+
+    private fun observeUploadError() {
+        viewModel.uploadError.observe(
+            viewLifecycleOwner,
+        ) { errorMessage ->
+            if (errorMessage != null) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeUploadSuccess() {
+        viewModel.uploadSuccess.observe(
+            viewLifecycleOwner,
+        ) { success ->
+            if (success == true) {
+                Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
+            } else if (success == false) {
+                Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeImageUri() {
+        viewModel.imageUri.observe(
+            viewLifecycleOwner,
+        ) { uri ->
+            if (uri != null) {
+                uploadImageToS3(uri)
+            }
+        }
+    }
+
+    private fun observeUiEvent() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
@@ -117,38 +159,6 @@ class RecipeMakingFragment : Fragment() {
                 is MakingEvent.AddImage -> onAddImageClicked()
             }
         }
-
-        // Observer to handle the pre-signed URL response
-        viewModel.imageUri.observe(
-            viewLifecycleOwner,
-            Observer { uri ->
-                if (uri != null) {
-                    uploadImageToS3(uri)
-                }
-            },
-        )
-
-        // Observer to handle the upload success
-        viewModel.uploadSuccess.observe(
-            viewLifecycleOwner,
-            Observer { success ->
-                if (success == true) {
-                    Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
-                } else if (success == false) {
-                    Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
-                }
-            },
-        )
-
-        // Observer to handle upload error
-        viewModel.uploadError.observe(
-            viewLifecycleOwner,
-            Observer { errorMessage ->
-                if (errorMessage != null) {
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-                }
-            },
-        )
     }
 
     private fun onAddImageClicked() {
