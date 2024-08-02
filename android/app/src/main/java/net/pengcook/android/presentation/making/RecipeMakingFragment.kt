@@ -155,13 +155,13 @@ class RecipeMakingFragment : Fragment() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
-                is MakingEvent.NavigateToMakingStep -> onNextClicked()
-                is MakingEvent.AddImage -> onAddImageClicked()
+                is MakingEvent.NavigateToMakingStep -> navigateToStepMaking()
+                is MakingEvent.AddImage -> addImage()
             }
         }
     }
 
-    private fun onAddImageClicked() {
+    private fun addImage() {
         if (permissionArray.all {
                 ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -226,7 +226,7 @@ class RecipeMakingFragment : Fragment() {
         _binding = null
     }
 
-    private fun onNextClicked() {
+    private fun navigateToStepMaking() {
         // val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(File(currentPhotoPath!!).name)
         // findNavController().navigate(action)
     }
