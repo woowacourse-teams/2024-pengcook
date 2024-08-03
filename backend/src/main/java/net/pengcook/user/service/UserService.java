@@ -1,6 +1,8 @@
 package net.pengcook.user.service;
 
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.UserReportRequest;
@@ -57,5 +59,12 @@ public class UserService {
 
         UserReport savedUserReport = userReportRepository.save(userReport);
         return new UserReportResponse(savedUserReport);
+    }
+
+    public BlockedUserGroup getBlockedUserGroup(long blockerId) {
+
+        return userBlockRepository.findAllByBlockerId(blockerId).stream()
+                .map(UserBlock::getBlockee)
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockedUserGroup::new));
     }
 }
