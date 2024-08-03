@@ -20,9 +20,9 @@ firebase:
 cloud:
   aws:
     S3:
-      bucket: ENC(3HINhuTYrePvhmhbckzbLLj1qaqG76bu77acZFETqegesjtrfoQb06gVHJmPFOyyfzK99gN3koThEn9aOV0wQA==)
-      path: ENC(kKCH6o2grAvEPGMPukQh7EcDGmf0YqRFikMo+n7nSr2xx17KBKbLqZMfSfFeFzZw)
-      s3-url: ENC(OKOlrO7h3rFyezy4xSAvDBIrPUPgE/I7FZ34nzcdc9M7A5T1Qp4be8aVQ3M1Z4wuG0GKqBsiMVUfg48eTRU3/T+MBjByqi9eBsKWeVtlw1zG6zzdjRXxWLhhhWiuGaCm)
+      bucket: ENC(vHtLR4hquZmrp7cqlrr6vXrazA0rLJApEalSU6QPYX4O1GHrbQd9dquGAWtCy1vZcOVfFUZ5aDqqSMSrycfhlw==)
+      path: ENC(enM1r+Mv5m9E/UFDfKiPN5mdu/JJ3BOvWgSW05+vDE4SaI4iHlnEN4vqZVa3pGxL)
+      s3-url: ENC(vXFQrV7EqIN++so+O8z8ZrhzS9tqn0n2cxy1HeNfSYBqV6zNZm3BwKeRt+OlctQVHbBMUfXdCYdEcoxsgKtJnu8veV21IEe04+yEfQSe/u/44Gij3ekxVKRx6FZT+A4c)
       cloudfront-cname: ENC(74un+Yr6O9u4VwCyLGWBTLMU862azaovIEJP8+3ouJ2jxk+zTNDD6OFQLjzeBqK/vINfMT8DDt5AbOb18wAiAg==)
     region:
       static: ENC(a7sCLLXDx5Fn76E+NLdyxLoL3MEp6x1J/OcoFyg0ejxLrGAQ/O+82ZoDr6LXcRAt)
