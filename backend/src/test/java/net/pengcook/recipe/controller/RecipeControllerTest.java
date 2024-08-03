@@ -121,7 +121,7 @@ class RecipeControllerTest extends RestDocsSetting {
                         "특정 레시피의 상세 스텝을 조회합니다.",
                         "레시피 상세 스텝 조회 API",
                         pathParameters(
-                                parameterWithName("id").description("레시피 아이디")
+                                parameterWithName("recipeId").description("레시피 아이디")
                         ),
                         responseFields(
                                 fieldWithPath("[]").description("레시피 스텝 목록"),
@@ -132,7 +132,7 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].sequence").description("레시피 스텝 순서")
                         )))
                 .when()
-                .get("/api/recipes/{id}/steps", 1L)
+                .get("/api/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .body("size()", is(3));
     }

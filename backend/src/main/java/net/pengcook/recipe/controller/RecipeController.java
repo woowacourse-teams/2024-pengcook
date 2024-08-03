@@ -40,9 +40,9 @@ public class RecipeController {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 
-    @GetMapping("/{id}/steps")
-    public List<RecipeStepResponse> readRecipeSteps(@PathVariable long id) {
-        return recipeService.readRecipeSteps(id);
+    @GetMapping("/{recipeId}/steps")
+    public List<RecipeStepResponse> readRecipeSteps(@PathVariable long recipeId) {
+        return recipeService.readRecipeSteps(recipeId);
     }
 
     @GetMapping("/{recipeId}/steps/{sequence}")
@@ -52,13 +52,17 @@ public class RecipeController {
 
     @PostMapping("/{recipeId}/steps")
     @ResponseStatus(HttpStatus.CREATED)
-    public RecipeStepResponse createRecipeStep(@PathVariable long recipeId,
-                                               @RequestBody RecipeStepRequest recipeStepRequest) {
+    public RecipeStepResponse createRecipeStep(
+            @PathVariable long recipeId,
+            @RequestBody RecipeStepRequest recipeStepRequest
+    ) {
         return recipeService.createRecipeStep(recipeId, recipeStepRequest);
     }
 
     @GetMapping("/search")
-    public List<MainRecipeResponse> readRecipesOfCategory(@ModelAttribute RecipeOfCategoryRequest request) {
-        return recipeService.readRecipesOfCategory(request);
+    public List<MainRecipeResponse> readRecipesOfCategory(
+            @ModelAttribute RecipeOfCategoryRequest recipeOfCategoryRequest
+    ) {
+        return recipeService.readRecipesOfCategory(recipeOfCategoryRequest);
     }
 }

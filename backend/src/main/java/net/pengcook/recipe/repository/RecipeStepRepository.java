@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipeStepRepository extends JpaRepository<RecipeStep, Long> {
 
-    List<RecipeStep> findAllByRecipeIdOrderBySequence(long id);
+    List<RecipeStep> findAllByRecipeIdOrderBySequence(long recipeId);
 
     Optional<RecipeStep> findByRecipeIdAndSequence(long recipeId, long sequence);
 }

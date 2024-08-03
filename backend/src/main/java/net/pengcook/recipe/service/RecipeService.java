@@ -55,8 +55,14 @@ public class RecipeService {
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
-        Recipe recipe = new Recipe(recipeRequest.title(), author, LocalTime.parse(recipeRequest.cookingTime()),
-                recipeRequest.thumbnail(), recipeRequest.difficulty(), recipeRequest.description());
+        Recipe recipe = new Recipe(
+                recipeRequest.title(),
+                author,
+                LocalTime.parse(recipeRequest.cookingTime()),
+                recipeRequest.thumbnail(),
+                recipeRequest.difficulty(),
+                recipeRequest.description()
+        );
 
         Recipe savedRecipe = recipeRepository.save(recipe);
         categoryService.saveCategories(savedRecipe, recipeRequest.categories());
@@ -65,8 +71,8 @@ public class RecipeService {
         return new RecipeResponse(savedRecipe);
     }
 
-    public List<RecipeStepResponse> readRecipeSteps(long id) {
-        List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(id);
+    public List<RecipeStepResponse> readRecipeSteps(long recipeId) {
+        List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(recipeId);
         return convertToRecipeStepResponses(recipeSteps);
     }
 
@@ -81,11 +87,15 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
 
-        RecipeStep recipeStep = new RecipeStep(recipe, recipeStepRequest.image(), recipeStepRequest.description(),
-                recipeStepRequest.sequence(), LocalTime.parse(recipeStepRequest.cookingTime()));
+        RecipeStep recipeStep = new RecipeStep(
+                recipe,
+                recipeStepRequest.image(),
+                recipeStepRequest.description(),
+                recipeStepRequest.sequence(),
+                LocalTime.parse(recipeStepRequest.cookingTime())
+        );
 
         RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
-
         return new RecipeStepResponse(savedRecipeStep);
     }
 
