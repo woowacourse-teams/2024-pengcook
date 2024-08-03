@@ -23,7 +23,7 @@ class S3ControllerTest extends RestDocsSetting {
     private S3ClientService s3ClientService;
 
     @Test
-    @DisplayName("presigned url을 요청한다.")
+    @DisplayName("presigned url을 반환한다.")
     void getPresignedUrl() {
         String presignedUrl =
                 "https://bucketName.s3.region.amazonaws.com/serviceName/image/fileName?X-Amz-Security-Token=REDACTED&X-Amz-Algorithm=REDACTED&X-Amz-Date=REDACTED&X-Amz-SignedHeaders=REDACTED&X-Amz-Expires=REDACTED&X-Amz-Credential=REDACTED&X-Amz-Signature=REDACTED";
