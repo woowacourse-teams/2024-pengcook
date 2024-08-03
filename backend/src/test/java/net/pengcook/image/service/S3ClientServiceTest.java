@@ -34,7 +34,7 @@ class S3ClientServiceTest {
     private String cloudfrontCname;
 
     @Test
-    @DisplayName("presigned url을 요청한다.")
+    @DisplayName("presigned url을 반환한다.")
     void generatePresignedUrl() throws MalformedURLException {
         String expectedPresignedUrl =
                 "https://bucketName.s3.region.amazonaws.com/serviceName/image/fileName?X-Amz-Security-Token=REDACTED&X-Amz-Algorithm=REDACTED&X-Amz-Date=REDACTED&X-Amz-SignedHeaders=REDACTED&X-Amz-Expires=REDACTED&X-Amz-Credential=REDACTED&X-Amz-Signature=REDACTED";
@@ -52,7 +52,7 @@ class S3ClientServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 조회 url을 요청한다.")
+    @DisplayName("이미지 조회 url을 반환한다.")
     void getImageUrl() {
         String expectedImageUrl = cloudfrontCname + "/pengcook/image/" + FILE_NAME;
         ImageUrlResponse imageUrlResponse = new ImageUrlResponse(expectedImageUrl);
