@@ -10,6 +10,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.service.CategoryService;
+import net.pengcook.image.service.S3ClientService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
@@ -44,6 +45,7 @@ public class RecipeService {
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
+    private final S3ClientService s3ClientService;
 
     public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -55,11 +57,12 @@ public class RecipeService {
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
+        String thumbnailUrl = s3ClientService.getImageUrl(recipeRequest.thumbnail()).url();
         Recipe recipe = new Recipe(
                 recipeRequest.title(),
                 author,
                 LocalTime.parse(recipeRequest.cookingTime()),
-                recipeRequest.thumbnail(),
+                thumbnailUrl,
                 recipeRequest.difficulty(),
                 recipeRequest.description()
         );
@@ -86,10 +89,10 @@ public class RecipeService {
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
-
+        String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
-                recipeStepRequest.image(),
+                imageUrl,
                 recipeStepRequest.description(),
                 recipeStepRequest.sequence(),
                 LocalTime.parse(recipeStepRequest.cookingTime())
