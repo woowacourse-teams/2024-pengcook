@@ -1,0 +1,28 @@
+package net.pengcook.comment.dto;
+
+import java.time.LocalDateTime;
+import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.comment.domain.Comment;
+
+public record CommentResponse(
+        Long commentId,
+        Long userId,
+        String userImage,
+        String userName,
+        LocalDateTime createdAt,
+        String message,
+        boolean mine
+) {
+
+    public CommentResponse(Comment comment, UserInfo userInfo) {
+        this(
+                comment.getId(),
+                comment.getUser().getId(),
+                comment.getUser().getImage(),
+                comment.getUser().getUsername(),
+                comment.getCreatedAt(),
+                comment.getMessage(),
+                comment.getUser().getId() == userInfo.getId()
+        );
+    }
+}
