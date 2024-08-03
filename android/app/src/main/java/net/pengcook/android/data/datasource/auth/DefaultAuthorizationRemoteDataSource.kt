@@ -28,8 +28,8 @@ class DefaultAuthorizationRemoteDataSource(
         return authorizationService.signUp(platformName, signUpData)
     }
 
-    override suspend fun fetchUsernameDuplication(username: String): Response<UsernameDuplicationResponse> {
-        return authorizationService.fetchUsernameDuplication(username)
+    override suspend fun checkUsernameDuplication(username: String): Response<UsernameDuplicationResponse> {
+        return authorizationService.checkUsernameDuplication(username)
     }
 
     override suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RefreshedTokensResponse> {
