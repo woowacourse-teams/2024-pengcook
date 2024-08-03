@@ -44,9 +44,9 @@ class DefaultAuthorizationRepository(
         }
     }
 
-    override suspend fun fetchUsernameDuplication(username: String): Result<Boolean> {
+    override suspend fun checkUsernameDuplication(username: String): Result<Boolean> {
         return runCatching {
-            val response = authorizationRemoteDataSource.fetchUsernameDuplication(username)
+            val response = authorizationRemoteDataSource.checkUsernameDuplication(username)
             body(response, RESPONSE_CODE_SUCCESS).toUsernameAvailable()
         }
     }

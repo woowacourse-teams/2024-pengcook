@@ -21,7 +21,7 @@ interface AuthorizationRemoteDataSource {
         signUpData: SignUpRequest,
     ): Response<SignUpResponse>
 
-    suspend fun fetchUsernameDuplication(username: String): Response<UsernameDuplicationResponse>
+    suspend fun checkUsernameDuplication(username: String): Response<UsernameDuplicationResponse>
 
     suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RefreshedTokensResponse>
 

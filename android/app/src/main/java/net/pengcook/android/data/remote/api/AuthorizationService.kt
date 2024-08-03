@@ -40,7 +40,7 @@ interface AuthorizationService {
     ): Response<SignUpResponse>
 
     @GET("/api/user/username/check")
-    suspend fun fetchUsernameDuplication(
+    suspend fun checkUsernameDuplication(
         @Query("username") username: String,
     ): Response<UsernameDuplicationResponse>
 }

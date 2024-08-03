@@ -17,7 +17,7 @@ interface AuthorizationRepository {
         userSignUpForm: UserSignUpForm,
     ): Result<SignUp>
 
-    suspend fun fetchUsernameDuplication(username: String): Result<Boolean>
+    suspend fun checkUsernameDuplication(username: String): Result<Boolean>
 
     suspend fun fetchAccessToken(refreshToken: String): Result<RefreshedTokens>
 

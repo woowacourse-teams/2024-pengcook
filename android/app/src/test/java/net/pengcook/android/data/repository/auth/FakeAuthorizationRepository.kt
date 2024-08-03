@@ -64,7 +64,7 @@ class FakeAuthorizationRepository(
         }
     }
 
-    override suspend fun fetchUsernameDuplication(username: String): Result<Boolean> {
+    override suspend fun checkUsernameDuplication(username: String): Result<Boolean> {
         return runCatching { username !in usernames }
     }
 
