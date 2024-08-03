@@ -8,12 +8,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
-import net.pengcook.category.service.CategoryService;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
-import net.pengcook.ingredient.service.IngredientRecipeService;
-import net.pengcook.ingredient.service.IngredientService;
-import net.pengcook.ingredient.service.IngredientSubstitutionService;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
@@ -26,13 +22,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@Import({RecipeService.class, CategoryService.class, IngredientService.class, IngredientRecipeService.class,
-        IngredientSubstitutionService.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = "/data/recipe.sql")
 class RecipeServiceTest {
 
