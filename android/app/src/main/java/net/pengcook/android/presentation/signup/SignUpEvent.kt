@@ -7,6 +7,8 @@ sealed interface SignUpEvent {
 
     data object BackPressed : SignUpEvent
 
+    data object SignUpFormNotCompleted : SignUpEvent
+
     data object UsernameInvalid : SignUpEvent
 
     data object NicknameLengthInvalid : SignUpEvent
