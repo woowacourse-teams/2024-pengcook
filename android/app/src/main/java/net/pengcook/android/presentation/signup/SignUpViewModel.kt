@@ -62,7 +62,7 @@ class SignUpViewModel(
                 return@launch
             }
 
-            authorizationRepository.fetchUsernameDuplication(username)
+            authorizationRepository.checkUsernameDuplication(username)
                 .onSuccess { available ->
                     if (!available) {
                         _signUpEvent.value = Event(SignUpEvent.NicknameDuplicated)
@@ -97,7 +97,7 @@ class SignUpViewModel(
         tokenRepository.updateAccessToken(signUpResult.accessToken)
         tokenRepository.updateRefreshToken(signUpResult.refreshToken)
         tokenRepository.updateCurrentPlatform(Platform.find(platformName))
-        _signUpEvent.value = Event(SignUpEvent.NavigateToMain)
+        _signUpEvent.value = Event(SignUpEvent.SignInSuccessful)
     }
 
     private fun onSignUpFailure() {
