@@ -10,19 +10,23 @@
             type="String" />
 
         <variable
-            name="icon"
+            name="leftIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="rightIcon"
             type="android.graphics.drawable.Drawable" />
 
         <variable
             name="appbarEventListener"
-            type="net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener" />
+            type="net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener" />
     </data>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_action"
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_action"
@@ -32,23 +36,33 @@
             app:layout_anchor="@+id/abl_default">
 
             <ImageView
-                android:id="@+id/iv_start_button"
+                android:id="@+id/iv_left_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> appbarEventListener.onNavigateBack()}"
+                android:onClick="@{() -> appbarEventListener.navigationAction()}"
                 android:padding="16dp"
-                android:src="@{icon}"
+                android:src="@{leftIcon}"
                 tools:src="@drawable/ic_back_24" />
 
             <TextView
-                style="@style/Body.Regular.B1"
+                style="@style/Headline.H4"
+                android:fontFamily="@font/notosans_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/notosans_bold"
                 android:gravity="center"
                 android:text="@{title}"
                 tools:text="Sign Up" />
+
+            <ImageView
+                android:id="@+id/iv_right_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> appbarEventListener.customAction()}"
+                android:src="@{rightIcon}"
+                tools:src="@drawable/ic_back_24" />
 
         </androidx.appcompat.widget.Toolbar>
 
