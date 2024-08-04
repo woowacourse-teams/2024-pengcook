@@ -1,9 +1,14 @@
 SET REFERENTIAL_INTEGRITY FALSE;
+
 TRUNCATE TABLE users;
 ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
 
+TRUNCATE TABLE user_block;
+ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
+
 TRUNCATE TABLE user_report;
 ALTER TABLE user_report ALTER COLUMN id RESTART WITH 1;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 INSERT INTO users (email, username, nickname, image, region)
@@ -16,3 +21,6 @@ VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA'),
        ('km@pengcook.net', 'km', '케이엠', 'km.jpg', 'KOREA'),
        ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', 'KOREA');
 
+INSERT INTO user_block (blocker_id, blockee_id)
+VALUES (1, 2),
+       (1, 3)
