@@ -21,6 +21,10 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
@@ -65,6 +69,34 @@ class RecipeControllerTest extends RestDocsSetting {
                 .get("/api/recipes")
                 .then().log().all()
                 .body("size()", is(3));
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"-1", "invalid", " ", "1.2"})
+    @DisplayName("레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생한다.")
+    void readRecipesWithInvalidPageNumber(String pageNumber) {
+        RestAssured.given().log().all()
+                .queryParam("pageNumber", pageNumber)
+                .queryParam("pageSize", 3)
+                .when()
+                .get("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"-1", "0", "invalid", " ", "1.2"})
+    @DisplayName("레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생한다.")
+    void readRecipesWithInvalidPageSize(String pageSize) {
+        RestAssured.given().log().all()
+                .queryParam("pageNumber", 0)
+                .queryParam("pageSize", pageSize)
+                .when()
+                .get("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
