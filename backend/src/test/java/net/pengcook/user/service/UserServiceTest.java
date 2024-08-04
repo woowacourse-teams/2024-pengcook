@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import net.pengcook.user.domain.BlockedUserGroup;
 import java.util.NoSuchElementException;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.UserReportRequest;
@@ -136,5 +137,19 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("차단할 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("차단한 사용자들의 목록을 불러올 수 있다.")
+    void getBlockedUserGroup() {
+        long blockerId = 1L;
+
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(blockerId);
+
+        assertAll(
+                () -> assertThat(blockedUserGroup.isBlocked(2L)).isTrue(),
+                () -> assertThat(blockedUserGroup.isBlocked(3L)).isTrue(),
+                () -> assertThat(blockedUserGroup.isBlocked(4L)).isFalse()
+        );
     }
 }
