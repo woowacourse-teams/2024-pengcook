@@ -16,6 +16,9 @@ import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
@@ -68,5 +71,49 @@ class CommentControllerTest extends RestDocsSetting {
                 .when().post("api/comments")
                 .then().log().all()
                 .statusCode(201);
+    }
+
+    @Test
+    @DisplayName("댓글 등록 시 레시피 아이디에 0을 입력하면 예외가 발생한다.")
+    void createCommentWithInvalidRecipeId() {
+        CreateCommentRequest request = new CreateCommentRequest(0L, "thank you!");
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피에 댓글을 등록할 때 유효하지 않은 레시피 아이디를 입력하면 예외가 발생합니다.",
+                        "댓글 조회 API",
+                        requestFields(
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("message").description("댓글 내용")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("api/comments")
+                .then().log().all()
+                .statusCode(400);
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" "})
+    @DisplayName("댓글 등록 시 빈 댓글 내용을 입력하면 예외가 발생한다.")
+    void createCommentWithBlankMessage(String message) {
+        CreateCommentRequest request = new CreateCommentRequest(1L, message);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피에 댓글을 등록할 때 유효하지 않은 댓글 내용을 입력하면 예외가 발생합니다.",
+                        "댓글 조회 API",
+                        requestFields(
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("message").description("댓글 내용")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("api/comments")
+                .then().log().all()
+                .statusCode(400);
     }
 }
