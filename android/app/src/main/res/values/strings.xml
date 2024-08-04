@@ -17,15 +17,16 @@
 
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
-    <string name="signup_username_hint">Write Username</string>
+    <string name="signup_username_hint">Enter Your Username</string>
     <string name="signup_nickname_title">Nickname</string>
-    <string name="signup_nickname_hint">Write Nickname</string>
+    <string name="signup_nickname_hint">Enter Your Nickname</string>
     <string name="signup_birth_date_title">Birth Date</string>
     <string name="signup_country_title">Country</string>
     <string name="signup_button_next">Next</string>
-    <string name="signup_message_invalid_username">The length of username is invalid.</string>
+    <string name="signup_message_invalid_username">Choose a username between 2 and 30 characters.</string>
     <string name="signup_message_duplicated_username">The username already exists.</string>
-    <string name="signup_message_invalid_nickname">The length of nickname is invalid.</string>
+    <string name="signup_message_form_not_completed">Please complete the form.</string>
+    <string name="signup_message_invalid_nickname">Choose a nickname between 1 and 30 characters.</string>
     <string name="signup_message_error">Server error occurred.</string>
     <string-array name="signup_countries">
         <item>Belgian</item>
