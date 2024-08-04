@@ -113,7 +113,7 @@ class SignUpFragment : Fragment() {
         viewModel.signUpEvent.observe(viewLifecycleOwner) { event ->
             val signUpEvent = event.getContentIfNotHandled() ?: return@observe
             when (signUpEvent) {
-                is SignUpEvent.NavigateToMain -> {
+                is SignUpEvent.SignInSuccessful -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
                 }
 
@@ -121,7 +121,7 @@ class SignUpFragment : Fragment() {
                     showSnackBar(getString(R.string.signup_message_error))
                 }
 
-                is SignUpEvent.NavigateBack -> {
+                is SignUpEvent.BackPressed -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_onboardingFragment)
                 }
 
