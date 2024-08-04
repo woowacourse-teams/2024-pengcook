@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
+import net.pengcook.comment.dto.CreateCommentRequest;
+import net.pengcook.comment.repository.CommentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,12 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts = "/data/comment.sql")
 class CommentServiceTest {
 
+    private static final int INITIAL_COMMENT_COUNT = 3;
+
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     @DisplayName("레시피의 댓글을 조회한다.")
@@ -35,5 +41,16 @@ class CommentServiceTest {
         List<CommentOfRecipeResponse> actual = commentService.readComments(1L, userInfo);
 
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
+    }
+
+    @Test
+    @DisplayName("댓글을 등록한다.")
+    void createComment() {
+        CreateCommentRequest request = new CreateCommentRequest(2L, "thank you!");
+        UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
+
+        commentService.createComment(request, userInfo);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1);
     }
 }
