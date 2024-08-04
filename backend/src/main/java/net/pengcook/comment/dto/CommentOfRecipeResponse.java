@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.domain.Comment;
 
-public record CommentResponse(
+public record CommentOfRecipeResponse(
         Long commentId,
         Long userId,
         String userImage,
@@ -14,7 +14,7 @@ public record CommentResponse(
         boolean mine
 ) {
 
-    public CommentResponse(Comment comment, UserInfo userInfo) {
+    public CommentOfRecipeResponse(Comment comment, UserInfo userInfo) {
         this(
                 comment.getId(),
                 comment.getUser().getId(),
