@@ -1,86 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="eventHandler"
+            type="net.pengcook.android.presentation.making.step.listener.StepMakingEventHandler" />
+
+        <variable
+            name="appbarEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener" />
 
         <variable
             name="vm"
             type="net.pengcook.android.presentation.making.step.StepMakingViewModel" />
     </data>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/abl_step_making"
+            layout="@layout/item_appbar_with_double_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:appbarEventListener="@{appbarEventListener}"
+            app:leftIcon="@{@drawable/ic_close}"
+            app:rightIcon="@{@drawable/ic_complete_making}"
+            app:title="@{@string/making_step_title}" />
+
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/cl_btn_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/abl_step_making">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/stepRecipeThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="24dp"
+                    android:background="#EFEFEF"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{vm.imageUrl}"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_default="percent"
+                    app:layout_constraintWidth_percent="0.8" />
+
+                <ImageView
+                    android:id="@+id/stepAddImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_photo"
+                    bind:visibility="@{vm.imageUrl.isEmpty()}"
+                    app:layout_constraintBottom_toBottomOf="@+id/stepRecipeThumbnail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/stepRecipeThumbnail"
+                    tools:layout_editor_absoluteY="214dp" />
+
+                <include
+                    android:id="@+id/et_guide_step_recipe"
+                    layout="@layout/item_form_multi_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="16dp"
+                    app:content="@={vm.introductionContent}"
+                    app:hintContent="@{@string/step_making_hint}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stepRecipeThumbnail"
+                    app:title="@{String.valueOf(vm.stepNumber)}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/cl_btn_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <!-- Close Button -->
-            <ImageView
-                android:id="@+id/stepRecipeCloseButton"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_close"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Recipe Title Text -->
+            <!-- Back Button -->
             <TextView
-                android:id="@+id/stepRecipeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/btn_back_step_making_recipe"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_margin="24dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/bg_radius_outlined"
+                android:fontFamily="@font/notosans_bold"
+                android:gravity="center"
+                android:onClick="@{() -> eventHandler.validatePreviousPageableCondition()}"
+                android:text="@string/back_making_step"
+                android:textColor="@color/black_100"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_next_making_recipe"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Recipe title" />
+                bind:visibility="@{vm.stepNumber != 1}" />
 
-            <ImageView
-                android:id="@+id/stepRecipeThumbnail"
-                android:layout_width="343dp"
-                android:layout_height="343dp"
-                android:layout_margin="16dp"
-                android:layout_marginTop="16dp"
-                android:background="#EFEFEF"
-                android:scaleType="centerCrop"
+            <!-- Next Button -->
+            <TextView
+                android:id="@+id/btn_next_making_recipe"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_margin="24dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/bg_radius_filled"
+                android:backgroundTint="@color/black_100"
+                android:fontFamily="@font/notosans_bold"
+                android:gravity="center"
+                android:onClick="@{() -> vm.validateNextPageableCondition()}"
+                android:text="@string/making_next_step"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/stepRecipeTitle"
-                app:layout_constraintWidth_default="percent"
-                app:layout_constraintWidth_percent="0.8" />
-
-
-            <ImageView
-                android:id="@+id/stepAddImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_photo"
-                app:layout_constraintBottom_toBottomOf="@+id/stepRecipeThumbnail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/stepRecipeThumbnail"
-                tools:layout_editor_absoluteY="214dp" />
-
-            <include
-                android:id="@+id/stepRecipeEditTitle"
-                layout="@layout/item_form_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:content="@={vm.introductionContent}"
-                app:hintContent="@{@string/step_making_hint}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/stepRecipeThumbnail"
-                app:title="@{vm.stepNumber}" />
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="4"
+                app:layout_constraintStart_toEndOf="@id/btn_back_step_making_recipe"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:visibility="@{vm.stepNumber != vm.maxStepPage}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
