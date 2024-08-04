@@ -1,9 +1,9 @@
-package net.pengcook.android.presentation.core.model
+package net.pengcook.android.data.model.step
 
-data class RecipeStep(
+data class RecipeStepResponse(
     val stepId: Long,
-    val recipeId: Long,
     val description: String,
     val image: String,
+    val recipeId: Long,
     val sequence: Int,
 )
