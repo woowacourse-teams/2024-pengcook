@@ -11,6 +11,7 @@ import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
+import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -36,7 +37,8 @@ class RecipeServiceTest {
     @CsvSource(value = {"0,2,15", "1,2,13", "1,3,12"})
     @DisplayName("요청받은 페이지의 레시피 개요 목록을 조회한다.")
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
-        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageNumber, pageSize);
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize);
+        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageRecipeRequest);
 
         assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
     }

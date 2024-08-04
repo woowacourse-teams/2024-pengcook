@@ -18,6 +18,7 @@ import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
+import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
@@ -47,8 +48,8 @@ public class RecipeService {
     private final IngredientService ingredientService;
     private final S3ClientService s3ClientService;
 
-    public List<MainRecipeResponse> readRecipes(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = PageRequest.of(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
         List<Long> recipeIds = recipeRepository.findRecipeIds(pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
