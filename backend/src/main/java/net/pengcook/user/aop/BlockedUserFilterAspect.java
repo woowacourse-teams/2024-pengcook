@@ -23,68 +23,77 @@ public class BlockedUserFilterAspect {
     private final UserService userService;
 
     @Pointcut("execution(java.util.List<net.pengcook.user.domain.AuthorAble+> net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningListOfAuthorAble() {
+    public void repositoryMethodsReturningAuthorAbleList() {
     }
 
-    @Around("repositoryMethodsReturningListOfAuthorAble()")
-    public Object filterAuthorAbles(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("repositoryMethodsReturningAuthorAbleList()")
+    public Object filterBlockedAuthorsFromList(ProceedingJoinPoint joinPoint) throws Throwable {
         List<AuthorAble> authorAbles = (List<AuthorAble>) joinPoint.proceed();
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        UserInfo userInfo = (UserInfo) requestAttributes.getAttribute(UserInfo.class.getName(), RequestAttributes.SCOPE_REQUEST);
 
+        UserInfo userInfo = getCurrentUserInfo();
         if (userInfo == null) {
             return authorAbles;
         }
 
         BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
 
-        return authorAbles.stream()
-                .filter(item -> !blockedUserGroup.isBlocked(item.getAuthorId()))
-                .toList();
+        return filterBlockedUsers(authorAbles, blockedUserGroup);
     }
 
     @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.AuthorAble+> net.pengcook..repository..*(..))")
-    public void repositoryFindMethodsReturningSingleAuthorAble() {
+    public void repositoryMethodsReturningOptionalAuthorAble() {
     }
 
-    @Around("repositoryFindMethodsReturningSingleAuthorAble()")
-    public Object filterAuthorAbleFind(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("repositoryMethodsReturningOptionalAuthorAble()")
+    public Object filterBlockedAuthorFromOptional(ProceedingJoinPoint joinPoint) throws Throwable {
         Optional<AuthorAble> authorAbleOptional = (Optional<AuthorAble>) joinPoint.proceed();
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        UserInfo userInfo = (UserInfo) requestAttributes.getAttribute(UserInfo.class.getName(), RequestAttributes.SCOPE_REQUEST);
 
-        if (userInfo == null) {
+        UserInfo userInfo = getCurrentUserInfo();
+        if (userInfo == null || authorAbleOptional.isEmpty()) {
             return authorAbleOptional;
         }
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
 
-        if (authorAbleOptional.isPresent()) {
-            AuthorAble authorAble = authorAbleOptional.get();
-            if (!blockedUserGroup.isBlocked(authorAble.getAuthorId())) {
-                return authorAbleOptional;
-            }
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
+        if (blockedUserGroup.isBlocked(authorAbleOptional.get().getAuthorId())) {
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        return authorAbleOptional;
     }
 
     @Pointcut("execution(net.pengcook.user.domain.AuthorAble+ net.pengcook..repository..*(..))")
-    public void repositoryGetMethodsReturningSingleAuthorAble() {
+    public void repositoryMethodsReturningAuthorAble() {
     }
 
-    @Around("repositoryGetMethodsReturningSingleAuthorAble()")
-    public Object filterAuthorAbleGet(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("repositoryMethodsReturningAuthorAble()")
+    public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
         AuthorAble authorAble = (AuthorAble) joinPoint.proceed();
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        UserInfo userInfo = (UserInfo) requestAttributes.getAttribute(UserInfo.class.getName(), RequestAttributes.SCOPE_REQUEST);
 
+        UserInfo userInfo = getCurrentUserInfo();
         if (userInfo == null) {
             return authorAble;
         }
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
 
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
         if (blockedUserGroup.isBlocked(authorAble.getAuthorId())) {
             return null;
         }
+
         return authorAble;
+    }
+
+    private UserInfo getCurrentUserInfo() {
+        try {
+            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+            return (UserInfo) requestAttributes.getAttribute(UserInfo.class.getName(), RequestAttributes.SCOPE_REQUEST);
+        } catch (IllegalStateException e) {
+            return null;
+        }
+    }
+
+    private List<AuthorAble> filterBlockedUsers(List<AuthorAble> authorAbles, BlockedUserGroup blockedUserGroup) {
+        return authorAbles.stream()
+                .filter(item -> !blockedUserGroup.isBlocked(item.getAuthorId()))
+                .toList();
     }
 }
