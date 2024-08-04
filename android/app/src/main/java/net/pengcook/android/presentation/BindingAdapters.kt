@@ -117,7 +117,6 @@ fun visibility(
     view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
-/*
 @BindingAdapter("bind:selectedValue")
 fun Spinner.bindSpinnerValue(value: Any?) {
     if (adapter == null) return
