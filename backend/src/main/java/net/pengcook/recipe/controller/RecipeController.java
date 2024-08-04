@@ -33,13 +33,13 @@ public class RecipeController {
     private final RecipeService recipeService;
 
     @GetMapping
-    public List<MainRecipeResponse> readRecipes(@Valid @ModelAttribute PageRecipeRequest pageRecipeRequest) {
+    public List<MainRecipeResponse> readRecipes(@ModelAttribute @Valid PageRecipeRequest pageRecipeRequest) {
         return recipeService.readRecipes(pageRecipeRequest);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @Valid @RequestBody RecipeRequest recipeRequest) {
+    public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody @Valid RecipeRequest recipeRequest) {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 
@@ -57,7 +57,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeStepResponse createRecipeStep(
             @PathVariable long recipeId,
-            @Valid @RequestBody RecipeStepRequest recipeStepRequest
+            @RequestBody @Valid RecipeStepRequest recipeStepRequest
     ) {
         return recipeService.createRecipeStep(recipeId, recipeStepRequest);
     }
