@@ -27,7 +27,7 @@ fun FeedItemResponse.toRecipe(): Recipe =
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =
     RecipeStep(
-        stepId = id,
+        stepId = stepId,
         recipeId = recipeId,
         description = description,
         image = image,
