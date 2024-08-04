@@ -39,7 +39,7 @@ public class RecipeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody RecipeRequest recipeRequest) {
+    public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @Valid @RequestBody RecipeRequest recipeRequest) {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 

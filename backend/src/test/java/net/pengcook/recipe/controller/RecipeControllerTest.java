@@ -146,6 +146,34 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("새로운 레시피 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
+    void createRecipeWithInvalidValue() {
+        List<String> categories = List.of("Dessert", "NewCategory");
+        List<String> substitutions = List.of("Water", "Orange");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("Apple", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
+        );
+        RecipeRequest recipeRequest = new RecipeRequest(
+                "새로운 레시피 제목",
+                "00:30:00",
+                "레시피 썸네일.jpg",
+                11,
+                "새로운 레시피 설명",
+                categories,
+                ingredients
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(recipeRequest)
+                .when().post("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
     @DisplayName("레시피 상세 스텝을 조회한다.")
     void readRecipeSteps() {
         RestAssured.given(spec).log().all()
