@@ -11,7 +11,10 @@ class OnboardingViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(OnboardingViewModel::class.java)) {
-            return OnboardingViewModel(authorizationRepository, tokenRepository) as T
+            return OnboardingViewModel(
+                authorizationRepository = authorizationRepository,
+                tokenRepository = tokenRepository,
+            ) as T
         }
         throw IllegalArgumentException()
     }
