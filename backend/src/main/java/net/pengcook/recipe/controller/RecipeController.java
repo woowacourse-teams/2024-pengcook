@@ -64,7 +64,7 @@ public class RecipeController {
 
     @GetMapping("/search")
     public List<MainRecipeResponse> readRecipesOfCategory(
-            @ModelAttribute RecipeOfCategoryRequest recipeOfCategoryRequest
+            @ModelAttribute @Valid RecipeOfCategoryRequest recipeOfCategoryRequest
     ) {
         return recipeService.readRecipesOfCategory(recipeOfCategoryRequest);
     }
