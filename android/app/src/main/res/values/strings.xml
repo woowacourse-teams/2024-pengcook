@@ -51,11 +51,15 @@
     <string name="search_searchbar_hint">Search</string>
 
     <string name="step_making_hint">Write Recipe Introduction</string>
+    <string name="making_step_title">Recipe title</string>
+    <string name="step_format">step %s</string>
 
     <string name="making_write_recipe_title">Write Recipe Title</string>
     <string name="making_write_ingredient">Write Ingredient</string>
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
+    <string name="making_next_step">Next Step</string>
+    <string name="back_making_step">Back</string>
     <string name="camera_permission_granted">Camera permission is allowed.</string>
     <string name="camera_permission_needed">Camera permission is required.</string>
     <string name="image_selection_failed">Image selection failed.</string>
