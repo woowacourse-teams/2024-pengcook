@@ -9,8 +9,6 @@ import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
@@ -42,9 +40,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         TokenPayload tokenPayload = jwtTokenManager.extract(accessToken);
         tokenPayload.validateAccessToken("헤더에 토큰이 access token이 아닙니다.");
         UserInfo userInfo = new UserInfo(tokenPayload.userId(), tokenPayload.email());
-
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        requestAttributes.setAttribute(UserInfo.class.getName(), userInfo, RequestAttributes.SCOPE_REQUEST);
 
         return userInfo;
     }
