@@ -14,6 +14,7 @@ import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserSignUpForm
 import net.pengcook.android.domain.usecase.ValidateNicknameUseCase
 import net.pengcook.android.domain.usecase.ValidateUsernameUseCase
+import net.pengcook.android.presentation.core.listener.AppbarActionEventListener
 import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 
@@ -25,7 +26,8 @@ class SignUpViewModel(
     private val validateNicknameUseCase: ValidateNicknameUseCase = ValidateNicknameUseCase(),
 ) : ViewModel(),
     BottomButtonClickListener,
-    SpinnerItemChangeListener {
+    SpinnerItemChangeListener,
+    AppbarActionEventListener {
     val usernameContent: MutableLiveData<String> = MutableLiveData()
     val nicknameContent: MutableLiveData<String> = MutableLiveData()
     val country: MutableLiveData<String> = MutableLiveData()
@@ -50,46 +52,60 @@ class SignUpViewModel(
         viewModelScope.launch {
             val username = usernameContent.value
             val nickname = nicknameContent.value
-            val country = country.value ?: return@launch
+            val country = country.value
 
-            if (username == null || !validateUsernameUseCase(username)) {
-                _signUpEvent.value = Event(SignUpEvent.UsernameInvalid)
+            if (username.isNullOrEmpty() || nickname.isNullOrEmpty() || country.isNullOrEmpty()) {
+                _signUpEvent.value = Event(SignUpEvent.SignUpFormNotCompleted)
                 return@launch
             }
-
-            if (nickname == null || !validateNicknameUseCase(nickname)) {
-                _signUpEvent.value = Event(SignUpEvent.NicknameLengthInvalid)
-                return@launch
-            }
-
-            authorizationRepository.checkUsernameDuplication(username)
-                .onSuccess { available ->
-                    if (!available) {
-                        _signUpEvent.value = Event(SignUpEvent.NicknameDuplicated)
-                        return@launch
-                    }
-                }.onFailure {
-                    _signUpEvent.value = Event(SignUpEvent.Error)
-                }
-
-            _isLoading.value = true
+            if (!signUpFormValid(username, nickname)) return@launch
+            if (!usernameAvailable(username)) return@launch
 
             val platformToken =
                 tokenRepository.authorizationData.first().platformToken ?: return@launch
 
-            authorizationRepository.signUp(
-                platformName,
-                UserSignUpForm(platformToken, country, nickname, username),
-            ).onSuccess { signUpResult ->
-                onSignUpSuccessful(signUpResult)
-            }.onFailure {
-                onSignUpFailure()
-            }
+            _isLoading.value = true
+            signUp(platformToken, country, nickname, username)
         }
     }
 
     override fun onSelectionChange(item: String) {
         country.value = item
+    }
+
+    override fun onNavigateBack() {
+        _signUpEvent.value = Event(SignUpEvent.BackPressed)
+    }
+
+    private suspend fun signUp(
+        platformToken: String,
+        country: String,
+        nickname: String,
+        username: String,
+    ) {
+        authorizationRepository.signUp(
+            platformName,
+            UserSignUpForm(platformToken, country, nickname, username),
+        ).onSuccess { signUpResult ->
+            onSignUpSuccessful(signUpResult)
+        }.onFailure {
+            onSignUpFailure()
+        }
+    }
+
+    private suspend fun usernameAvailable(username: String): Boolean {
+        authorizationRepository.checkUsernameDuplication(username)
+            .onSuccess { available ->
+                if (!available) {
+                    _signUpEvent.value = Event(SignUpEvent.NicknameDuplicated)
+                    return false
+                }
+            }.onFailure {
+                _signUpEvent.value = Event(SignUpEvent.Error)
+                return false
+            }
+
+        return true
     }
 
     private suspend fun onSignUpSuccessful(signUpResult: SignUp) {
@@ -103,5 +119,22 @@ class SignUpViewModel(
     private fun onSignUpFailure() {
         _isLoading.value = false
         _signUpEvent.value = Event(SignUpEvent.Error)
+    }
+
+    private fun signUpFormValid(
+        username: String,
+        nickname: String,
+    ): Boolean {
+        if (!validateUsernameUseCase(username)) {
+            _signUpEvent.value = Event(SignUpEvent.UsernameInvalid)
+            return false
+        }
+
+        if (!validateNicknameUseCase(nickname)) {
+            _signUpEvent.value = Event(SignUpEvent.NicknameLengthInvalid)
+            return false
+        }
+
+        return true
     }
 }

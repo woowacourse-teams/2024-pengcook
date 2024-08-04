@@ -136,6 +136,10 @@ class SignUpFragment : Fragment() {
                 is SignUpEvent.NicknameDuplicated -> {
                     showSnackBar(getString(R.string.signup_message_duplicated_username))
                 }
+
+                is SignUpEvent.SignUpFormNotCompleted -> {
+                    showSnackBar(getString(R.string.signup_message_form_not_completed))
+                }
             }
         }
     }
