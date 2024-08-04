@@ -1,7 +1,7 @@
 package net.pengcook.android.data.datasource.feed
 
 import net.pengcook.android.data.model.feed.item.FeedItemResponse
-import net.pengcook.android.data.model.feed.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.remote.api.FeedService
 import retrofit2.Response
 

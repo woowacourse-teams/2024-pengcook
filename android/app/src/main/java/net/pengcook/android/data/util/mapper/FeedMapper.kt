@@ -4,7 +4,7 @@ import net.pengcook.android.data.model.feed.item.AuthorResponse
 import net.pengcook.android.data.model.feed.item.CategoryResponse
 import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.feed.item.IngredientResponse
-import net.pengcook.android.data.model.feed.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.presentation.core.model.Ingredient
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.model.RecipeStep

@@ -2,7 +2,7 @@ package net.pengcook.android.data.repository.feed
 
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.model.feed.item.FeedItemResponse
-import net.pengcook.android.data.model.feed.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.util.mapper.toRecipe
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
