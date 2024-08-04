@@ -57,7 +57,7 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeStepResponse createRecipeStep(
             @PathVariable long recipeId,
-            @RequestBody RecipeStepRequest recipeStepRequest
+            @Valid @RequestBody RecipeStepRequest recipeStepRequest
     ) {
         return recipeService.createRecipeStep(recipeId, recipeStepRequest);
     }
