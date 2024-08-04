@@ -1,5 +1,6 @@
 package net.pengcook.comment.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
@@ -30,7 +31,7 @@ public class CommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createComment(@RequestBody CreateCommentRequest request, @LoginUser UserInfo userInfo) {
+    public void createComment(@RequestBody @Valid CreateCommentRequest request, @LoginUser UserInfo userInfo) {
         commentService.createComment(request, userInfo);
     }
 }
