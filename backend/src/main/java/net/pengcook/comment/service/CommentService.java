@@ -1,11 +1,17 @@
 package net.pengcook.comment.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.domain.Comment;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
+import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.user.domain.User;
+import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final RecipeRepository recipeRepository;
+    private final UserRepository userRepository;
 
     public List<CommentOfRecipeResponse> readComments(Long recipeId, UserInfo userInfo) {
         List<Comment> comments = commentRepository.findByRecipeId(recipeId);
@@ -20,5 +28,13 @@ public class CommentService {
         return comments.stream()
                 .map(comment -> new CommentOfRecipeResponse(comment, userInfo))
                 .toList();
+    }
+
+    public void createComment(CreateCommentRequest request, UserInfo userInfo) {
+        User user = userRepository.findByEmail(userInfo.getEmail()).orElseThrow();
+        Recipe recipe = recipeRepository.findById(request.recipeId()).orElseThrow();
+        Comment comment = new Comment(user, recipe, request.message(), LocalDateTime.now());
+
+        commentRepository.save(comment);
     }
 }

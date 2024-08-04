@@ -3,14 +3,17 @@ package net.pengcook.comment.controller;
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.comment.dto.CreateCommentRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
@@ -43,5 +46,27 @@ class CommentControllerTest extends RestDocsSetting {
                 .when().get("/api/comments/{recipeId}", 1L)
                 .then().log().all()
                 .body("size()", is(2));
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("댓글을 등록한다.")
+    void createComment() {
+        CreateCommentRequest request = new CreateCommentRequest(1L, "thank you!");
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피에 댓글을 등록합니다.",
+                        "댓글 등록 API",
+                        requestFields(
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("message").description("댓글 내용")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("api/comments")
+                .then().log().all()
+                .statusCode(201);
     }
 }
