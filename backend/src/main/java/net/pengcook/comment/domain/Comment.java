@@ -24,13 +24,13 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-    Recipe recipe;
+    private Recipe recipe;
 
-    String message;
+    private String message;
 
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }
