@@ -256,6 +256,20 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @DisplayName("특정 레시피의 레시피 스텝 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다..")
+    void createRecipeStepWithInvalidValue() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "", 4, "00:05:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(recipeStepRequest)
+                .when()
+                .post("/api/recipes/{recipeId}/steps", 1L)
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
     @DisplayName("카테고리별 레시피 개요 목록을 조회한다.")
     void readRecipesOfCategory() {
         RestAssured.given(spec).log().all()
