@@ -6,8 +6,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
             type="net.pengcook.android.presentation.signup.SignUpViewModel" />
