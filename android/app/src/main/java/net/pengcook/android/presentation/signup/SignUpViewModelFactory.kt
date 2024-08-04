@@ -17,11 +17,11 @@ class SignUpViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SignUpViewModel::class.java)) {
             return SignUpViewModel(
-                platformName,
-                authorizationRepository,
-                tokenRepository,
-                validateUsernameUseCase,
-                validateNicknameUseCase,
+                platformName = platformName,
+                authorizationRepository = authorizationRepository,
+                tokenRepository = tokenRepository,
+                validateUsernameUseCase = validateUsernameUseCase,
+                validateNicknameUseCase = validateNicknameUseCase,
             ) as T
         }
         throw IllegalArgumentException()

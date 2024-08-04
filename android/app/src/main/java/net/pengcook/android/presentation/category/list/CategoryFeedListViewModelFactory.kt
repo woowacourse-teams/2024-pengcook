@@ -10,7 +10,10 @@ class CategoryFeedListViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CategoryFeedListViewModel::class.java)) {
-            return CategoryFeedListViewModel(feedRepository, category) as T
+            return CategoryFeedListViewModel(
+                feedRepository = feedRepository,
+                category = category,
+            ) as T
         }
         throw IllegalArgumentException()
     }
