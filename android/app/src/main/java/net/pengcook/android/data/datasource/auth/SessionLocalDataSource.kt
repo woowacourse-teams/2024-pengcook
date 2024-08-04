@@ -1,11 +1,11 @@
 package net.pengcook.android.data.datasource.auth
 
 import kotlinx.coroutines.flow.Flow
-import net.pengcook.android.data.model.auth.Authorization
+import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.domain.model.auth.Platform
 
-interface TokenLocalDataSource {
-    val authorizationData: Flow<Authorization>
+interface SessionLocalDataSource {
+    val sessionData: Flow<Session>
 
     suspend fun updatePlatformToken(platformToken: String?)
 

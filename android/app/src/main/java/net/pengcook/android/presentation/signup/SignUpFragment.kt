@@ -36,7 +36,7 @@ class SignUpFragment : Fragment() {
         SignUpViewModelFactory(
             args.platform,
             module.authorizationRepository,
-            module.tokenRepository,
+            module.sessionRepository,
         )
     }
     // TODO 사진 받아오는 기능 구현하기

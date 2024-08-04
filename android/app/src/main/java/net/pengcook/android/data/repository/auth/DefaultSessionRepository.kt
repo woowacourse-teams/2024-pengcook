@@ -1,15 +1,15 @@
 package net.pengcook.android.data.repository.auth
 
 import kotlinx.coroutines.flow.Flow
-import net.pengcook.android.data.datasource.auth.TokenLocalDataSource
-import net.pengcook.android.data.model.auth.Authorization
+import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
+import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.domain.model.auth.Platform
 
-class DefaultTokenRepository(
-    private val authorizationLocalDataSource: TokenLocalDataSource,
-) : TokenRepository {
-    override val authorizationData: Flow<Authorization> =
-        authorizationLocalDataSource.authorizationData
+class DefaultSessionRepository(
+    private val authorizationLocalDataSource: SessionLocalDataSource,
+) : SessionRepository {
+    override val sessionData: Flow<Session> =
+        authorizationLocalDataSource.sessionData
 
     override suspend fun updatePlatformToken(platformToken: String?) {
         authorizationLocalDataSource.updatePlatformToken(platformToken)

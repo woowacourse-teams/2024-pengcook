@@ -1,6 +1,6 @@
 package net.pengcook.android.data.repository.auth
 
-import net.pengcook.android.data.datasource.auth.FakeTokenLocalDataSource
+import net.pengcook.android.data.datasource.auth.FakeSessionLocalDataSource
 import net.pengcook.android.domain.model.auth.RefreshedTokens
 import net.pengcook.android.domain.model.auth.SignIn
 import net.pengcook.android.domain.model.auth.SignUp
@@ -10,7 +10,7 @@ import net.pengcook.android.domain.model.auth.UserSignUpForm
 class FakeAuthorizationRepository(
     private val registered: Boolean,
     private val usernames: List<String>,
-    private val fakeTokenLocalDataSource: FakeTokenLocalDataSource,
+    private val fakeTokenLocalDataSource: FakeSessionLocalDataSource,
 ) : AuthorizationRepository {
     private var userInformation: UserInformation? = null
     private var refreshTrial = 0

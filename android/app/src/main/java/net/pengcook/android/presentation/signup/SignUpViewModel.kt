@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
-import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserSignUpForm
@@ -21,7 +21,7 @@ import net.pengcook.android.presentation.core.util.Event
 class SignUpViewModel(
     private val platformName: String,
     private val authorizationRepository: AuthorizationRepository,
-    private val tokenRepository: TokenRepository,
+    private val sessionRepository: SessionRepository,
     private val validateUsernameUseCase: ValidateUsernameUseCase = ValidateUsernameUseCase(),
     private val validateNicknameUseCase: ValidateNicknameUseCase = ValidateNicknameUseCase(),
 ) : ViewModel(),
@@ -62,7 +62,7 @@ class SignUpViewModel(
             if (!usernameAvailable(username)) return@launch
 
             val platformToken =
-                tokenRepository.authorizationData.first().platformToken ?: return@launch
+                sessionRepository.sessionData.first().platformToken ?: return@launch
 
             _isLoading.value = true
             signUp(platformToken, country, nickname, username)
@@ -110,9 +110,9 @@ class SignUpViewModel(
 
     private suspend fun onSignUpSuccessful(signUpResult: SignUp) {
         _isLoading.value = false
-        tokenRepository.updateAccessToken(signUpResult.accessToken)
-        tokenRepository.updateRefreshToken(signUpResult.refreshToken)
-        tokenRepository.updateCurrentPlatform(Platform.find(platformName))
+        sessionRepository.updateAccessToken(signUpResult.accessToken)
+        sessionRepository.updateRefreshToken(signUpResult.refreshToken)
+        sessionRepository.updateCurrentPlatform(Platform.find(platformName))
         _signUpEvent.value = Event(SignUpEvent.SignInSuccessful)
     }
 

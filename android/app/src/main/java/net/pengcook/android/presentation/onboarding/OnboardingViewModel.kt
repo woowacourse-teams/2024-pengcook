@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
-import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.core.util.Event
 
 class OnboardingViewModel(
     private val authorizationRepository: AuthorizationRepository,
-    private val tokenRepository: TokenRepository,
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
@@ -38,11 +38,11 @@ class OnboardingViewModel(
     ) {
         authorizationRepository.signIn(platformName, platformToken)
             .onSuccess { signInData ->
-                tokenRepository.updateCurrentPlatform(Platform.find(platformName))
-                tokenRepository.updatePlatformToken(platformToken)
+                sessionRepository.updateCurrentPlatform(Platform.find(platformName))
+                sessionRepository.updatePlatformToken(platformToken)
                 if (signInData.registered) {
-                    tokenRepository.updateCurrentPlatform(Platform.find(platformName))
-                    tokenRepository.updateAccessToken(signInData.accessToken)
+                    sessionRepository.updateCurrentPlatform(Platform.find(platformName))
+                    sessionRepository.updateAccessToken(signInData.accessToken)
                     _isLoading.value = false
                     _uiEvent.value = Event(OnboardingUiEvent.NavigateToMain)
                     return@onSuccess
