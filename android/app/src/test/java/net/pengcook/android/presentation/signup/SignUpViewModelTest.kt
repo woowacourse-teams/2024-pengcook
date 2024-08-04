@@ -9,11 +9,11 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import net.pengcook.android.data.datasource.auth.FakeTokenLocalDataSource
+import net.pengcook.android.data.datasource.auth.FakeSessionLocalDataSource
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.FakeAuthorizationRepository
-import net.pengcook.android.data.repository.auth.FakeTokenRepository
-import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.data.repository.auth.FakeSessionRepository
+import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -27,7 +27,7 @@ import org.robolectric.RobolectricTestRunner
 @OptIn(ExperimentalCoroutinesApi::class)
 class SignUpViewModelTest {
     private lateinit var viewModel: SignUpViewModel
-    private lateinit var tokenRepository: TokenRepository
+    private lateinit var sessionRepository: SessionRepository
     private lateinit var authorizationRepository: AuthorizationRepository
 
     @get:Rule
@@ -38,7 +38,7 @@ class SignUpViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        tokenRepository = FakeTokenRepository(FakeTokenLocalDataSource())
+        sessionRepository = FakeSessionRepository(FakeSessionLocalDataSource())
     }
 
     @After
@@ -54,14 +54,14 @@ class SignUpViewModelTest {
                 FakeAuthorizationRepository(
                     registered = false,
                     usernames = emptyList(),
-                    fakeTokenLocalDataSource = FakeTokenLocalDataSource(),
+                    fakeTokenLocalDataSource = FakeSessionLocalDataSource(),
                 )
 
             viewModel =
                 SignUpViewModel(
                     platformName = "google",
                     authorizationRepository = authorizationRepository,
-                    tokenRepository = tokenRepository,
+                    sessionRepository = sessionRepository,
                 )
 
             // when
@@ -81,14 +81,14 @@ class SignUpViewModelTest {
                 FakeAuthorizationRepository(
                     registered = false,
                     usernames = emptyList(),
-                    fakeTokenLocalDataSource = FakeTokenLocalDataSource(),
+                    fakeTokenLocalDataSource = FakeSessionLocalDataSource(),
                 )
 
             viewModel =
                 SignUpViewModel(
                     platformName = "google",
                     authorizationRepository = authorizationRepository,
-                    tokenRepository = tokenRepository,
+                    sessionRepository = sessionRepository,
                 )
 
             // when

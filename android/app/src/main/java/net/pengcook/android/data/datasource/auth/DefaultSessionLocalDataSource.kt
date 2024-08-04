@@ -10,13 +10,13 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import net.pengcook.android.data.model.auth.Authorization
+import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.domain.model.auth.Platform
 
-class DefaultTokenLocalDataSource(
+class DefaultSessionLocalDataSource(
     private val dataStore: DataStore<Preferences>,
-) : TokenLocalDataSource {
-    override val authorizationData: Flow<Authorization> =
+) : SessionLocalDataSource {
+    override val sessionData: Flow<Session> =
         dataStore
             .data
             .catchException()
@@ -71,14 +71,14 @@ class DefaultTokenLocalDataSource(
             }
         }
 
-    private fun mapUserPreferences(preferences: Preferences): Authorization {
+    private fun mapUserPreferences(preferences: Preferences): Session {
         val platformToken = preferences[KEY_PLATFORM_TOKEN]
         val accessToken = preferences[KEY_ACCESS_TOKEN]
         val refreshToken = preferences[KEY_REFRESH_TOKEN]
         val fcmToken = preferences[KEY_FCM_TOKEN]
         val currentPlatform = preferences[KEY_CURRENT_PLATFORM] ?: Platform.NONE.platformName
 
-        return Authorization(
+        return Session(
             platformToken = platformToken,
             accessToken = accessToken,
             refreshToken = refreshToken,

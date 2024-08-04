@@ -8,11 +8,11 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import net.pengcook.android.data.datasource.auth.FakeTokenLocalDataSource
+import net.pengcook.android.data.datasource.auth.FakeSessionLocalDataSource
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.FakeAuthorizationRepository
-import net.pengcook.android.data.repository.auth.FakeTokenRepository
-import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.data.repository.auth.FakeSessionRepository
+import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnboardingViewModelTest {
     private lateinit var authorizationRepository: AuthorizationRepository
-    private lateinit var tokenRepository: TokenRepository
+    private lateinit var sessionRepository: SessionRepository
     private lateinit var viewModel: OnboardingViewModel
 
     @get:Rule
@@ -34,7 +34,7 @@ class OnboardingViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        tokenRepository = FakeTokenRepository(FakeTokenLocalDataSource())
+        sessionRepository = FakeSessionRepository(FakeSessionLocalDataSource())
     }
 
     @After
@@ -47,8 +47,8 @@ class OnboardingViewModelTest {
         runTest {
             // given
             authorizationRepository =
-                FakeAuthorizationRepository(true, emptyList(), FakeTokenLocalDataSource())
-            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+                FakeAuthorizationRepository(true, emptyList(), FakeSessionLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, sessionRepository)
 
             // when
             viewModel.signIn("google", "googleToken")
@@ -64,8 +64,8 @@ class OnboardingViewModelTest {
         runTest {
             // given
             authorizationRepository =
-                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+                FakeAuthorizationRepository(false, emptyList(), FakeSessionLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, sessionRepository)
 
             // when
             viewModel.signIn("google", "googleToken")
@@ -81,8 +81,8 @@ class OnboardingViewModelTest {
         runTest {
             // given
             authorizationRepository =
-                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+                FakeAuthorizationRepository(false, emptyList(), FakeSessionLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, sessionRepository)
 
             // when
             viewModel.signIn("google", "invalidGoogleToken")
@@ -98,8 +98,8 @@ class OnboardingViewModelTest {
         runTest {
             // given
             authorizationRepository =
-                FakeAuthorizationRepository(false, emptyList(), FakeTokenLocalDataSource())
-            viewModel = OnboardingViewModel(authorizationRepository, tokenRepository)
+                FakeAuthorizationRepository(false, emptyList(), FakeSessionLocalDataSource())
+            viewModel = OnboardingViewModel(authorizationRepository, sessionRepository)
 
             // when
             viewModel.signIn("gogle", "googleToken")

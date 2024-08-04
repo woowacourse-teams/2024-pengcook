@@ -4,8 +4,8 @@ import android.content.Context
 import net.pengcook.android.BuildConfig
 import net.pengcook.android.data.datasource.auth.AuthorizationRemoteDataSource
 import net.pengcook.android.data.datasource.auth.DefaultAuthorizationRemoteDataSource
-import net.pengcook.android.data.datasource.auth.DefaultTokenLocalDataSource
-import net.pengcook.android.data.datasource.auth.TokenLocalDataSource
+import net.pengcook.android.data.datasource.auth.DefaultSessionLocalDataSource
+import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.local.preferences.dataStore
@@ -13,8 +13,8 @@ import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
-import net.pengcook.android.data.repository.auth.DefaultTokenRepository
-import net.pengcook.android.data.repository.auth.TokenRepository
+import net.pengcook.android.data.repository.auth.DefaultSessionRepository
+import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import okhttp3.OkHttpClient
@@ -56,11 +56,11 @@ class DefaultAppModule(
     override val authorizationRepository: AuthorizationRepository =
         DefaultAuthorizationRepository(authorizationRemoteDataSource)
 
-    private val tokenLocalDataSource: TokenLocalDataSource =
-        DefaultTokenLocalDataSource(appContext.dataStore)
+    private val sessionLocalDataSource: SessionLocalDataSource =
+        DefaultSessionLocalDataSource(appContext.dataStore)
 
-    override val tokenRepository: TokenRepository =
-        DefaultTokenRepository(tokenLocalDataSource)
+    override val sessionRepository: SessionRepository =
+        DefaultSessionRepository(sessionLocalDataSource)
 
     private val feedRemoteDataSource: FeedRemoteDataSource =
         DefaultFeedRemoteDataSource(service(FeedService::class.java))

@@ -57,7 +57,7 @@ class OnboardingFragment : Fragment() {
         val module = application.appModule
         OnboardingViewModelFactory(
             module.authorizationRepository,
-            module.tokenRepository,
+            module.sessionRepository,
         )
     }
 

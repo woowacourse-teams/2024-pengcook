@@ -1,6 +1,6 @@
 package net.pengcook.android.data.model.auth
 
-data class Authorization(
+data class Session(
     val platformToken: String?,
     val accessToken: String?,
     val refreshToken: String?,

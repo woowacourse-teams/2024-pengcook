@@ -1,14 +1,14 @@
 package net.pengcook.android.data.repository.auth
 
 import kotlinx.coroutines.flow.Flow
-import net.pengcook.android.data.datasource.auth.FakeTokenLocalDataSource
-import net.pengcook.android.data.model.auth.Authorization
+import net.pengcook.android.data.datasource.auth.FakeSessionLocalDataSource
+import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.domain.model.auth.Platform
 
-class FakeTokenRepository(
-    private val fakeTokenLocalDataSource: FakeTokenLocalDataSource,
-) : TokenRepository {
-    override val authorizationData: Flow<Authorization> = fakeTokenLocalDataSource.authorizationData
+class FakeSessionRepository(
+    private val fakeTokenLocalDataSource: FakeSessionLocalDataSource,
+) : SessionRepository {
+    override val sessionData: Flow<Session> = fakeTokenLocalDataSource.sessionData
 
     override suspend fun updatePlatformToken(platformToken: String?) {
         fakeTokenLocalDataSource.updatePlatformToken(platformToken)
