@@ -62,14 +62,14 @@ class RecipeMakingFragment : Fragment() {
                 Toast.makeText(
                     requireContext(),
                     R.string.camera_permission_granted,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
                 showImageSourceDialog()
             } else {
                 Toast.makeText(
                     requireContext(),
                     R.string.camera_permission_needed,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
         }
@@ -87,14 +87,14 @@ class RecipeMakingFragment : Fragment() {
                     Toast.makeText(
                         requireContext(),
                         R.string.image_selection_failed,
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                 }
             } ?: run {
                 Toast.makeText(
                     requireContext(),
                     R.string.image_selection_failed,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
         }
