@@ -56,5 +56,14 @@
     <string name="making_write_ingredient">Write Ingredient</string>
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
+    <string name="camera_permission_granted">Camera permission is allowed.</string>
+    <string name="camera_permission_needed">Camera permission is required.</string>
+    <string name="image_selection_failed">Image selection failed.</string>
+    <string name="photo_capture_failed">Failed to take a picture.</string>
+    <string name="image_upload_success">Image upload successful!</string>
+    <string name="image_upload_failed">Image upload failed!</string>
+    <string name="select_image_source">Select image source</string>
+    <string name="take_photo">Take a photo with a camera</string>
+    <string name="choose_from_album">Select photos from album</string>
 
 </resources>
