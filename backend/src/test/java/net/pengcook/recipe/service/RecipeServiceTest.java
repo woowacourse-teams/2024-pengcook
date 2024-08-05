@@ -1,6 +1,7 @@
 package net.pengcook.recipe.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
+import net.pengcook.recipe.exception.InvalidParameterException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,6 +43,17 @@ class RecipeServiceTest {
         List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageRecipeRequest);
 
         assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
+    }
+
+    @Test
+    @DisplayName("요청받은 페이지 offset 값이 int 타입의 최댓값을 초과하면 예외가 발생한다.")
+    void readRecipesWhenPageOffsetIsGreaterThanIntMaxValue() {
+        int pageNumber = 1073741824;
+        int pageSize = 2;
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize);
+
+        assertThatThrownBy(() -> recipeService.readRecipes(pageRecipeRequest))
+                .isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
