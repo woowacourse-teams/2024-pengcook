@@ -58,7 +58,10 @@ fun favoriteCountText(
 }
 
 @BindingAdapter("isFavorite")
-fun setFavorite(imageView: ImageView, isFavorite: Boolean) {
+fun setFavorite(
+    imageView: ImageView,
+    isFavorite: Boolean,
+) {
     imageView.isSelected = isFavorite
 }
 
