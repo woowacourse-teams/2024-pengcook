@@ -1,5 +1,6 @@
 package net.pengcook.recipe.dto;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public record MainRecipeResponse(
         int likeCount,
         int commentCount,
         String description,
+        LocalDateTime createdAt,
         List<CategoryResponse> category,
         List<IngredientResponse> ingredient
 ) {

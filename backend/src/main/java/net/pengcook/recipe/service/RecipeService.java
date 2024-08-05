@@ -143,6 +143,7 @@ public class RecipeService {
                 firstResponse.likeCount(),
                 firstResponse.commentCount(),
                 firstResponse.description(),
+                firstResponse.createdAt(),
                 getCategoryResponses(groupedResponses),
                 getIngredientResponses(groupedResponses)
         );

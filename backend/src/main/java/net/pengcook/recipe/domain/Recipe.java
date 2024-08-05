@@ -1,13 +1,19 @@
 package net.pengcook.recipe.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.pengcook.user.domain.User;
-
-import java.time.LocalTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,6 +50,9 @@ public class Recipe {
     @Column(nullable = true)
     private String description;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     public Recipe(
             String title,
             User author,
@@ -52,7 +61,7 @@ public class Recipe {
             int difficulty,
             String description
     ) {
-        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, 0, description);
+        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, 0, description, LocalDateTime.now());
     }
 
     public void increaseLikeCount() {
