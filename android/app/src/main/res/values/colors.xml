@@ -6,4 +6,6 @@
     <color name="gray_500">#FF9E9E9E</color>
     <color name="gray_300">#FFD3CECE</color>
     <color name="gray">#FFD4D4DA</color>
+    <color name="favorite">#FF0000</color>
+    <color name="not_favorite">#FFFFFF</color>
 </resources>

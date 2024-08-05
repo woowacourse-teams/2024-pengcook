@@ -174,8 +174,10 @@
                             android:layout_height="36dp"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/ic_circle"
+                            android:onClick="@{() -> vm.toggleFavorite()}"
                             android:padding="7dp"
-                            android:src="@drawable/ic_favorite"
+                            android:src="@drawable/selector_favorite"
+                            app:isFavorite="@{vm.isFavorite}"
                             app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
                             app:layout_constraintEnd_toStartOf="@id/iv_mention" />
 

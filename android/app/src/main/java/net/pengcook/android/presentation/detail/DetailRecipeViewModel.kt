@@ -13,6 +13,13 @@ class DetailRecipeViewModel(
     private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
     val navigateToStepEvent: LiveData<Event<Boolean>> get() = _navigateToStepEvent
 
+    private val _isFavorite = MutableLiveData(false)
+    val isFavorite: LiveData<Boolean> get() = _isFavorite
+
+    fun toggleFavorite() {
+        _isFavorite.value = _isFavorite.value?.not()
+    }
+
     fun onNavigateToMakingStep() {
         _navigateToStepEvent.value = Event(true)
     }
