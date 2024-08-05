@@ -75,7 +75,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @NullSource
     @ValueSource(strings = {"-1", "invalid", " ", "1.2"})
     @DisplayName("레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생한다.")
-    void readRecipesWithInvalidPageNumber(String pageNumber) {
+    void readRecipesWhenInvalidPageNumber(String pageNumber) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생합니다.",
@@ -96,7 +96,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @NullSource
     @ValueSource(strings = {"-1", "0", "invalid", " ", "1.2"})
     @DisplayName("레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생한다.")
-    void readRecipesWithInvalidPageSize(String pageSize) {
+    void readRecipesWhenInvalidPageSize(String pageSize) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생합니다.",
@@ -163,7 +163,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @ValueSource(ints = {-1, 11})
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("새로운 레시피 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
-    void createRecipeWithInvalidValue(int difficulty) {
+    void createRecipeWhenInvalidValue(int difficulty) {
         List<String> categories = List.of("Dessert", "NewCategory");
         List<String> substitutions = List.of("Water", "Orange");
         List<IngredientCreateRequest> ingredients = List.of(
@@ -287,7 +287,7 @@ class RecipeControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("특정 레시피의 레시피 스텝 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
-    void createRecipeStepWithInvalidValue() {
+    void createRecipeStepWhenInvalidValue() {
         RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "", 4, "00:05:00");
 
         RestAssured.given(spec).log().all()
