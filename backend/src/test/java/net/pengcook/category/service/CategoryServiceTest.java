@@ -35,7 +35,7 @@ class CategoryServiceTest {
     @DisplayName("레시피의 카테고리를 저장한다.")
     void saveCategories() {
         User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
-        Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg", 3, 2, "김치볶음밥 조리법");
+        Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg", 3, 2, 0, "김치볶음밥 조리법");
 
         categoryService.saveCategories(recipe, List.of("건강식", "매운음식"));
 

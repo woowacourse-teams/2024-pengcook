@@ -20,9 +20,9 @@ INSERT INTO users (email, username, nickname, image, region)
 VALUES ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA'),
        ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA');
 
-INSERT INTO recipe (title, author_id, cooking_time, thumbnail, difficulty, like_count, description)
-VALUES ('김밥', 1, '01:00:00', '김밥이미지.jpg', 8, 1, '김밥 조리법'),
-       ('김치찌개', 1, '00:30:00', '김치찌개이미지.jpg', 3, 2, '김치찌개 조리법');
+INSERT INTO recipe (title, author_id, cooking_time, thumbnail, difficulty, like_count, comment_count, description)
+VALUES ('김밥', 1, '01:00:00', '김밥이미지.jpg', 8, 1, 0, '김밥 조리법'),
+       ('김치찌개', 1, '00:30:00', '김치찌개이미지.jpg', 3, 2, 0, '김치찌개 조리법');
 
 INSERT INTO comment (user_id, recipe_id, message, created_at)
 VALUES ('2', '1', 'great', '2024-01-01'),

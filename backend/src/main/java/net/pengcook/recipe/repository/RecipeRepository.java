@@ -27,6 +27,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                 r.thumbnail,
                 r.difficulty,
                 r.likeCount,
+                r.commentCount,
                 r.description,
                 c.id,
                 c.name,

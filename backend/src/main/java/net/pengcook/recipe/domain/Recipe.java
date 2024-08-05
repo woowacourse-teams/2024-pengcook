@@ -38,6 +38,9 @@ public class Recipe {
     @Column(nullable = false)
     private int likeCount;
 
+    @Column(nullable = false)
+    private int commentCount;
+
     @Column(nullable = true)
     private String description;
 
@@ -49,7 +52,7 @@ public class Recipe {
             int difficulty,
             String description
     ) {
-        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, description);
+        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, 0, description);
     }
 
     public void increaseLikeCount() {

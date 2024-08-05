@@ -141,6 +141,7 @@ public class RecipeService {
                 firstResponse.thumbnail(),
                 firstResponse.difficulty(),
                 firstResponse.likeCount(),
+                firstResponse.commentCount(),
                 firstResponse.description(),
                 getCategoryResponses(groupedResponses),
                 getIngredientResponses(groupedResponses)

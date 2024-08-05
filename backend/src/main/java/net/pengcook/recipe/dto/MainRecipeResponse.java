@@ -11,6 +11,7 @@ public record MainRecipeResponse(
         String thumbnail,
         int difficulty,
         int likeCount,
+        int commentCount,
         String description,
         List<CategoryResponse> category,
         List<IngredientResponse> ingredient

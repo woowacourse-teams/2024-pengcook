@@ -14,6 +14,7 @@ public record RecipeDataResponse(
         String thumbnail,
         int difficulty,
         int likeCount,
+        int commentCount,
         String description,
         long categoryId,
         String categoryName,
