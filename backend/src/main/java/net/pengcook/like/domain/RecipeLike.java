@@ -10,6 +10,7 @@ import net.pengcook.user.domain.User;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "recipe_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecipeLike {
