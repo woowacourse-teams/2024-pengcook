@@ -2,10 +2,14 @@ package net.pengcook.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.NoSuchElementException;
+import net.pengcook.user.domain.UserReport;
+import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
+import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +27,8 @@ class UserServiceTest {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserReportRepository userReportRepository;
     @Autowired
     UserService userService;
 
@@ -71,5 +77,24 @@ class UserServiceTest {
         UsernameCheckResponse usernameCheckResponse = userService.checkUsername(username);
 
         assertThat(usernameCheckResponse.available()).isFalse();
+    }
+
+    @Test
+    @DisplayName("신고 테이블에 신고 내역을 저장한다.")
+    void reportUser() {
+        UserReportRequest spamReportRequest = new UserReportRequest(
+                2,
+                "SPAM",
+                "스팸 컨텐츠입니다."
+        );
+        userService.reportUser(1, spamReportRequest);
+
+        UserReport actual = userReportRepository.findById(1L).get();
+        assertAll(
+                () -> assertThat(actual.getReporter().getId()).isEqualTo(1),
+                () -> assertThat(actual.getReportee().getId()).isEqualTo(2),
+                () -> assertThat(actual.getReason()).isEqualTo("SPAM"),
+                () -> assertThat(actual.getDetails()).isEqualTo("스팸 컨텐츠입니다.")
+        );
     }
 }

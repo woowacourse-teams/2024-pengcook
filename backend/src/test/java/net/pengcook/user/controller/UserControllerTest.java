@@ -2,7 +2,9 @@ package net.pengcook.user.controller;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
@@ -12,8 +14,8 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,7 +79,7 @@ class UserControllerTest extends RestDocsSetting {
                 .when().get("/api/user/username/check")
                 .then().log().all()
                 .statusCode(200)
-                .body("available", Matchers.is(true));
+                .body("available", is(true));
     }
 
     @Test
@@ -99,6 +101,46 @@ class UserControllerTest extends RestDocsSetting {
                 .when().get("/api/user/username/check")
                 .then().log().all()
                 .statusCode(200)
-                .body("available", Matchers.is(false));
+                .body("available", is(false));
+    }
+
+    @Test
+    @WithLoginUser
+    @DisplayName("유저를 신고한다.")
+    void report() {
+        UserReportRequest spamReportRequest = new UserReportRequest(
+                1,
+                "SPAM",
+                "스팸 컨텐츠입니다."
+        );
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "유저를 신고한다.",
+                        "유저 신고 API",
+                        requestFields(
+                                fieldWithPath("reporteeId").description("피신고자 id"),
+                                fieldWithPath("reason").description("사유"),
+                                fieldWithPath("details").description("내용")
+                        ),
+                        responseFields(
+                                fieldWithPath("reportId").description("신고 id"),
+                                fieldWithPath("reporterId").description("신고자 id"),
+                                fieldWithPath("reporteeId").description("피신고자 id"),
+                                fieldWithPath("reason").description("사유"),
+                                fieldWithPath("details").description("내용"),
+                                fieldWithPath("createdAt").description("신고 일자")
+                        )))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(spamReportRequest)
+                .post("/api/user/report")
+                .then().log().all()
+                .statusCode(201)
+                .body("reportId", is(1))
+                .body("reporterId", is(9))
+                .body("reporteeId", is(1))
+                .body("reason", is("SPAM"))
+                .body("details", is("스팸 컨텐츠입니다."));
     }
 }
