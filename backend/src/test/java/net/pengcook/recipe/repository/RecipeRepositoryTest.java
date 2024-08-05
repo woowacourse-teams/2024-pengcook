@@ -37,7 +37,7 @@ class RecipeRepositoryTest {
     void findRecipeData() {
         List<Long> recipeIds = List.of(4L, 3L);
         RecipeDataResponse expectedData = new RecipeDataResponse(4, "토마토스파게티", 1, "loki", "loki.jpg", LocalTime.of(0, 30),
-                "토마토스파게티이미지.jpg", 3, 2, "토마토스파게티 조리법", 2, "양식", 2, "쌀", REQUIRED
+                "토마토스파게티이미지.jpg", 3, 2, 0, "토마토스파게티 조리법", 2, "양식", 2, "쌀", REQUIRED
         );
 
         List<RecipeDataResponse> recipeData = repository.findRecipeData(recipeIds);
