@@ -29,6 +29,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
                 r.likeCount,
                 r.commentCount,
                 r.description,
+                r.createdAt,
                 c.id,
                 c.name,
                 i.id,

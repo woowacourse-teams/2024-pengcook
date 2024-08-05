@@ -3,6 +3,7 @@ package net.pengcook.category.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import net.pengcook.category.repository.CategoryRecipeRepository;
@@ -35,7 +36,8 @@ class CategoryServiceTest {
     @DisplayName("레시피의 카테고리를 저장한다.")
     void saveCategories() {
         User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
-        Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg", 3, 2, 0, "김치볶음밥 조리법");
+        Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg",
+                3, 2, 0, "김치볶음밥 조리법", LocalDateTime.now());
 
         categoryService.saveCategories(recipe, List.of("건강식", "매운음식"));
 
