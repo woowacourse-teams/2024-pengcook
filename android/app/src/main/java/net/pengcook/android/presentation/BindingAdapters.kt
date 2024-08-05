@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import net.pengcook.android.R
@@ -115,4 +116,11 @@ fun Spinner.setInverseBindingListener(spinnerItemChangeListener: SpinnerItemChan
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+}
+
+@BindingAdapter("bind:drawableId")
+fun ImageView.drawable(
+    @DrawableRes drawableId: Int,
+) {
+    setImageResource(drawableId)
 }

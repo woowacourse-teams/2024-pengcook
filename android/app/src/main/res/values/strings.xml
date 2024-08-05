@@ -66,4 +66,21 @@
     <string name="take_photo">Take a photo with a camera</string>
     <string name="choose_from_album">Select photos from album</string>
 
+    <string name="profile_numeric_indicators">%,d followers ・ %,d recipes</string>
+    <string name="profile_appbar_title">Profile</string>
+    <string name="profile_edit_button">Edit Profile</string>
+    <string name="profile_setting_button">Setting</string>
+    <string name="profile_follower_button">Remove</string>
+    <string name="profile_following_button">Unfollow</string>
+    <string name="profile_search_hint">Search</string>
+
+    <string name="setting_appbar_title">Setting</string>
+    <string name="setting_menu_likes">Likes</string>
+    <string name="setting_menu_comments">Comments</string>
+    <string name="setting_menu_blocked">Blocked</string>
+    <string name="setting_menu_language">Language</string>
+    <string name="setting_menu_privacy_policy">Privacy Policy</string>
+    <string name="setting_menu_privacy_terms">Terms of Use</string>
+    <string name="setting_menu_account">Account</string>
+
 </resources>
