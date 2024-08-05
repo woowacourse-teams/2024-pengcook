@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/profileFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -142,5 +142,23 @@
             android:id="@+id/action_categoryFeedListFragment_to_detailRecipeFragment"
             app:destination="@id/detailRecipeFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="net.pengcook.android.presentation.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="net.pengcook.android.presentation.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+
+    <fragment
+        android:id="@+id/followListFragment"
+        android:name="net.pengcook.android.presentation.follow.FollowListFragment"
+        android:label="fragment_follow_list"
+        tools:layout="@layout/fragment_follow_list"/>
 
 </navigation>
