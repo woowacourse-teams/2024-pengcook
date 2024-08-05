@@ -4,16 +4,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.category.domain.Category;
 import net.pengcook.category.domain.CategoryRecipe;
-import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.repository.CategoryRepository;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.MainRecipeResponse;
-import net.pengcook.recipe.dto.RecipeDataResponse;
-import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.recipe.service.RecipeService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
