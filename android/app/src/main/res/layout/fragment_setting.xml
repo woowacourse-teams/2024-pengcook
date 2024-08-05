@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="adapter"
+            type="net.pengcook.android.presentation.setting.SettingRecyclerViewAdapter" />
+
+        <variable
+            name="appbarActionEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarActionEventListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".profile.setting.SettingFragment">
+
+        <include
+            android:id="@+id/abl_setting"
+            layout="@layout/item_appbar_with_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:appbarEventListener="@{appbarActionEventListener}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:title="@{@string/setting_appbar_title}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_setting_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:adapter="@{adapter}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/abl_setting"
+            tools:layout_editor_absoluteX="0dp"
+            tools:listitem="@layout/item_setting_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
