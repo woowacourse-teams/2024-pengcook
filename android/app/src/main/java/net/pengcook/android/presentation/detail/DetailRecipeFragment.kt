@@ -45,6 +45,7 @@ class DetailRecipeFragment : Fragment() {
     private fun fetchRecipe() {
         binding.recipe = args.recipe
         binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun navigateToStep() {
