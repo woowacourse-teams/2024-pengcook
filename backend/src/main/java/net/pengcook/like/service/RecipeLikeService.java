@@ -19,9 +19,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RecipeLikeService {
 
-    RecipeLikeRepository likeRepository;
-    UserRepository userRepository;
-    RecipeRepository recipeRepository;
+    private final RecipeLikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
 
     @Transactional
     public void toggleLike(UserInfo userInfo, long recipeId) {
@@ -31,7 +31,7 @@ public class RecipeLikeService {
 
     private void deleteLike(RecipeLike recipeLike) {
         Recipe recipe = recipeLike.getRecipe();
-        
+
         recipe.decreaseLikeCount();
 
         likeRepository.delete(recipeLike);
