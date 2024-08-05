@@ -24,6 +24,7 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
+import net.pengcook.recipe.exception.InvalidParameterException;
 import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
@@ -49,7 +50,7 @@ public class RecipeService {
     private final S3ClientService s3ClientService;
 
     public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
-        Pageable pageable = PageRequest.of(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
+        Pageable pageable = getPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
         List<Long> recipeIds = recipeRepository.findRecipeIds(pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
@@ -105,7 +106,7 @@ public class RecipeService {
 
     public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
         String categoryName = request.category();
-        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        Pageable pageable = getPageable(request.pageNumber(), request.pageSize());
         List<Long> recipeIds = categoryRecipeRepository.findRecipeIdsByCategoryName(categoryName, pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
@@ -158,5 +159,13 @@ public class RecipeService {
                 .map(r -> new CategoryResponse(r.categoryId(), r.categoryName()))
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    private Pageable getPageable(int pageNumber, int pageSize) {
+        long offset = (long) pageNumber * pageSize;
+        if (offset > Integer.MAX_VALUE) {
+            throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
+        }
+        return PageRequest.of(pageNumber, pageSize);
     }
 }
