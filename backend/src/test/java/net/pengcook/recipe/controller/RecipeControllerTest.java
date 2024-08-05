@@ -159,10 +159,11 @@ class RecipeControllerTest extends RestDocsSetting {
                 .body("recipeId", is(16));
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 11})
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("새로운 레시피 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
-    void createRecipeWithInvalidValue() {
+    void createRecipeWithInvalidValue(int difficulty) {
         List<String> categories = List.of("Dessert", "NewCategory");
         List<String> substitutions = List.of("Water", "Orange");
         List<IngredientCreateRequest> ingredients = List.of(
@@ -173,7 +174,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 "새로운 레시피 제목",
                 "00:30:00",
                 "레시피 썸네일.jpg",
-                11,
+                difficulty,
                 "새로운 레시피 설명",
                 categories,
                 ingredients
