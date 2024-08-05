@@ -15,6 +15,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import net.pengcook.android.BuildConfig
+import net.pengcook.android.R
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
@@ -58,10 +59,18 @@ class RecipeMakingFragment : Fragment() {
             ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
             if (isGranted) {
-                Toast.makeText(requireContext(), "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.camera_permission_granted,
+                    Toast.LENGTH_SHORT
+                ).show()
                 showImageSourceDialog()
             } else {
-                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.camera_permission_needed,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -75,10 +84,18 @@ class RecipeMakingFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.image_selection_failed,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } ?: run {
-                Toast.makeText(requireContext(), "이미지 선택에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    R.string.image_selection_failed,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -90,7 +107,8 @@ class RecipeMakingFragment : Fragment() {
             if (success) {
                 viewModel.fetchImageUri(File(currentPhotoPath!!).name)
             } else {
-                Toast.makeText(requireContext(), "사진을 찍는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.photo_capture_failed, Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -134,9 +152,11 @@ class RecipeMakingFragment : Fragment() {
             viewLifecycleOwner,
         ) { success ->
             if (success == true) {
-                Toast.makeText(requireContext(), "이미지 업로드 성공!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.image_upload_success, Toast.LENGTH_SHORT)
+                    .show()
             } else if (success == false) {
-                Toast.makeText(requireContext(), "이미지 업로드 실패!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.image_upload_failed, Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -176,9 +196,9 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun showImageSourceDialog() {
-        val options = arrayOf("카메라로 사진 찍기", "앨범에서 사진 선택")
+        val options = arrayOf(getString(R.string.take_photo), getString(R.string.choose_from_album))
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("이미지 소스 선택")
+        builder.setTitle(R.string.select_image_source)
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> takePicture()
