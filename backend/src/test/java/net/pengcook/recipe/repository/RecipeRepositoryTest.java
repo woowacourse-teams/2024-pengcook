@@ -37,8 +37,9 @@ class RecipeRepositoryTest {
     @DisplayName("레시피 id에 해당되는 세부 정보를 반환한다.")
     void findRecipeData() {
         List<Long> recipeIds = List.of(4L, 3L);
-        RecipeDataResponse expectedData = new RecipeDataResponse(4, "토마토스파게티", 1, "loki", "loki.jpg", LocalTime.of(0, 30),
-                "토마토스파게티이미지.jpg", 3, 2, 0, "토마토스파게티 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0), 2, "양식", 2, "쌀", REQUIRED
+        RecipeDataResponse expectedData = new RecipeDataResponse(4, "토마토스파게티", 1, "loki", "loki.jpg",
+                LocalTime.of(0, 30), "토마토스파게티이미지.jpg", 3, 2, 0, "토마토스파게티 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0),
+                2, "양식", 2, "쌀", REQUIRED
         );
 
         List<RecipeDataResponse> recipeData = repository.findRecipeData(recipeIds);
