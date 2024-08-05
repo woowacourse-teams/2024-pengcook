@@ -3,6 +3,7 @@ package net.pengcook.like.service;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.like.domain.RecipeLike;
+import net.pengcook.like.dto.RecipeLikeResponse;
 import net.pengcook.like.exception.RecipeLikeException;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.domain.Recipe;
@@ -22,6 +23,15 @@ public class RecipeLikeService {
     private final RecipeLikeRepository likeRepository;
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
+
+    public RecipeLikeResponse readLikesCount(long recipeId) {
+        int likesCount = recipeRepository.findById(recipeId).stream()
+                .mapToInt(Recipe::getLikeCount)
+                .findAny()
+                .orElseThrow(() -> new RecipeLikeException(HttpStatus.NOT_FOUND, "존재하지 않는 레시피 입니다."));
+
+        return new RecipeLikeResponse(likesCount);
+    }
 
     @Transactional
     public void toggleLike(UserInfo userInfo, long recipeId) {
