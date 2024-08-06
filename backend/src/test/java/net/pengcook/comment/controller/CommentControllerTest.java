@@ -74,7 +74,8 @@ class CommentControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @DisplayName("댓글 등록 시 레시피 아이디에 0을 입력하면 예외가 발생한다.")
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("댓글 등록 시 존재하지 않는 레시피 아이디를 입력하면 예외가 발생한다.")
     void createCommentWithInvalidRecipeId() {
         CreateCommentRequest request = new CreateCommentRequest(0L, "thank you!");
 
@@ -91,7 +92,7 @@ class CommentControllerTest extends RestDocsSetting {
                 .body(request)
                 .when().post("api/comments")
                 .then().log().all()
-                .statusCode(400);
+                .statusCode(404);
     }
 
     @ParameterizedTest
