@@ -1,8 +1,15 @@
 package net.pengcook.recipe.dto;
 
+import java.time.LocalTime;
 import net.pengcook.recipe.domain.RecipeStep;
 
-public record RecipeStepResponse(long id, long recipeId, String image, String description, int sequence) {
+public record RecipeStepResponse(
+        long id,
+        long recipeId,
+        String image,
+        String description,
+        int sequence,
+        LocalTime cookingTime) {
 
     public RecipeStepResponse(RecipeStep recipeStep) {
         this(
@@ -10,7 +17,8 @@ public record RecipeStepResponse(long id, long recipeId, String image, String de
                 recipeStep.recipeId(),
                 recipeStep.getImage(),
                 recipeStep.getDescription(),
-                recipeStep.getSequence()
+                recipeStep.getSequence(),
+                recipeStep.getCookingTime()
         );
     }
 }

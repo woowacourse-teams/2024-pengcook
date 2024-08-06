@@ -221,7 +221,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].recipeId").description("레시피 아이디"),
                                 fieldWithPath("[].image").description("레시피 스텝 이미지"),
                                 fieldWithPath("[].description").description("레시피 스텝 설명"),
-                                fieldWithPath("[].sequence").description("레시피 스텝 순서")
+                                fieldWithPath("[].sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("[].cookingTime").description("레시피 스텝 소요시간")
                         )))
                 .when()
                 .get("/api/recipes/{recipeId}/steps", 1L)
@@ -245,7 +246,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("image").description("레시피 스텝 이미지"),
                                 fieldWithPath("description").description("레시피 스텝 설명"),
-                                fieldWithPath("sequence").description("레시피 스텝 순서")
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
                         )))
                 .when()
                 .get("/api/recipes/{recipeId}/steps/{sequence}", 1L, 1L)
@@ -277,7 +279,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("image").description("레시피 스텝 이미지"),
                                 fieldWithPath("description").description("레시피 스텝 설명"),
-                                fieldWithPath("sequence").description("레시피 스텝 순서")
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
                         )))
                 .contentType(ContentType.JSON)
                 .body(recipeStepRequest)
