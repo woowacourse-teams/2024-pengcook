@@ -1,6 +1,9 @@
 package net.pengcook.like.service;
 
-import net.pengcook.authentication.domain.JwtTokenManager;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.Optional;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.like.domain.RecipeLike;
 import net.pengcook.like.exception.RecipeLikeException;
@@ -12,13 +15,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-@Sql(value = "/data/like.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Import({JwtTokenManager.class, RecipeLikeService.class})
+@Sql(value = "/data/like.sql")
+@Import(RecipeLikeService.class)
 @DataJpaTest
 class RecipeLikeServiceTest {
 
