@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0" apply false
+    
+    // Add the dependency for the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics") version "2.9.9" apply false
+
 }
 
 allprojects {
