@@ -39,8 +39,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         TokenPayload tokenPayload = jwtTokenManager.extract(accessToken);
         tokenPayload.validateAccessToken("헤더에 토큰이 access token이 아닙니다.");
-        UserInfo userInfo = new UserInfo(tokenPayload.userId(), tokenPayload.email());
 
-        return userInfo;
+        return new UserInfo(tokenPayload.userId(), tokenPayload.email());
     }
 }
