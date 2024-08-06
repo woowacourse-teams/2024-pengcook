@@ -1,15 +1,5 @@
 package net.pengcook.like.controller;
 
-import io.restassured.RestAssured;
-import net.pengcook.RestDocsSetting;
-import net.pengcook.authentication.annotation.WithLoginUser;
-import net.pengcook.authentication.annotation.WithLoginUserTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.jdbc.Sql;
-
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -17,9 +7,17 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
+import io.restassured.RestAssured;
+import net.pengcook.RestDocsSetting;
+import net.pengcook.authentication.annotation.WithLoginUser;
+import net.pengcook.authentication.annotation.WithLoginUserTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.jdbc.Sql;
+
 @Sql(value = "/data/like.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @WithLoginUserTest
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RecipeLikeControllerTest extends RestDocsSetting {
 
     @Test
