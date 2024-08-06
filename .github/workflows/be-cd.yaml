@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - be/dev
-      - be/feat/95
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
