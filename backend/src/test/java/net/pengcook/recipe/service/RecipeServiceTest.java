@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -87,9 +88,9 @@ class RecipeServiceTest {
     void readRecipeSteps() {
         long recipeId = 1L;
         List<RecipeStepResponse> expectedRecipeStepResponses = Arrays.asList(
-                new RecipeStepResponse(1L, 1, "레시피1 설명1 이미지", "레시피1 설명1", 1),
-                new RecipeStepResponse(3L, 1, "레시피1 설명2 이미지", "레시피1 설명2", 2),
-                new RecipeStepResponse(2L, 1, "레시피1 설명3 이미지", "레시피1 설명3", 3)
+                new RecipeStepResponse(1L, 1, "레시피1 설명1 이미지", "레시피1 설명1", 1, LocalTime.parse("00:10:00")),
+                new RecipeStepResponse(3L, 1, "레시피1 설명2 이미지", "레시피1 설명2", 2, LocalTime.parse("00:20:00")),
+                new RecipeStepResponse(2L, 1, "레시피1 설명3 이미지", "레시피1 설명3", 3, LocalTime.parse("00:30:00"))
         );
 
         List<RecipeStepResponse> recipeStepResponses = recipeService.readRecipeSteps(recipeId);
