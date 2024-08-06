@@ -21,6 +21,10 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
@@ -67,6 +71,48 @@ class RecipeControllerTest extends RestDocsSetting {
                 .body("size()", is(3));
     }
 
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"-1", "invalid", " ", "1.2"})
+    @DisplayName("레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생한다.")
+    void readRecipesWhenInvalidPageNumber(String pageNumber) {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생합니다.",
+                        "레시피 조회 API",
+                        queryParameters(
+                                parameterWithName("pageNumber").description("페이지 번호"),
+                                parameterWithName("pageSize").description("페이지 크기")
+                        )))
+                .queryParam("pageNumber", pageNumber)
+                .queryParam("pageSize", 3)
+                .when()
+                .get("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @NullSource
+    @ValueSource(strings = {"-1", "0", "invalid", " ", "1.2"})
+    @DisplayName("레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생한다.")
+    void readRecipesWhenInvalidPageSize(String pageSize) {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생합니다.",
+                        "레시피 조회 API",
+                        queryParameters(
+                                parameterWithName("pageNumber").description("페이지 번호"),
+                                parameterWithName("pageSize").description("페이지 크기")
+                        )))
+                .queryParam("pageNumber", 0)
+                .queryParam("pageSize", pageSize)
+                .when()
+                .get("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("새로운 레시피를 생성한다.")
@@ -111,6 +157,50 @@ class RecipeControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(201)
                 .body("recipeId", is(16));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 11})
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("새로운 레시피 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
+    void createRecipeWhenInvalidValue(int difficulty) {
+        List<String> categories = List.of("Dessert", "NewCategory");
+        List<String> substitutions = List.of("Water", "Orange");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("Apple", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
+        );
+        RecipeRequest recipeRequest = new RecipeRequest(
+                "새로운 레시피 제목",
+                "00:30:00",
+                "레시피 썸네일.jpg",
+                difficulty,
+                "새로운 레시피 설명",
+                categories,
+                ingredients
+        );
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "새로운 레시피 개요 등록 시 올바르지 않은 필드 값을 입력하면 예외가 발생합니다.",
+                        "신규 레시피 생성 API",
+                        requestFields(
+                                fieldWithPath("title").description("레시피 제목"),
+                                fieldWithPath("cookingTime").description("조리 시간"),
+                                fieldWithPath("thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("difficulty").description("난이도"),
+                                fieldWithPath("description").description("레시피 설명"),
+                                fieldWithPath("categories").description("카테고리 목록"),
+                                fieldWithPath("ingredients[]").description("재료 목록"),
+                                fieldWithPath("ingredients[].name").description("재료 이름"),
+                                fieldWithPath("ingredients[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("ingredients[].substitutions").description("대체 재료 목록").optional()
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeRequest)
+                .when().post("/api/recipes")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
@@ -193,6 +283,32 @@ class RecipeControllerTest extends RestDocsSetting {
                 .post("/api/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(201);
+    }
+
+    @Test
+    @DisplayName("특정 레시피의 레시피 스텝 생성 시 올바르지 않은 필드 값을 입력하면 예외가 발생한다.")
+    void createRecipeStepWhenInvalidValue() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "", 4, "00:05:00");
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 레시피 스텝을 생성 시 올바르지 않은 필드 값을 입력하면 에외가 발생합니다.",
+                        "특정 레시피 레시피 스텝 생성 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeStepRequest)
+                .when()
+                .post("/api/recipes/{recipeId}/steps", 1L)
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
