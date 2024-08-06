@@ -80,7 +80,13 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
             val ingredients = ingredientContent.value?.trim()
             val title = titleContent.value?.trim()
 
-            if (category.isNullOrEmpty() || introduction.isNullOrEmpty() || difficulty == null || ingredients.isNullOrEmpty() || title.isNullOrEmpty() || thumbnailTitle.isNullOrEmpty()) {
+            if (category.isNullOrEmpty() ||
+                introduction.isNullOrEmpty() ||
+                difficulty == null ||
+                ingredients.isNullOrEmpty() ||
+                title.isNullOrEmpty() ||
+                thumbnailTitle.isNullOrEmpty()
+            ) {
                 _uiEvent.value = Event(MakingEvent.DescriptionFormNotCompleted)
                 return@launch
             }
