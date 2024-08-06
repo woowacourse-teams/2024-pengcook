@@ -81,7 +81,9 @@ class ProfileAdapter(
                     val isProfileButtonSame =
                         oldItem is ProfileViewItem.ProfileButtons && newItem is ProfileViewItem.ProfileButtons
                     val isProfileFeedSame =
-                        oldItem is ProfileViewItem.ProfileFeeds && newItem is ProfileViewItem.ProfileFeeds && (oldItem.recipe.recipeId == newItem.recipe.recipeId)
+                        oldItem is ProfileViewItem.ProfileFeeds &&
+                            newItem is ProfileViewItem.ProfileFeeds &&
+                            (oldItem.recipe.recipeId == newItem.recipe.recipeId)
                     return isProfileDescriptionSame || isProfileButtonSame || isProfileFeedSame
                 }
 
