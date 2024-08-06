@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public UserBlockResponse blockUser(long blockerId, long blockeeId) {
-        User blocker = userRepository.findById(blockerId).orElseThrow(() -> new UserNotFoundException("차단하는 사용자를 찾을 수 없습니다."));
+        User blocker = userRepository.findById(blockerId).orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
         User blockee = userRepository.findById(blockeeId).orElseThrow(() -> new UserNotFoundException("차단할 사용자를 찾을 수 없습니다."));
 
         UserBlock userBlock = userBlockRepository.save(new UserBlock(blocker, blockee));
