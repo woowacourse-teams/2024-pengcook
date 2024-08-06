@@ -21,10 +21,12 @@ public class RecipeLikeController {
 
     private final RecipeLikeService likeService;
 
-    // TODO: add my like boolean field
     @GetMapping("/{recipeId}")
-    public RecipeLikeResponse readLikesCount(@PathVariable("recipeId") long recipeId) {
-        return likeService.readLikesCount(recipeId);
+    public RecipeLikeResponse readLikesCount(
+            @LoginUser UserInfo userInfo,
+            @PathVariable("recipeId") long recipeId
+    ) {
+        return likeService.readLikesCount(userInfo, recipeId);
     }
 
     @PostMapping

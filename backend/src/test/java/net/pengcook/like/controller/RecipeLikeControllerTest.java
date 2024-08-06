@@ -24,6 +24,7 @@ import org.springframework.test.context.jdbc.Sql;
 class RecipeLikeControllerTest extends RestDocsSetting {
 
     @Test
+    @WithLoginUser(email = "ela@pengcook.net")
     @DisplayName("게시글의 좋아요 개수를 조회한다.")
     void readLikesCount() {
         RestAssured.given(spec).log().all()
@@ -34,7 +35,8 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                                 parameterWithName("recipeId").description("레시피 아이디")
                         ),
                         responseFields(
-                                fieldWithPath("likesCount").description("좋아요 개수")
+                                fieldWithPath("likesCount").description("좋아요 개수"),
+                                fieldWithPath("isLike").description("나의 좋아요 여부")
                         )))
                 .when().get("/api/likes/{recipeId}", 1L)
                 .then().log().all()
@@ -52,7 +54,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         "레시피별 좋아요 변경 API",
                         requestFields(
                                 fieldWithPath("recipeId").description("레시피 아이디"),
-                                fieldWithPath("isLike").description("좋아요 여부")
+                                fieldWithPath("isLike").description("나의 좋아요 여부")
                         )))
                 .body(Map.of("recipeId", 2L, "isLike", true))
                 .contentType(ContentType.JSON)
