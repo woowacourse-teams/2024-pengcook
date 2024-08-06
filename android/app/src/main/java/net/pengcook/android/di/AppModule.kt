@@ -4,6 +4,7 @@ import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
+import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 
 interface AppModule {
     val authorizationRepository: AuthorizationRepository
@@ -13,6 +14,8 @@ interface AppModule {
     val feedRepository: FeedRepository
 
     val recipeStepMakingRepository: RecipeStepMakingRepository
+
+    val makingRecipeRepository: MakingRecipeRepository
 
     fun <T> service(apiService: Class<T>): T
 }

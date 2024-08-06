@@ -40,27 +40,17 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <ImageView
-                    android:id="@+id/makingRecipeThumbnail"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/bg_radius_tiny_filled"
-                    android:onClick="@{() -> vm.onAddImage()}"
+                <include
+                    android:id="@+id/iv_add_image"
+                    layout="@layout/item_add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:imageUri="@{vm.currentImage}"
+                    app:recipeMakingEventListener="@{vm}"
                     android:scaleType="centerCrop"
-                    app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/makingRecipeAddImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_photo"
-                    app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail" />
 
                 <include
                     android:id="@+id/makingRecipeEditTitle"
@@ -72,7 +62,7 @@
                     app:hintContent="@{@string/making_write_recipe_title}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/makingRecipeThumbnail"
+                    app:layout_constraintTop_toBottomOf="@id/iv_add_image"
                     app:title="@{@string/making_form_recipe_title}" />
 
                 <!-- Category Spinner -->
