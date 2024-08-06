@@ -82,7 +82,7 @@ class LoginServiceTest {
     }
 
     @Test
-    @DisplayName("구글 계정으로 회원가입을 할 수 있다.")
+    @DisplayName("구글 계정으로 회원가입을 한다.")
     void signUpWithGoogle() throws FirebaseAuthException {
         String email = "new_face@pengcook.net";
         String idToken = "test.id.token";

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class UserBlockTest {
 
     @Test
-    @DisplayName("UserBlock 객체를 생성할 수 있다.")
+    @DisplayName("UserBlock 객체를 생성한다.")
     void create() {
         User user_loki = new User(1L, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA");
         User user_pond = new User(2L, "pond@pengcook.net", "pond", "폰드", "pond.jpg", "KOREA");

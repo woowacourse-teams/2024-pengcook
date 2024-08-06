@@ -8,7 +8,6 @@ import java.util.List;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.repository.CategoryRepository;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class CategoryServiceTest {
     private CategoryRecipeRepository categoryRecipeRepository;
 
     @Test
-    @DisplayName("레시피의 카테고리를 저장할 수 있다.")
+    @DisplayName("레시피의 카테고리를 저장한다.")
     void saveCategories() {
         User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
         Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg", 3, 2, "김치볶음밥 조리법");
