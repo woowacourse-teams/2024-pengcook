@@ -26,7 +26,8 @@
             app:layout_constraintStart_toStartOf="parent"
             bind:selectedValue="@{selectedValue}"
             bind:spinnerItemChangeListener="@{spinnerItemChangeListener}"
-            android:padding="16dp" />
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

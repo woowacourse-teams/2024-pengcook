@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -135,6 +136,7 @@ class RecipeMakingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
         observeData()
+        setUpCategorySpinner()
     }
 
     private fun observeData() {
@@ -265,5 +267,16 @@ class RecipeMakingFragment : Fragment() {
     private fun initBinding() {
         binding.lifecycleOwner = this
         binding.vm = viewModel
+    }
+
+    private fun setUpCategorySpinner() {
+        val countryAdapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                resources.getStringArray(R.array.signup_countries),
+            )
+        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.makingRecipeCategory.spFormContent.spDefault.adapter = countryAdapter
     }
 }
