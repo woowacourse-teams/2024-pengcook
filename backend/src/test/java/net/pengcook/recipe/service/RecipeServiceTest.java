@@ -123,6 +123,15 @@ class RecipeServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("레시피 스텝 등록 시 이전 sequence 정보가 없으면 예외가 발생한다.")
+    void createRecipeWhenPreviousSequenceIsNotExist() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("새로운 스텝 이미지.jpg", "새로운 스텝 설명", 2, "00:05:00");
+
+        assertThatThrownBy(() -> recipeService.createRecipeStep(2L, recipeStepRequest))
+                .isInstanceOf(InvalidParameterException.class);
+    }
+
     @ParameterizedTest
     @MethodSource("provideParameters")
     @DisplayName("특정 카테고리의 레시피를 찾는다.")
