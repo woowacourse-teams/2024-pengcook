@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
-@Sql(value = "/data/like.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/data/like.sql")
 @WithLoginUserTest
 class RecipeLikeControllerTest extends RestDocsSetting {
 
