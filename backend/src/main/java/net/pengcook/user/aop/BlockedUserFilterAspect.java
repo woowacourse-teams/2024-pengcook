@@ -2,7 +2,7 @@ package net.pengcook.user.aop;
 
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.user.domain.AuthorAble;
 import net.pengcook.user.domain.BlockedUserGroup;
@@ -17,7 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 @Aspect
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BlockedUserFilterAspect {
 
     private final UserService userService;

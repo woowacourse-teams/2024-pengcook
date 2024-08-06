@@ -1,7 +1,7 @@
 package net.pengcook.authentication.config;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.interceptor.UserInfoInterceptor;
 import net.pengcook.authentication.resolver.LoginUserArgumentResolver;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginUserArgumentResolverConfig implements WebMvcConfigurer {
 
     private final UserInfoInterceptor userInfoInterceptor;
