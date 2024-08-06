@@ -24,8 +24,7 @@ public class RecipeLikeController {
     }
 
     @PostMapping("/{recipeId}")
-    public void toggleLike(@LoginUser UserInfo userInfo,
-                           @PathVariable("recipeId") long recipeId) {
+    public void toggleLike(@LoginUser UserInfo userInfo, @PathVariable("recipeId") long recipeId) {
         likeService.toggleLike(userInfo, recipeId);
     }
 }

@@ -1,20 +1,19 @@
 package net.pengcook.like.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.like.domain.RecipeLike;
 import net.pengcook.like.dto.RecipeLikeResponse;
-import net.pengcook.like.exception.RecipeLikeException;
+import net.pengcook.like.exception.RecipeNotFoundException;
+import net.pengcook.like.exception.UserNotFoundException;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ public class RecipeLikeService {
         int likesCount = recipeRepository.findById(recipeId).stream()
                 .mapToInt(Recipe::getLikeCount)
                 .findAny()
-                .orElseThrow(() -> new RecipeLikeException(HttpStatus.NOT_FOUND, "존재하지 않는 레시피 입니다."));
+                .orElseThrow(RecipeNotFoundException::new);
 
         return new RecipeLikeResponse(likesCount);
     }
@@ -50,9 +49,9 @@ public class RecipeLikeService {
 
     private void addLike(long userId, long recipeId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RecipeLikeException(HttpStatus.NOT_FOUND, "존재하지 않는 유저 입니다."));
+                .orElseThrow(UserNotFoundException::new);
         Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RecipeLikeException(HttpStatus.NOT_FOUND, "존재하지 않는 레시피 입니다."));
+                .orElseThrow(RecipeNotFoundException::new);
 
         recipe.increaseLikeCount();
 
