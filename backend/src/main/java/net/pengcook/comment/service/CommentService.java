@@ -7,6 +7,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.domain.Comment;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
+import net.pengcook.comment.exception.NotFoundException;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
@@ -31,8 +32,10 @@ public class CommentService {
     }
 
     public void createComment(CreateCommentRequest request, UserInfo userInfo) {
-        User user = userRepository.findByEmail(userInfo.getEmail()).orElseThrow();
-        Recipe recipe = recipeRepository.findById(request.recipeId()).orElseThrow();
+        User user = userRepository.findByEmail(userInfo.getEmail())
+                .orElseThrow(() -> new NotFoundException("해당되는 유저가 없습니다."));
+        Recipe recipe = recipeRepository.findById(request.recipeId())
+                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
         Comment comment = new Comment(user, recipe, request.message(), LocalDateTime.now());
 
         commentRepository.save(comment);
