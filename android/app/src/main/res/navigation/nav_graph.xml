@@ -126,7 +126,11 @@
     <fragment
         android:id="@+id/stepMakingFragment"
         android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"
-        android:label="StepMakingFragment" />
+        android:label="StepMakingFragment">
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+    </fragment>
 
 
     <fragment
