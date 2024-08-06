@@ -7,6 +7,7 @@ import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
+import net.pengcook.user.exception.NotFoundException;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,10 @@ public class UserService {
     }
 
     public UserReportResponse reportUser(long reporterId, UserReportRequest userReportRequest) {
-        User reporter = userRepository.findById(reporterId).orElseThrow();
-        User reportee = userRepository.findById(userReportRequest.reporteeId()).orElseThrow();
+        User reporter = userRepository.findById(reporterId)
+                .orElseThrow(() -> new NotFoundException("신고자 정보를 조회할 수 없습니다."));
+        User reportee = userRepository.findById(userReportRequest.reporteeId())
+                .orElseThrow(() -> new NotFoundException("피신고자 정보를 조회할 수 없습니다."));
         UserReport userReport = new UserReport(
                 reporter,
                 reportee,
