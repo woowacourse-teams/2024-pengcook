@@ -358,7 +358,7 @@ class RecipeControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("레시피 스텝 등록 시 이전 sequence 정보가 없으면 예외가 발생한다.")
-    void createRecipeStepWhenPreviousSequenceIsNotExist() {
+    void createRecipeStepWhenPreviousSequenceDoesNotExist() {
         RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "신규 스텝 설명", 5, "00:05:00");
 
         RestAssured.given(spec).log().all()
