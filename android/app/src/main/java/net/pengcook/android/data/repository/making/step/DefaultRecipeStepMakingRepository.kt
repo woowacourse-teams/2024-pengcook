@@ -5,12 +5,11 @@ import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.RecipeStep
-import retrofit2.Response
 
 class DefaultRecipeStepMakingRepository(
     private val recipeStepMakingDataSource: RecipeStepMakingDataSource,
-) : RecipeStepMakingRepository,
-    NetworkResponseHandler {
+) : NetworkResponseHandler(),
+    RecipeStepMakingRepository {
     override suspend fun fetchRecipeStep(
         recipeId: Long,
         sequence: Int,
@@ -25,17 +24,6 @@ class DefaultRecipeStepMakingRepository(
             val response = recipeStepMakingDataSource.uploadRecipeStep(recipeStep.toRecipeStepResponse())
             body(response, RESPONSE_CODE_SUCCESS)
         }
-
-    override fun <T> body(
-        response: Response<T>,
-        validHttpCode: Int,
-    ): T {
-        val code = response.code()
-        val body = response.body()
-        if (code != validHttpCode) throw RuntimeException(EXCEPTION_HTTP_CODE)
-        if (body == null) throw RuntimeException(EXCEPTION_NULL_BODY)
-        return body
-    }
 
     private fun RecipeStep.toRecipeStepResponse(): RecipeStepResponse =
         RecipeStepResponse(

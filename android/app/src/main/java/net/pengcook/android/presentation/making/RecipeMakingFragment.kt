@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import net.pengcook.android.BuildConfig
 import net.pengcook.android.R
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
@@ -35,7 +36,8 @@ class RecipeMakingFragment : Fragment() {
 
     private val viewModel: RecipeMakingViewModel by viewModels {
         val retrofit =
-            Retrofit.Builder()
+            Retrofit
+                .Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -59,18 +61,20 @@ class RecipeMakingFragment : Fragment() {
             ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
             if (isGranted) {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.camera_permission_granted,
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        R.string.camera_permission_granted,
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 showImageSourceDialog()
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.camera_permission_needed,
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Toast
+                    .makeText(
+                        requireContext(),
+                        R.string.camera_permission_needed,
+                        Toast.LENGTH_SHORT,
+                    ).show()
             }
         }
 
@@ -84,18 +88,20 @@ class RecipeMakingFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    Toast.makeText(
+                    Toast
+                        .makeText(
+                            requireContext(),
+                            R.string.image_selection_failed,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                }
+            } ?: run {
+                Toast
+                    .makeText(
                         requireContext(),
                         R.string.image_selection_failed,
                         Toast.LENGTH_SHORT,
                     ).show()
-                }
-            } ?: run {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.image_selection_failed,
-                    Toast.LENGTH_SHORT,
-                ).show()
             }
         }
 
@@ -107,7 +113,8 @@ class RecipeMakingFragment : Fragment() {
             if (success) {
                 viewModel.fetchImageUri(File(currentPhotoPath!!).name)
             } else {
-                Toast.makeText(requireContext(), R.string.photo_capture_failed, Toast.LENGTH_SHORT)
+                Toast
+                    .makeText(requireContext(), R.string.photo_capture_failed, Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -152,10 +159,12 @@ class RecipeMakingFragment : Fragment() {
             viewLifecycleOwner,
         ) { success ->
             if (success == true) {
-                Toast.makeText(requireContext(), R.string.image_upload_success, Toast.LENGTH_SHORT)
+                Toast
+                    .makeText(requireContext(), R.string.image_upload_success, Toast.LENGTH_SHORT)
                     .show()
             } else if (success == false) {
-                Toast.makeText(requireContext(), R.string.image_upload_failed, Toast.LENGTH_SHORT)
+                Toast
+                    .makeText(requireContext(), R.string.image_upload_failed, Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -198,14 +207,14 @@ class RecipeMakingFragment : Fragment() {
     private fun showImageSourceDialog() {
         val options = arrayOf(getString(R.string.take_photo), getString(R.string.choose_from_album))
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.select_image_source)
+        builder
+            .setTitle(R.string.select_image_source)
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> takePicture()
                     1 -> selectImageFromAlbum()
                 }
-            }
-            .show()
+            }.show()
     }
 
     private fun takePicture() {
@@ -227,13 +236,14 @@ class RecipeMakingFragment : Fragment() {
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = requireContext().getExternalFilesDir(null)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir,
-        ).apply {
-            currentPhotoPath = absolutePath
-        }
+        return File
+            .createTempFile(
+                "JPEG_${timeStamp}_",
+                ".jpg",
+                storageDir,
+            ).apply {
+                currentPhotoPath = absolutePath
+            }
     }
 
     private fun uploadImageToS3(presignedUrl: String) {
@@ -247,8 +257,9 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun navigateToStepMaking() {
-        // val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(File(currentPhotoPath!!).name)
-        // findNavController().navigate(action)
+        // File(currentPhotoPath!!).name
+        val action = RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment()
+        findNavController().navigate(action)
     }
 
     private fun initBinding() {

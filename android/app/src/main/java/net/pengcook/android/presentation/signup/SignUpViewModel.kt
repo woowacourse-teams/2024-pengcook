@@ -14,7 +14,7 @@ import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserSignUpForm
 import net.pengcook.android.domain.usecase.ValidateNicknameUseCase
 import net.pengcook.android.domain.usecase.ValidateUsernameUseCase
-import net.pengcook.android.presentation.core.listener.AppbarActionEventListener
+import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 
@@ -27,7 +27,7 @@ class SignUpViewModel(
 ) : ViewModel(),
     BottomButtonClickListener,
     SpinnerItemChangeListener,
-    AppbarActionEventListener {
+    AppbarSingleActionEventListener {
     val usernameContent: MutableLiveData<String> = MutableLiveData()
     val nicknameContent: MutableLiveData<String> = MutableLiveData()
     val country: MutableLiveData<String> = MutableLiveData()
@@ -83,18 +83,20 @@ class SignUpViewModel(
         nickname: String,
         username: String,
     ) {
-        authorizationRepository.signUp(
-            platformName,
-            UserSignUpForm(platformToken, country, nickname, username),
-        ).onSuccess { signUpResult ->
-            onSignUpSuccessful(signUpResult)
-        }.onFailure {
-            onSignUpFailure()
-        }
+        authorizationRepository
+            .signUp(
+                platformName,
+                UserSignUpForm(platformToken, country, nickname, username),
+            ).onSuccess { signUpResult ->
+                onSignUpSuccessful(signUpResult)
+            }.onFailure {
+                onSignUpFailure()
+            }
     }
 
     private suspend fun usernameAvailable(username: String): Boolean {
-        authorizationRepository.checkUsernameDuplication(username)
+        authorizationRepository
+            .checkUsernameDuplication(username)
             .onSuccess { available ->
                 if (!available) {
                     _signUpEvent.value = Event(SignUpEvent.NicknameDuplicated)
