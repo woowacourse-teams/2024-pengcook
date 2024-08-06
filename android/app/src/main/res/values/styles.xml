@@ -5,4 +5,9 @@
         <item name="android:layout_height">0.5dp</item>
         <item name="dividerColor">#B471BF</item>
     </style>
+
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/selector_rating_bar</item>
+        <item name="android:numStars">5</item>
+    </style>
 </resources>
