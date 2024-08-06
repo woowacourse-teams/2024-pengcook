@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> settingMenuItemClickListener.onSettingMenuItemClick(menuItem)}"
-        android:padding="12dp">
+        android:paddingHorizontal="12dp">
 
         <ImageView
             android:id="@+id/iv_setting_item"
@@ -37,8 +37,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="12dp"
+            android:padding="12dp"
             android:text="@{menuItem.title}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_setting_item"
             tools:text="Menu" />
