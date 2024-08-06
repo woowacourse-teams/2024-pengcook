@@ -1,7 +1,9 @@
 package net.pengcook.recipe.controller;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -19,6 +21,7 @@ import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeStepRequest;
+import net.pengcook.recipe.dto.RecipeStepResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -314,6 +317,43 @@ class RecipeControllerTest extends RestDocsSetting {
                 .post("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("레시피 스텝 등록 시 이미 존재하는 정보가 있으면 새로운 내용으로 수정한다.")
+    void createRecipeStepWithExistingRecipeStep() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest(
+                "changedImage.jpg",
+                "changedDescription",
+                1,
+                "00:15:00"
+        );
+
+        RecipeStepResponse recipeStepResponse = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeStepRequest)
+                .when()
+                .post("/api/recipes/{recipeId}/steps", 1L)
+                .then().log().all()
+                .statusCode(201)
+                .extract()
+                .as(RecipeStepResponse.class);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.id()).isEqualTo(1L),
+                () -> assertThat(recipeStepResponse.description()).isEqualTo("changedDescription"),
+                () -> assertThat(recipeStepResponse.image()).endsWith("changedImage.jpg")
+        );
     }
 
     @Test

@@ -124,6 +124,25 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("레시피 스텝 등록 시 이미 존재하는 정보가 있으면 새로운 내용으로 수정한다.")
+    void createRecipeStepWithExistingRecipeStep() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest(
+                "changedImage.jpg",
+                "changedDescription",
+                1,
+                "00:05:00"
+        );
+
+        RecipeStepResponse recipeStepResponse = recipeService.createRecipeStep(1L, recipeStepRequest);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.id()).isEqualTo(1L),
+                () -> assertThat(recipeStepResponse.description()).isEqualTo("changedDescription"),
+                () -> assertThat(recipeStepResponse.image()).endsWith("changedImage.jpg")
+        );
+    }
+
+    @Test
     @DisplayName("레시피 스텝 등록 시 이전 sequence 정보가 없으면 예외가 발생한다.")
     void createRecipeWhenPreviousSequenceIsNotExist() {
         RecipeStepRequest recipeStepRequest = new RecipeStepRequest("새로운 스텝 이미지.jpg", "새로운 스텝 설명", 2, "00:05:00");
