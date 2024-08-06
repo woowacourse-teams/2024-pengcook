@@ -144,7 +144,7 @@ VALUES (1, 1, 'REQUIRED'),  -- 김치볶음밥
        (17, 13, 'REQUIRED'), -- 베지터블 스프
        (18, 14, 'OPTIONAL'); -- 카레라이스
 
-INSERT INTO recipe_step (recipe_id, image, description, sequence)
-VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
-       (1, '레시피1 설명3 이미지', '레시피1 설명3', 3),
-       (1, '레시피1 설명2 이미지', '레시피1 설명2', 2);
+INSERT INTO recipe_step (recipe_id, image, description, sequence, cooking_time)
+VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1, '00:10:00'),
+       (1, '레시피1 설명3 이미지', '레시피1 설명3', 3, '00:30:00'),
+       (1, '레시피1 설명2 이미지', '레시피1 설명2', 2, '00:20:00');
