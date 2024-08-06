@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import net.pengcook.android.databinding.FragmentSettingBinding
-import net.pengcook.android.presentation.core.listener.AppbarActionEventListener
+import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 
-class SettingFragment : Fragment(), SettingMenuItemClickListener, AppbarActionEventListener {
+class SettingFragment :
+    Fragment(),
+    SettingMenuItemClickListener,
+    AppbarSingleActionEventListener {
     private var _binding: FragmentSettingBinding? = null
     private val binding: FragmentSettingBinding
         get() = _binding!!

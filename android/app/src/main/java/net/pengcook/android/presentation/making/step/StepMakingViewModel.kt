@@ -73,6 +73,7 @@ class StepMakingViewModel(
     }
 
     override fun validatePreviousPageableCondition() {
+        if (stepNumber.value == 1) return
         _stepNumber.value = _stepNumber.value?.minus(1)
         initStepData(stepNumber.value!!)
     }
@@ -120,13 +121,15 @@ class StepMakingViewModel(
     private suspend fun uploadStepData(stepNumber: Int) {
         // Upload step data to repository
         recipeStepMakingRepository.uploadRecipeStep(
-            RecipeStep(
-                recipeId = recipeId,
-                sequence = stepNumber,
-                description = introductionContent.value ?: "",
-                image = imageUrl.value ?: "",
-                stepId = 1L,
-            ),
+            recipeId = recipeId,
+            recipeStep =
+                RecipeStep(
+                    recipeId = recipeId,
+                    sequence = stepNumber,
+                    description = introductionContent.value ?: "",
+                    image = imageUrl.value ?: "",
+                    stepId = 1L,
+                ),
         )
     }
 }

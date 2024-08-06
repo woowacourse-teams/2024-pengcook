@@ -8,9 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import net.pengcook.android.data.datasource.making.FakeRecipeStepMakingDatasource
-import net.pengcook.android.data.repository.making.step.FakeRecipeStepMakingRepository
 import net.pengcook.android.databinding.FragmentMakingStepBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 
 class StepMakingFragment : Fragment() {
     private var _binding: FragmentMakingStepBinding? = null
@@ -27,8 +26,7 @@ class StepMakingFragment : Fragment() {
                             stepMakingService = RetrofitClient.service(StepMakingService::class.java),
                         ),
                 ),
-        )*/
-        StepMakingViewModelFactory(
+        )StepMakingViewModelFactory(
             recipeId = 1,
             maximumStep = 15,
             recipeStepMakingRepository =
@@ -36,7 +34,15 @@ class StepMakingFragment : Fragment() {
                     recipeStepMakingDataSource =
                         FakeRecipeStepMakingDatasource(),
                 ),
+        )*/
+
+        val appModule = (requireContext().applicationContext as DefaultPengcookApplication).appModule
+        StepMakingViewModelFactory(
+            recipeId = 1,
+            maximumStep = 15,
+            appModule.recipeStepMakingRepository,
         )
+        // HomeViewModelFactory(appModule.feedRepository)
     }
 
     override fun onCreateView(

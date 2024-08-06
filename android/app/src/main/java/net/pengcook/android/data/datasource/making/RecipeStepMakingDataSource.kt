@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.making
 
 import net.pengcook.android.data.model.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import retrofit2.Response
 
 interface RecipeStepMakingDataSource {
@@ -9,5 +10,8 @@ interface RecipeStepMakingDataSource {
         sequence: Int,
     ): Response<RecipeStepResponse>
 
-    suspend fun uploadRecipeStep(recipeStepResponse: RecipeStepResponse): Response<Unit>
+    suspend fun uploadRecipeStep(
+        recipeId: Long,
+        recipeStepRequest: RecipeStepRequest,
+    ): Response<Unit>
 }
