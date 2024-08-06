@@ -61,7 +61,7 @@ class RecipeLikeServiceTest {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 2L;
 
-        recipeLikeService.toggleLike(userInfo, recipeId);
+        recipeLikeService.addLike(userInfo, recipeId);
         Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
         assertThat(like).isPresent();
@@ -73,7 +73,7 @@ class RecipeLikeServiceTest {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 1L;
 
-        recipeLikeService.toggleLike(userInfo, recipeId);
+        recipeLikeService.deleteLike(userInfo, recipeId);
         Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
         assertThat(like).isEmpty();
@@ -85,7 +85,7 @@ class RecipeLikeServiceTest {
         UserInfo userInfo = new UserInfo(4L, "seyang@pengcook.net");
         long recipeId = 1L;
 
-        assertThatThrownBy(() -> recipeLikeService.toggleLike(userInfo, recipeId))
+        assertThatThrownBy(() -> recipeLikeService.addLike(userInfo, recipeId))
                 .isInstanceOf(RecipeLikeException.class)
                 .hasMessage("존재하지 않는 유저 입니다.");
     }
@@ -96,7 +96,7 @@ class RecipeLikeServiceTest {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 7L;
 
-        assertThatThrownBy(() -> recipeLikeService.toggleLike(userInfo, recipeId))
+        assertThatThrownBy(() -> recipeLikeService.deleteLike(userInfo, recipeId))
                 .isInstanceOf(RecipeLikeException.class)
                 .hasMessage("존재하지 않는 레시피 입니다.");
     }
