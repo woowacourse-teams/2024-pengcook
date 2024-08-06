@@ -1,12 +1,6 @@
-package net.pengcook.comment.domain;
+package net.pengcook.like.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,9 +10,10 @@ import net.pengcook.user.domain.User;
 
 @Entity
 @Getter
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "recipe_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Comment {
+public class RecipeLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +27,7 @@ public class Comment {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    private String message;
-
-    private LocalDateTime createdAt;
-
-    public Comment(User user, Recipe recipe, String message, LocalDateTime createdAt) {
-        this(0L, user, recipe, message, createdAt);
+    public RecipeLike(User user, Recipe recipe) {
+        this(0L, user, recipe);
     }
 }

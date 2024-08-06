@@ -1,0 +1,57 @@
+package net.pengcook.like.service;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.like.domain.RecipeLike;
+import net.pengcook.like.dto.RecipeLikeResponse;
+import net.pengcook.like.exception.RecipeNotFoundException;
+import net.pengcook.like.exception.UserNotFoundException;
+import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.user.domain.User;
+import net.pengcook.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class RecipeLikeService {
+
+    private final RecipeLikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
+
+    public RecipeLikeResponse readLikesCount(long recipeId) {
+        int likesCount = recipeRepository.findById(recipeId).stream()
+                .mapToInt(Recipe::getLikeCount)
+                .findAny()
+                .orElseThrow(RecipeNotFoundException::new);
+
+        return new RecipeLikeResponse(likesCount);
+    }
+
+    @Transactional
+    public void addLike(UserInfo userInfo, long recipeId) {
+        User user = userRepository.findById(userInfo.getId())
+                .orElseThrow(UserNotFoundException::new);
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(RecipeNotFoundException::new);
+
+        recipe.increaseLikeCount();
+
+        likeRepository.save(new RecipeLike(user, recipe));
+        recipeRepository.save(recipe);
+    }
+
+    @Transactional
+    public void deleteLike(UserInfo userInfo, long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(RecipeNotFoundException::new);
+
+        recipe.decreaseLikeCount();
+
+        likeRepository.deleteByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        recipeRepository.save(recipe);
+    }
+}
