@@ -11,7 +11,7 @@
 
         <variable
             name="appbarActionEventListener"
-            type="net.pengcook.android.presentation.core.listener.AppbarActionEventListener" />
+            type="net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

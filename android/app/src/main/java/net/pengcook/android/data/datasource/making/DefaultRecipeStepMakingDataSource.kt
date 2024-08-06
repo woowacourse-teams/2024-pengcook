@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.making
 
 import net.pengcook.android.data.model.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import net.pengcook.android.data.remote.api.StepMakingService
 import retrofit2.Response
 
@@ -10,11 +11,14 @@ class DefaultRecipeStepMakingDataSource(
     override suspend fun fetchRecipeStep(
         recipeId: Long,
         sequence: Int,
-    ): Response<RecipeStepResponse> {
-        TODO("Not yet implemented")
-    }
+    ): Response<RecipeStepResponse> = stepMakingService.fetchRecipeSteps(recipeId, sequence)
 
-    override suspend fun uploadRecipeStep(recipeStepResponse: RecipeStepResponse): Response<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun uploadRecipeStep(
+        recipeId: Long,
+        recipeStepRequest: RecipeStepRequest,
+    ): Response<Unit> =
+        stepMakingService.uploadRecipeStep(
+            recipeId = recipeId,
+            recipeStepRequest = recipeStepRequest,
+        )
 }

@@ -8,15 +8,20 @@ import net.pengcook.android.data.datasource.auth.DefaultSessionLocalDataSource
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
+import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultSessionRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
+import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingRepository
+import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -32,23 +37,24 @@ class DefaultAppModule(
         }
 
     private val client =
-        OkHttpClient.Builder().apply {
-            addInterceptor(interceptor)
-            connectTimeout(30, TimeUnit.SECONDS)
-            readTimeout(20, TimeUnit.SECONDS)
-            writeTimeout(25, TimeUnit.SECONDS)
-        }.build()
+        OkHttpClient
+            .Builder()
+            .apply {
+                addInterceptor(interceptor)
+                connectTimeout(30, TimeUnit.SECONDS)
+                readTimeout(20, TimeUnit.SECONDS)
+                writeTimeout(25, TimeUnit.SECONDS)
+            }.build()
 
     private val retrofit =
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
 
-    override fun <T> service(apiService: Class<T>): T {
-        return retrofit.create(apiService)
-    }
+    override fun <T> service(apiService: Class<T>): T = retrofit.create(apiService)
 
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource =
         DefaultAuthorizationRemoteDataSource(service(AuthorizationService::class.java))
@@ -67,4 +73,10 @@ class DefaultAppModule(
 
     override val feedRepository: FeedRepository =
         DefaultFeedRepository(feedRemoteDataSource)
+
+    private val recipeStepMakingDatasource: RecipeStepMakingDataSource =
+        DefaultRecipeStepMakingDataSource(service(StepMakingService::class.java))
+
+    override val recipeStepMakingRepository: RecipeStepMakingRepository =
+        DefaultRecipeStepMakingRepository(recipeStepMakingDatasource)
 }

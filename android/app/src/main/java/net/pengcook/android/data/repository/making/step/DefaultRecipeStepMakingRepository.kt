@@ -1,7 +1,7 @@
 package net.pengcook.android.data.repository.making.step
 
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
-import net.pengcook.android.data.model.step.RecipeStepResponse
+import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.RecipeStep
@@ -19,19 +19,21 @@ class DefaultRecipeStepMakingRepository(
             body(response, RESPONSE_CODE_SUCCESS).toRecipeStep()
         }
 
-    override suspend fun uploadRecipeStep(recipeStep: RecipeStep): Result<Unit> =
+    override suspend fun uploadRecipeStep(
+        recipeId: Long,
+        recipeStep: RecipeStep,
+    ): Result<Unit> =
         runCatching {
-            val response = recipeStepMakingDataSource.uploadRecipeStep(recipeStep.toRecipeStepResponse())
+            val response = recipeStepMakingDataSource.uploadRecipeStep(recipeId, recipeStep.toRecipeStepRequest())
             body(response, RESPONSE_CODE_SUCCESS)
         }
 
-    private fun RecipeStep.toRecipeStepResponse(): RecipeStepResponse =
-        RecipeStepResponse(
-            stepId = stepId,
-            recipeId = recipeId,
-            sequence = sequence,
+    private fun RecipeStep.toRecipeStepRequest(): RecipeStepRequest =
+        RecipeStepRequest(
             image = image,
             description = description,
+            sequence = sequence,
+            cookingTime = "00:05:00",
         )
 
     companion object {

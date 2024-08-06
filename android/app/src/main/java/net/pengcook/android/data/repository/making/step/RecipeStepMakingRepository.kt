@@ -8,5 +8,8 @@ interface RecipeStepMakingRepository {
         sequence: Int,
     ): Result<RecipeStep>
 
-    suspend fun uploadRecipeStep(recipeStep: RecipeStep): Result<Unit>
+    suspend fun uploadRecipeStep(
+        recipeId: Long,
+        recipeStep: RecipeStep,
+    ): Result<Unit>
 }
