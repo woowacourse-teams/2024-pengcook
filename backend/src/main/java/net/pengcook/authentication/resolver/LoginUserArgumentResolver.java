@@ -1,6 +1,6 @@
 package net.pengcook.authentication.resolver;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenExtractor;
 import net.pengcook.authentication.domain.TokenPayload;
@@ -13,7 +13,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";

@@ -3,7 +3,7 @@ package net.pengcook.authentication.service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.TokenType;
@@ -19,7 +19,7 @@ import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginService {
 
     private final FirebaseAuth firebaseAuth;

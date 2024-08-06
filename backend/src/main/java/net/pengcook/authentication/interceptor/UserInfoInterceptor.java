@@ -2,7 +2,7 @@ package net.pengcook.authentication.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenExtractor;
 import net.pengcook.authentication.domain.TokenPayload;
@@ -13,7 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserInfoInterceptor implements HandlerInterceptor {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
