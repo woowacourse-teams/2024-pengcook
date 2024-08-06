@@ -125,7 +125,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
                 .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("차단하는 사용자를 찾을 수 없습니다.");
+                .hasMessage("정상적으로 로그인되지 않았습니다.");
     }
 
     @Test
