@@ -42,4 +42,8 @@ public class User {
     public User(String email, String username, String nickname, String image, String region) {
         this(0L, email, username, nickname, image, region);
     }
+
+    public boolean isSameUser(long userId) {
+        return this.id == userId;
+    }
 }

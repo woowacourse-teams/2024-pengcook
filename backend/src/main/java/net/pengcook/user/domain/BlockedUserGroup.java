@@ -10,7 +10,6 @@ public class BlockedUserGroup {
 
     public boolean isBlocked(long userId) {
         return users.stream()
-                .map(User::getId)
-                .anyMatch(id -> id == userId);
+                .anyMatch(user -> user.isSameUser(userId));
     }
 }
