@@ -33,6 +33,10 @@ public class RecipeLikeService {
 
     @Transactional
     public void addLike(UserInfo userInfo, long recipeId) {
+        if (likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId)) {
+            return;
+        }
+
         User user = userRepository.findById(userInfo.getId())
                 .orElseThrow(UserNotFoundException::new);
         Recipe recipe = recipeRepository.findById(recipeId)
@@ -46,6 +50,10 @@ public class RecipeLikeService {
 
     @Transactional
     public void deleteLike(UserInfo userInfo, long recipeId) {
+        if (likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId)) {
+            return;
+        }
+
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(RecipeNotFoundException::new);
 

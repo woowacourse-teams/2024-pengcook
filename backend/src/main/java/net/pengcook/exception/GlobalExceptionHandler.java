@@ -30,7 +30,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ProblemDetail> handleDomainException(DomainException ex) {
-        log.error(ex.getMessage(), ex);
+        if (ex.getHttpStatus().is5xxServerError()) {
+            log.error(ex.getMessage(), ex);
+        }
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(ex.getHttpStatus());
         problemDetail.setDetail(ex.getMessage());
