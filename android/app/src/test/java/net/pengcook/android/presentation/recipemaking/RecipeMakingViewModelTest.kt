@@ -6,6 +6,7 @@ import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,11 +14,12 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.MakingEvent
 import net.pengcook.android.presentation.making.RecipeMakingViewModel
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,12 +31,10 @@ class RecipeMakingViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private val repository: MakingRecipeRepository = mockk()
+    private val repository: DefaultMakingRecipeRepository = mockk()
 
     private val eventObserver: Observer<Event<MakingEvent>> = mockk(relaxed = true)
-    private val imageUriObserver: Observer<String> = mockk(relaxed = true)
-    private val uploadSuccessObserver: Observer<Boolean> = mockk(relaxed = true)
-    private val uploadErrorObserver: Observer<String> = mockk(relaxed = true)
+    private val eventSlot = slot<Event<MakingEvent>>()
 
     private lateinit var viewModel: RecipeMakingViewModel
 
@@ -59,13 +59,17 @@ class RecipeMakingViewModelTest {
 
             coEvery { repository.fetchImageUri(keyName) } returns url
 
-            viewModel.imageUri.observeForever(imageUriObserver)
+            viewModel.uiEvent.observeForever(eventObserver)
             viewModel.fetchImageUri(keyName)
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            verify { imageUriObserver.onChanged(url) }
+            verify { eventObserver.onChanged(capture(eventSlot)) }
             coVerify { repository.fetchImageUri(keyName) }
+            assertEquals(
+                eventSlot.captured.getContentIfNotHandled(),
+                MakingEvent.PresignedUrlRequestSuccessful(url),
+            )
         }
 
     @Test
@@ -76,14 +80,18 @@ class RecipeMakingViewModelTest {
 
             coEvery { repository.fetchImageUri(keyName) } throws RuntimeException(errorMessage)
 
-            viewModel.uploadError.observeForever(uploadErrorObserver)
+            viewModel.uiEvent.observeForever(eventObserver)
 
             viewModel.fetchImageUri(keyName)
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            verify { uploadErrorObserver.onChanged("Pre-signed URL 요청 실패: $errorMessage") }
+            verify { eventObserver.onChanged(capture(eventSlot)) }
             coVerify { repository.fetchImageUri(keyName) }
+            assertEquals(
+                eventSlot.captured.getContentIfNotHandled(),
+                MakingEvent.PostImageFailure,
+            )
         }
 
     @Test
@@ -94,14 +102,18 @@ class RecipeMakingViewModelTest {
 
             coJustRun { repository.uploadImageToS3(presignedUrl, file) }
 
-            viewModel.uploadSuccess.observeForever(uploadSuccessObserver)
+            viewModel.uiEvent.observeForever(eventObserver)
 
             viewModel.uploadImageToS3(presignedUrl, file)
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            verify { uploadSuccessObserver.onChanged(true) }
+            verify { eventObserver.onChanged(capture(eventSlot)) }
             coVerify { repository.uploadImageToS3(presignedUrl, file) }
+            assertEquals(
+                eventSlot.captured.getContentIfNotHandled(),
+                MakingEvent.PostImageSuccessful,
+            )
         }
 
     @Test
@@ -116,13 +128,14 @@ class RecipeMakingViewModelTest {
                     errorMessage,
                 )
 
-            viewModel.uploadError.observeForever(uploadErrorObserver)
+            viewModel.uiEvent.observeForever(eventObserver)
 
             viewModel.uploadImageToS3(presignedUrl, file)
 
             testDispatcher.scheduler.advanceUntilIdle()
 
-            verify { uploadErrorObserver.onChanged("이미지 업로드 실패: $errorMessage") }
+            verify { eventObserver.onChanged(capture(eventSlot)) }
             coVerify { repository.uploadImageToS3(presignedUrl, file) }
+            assertEquals(eventSlot.captured.getContentIfNotHandled(), MakingEvent.PostImageFailure)
         }
 }

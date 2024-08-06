@@ -1,17 +1,15 @@
 package net.pengcook.android.data.repository.makingrecipe
 
-import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
+import net.pengcook.android.domain.model.recipemaking.RecipeDescription
 import java.io.File
 
-class MakingRecipeRepository(private val remoteDataSource: MakingRecipeRemoteDataSource) {
-    suspend fun fetchImageUri(keyName: String): String {
-        return remoteDataSource.fetchImageUri(keyName)
-    }
+interface MakingRecipeRepository {
+    suspend fun fetchImageUri(keyName: String): String
 
     suspend fun uploadImageToS3(
         presignedUrl: String,
         file: File,
-    ) {
-        remoteDataSource.uploadImageToS3(presignedUrl, file)
-    }
+    )
+
+    suspend fun postRecipeDescription(recipeDescription: RecipeDescription): Result<Long>
 }
