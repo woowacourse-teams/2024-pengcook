@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_radius_filled"
-        android:padding="12dp">
+        android:paddingHorizontal="12dp">
 
         <ImageView
             android:id="@+id/iv_search"
@@ -42,7 +42,7 @@
             android:background="@android:color/transparent"
             android:inputType="text"
             style="@style/Body.Medium.B1"
-            android:layout_marginStart="12dp"
+            android:padding="12dp"
             android:maxLines="1"
             tools:hint="Search"/>
 
