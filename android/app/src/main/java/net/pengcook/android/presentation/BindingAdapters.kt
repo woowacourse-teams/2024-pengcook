@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import net.pengcook.android.R
@@ -23,6 +24,8 @@ fun loadImage(
             .with(view.context)
             .load(url)
             .into(view)
+    } else {
+        view.setImageResource(R.drawable.bg_empty_image)
     }
 }
 
@@ -98,6 +101,31 @@ fun categoryText(
     view.text = category.joinToString(context.getString(R.string.separator))
 }
 
+@BindingAdapter("bind:stepCount")
+fun stepCountText(
+    view: TextView,
+    stepCount: String,
+) {
+    val context = view.context
+    view.text = context.getString(R.string.step_format).format(stepCount)
+}
+
+@BindingAdapter("bind:backButtonVisibility")
+fun backVisibility(
+    view: View,
+    step: Int,
+) {
+    view.visibility = if (step == 1) View.GONE else View.VISIBLE
+}
+
+@BindingAdapter("bind:visibility")
+fun visibility(
+    view: View,
+    isVisible: Boolean,
+) {
+    view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
 @BindingAdapter("bind:selectedValue")
 fun Spinner.bindSpinnerValue(value: Any?) {
     if (adapter == null) return
@@ -123,4 +151,11 @@ fun Spinner.setInverseBindingListener(spinnerItemChangeListener: SpinnerItemChan
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+}
+
+@BindingAdapter("bind:drawableId")
+fun ImageView.drawable(
+    @DrawableRes drawableId: Int,
+) {
+    setImageResource(drawableId)
 }

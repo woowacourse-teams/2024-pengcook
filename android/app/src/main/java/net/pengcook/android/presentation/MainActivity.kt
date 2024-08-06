@@ -10,6 +10,9 @@ import net.pengcook.android.R
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Security.insertProviderAt(Conscrypt.newProvider(), 1)
+
         setContentView(R.layout.activity_main)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
@@ -21,7 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.searchFragment, R.id.profileFragment, R.id.categoryFragment -> bottomNav.visibility = View.VISIBLE
+                R.id.homeFragment, R.id.searchFragment, R.id.profileFragment, R.id.categoryFragment ->
+                    bottomNav.visibility =
+                        View.VISIBLE
+
                 else -> bottomNav.visibility = View.GONE
             }
         }

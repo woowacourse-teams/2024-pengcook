@@ -11,7 +11,7 @@ import androidx.paging.cachedIn
 import androidx.paging.liveData
 import net.pengcook.android.data.datasource.CategoryFeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
-import net.pengcook.android.presentation.core.listener.AppbarActionEventListener
+import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
@@ -19,7 +19,9 @@ import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 class CategoryFeedListViewModel(
     private val feedRepository: FeedRepository,
     private val category: String,
-) : ViewModel(), AppbarActionEventListener, FeedItemEventListener {
+) : ViewModel(),
+    AppbarSingleActionEventListener,
+    FeedItemEventListener {
     private val _uiEvent: MutableLiveData<Event<CategoryFeedListUiEvent>> = MutableLiveData()
     val uiEvent: LiveData<Event<CategoryFeedListUiEvent>>
         get() = _uiEvent
@@ -33,8 +35,7 @@ class CategoryFeedListViewModel(
                     fetchFeeds = feedRepository::fetchRecipesByCategory,
                 )
             },
-        )
-            .liveData
+        ).liveData
             .cachedIn(viewModelScope)
 
     override fun onNavigateBack() {

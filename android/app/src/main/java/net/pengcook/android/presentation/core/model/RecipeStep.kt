@@ -4,6 +4,6 @@ data class RecipeStep(
     val stepId: Long,
     val recipeId: Long,
     val description: String,
-    val image: Any,
-    val sequence: Long,
+    val image: String,
+    val sequence: Int,
 )
