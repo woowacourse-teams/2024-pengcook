@@ -3,11 +3,10 @@ package net.pengcook.like.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.Optional;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.like.domain.RecipeLike;
 import net.pengcook.like.exception.RecipeLikeException;
 import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,13 @@ class RecipeLikeServiceTest {
     private RecipeLikeService recipeLikeService;
     @Autowired
     private RecipeLikeRepository likeRepository;
+    @Autowired
+    private RecipeRepository RecipeRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Test
-    @DisplayName("레시피의 좋아요 개수를 조회한다.")
+    @DisplayName("레시피의 좋아요 개수 1개를 조회한다.")
     void readLikesCountOne() {
         long recipeId = 1L;
 
@@ -36,7 +39,7 @@ class RecipeLikeServiceTest {
     }
 
     @Test
-    @DisplayName("레시피의 좋아요 개수를 조회한다.")
+    @DisplayName("레시피의 좋아요 개수 0개를 조회한다.")
     void readLikesCountZero() {
         long recipeId = 2L;
 
@@ -57,26 +60,62 @@ class RecipeLikeServiceTest {
 
     @Test
     @DisplayName("좋아요가 없는 게시글에 좋아요를 추가한다.")
-    void toggleLikeOnEmpty() {
+    void addLikeOnEmpty() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 2L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
         recipeLikeService.addLike(userInfo, recipeId);
-        Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
-        assertThat(like).isPresent();
+        assertThat(exists).isTrue();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount + 1);
     }
 
     @Test
-    @DisplayName("이미 좋아요를 한 게시글에 좋아요를 취소한다.")
-    void toggleLikeOnPresent() {
+    @DisplayName("좋아요가 없는 게시글에 좋아요를 취소해도 아무일이 일어나지 않는다.")
+    void deleteLikeOnEmpty() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
-        long recipeId = 1L;
+        long recipeId = 2L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
         recipeLikeService.deleteLike(userInfo, recipeId);
-        Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
-        assertThat(like).isEmpty();
+        assertThat(exists).isFalse();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount);
+    }
+
+    @Test
+    @DisplayName("좋아요를 한 게시글에 좋아요를 추가해도 아무일이 일어나지 않는다.")
+    void addLikeOnPresent() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+        long recipeId = 1L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        recipeLikeService.addLike(userInfo, recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        assertThat(exists).isTrue();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount);
+    }
+
+    @Test
+    @DisplayName("좋아요를 한 게시글에 좋아요를 취소한다.")
+    void deleteLikeOnPresent() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+        long recipeId = 1L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        recipeLikeService.deleteLike(userInfo, recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        assertThat(exists).isFalse();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount - 1);
     }
 
     @Test

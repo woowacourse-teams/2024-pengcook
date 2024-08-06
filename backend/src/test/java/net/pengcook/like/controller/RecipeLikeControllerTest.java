@@ -28,6 +28,8 @@ class RecipeLikeControllerTest extends RestDocsSetting {
     void readLikesCount() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 좋아요 개수를 조회한다.",
+                        "레시피별 좋아요 개수 조회 API",
                         pathParameters(
                                 parameterWithName("recipeId").description("레시피 아이디")
                         ),
@@ -50,9 +52,9 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         "레시피별 좋아요 변경 API",
                         requestFields(
                                 fieldWithPath("recipeId").description("레시피 아이디"),
-                                fieldWithPath("like").description("좋아요 여부")
+                                fieldWithPath("isLike").description("좋아요 여부")
                         )))
-                .body(Map.of("recipeId", 2L, "like", true))
+                .body(Map.of("recipeId", 2L, "isLike", true))
                 .contentType(ContentType.JSON)
                 .when().post("/likes")
                 .then().log().all()
@@ -69,9 +71,9 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         "레시피별 좋아요 변경 API",
                         requestFields(
                                 fieldWithPath("recipeId").description("레시피 아이디"),
-                                fieldWithPath("like").description("좋아요 여부")
+                                fieldWithPath("isLike").description("좋아요 여부")
                         )))
-                .body(Map.of("recipeId", 1L, "like", false))
+                .body(Map.of("recipeId", 1L, "isLike", false))
                 .contentType(ContentType.JSON)
                 .when().post("/likes")
                 .then().log().all()
