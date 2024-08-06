@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
@@ -89,16 +90,30 @@ public class RecipeService {
     }
 
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
-        Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
         validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
+        Recipe recipe = getRecipeByRecipeId(recipeId);
         String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
+        LocalTime cookingTime = LocalTime.parse(recipeStepRequest.cookingTime());
+
+        Optional<RecipeStep> existingRecipeStep = recipeStepRepository.findByRecipeIdAndSequence(
+                recipeId,
+                recipeStepRequest.sequence()
+        );
+
+        if (existingRecipeStep.isPresent()) {
+            RecipeStep recipeStep = existingRecipeStep.get();
+            recipeStep.setImage(imageUrl);
+            recipeStep.setDescription(recipeStepRequest.description());
+            recipeStep.setCookingTime(cookingTime);
+            return new RecipeStepResponse(recipeStep);
+        }
+
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
                 imageUrl,
                 recipeStepRequest.description(),
                 recipeStepRequest.sequence(),
-                LocalTime.parse(recipeStepRequest.cookingTime())
+                cookingTime
         );
 
         RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
@@ -170,6 +185,11 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    private Recipe getRecipeByRecipeId(long recipeId) {
+        return recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
     }
 
     private void validateRecipeStepSequence(long recipeId, int sequence) {
