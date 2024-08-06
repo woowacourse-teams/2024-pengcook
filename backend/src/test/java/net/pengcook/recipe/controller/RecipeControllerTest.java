@@ -317,6 +317,30 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @DisplayName("레시피 스텝 등록 시 이전 sequence 정보가 없으면 예외가 발생한다.")
+    void createRecipeStepWhenPreviousSequenceIsNotExist() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("신규 스텝 이미지.jpg", "신규 스텝 설명", 5, "00:05:00");
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("image").description("레시피 스텝 이미지"),
+                                fieldWithPath("description").description("레시피 스텝 설명"),
+                                fieldWithPath("sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeStepRequest)
+                .when()
+                .post("/api/recipes/{recipeId}/steps", 1L)
+                .then().log().all()
+                .statusCode(400);
+    }
+
+    @Test
     @DisplayName("카테고리별 레시피 개요 목록을 조회한다.")
     void readRecipesOfCategory() {
         RestAssured.given(spec).log().all()

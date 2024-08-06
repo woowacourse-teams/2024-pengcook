@@ -91,6 +91,7 @@ public class RecipeService {
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
+        validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
         String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
@@ -169,5 +170,13 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    private void validateRecipeStepSequence(long recipeId, int sequence) {
+        int previousSequence = sequence - 1;
+        if (previousSequence >= 1) {
+            recipeStepRepository.findByRecipeIdAndSequence(recipeId, previousSequence)
+                    .orElseThrow(() -> new InvalidParameterException("이전 sequence가 등록되지 않았습니다."));
+        }
     }
 }
