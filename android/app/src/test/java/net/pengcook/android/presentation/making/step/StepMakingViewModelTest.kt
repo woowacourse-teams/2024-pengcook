@@ -50,6 +50,7 @@ class StepMakingViewModelTest {
         // then
         assertEquals(1, actual)
     }
+}
 
   /*  @Test
     fun `fetch recipe step data when it exist already`() {
@@ -83,8 +84,7 @@ class StepMakingViewModelTest {
 
     @Test
     fun `uploadStep success`() {
-   */
-  /*     // given
+      // given
              viewModel = StepMakingViewModel(1, 15, stepMakingRepository)
 
              // when
@@ -92,7 +92,7 @@ class StepMakingViewModelTest {
 
              // then
              val actual = viewModel.completeStepMakingState.value?.getContentIfNotHandled()
-             assertEquals(true, actual)*/
-  /*
-    }*/
-}
+             assertEquals(true, actual)
+
+    }
+   */
