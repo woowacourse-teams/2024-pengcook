@@ -103,7 +103,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("사용자를 차단할 수 있다.")
+    @DisplayName("사용자를 차단한다.")
     void blockUser() {
         long blockerId = 1L;
         long blockeeId = 2L;
