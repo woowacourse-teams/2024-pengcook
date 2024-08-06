@@ -42,14 +42,12 @@ class DefaultAppModule(
         }
 
     private val client =
-        OkHttpClient
-            .Builder()
-            .apply {
-                addInterceptor(interceptor)
-                connectTimeout(30, TimeUnit.SECONDS)
-                readTimeout(20, TimeUnit.SECONDS)
-                writeTimeout(25, TimeUnit.SECONDS)
-            }.build()
+        OkHttpClient.Builder().apply {
+            addInterceptor(interceptor)
+            connectTimeout(30, TimeUnit.SECONDS)
+            readTimeout(20, TimeUnit.SECONDS)
+            writeTimeout(25, TimeUnit.SECONDS)
+        }.build()
 
     private val retrofit =
         Retrofit
