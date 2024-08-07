@@ -25,7 +25,7 @@ interface MakingRecipeService {
         @Body image: RequestBody,
     ): Response<Unit>
 
-    @POST("/api/recipes")
+    @POST("/recipes")
     suspend fun postRecipeDescription(
         @Header("Authorization") accessToken: String,
         @Body recipeDescription: RecipeDescriptionRequest,
