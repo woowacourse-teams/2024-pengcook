@@ -10,7 +10,6 @@ public record UserResponse(
         String image,
         String region
 ) {
-
     public UserResponse(User user) {
         this(
                 user.getId(),
