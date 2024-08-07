@@ -93,7 +93,7 @@ public class RecipeService {
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
         Recipe recipe = getRecipeByRecipeId(recipeId);
-        String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
+        String imageUrl = getImageUrl(recipeStepRequest.image());
         String description = recipeStepRequest.description();
         LocalTime cookingTime = LocalTime.parse(recipeStepRequest.cookingTime());
 
@@ -209,5 +209,15 @@ public class RecipeService {
         );
 
         return recipeStepRepository.save(recipeStep);
+    }
+
+    private String getImageUrl(String image) {
+        if (image == null) {
+            return null;
+        }
+        if (image.isBlank()) {
+            throw new InvalidParameterException("적절하지 않은 이미지 이름입니다.");
+        }
+        return s3ClientService.getImageUrl(image).url();
     }
 }
