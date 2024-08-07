@@ -83,8 +83,6 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipesWhenInvalidPageNumber(String pageNumber) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생합니다.",
-                        "레시피 조회 API",
                         queryParameters(
                                 parameterWithName("pageNumber").description("페이지 번호"),
                                 parameterWithName("pageSize").description("페이지 크기")
@@ -104,8 +102,6 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipesWhenInvalidPageSize(String pageSize) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생합니다.",
-                        "레시피 조회 API",
                         queryParameters(
                                 parameterWithName("pageNumber").description("페이지 번호"),
                                 parameterWithName("pageSize").description("페이지 크기")
@@ -187,8 +183,6 @@ class RecipeControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "새로운 레시피 개요 등록 시 올바르지 않은 필드 값을 입력하면 예외가 발생합니다.",
-                        "신규 레시피 생성 API",
                         requestFields(
                                 fieldWithPath("title").description("레시피 제목"),
                                 fieldWithPath("cookingTime").description("조리 시간"),
@@ -300,8 +294,6 @@ class RecipeControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "특정 레시피의 레시피 스텝을 생성 시 올바르지 않은 필드 값을 입력하면 에외가 발생합니다.",
-                        "특정 레시피 레시피 스텝 생성 API",
                         pathParameters(
                                 parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
                         ),
