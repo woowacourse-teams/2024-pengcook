@@ -26,6 +26,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -122,6 +123,30 @@ class RecipeServiceTest {
                 () -> assertThat(recipeStepResponse.recipeId()).isEqualTo(2L),
                 () -> assertThat(recipeStepResponse.description()).isEqualTo("새로운 스텝 설명")
         );
+    }
+
+    @Test
+    @DisplayName("레시피 스텝 생성 요청 이미지 값이 null이어도 정상적으로 생성하고, 이미지에 null을 저장한다.")
+    void createRecipeStepWithNullImage() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest(null, "새로운 스텝 설명", 1, "00:05:00");
+
+        RecipeStepResponse recipeStepResponse = recipeService.createRecipeStep(2L, recipeStepRequest);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.recipeId()).isEqualTo(2L),
+                () -> assertThat(recipeStepResponse.image()).isNull(),
+                () -> assertThat(recipeStepResponse.description()).isEqualTo("새로운 스텝 설명")
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    "})
+    @DisplayName("레시피 스텝 생성 요청 이미지 값이 빈 문자열이거나 공백만 있을 경우 예외가 발생한다.")
+    void createRecipeStepWhenBlankImage(String image) {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest(image, "새로운 스텝 설명", 1, "00:05:00");
+
+        assertThatThrownBy(() -> recipeService.createRecipeStep(2L, recipeStepRequest))
+                .isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
