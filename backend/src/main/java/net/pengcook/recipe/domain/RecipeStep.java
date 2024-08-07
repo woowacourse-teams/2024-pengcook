@@ -42,15 +42,11 @@ public class RecipeStep {
         return recipe.getId();
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public void setDescription(String description) {
+    public RecipeStep update(String imageUrl, String description, LocalTime cookingTime) {
+        this.image  = imageUrl;
         this.description = description;
-    }
-
-    public void setCookingTime(LocalTime cookingTime) {
         this.cookingTime = cookingTime;
+
+        return this;
     }
 }
