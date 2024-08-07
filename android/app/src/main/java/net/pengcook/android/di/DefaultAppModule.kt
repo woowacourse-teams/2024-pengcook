@@ -10,9 +10,12 @@ import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSource
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
+import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
+import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.remote.api.ProfileService
 import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
@@ -22,6 +25,8 @@ import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingRepository
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
+import net.pengcook.android.data.repository.profile.DefaultProfileRepository
+import net.pengcook.android.data.repository.profile.ProfileRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -79,4 +84,10 @@ class DefaultAppModule(
 
     override val recipeStepMakingRepository: RecipeStepMakingRepository =
         DefaultRecipeStepMakingRepository(recipeStepMakingDatasource)
+
+    private val profileRemoteDataSource: ProfileRemoteDataSource =
+        DefaultProfileRemoteDataSource(service(ProfileService::class.java))
+
+    override val profileRepository: ProfileRepository =
+        DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
 }

@@ -8,7 +8,7 @@
 
         <variable
             name="profile"
-            type="net.pengcook.android.presentation.profile.Profile" />
+            type="net.pengcook.android.domain.model.profile.UserProfile" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,7 +47,7 @@
                 android:maxLines="2"
                 style="@style/Body.Medium.B2"
                 android:visibility="gone"
-                android:text="@{profile.introduction}"
+                android:text="@{profile.introduction.toString()}"
                 tools:text="Hello, My Name is Nickname.\n I wanna be a superstar!"/>
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_marginTop="8dp"
                 style="@style/Body.Medium.B2"
                 tools:text="1,323 followers ・ 100 recipes"
-                android:text="@{@string/profile_numeric_indicators(profile.followers, profile.recipeCount)}"/>
+                android:text="@{@string/profile_numeric_indicators(profile.follower, profile.recipeCount)}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,7 +74,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            bind:imageUrl="@{profile.imageUrl}"
+            bind:imageUrl="@{profile.image}"
             android:background="@drawable/bg_circle_filled"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintTop_toTopOf="parent"
