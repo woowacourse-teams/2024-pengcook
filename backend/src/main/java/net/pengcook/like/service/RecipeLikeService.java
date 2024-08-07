@@ -22,14 +22,10 @@ public class RecipeLikeService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
 
-    public RecipeLikeResponse readLikesCount(UserInfo userInfo, long recipeId) {
-        int likesCount = recipeRepository.findById(recipeId).stream()
-                .mapToInt(Recipe::getLikeCount)
-                .findAny()
-                .orElseThrow(RecipeNotFoundException::new);
+    public RecipeLikeResponse readLike(UserInfo userInfo, long recipeId) {
         boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
-        return new RecipeLikeResponse(likesCount, isLike);
+        return new RecipeLikeResponse(isLike);
     }
 
     @Transactional

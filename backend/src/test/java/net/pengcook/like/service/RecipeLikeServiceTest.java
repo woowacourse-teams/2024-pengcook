@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.like.exception.RecipeLikeException;
 import net.pengcook.like.exception.RecipeNotFoundException;
 import net.pengcook.like.exception.UserNotFoundException;
 import net.pengcook.like.repository.RecipeLikeRepository;
@@ -29,36 +28,25 @@ class RecipeLikeServiceTest {
     private RecipeRepository recipeRepository;
 
     @Test
-    @DisplayName("레시피의 좋아요 개수 1개를 조회한다.")
-    void readLikesCountOne() {
+    @DisplayName("내가 좋아요를 한 게시글인지 조회한다.")
+    void readLikeMine() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 1L;
 
-        int likesCount = recipeLikeService.readLikesCount(userInfo, recipeId).likesCount();
+        boolean like = recipeLikeService.readLike(userInfo, recipeId).isLike();
 
-        assertThat(likesCount).isOne();
+        assertThat(like).isTrue();
     }
 
     @Test
-    @DisplayName("레시피의 좋아요 개수 0개를 조회한다.")
-    void readLikesCountZero() {
+    @DisplayName("내가 좋아요를 하지 않은 게시글인지 조회한다.")
+    void readLikeNotMine() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 2L;
 
-        int likesCount = recipeLikeService.readLikesCount(userInfo, recipeId).likesCount();
+        boolean like = recipeLikeService.readLike(userInfo, recipeId).isLike();
 
-        assertThat(likesCount).isZero();
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 레시피에 좋아요를 조회할 경우 예외가 발생한다.")
-    void readLikesWhenNotExistRecipe() {
-        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
-        long recipeId = 7L;
-
-        assertThatThrownBy(() -> recipeLikeService.readLikesCount(userInfo, recipeId))
-                .isInstanceOf(RecipeLikeException.class)
-                .hasMessage("존재하지 않는 레시피 입니다.");
+        assertThat(like).isFalse();
     }
 
     @Test
