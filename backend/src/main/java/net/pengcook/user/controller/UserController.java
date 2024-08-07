@@ -56,14 +56,19 @@ public class UserController {
 
     @PostMapping("/user/report")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReportResponse report(@LoginUser UserInfo userInfo, @RequestBody UserReportRequest userReportRequest) {
+    public UserReportResponse report(
+            @LoginUser UserInfo userInfo,
+            @RequestBody UserReportRequest userReportRequest
+    ) {
         return userService.reportUser(userInfo.getId(), userReportRequest);
     }
 
     @PostMapping("/user/block")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserBlockResponse blockUser(@LoginUser UserInfo userInfo,
-                                       @RequestBody @Valid UserBlockRequest userBlockRequest) {
+    public UserBlockResponse blockUser(
+            @LoginUser UserInfo userInfo,
+            @RequestBody @Valid UserBlockRequest userBlockRequest
+    ) {
         return userService.blockUser(userInfo.getId(), userBlockRequest.blockeeId());
     }
 }

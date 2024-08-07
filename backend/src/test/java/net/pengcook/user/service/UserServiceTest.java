@@ -5,16 +5,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import net.pengcook.user.domain.BlockedUserGroup;
-import java.util.NoSuchElementException;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
+import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
-import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.exception.UserNotFoundException;
+import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

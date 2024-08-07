@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
+import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
@@ -13,14 +14,12 @@ import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserReportResponse;
-import net.pengcook.user.domain.UserBlock;
-import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.NotFoundException;
-import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
+import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +58,15 @@ public class UserService {
     }
 
     public UserBlockResponse blockUser(long blockerId, long blockeeId) {
-        User blocker = userRepository.findById(blockerId).orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
-        User blockee = userRepository.findById(blockeeId).orElseThrow(() -> new UserNotFoundException("차단할 사용자를 찾을 수 없습니다."));
+        User blocker = userRepository.findById(blockerId)
+                .orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
+        User blockee = userRepository.findById(blockeeId)
+                .orElseThrow(() -> new UserNotFoundException("차단할 사용자를 찾을 수 없습니다."));
 
         UserBlock userBlock = userBlockRepository.save(new UserBlock(blocker, blockee));
 
-        return new UserBlockResponse(new UserResponse(userBlock.getBlocker()), new UserResponse(userBlock.getBlockee()));
+        return new UserBlockResponse(new UserResponse(userBlock.getBlocker()),
+                new UserResponse(userBlock.getBlockee()));
     }
 
     public UserReportResponse reportUser(long reporterId, UserReportRequest userReportRequest) {
