@@ -8,6 +8,8 @@ import net.pengcook.user.domain.BlockedUserGroup;
 import java.util.NoSuchElementException;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.UserReportRequest;
+import net.pengcook.user.dto.UpdateProfileRequest;
+import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
@@ -61,6 +63,31 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUserById(id))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자를 찾을 수 없습니다.");
+    @Test
+    @DisplayName("사용자 프로필을 수정한다.")
+    void updateProfile() {
+        long id = 1L;
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse expected = new UpdateProfileResponse(
+                id,
+                "loki@pengcook.net",
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse actual = userService.updateProfile(id, request);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

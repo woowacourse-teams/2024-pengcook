@@ -135,6 +135,7 @@ VALUES (1, 1, 'REQUIRED'),  -- 김치볶음밥
        (1, 9, 'OPTIONAL'),  -- 흰쌀밥
        (5, 10, 'REQUIRED'), -- 샐러드
        (8, 10, 'OPTIONAL'), -- 샐러드
+       (8, 11, 'REQUIRED'), -- 연어 스테이크
        (11, 6, 'REQUIRED'), -- 피자
        (12, 15, 'REQUIRED'), -- 새우볶음밥
        (13, 15, 'OPTIONAL'), -- 새우볶음밥

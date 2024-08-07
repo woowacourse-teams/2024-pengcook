@@ -1,10 +1,14 @@
 package net.pengcook.user.service;
 
+import jakarta.transaction.Transactional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserReport;
+import net.pengcook.user.dto.UpdateProfileRequest;
+import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.domain.UserBlock;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
 
@@ -34,6 +39,19 @@ public class UserService {
     public UsernameCheckResponse checkUsername(String username) {
         boolean userExists = userRepository.existsByUsername(username);
         return new UsernameCheckResponse(!userExists);
+    }
+
+    @Transactional
+    public UpdateProfileResponse updateProfile(long userId, UpdateProfileRequest updateProfileRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        user.update(
+                updateProfileRequest.username(),
+                updateProfileRequest.nickname(),
+                updateProfileRequest.image(),
+                updateProfileRequest.region()
+        );
+        return new UpdateProfileResponse(user);
     }
 
     public UserBlockResponse blockUser(long blockerId, long blockeeId) {

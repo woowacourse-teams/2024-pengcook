@@ -14,6 +14,8 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.user.dto.UpdateProfileRequest;
+import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
@@ -60,6 +62,57 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(200)
                 .extract()
                 .as(UserResponse.class);
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("로그인된 사용자의 정보를 수정한다.")
+    void updateUserProfile() {
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse expected = new UpdateProfileResponse(
+                1L,
+                "loki@pengcook.net",
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "로그인된 사용자 정보를 변경합니다.",
+                        "사용자 정보 수정 API",
+                        requestFields(
+                                fieldWithPath("username").description("사용자 아이디"),
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("image").description("사용자 프로필 이미지"),
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개")
+                        ),
+                        responseFields(
+                                fieldWithPath("userId").description("사용자 ID"),
+                                fieldWithPath("email").description("사용자 이메일"),
+                                fieldWithPath("username").description("사용자 아이디"),
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("image").description("사용자 프로필 이미지"),
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .patch("/user/me")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(UpdateProfileResponse.class);
 
         assertThat(actual).isEqualTo(expected);
     }
