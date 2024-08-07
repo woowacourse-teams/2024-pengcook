@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/onboardingFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -126,7 +126,11 @@
     <fragment
         android:id="@+id/stepMakingFragment"
         android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"
-        android:label="StepMakingFragment" />
+        android:label="StepMakingFragment">
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+    </fragment>
 
 
     <fragment
@@ -160,12 +164,28 @@
         android:id="@+id/settingFragment"
         android:name="net.pengcook.android.presentation.setting.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_accountSettingFragment"
+            app:destination="@id/accountSettingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/followListFragment"
         android:name="net.pengcook.android.presentation.follow.FollowListFragment"
         android:label="fragment_follow_list"
         tools:layout="@layout/fragment_follow_list"/>
+
+    <fragment
+        android:id="@+id/accountSettingFragment"
+        android:name="net.pengcook.android.presentation.setting.AccountSettingFragment"
+        android:label="fragment_account_setting"
+        tools:layout="@layout/fragment_account_setting" >
+        <action
+            android:id="@+id/action_accountSettingFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>

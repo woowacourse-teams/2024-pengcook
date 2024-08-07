@@ -4,33 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import net.pengcook.android.R
-import net.pengcook.android.databinding.FragmentSettingBinding
+import net.pengcook.android.databinding.FragmentAccountSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 
-class SettingFragment :
+class AccountSettingFragment :
     Fragment(),
     SettingMenuItemClickListener,
     AppbarSingleActionEventListener {
-    private var _binding: FragmentSettingBinding? = null
-    private val binding: FragmentSettingBinding
+    private var _binding: FragmentAccountSettingBinding? = null
+    private val binding: FragmentAccountSettingBinding
         get() = _binding!!
-    private val settings: List<Setting> =
-        listOf(
-            Setting(
-                listOf(MenuItem.LIKES, MenuItem.COMMENTS),
-            ),
-            Setting(
-                listOf(MenuItem.BLOCKED, MenuItem.LANGUAGE),
-            ),
-            Setting(
-                listOf(MenuItem.PRIVACY_POLICY, MenuItem.TERMS_OF_USE, MenuItem.ACCOUNT),
-            ),
+
+    private val adapter: SettingItemRecyclerViewAdapter by lazy {
+        SettingItemRecyclerViewAdapter(
+            menus = listOf(MenuItem.SIGN_OUT, MenuItem.DELETE_ACCOUNT),
+            settingMenuItemClickListener = this,
         )
-    private val adapter: SettingRecyclerViewAdapter by lazy {
-        SettingRecyclerViewAdapter(settings, this)
     }
 
     override fun onCreateView(
@@ -38,7 +32,7 @@ class SettingFragment :
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSettingBinding.inflate(inflater, container, false)
+        _binding = FragmentAccountSettingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,7 +42,14 @@ class SettingFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.adapter = adapter
-        binding.appbarActionEventListener = this
+        binding.appbarEventListener = this
+
+        val dividerItemDecoration =
+            MaterialDividerItemDecoration(binding.root.context, LinearLayout.VERTICAL).apply {
+                isLastItemDecorated = false
+            }
+
+        binding.rvAccountSetting.rvSettingContainer.addItemDecoration(dividerItemDecoration)
     }
 
     override fun onDestroyView() {
@@ -58,14 +59,11 @@ class SettingFragment :
 
     override fun onSettingMenuItemClick(menuItem: MenuItem) {
         when (menuItem) {
-            MenuItem.LIKES -> {}
-            MenuItem.COMMENTS -> {}
-            MenuItem.BLOCKED -> {}
-            MenuItem.LANGUAGE -> {}
-            MenuItem.PRIVACY_POLICY -> {}
-            MenuItem.TERMS_OF_USE -> {}
-            MenuItem.ACCOUNT ->
-                findNavController().navigate(R.id.action_settingFragment_to_accountSettingFragment)
+            MenuItem.SIGN_OUT -> {
+                findNavController().navigate(R.id.action_accountSettingFragment_to_onboardingFragment)
+            }
+            MenuItem.DELETE_ACCOUNT -> {
+            }
             else -> Unit
         }
     }

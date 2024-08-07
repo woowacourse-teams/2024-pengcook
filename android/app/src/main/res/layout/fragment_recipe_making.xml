@@ -8,152 +8,134 @@
         <variable
             name="vm"
             type="net.pengcook.android.presentation.making.RecipeMakingViewModel" />
+
+        <variable
+            name="appbarEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener" />
     </data>
 
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <include
+            android:id="@+id/abl_recipe_making"
+            layout="@layout/item_appbar_with_action"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- Close Button -->
-            <ImageView
-                android:id="@+id/makingRecipeCloseButton"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_close"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            app:appbarEventListener="@{appbarEventListener}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/making_appbar_title}" />
 
-            <!-- Recipe Title Text -->
-            <TextView
-                android:id="@+id/makingRecipeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="26sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@{`Recipe title`}" />
+        <ScrollView
+            android:id="@+id/sv_recipe_making"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/nextButton"
+            app:layout_constraintTop_toBottomOf="@id/abl_recipe_making">
 
-            <ImageView
-                android:id="@+id/makingRecipeThumbnail"
-                android:layout_width="343dp"
-                android:layout_height="343dp"
-                android:layout_margin="16dp"
-                android:layout_marginTop="16dp"
-                android:background="#EFEFEF"
-                android:onClick="@{() -> vm.onAddImage()}"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeTitle"
-                app:layout_constraintWidth_default="percent"
-                app:layout_constraintWidth_percent="0.8" />
-
-
-            <ImageView
-                android:id="@+id/makingRecipeAddImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_photo"
-                app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail"
-                tools:layout_editor_absoluteY="214dp" />
-
-            <include
-                android:id="@+id/makingRecipeEditTitle"
-                layout="@layout/item_form_text"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:content="@={vm.titleContent}"
-                app:hintContent="@{@string/making_write_recipe_title}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeThumbnail"
-                app:title="@{`Recipe Title`}" />
+                android:padding="16dp">
 
-            <!-- Category Spinner -->
-            <include
-                android:id="@+id/makingRecipeCategory"
-                layout="@layout/item_form_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
-                app:selectedValue="@{vm.categorySelectedValue}"
-                app:title="@{`Category`}" />
+                <include
+                    android:id="@+id/iv_add_image"
+                    layout="@layout/item_add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:imageUri="@{vm.currentImage}"
+                    app:recipeMakingEventListener="@{vm}"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Ingredient EditText -->
-            <include
-                android:id="@+id/makingRecipeIngredient"
-                layout="@layout/item_form_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:content="@={vm.ingredientContent}"
-                app:hintContent="@{@string/making_write_ingredient}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
-                app:title="@{`Ingredient`}" />
+                <include
+                    android:id="@+id/makingRecipeEditTitle"
+                    layout="@layout/item_form_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    app:content="@={vm.titleContent}"
+                    app:hintContent="@{@string/making_write_recipe_title}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_add_image"
+                    app:title="@{@string/making_form_recipe_title}" />
+
+                <!-- Category Spinner -->
+                <include
+                    android:id="@+id/makingRecipeCategory"
+                    layout="@layout/item_form_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
+                    app:selectedValue="@{vm.categorySelectedValue}"
+                    app:title="@{@string/making_form_category}"
+                    app:spinnerItemChangeListener="@{vm}"/>
+
+                <!-- Ingredient EditText -->
+                <include
+                    android:id="@+id/makingRecipeIngredient"
+                    layout="@layout/item_form_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    app:content="@={vm.ingredientContent}"
+                    app:hintContent="@{@string/making_write_ingredient}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
+                    app:title="@{@string/making_form_ingredient}" />
 
 
-            <!-- Difficulty Spinner -->
-            <include
-                android:id="@+id/makingRecipeDifficulty"
-                layout="@layout/item_form_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
-                app:selectedValue="@={vm.difficultySelectedValue}"
-                app:title="@{`Difficulty`}" />
+                <!-- Difficulty Spinner -->
+                <include
+                    android:id="@+id/makingRecipeDifficulty"
+                    layout="@layout/item_form_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
+                    app:selectedRating="@={vm.difficultySelectedValue}"
+                    app:title="@{@string/making_form_difficulty}" />
 
-            <!-- Introduction EditText -->
-            <include
-                android:id="@+id/makingRecipeIntroduction"
-                layout="@layout/item_form_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:content="@={vm.introductionContent}"
-                app:hintContent="@{@string/step_making_hint}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
-                app:title="@{`Introduction`}" />
+                <!-- Introduction EditText -->
+                <include
+                    android:id="@+id/makingRecipeIntroduction"
+                    layout="@layout/item_form_text_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    app:content="@={vm.introductionContent}"
+                    app:hintContent="@{@string/step_making_hint}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
+                    app:title="@{@string/making_form_introduction}" />
 
-            <!-- Next Button -->
-            <Button
-                android:id="@+id/nextButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginHorizontal="16dp"
-                android:backgroundTint="@color/gray_300"
-                android:text="@string/making_next"
-                android:textColor="@color/black_100"
-                android:onClick="@{() -> vm.onNavigateToMakingStep()}"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/makingRecipeIntroduction" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <!-- Next Button -->
+        <include
+            android:id="@+id/nextButton"
+            layout="@layout/item_button_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:buttonClickListener="@{vm}"
+            app:enabled="@{true}"
+            app:buttonText="@{@string/making_next}"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

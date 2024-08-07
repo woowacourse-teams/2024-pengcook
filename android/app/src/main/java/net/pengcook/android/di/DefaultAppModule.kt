@@ -12,10 +12,13 @@ import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSo
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
 import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
 import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
+import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
+import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.remote.api.ProfileService
+import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
@@ -27,6 +30,8 @@ import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingR
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.profile.DefaultProfileRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
+import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
+import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -76,6 +81,9 @@ class DefaultAppModule(
     private val feedRemoteDataSource: FeedRemoteDataSource =
         DefaultFeedRemoteDataSource(service(FeedService::class.java))
 
+    private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
+        DefaultMakingRecipeRemoteDataSource(service(MakingRecipeService::class.java))
+
     override val feedRepository: FeedRepository =
         DefaultFeedRepository(feedRemoteDataSource)
 
@@ -90,4 +98,7 @@ class DefaultAppModule(
 
     override val profileRepository: ProfileRepository =
         DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
+
+    override val makingRecipeRepository: MakingRecipeRepository =
+        DefaultMakingRecipeRepository(sessionLocalDataSource, makingRecipeRemoteDataSource)
 }

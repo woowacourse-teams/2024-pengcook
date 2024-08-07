@@ -8,18 +8,18 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FeedService {
-    @GET("/api/recipes")
+    @GET("/recipes")
     suspend fun fetchRecipes(
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize: Int,
     ): Response<List<FeedItemResponse>>
 
-    @GET("/api/recipes/{recipeId}/steps")
+    @GET("/recipes/{recipeId}/steps")
     suspend fun fetchRecipeSteps(
         @Path("recipeId") recipeId: Long,
     ): Response<List<RecipeStepResponse>>
 
-    @GET("/api/categories")
+    @GET("/recipes/search")
     suspend fun fetchRecipesByCategory(
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize: Int,

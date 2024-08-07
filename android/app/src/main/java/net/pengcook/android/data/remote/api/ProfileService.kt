@@ -13,17 +13,17 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProfileService {
-    @GET("/api/user/{userId}")
+    @GET("/user/{userId}")
     suspend fun fetchUserInformation(
         @Path("userId") userId: Long,
     ): Response<UserProfileResponse>
 
-    @GET("/api/user/me")
+    @GET("/user/me")
     suspend fun fetchMyUserInformation(
         @Header("Authorization") accessToken: String,
     ): Response<UserProfileResponse>
 
-    @PATCH("/api/user/me")
+    @PATCH("/user/me")
     suspend fun patchMyUserInformation(
         @Header("Authorization") accessToken: String,
         @Body userProfile: UpdateProfileRequest,

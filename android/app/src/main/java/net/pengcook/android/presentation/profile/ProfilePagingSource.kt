@@ -24,7 +24,7 @@ class ProfilePagingSource(
                         userId = userProfile.id
                         pageData += ProfileViewItem.ProfileDescription(userProfile)
                         pageData += ProfileViewItem.ProfileButtons()
-                    }.getOrThrow()
+                    }
                 val feeds = profileFeeds(pageNumber, params.loadSize - 2)
                 pageData += feeds
                 val nextKey = if (pageData.size < params.loadSize - 2) null else pageNumber + 1

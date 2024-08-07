@@ -9,13 +9,13 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface StepMakingService {
-    @GET("/api/recipes/{recipeId}/steps/{sequence}")
+    @GET("/recipes/{recipeId}/steps/{sequence}")
     suspend fun fetchRecipeSteps(
         @Path("recipeId") recipeId: Long,
         @Path("sequence") sequence: Int,
     ): Response<RecipeStepResponse>
 
-    @POST("/api/recipees/{recipeId}/steps")
+    @POST("/recipes/{recipeId}/steps")
     suspend fun uploadRecipeStep(
         @Path("recipeId") recipeId: Long,
         @Body recipeStepRequest: RecipeStepRequest,

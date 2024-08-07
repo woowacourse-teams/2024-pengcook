@@ -16,33 +16,12 @@ class StepMakingFragment : Fragment() {
     private val binding: FragmentMakingStepBinding
         get() = _binding!!
     private val viewModel: StepMakingViewModel by viewModels {
-        /*StepMakingViewModelFactory(
-            recipeId = 1,
-            maximumStep = 15,
-            recipeStepMakingRepository =
-                DefaultRecipeStepMakingRepository(
-                    recipeStepMakingDataSource =
-                        DefaultRecipeStepMakingDataSource(
-                            stepMakingService = RetrofitClient.service(StepMakingService::class.java),
-                        ),
-                ),
-        )StepMakingViewModelFactory(
-            recipeId = 1,
-            maximumStep = 15,
-            recipeStepMakingRepository =
-                FakeRecipeStepMakingRepository(
-                    recipeStepMakingDataSource =
-                        FakeRecipeStepMakingDatasource(),
-                ),
-        )*/
-
         val appModule = (requireContext().applicationContext as DefaultPengcookApplication).appModule
         StepMakingViewModelFactory(
             recipeId = 1,
             maximumStep = 15,
             appModule.recipeStepMakingRepository,
         )
-        // HomeViewModelFactory(appModule.feedRepository)
     }
 
     override fun onCreateView(
@@ -76,34 +55,37 @@ class StepMakingFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        observeEmptyIntroductionState()
+        observeUploadingImageState()
+        observeQuitStepMakingState()
+        observeCompleteStepMakingState()
+    }
+
+    private fun observeEmptyIntroductionState() {
         viewModel.emptyIntroductionState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
-                Toast
-                    .makeText(
-                        requireContext(),
-                        "Introduction Should be filled",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                showToast("Introduction Should be filled")
             }
         }
+    }
 
+    private fun observeUploadingImageState() {
         viewModel.uploadingImageState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
-                Toast
-                    .makeText(
-                        requireContext(),
-                        "Cannot move to next step while uploading image",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                showToast("Cannot move to next step while uploading image")
             }
         }
+    }
 
+    private fun observeQuitStepMakingState() {
         viewModel.quitStepMakingState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 findNavController().popBackStack()
             }
         }
+    }
 
+    private fun observeCompleteStepMakingState() {
         viewModel.completeStepMakingState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 // Seems like legacy code
@@ -111,5 +93,14 @@ class StepMakingFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast
+            .makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT,
+            ).show()
     }
 }

@@ -1,5 +1,8 @@
 package net.pengcook.android.data.datasource.makingrecipe
 
+import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionRequest
+import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionResponse
+import retrofit2.Response
 import java.io.File
 
 interface MakingRecipeRemoteDataSource {
@@ -9,4 +12,9 @@ interface MakingRecipeRemoteDataSource {
         presignedUrl: String,
         file: File,
     )
+
+    suspend fun postRecipeDescription(
+        accessToken: String,
+        recipeDescriptionRequest: RecipeDescriptionRequest,
+    ): Response<RecipeDescriptionResponse>
 }
