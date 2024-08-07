@@ -343,7 +343,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .body(recipeStepRequest)
                 .when()
-                .post("/api/recipes/{recipeId}/steps", 1L)
+                .post("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(201)
                 .extract()
@@ -375,7 +375,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .body(recipeStepRequest)
                 .when()
-                .post("/api/recipes/{recipeId}/steps", 1L)
+                .post("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(400);
     }
