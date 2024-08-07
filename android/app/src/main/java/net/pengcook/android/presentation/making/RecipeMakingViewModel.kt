@@ -15,8 +15,8 @@ import java.io.File
 
 class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepository) :
     ViewModel(), RecipeMakingEventListener, SpinnerItemChangeListener {
-    private val _uiEvent: MutableLiveData<Event<MakingEvent>> = MutableLiveData()
-    val uiEvent: LiveData<Event<MakingEvent>>
+    private val _uiEvent: MutableLiveData<Event<RecipeMakingEvent>> = MutableLiveData()
+    val uiEvent: LiveData<Event<RecipeMakingEvent>>
         get() = _uiEvent
 
     private val _categorySelectedValue: MutableLiveData<String> = MutableLiveData()
@@ -39,10 +39,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         viewModelScope.launch {
             try {
                 val uri = makingRecipeRepository.fetchImageUri(keyName)
-                _uiEvent.value = Event(MakingEvent.PresignedUrlRequestSuccessful(uri))
+                _uiEvent.value = Event(RecipeMakingEvent.PresignedUrlRequestSuccessful(uri))
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiEvent.value = Event(MakingEvent.PostImageFailure)
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
             }
         }
     }
@@ -56,10 +56,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
             try {
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
                 thumbnailTitle = file.name
-                _uiEvent.value = Event(MakingEvent.PostImageSuccessful)
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageSuccessful)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiEvent.value = Event(MakingEvent.PostImageFailure)
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
             }
         }
     }
@@ -69,7 +69,7 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
     }
 
     override fun onAddImage() {
-        _uiEvent.value = Event(MakingEvent.AddImage)
+        _uiEvent.value = Event(RecipeMakingEvent.AddImage)
     }
 
     override fun onConfirm() {
@@ -87,7 +87,7 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
                 title.isNullOrEmpty() ||
                 thumbnailTitle.isNullOrEmpty()
             ) {
-                _uiEvent.value = Event(MakingEvent.DescriptionFormNotCompleted)
+                _uiEvent.value = Event(RecipeMakingEvent.DescriptionFormNotCompleted)
                 return@launch
             }
 
@@ -119,9 +119,9 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
 
         makingRecipeRepository.postRecipeDescription(recipeDescription)
             .onSuccess { recipeId ->
-                _uiEvent.value = Event(MakingEvent.NavigateToMakingStep(recipeId))
+                _uiEvent.value = Event(RecipeMakingEvent.NavigateToMakingStep(recipeId))
             }.onFailure {
-                _uiEvent.value = Event(MakingEvent.PostRecipeFailure)
+                _uiEvent.value = Event(RecipeMakingEvent.PostRecipeFailure)
             }
     }
 }

@@ -113,13 +113,13 @@ class RecipeMakingFragment : Fragment() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
-                is MakingEvent.NavigateToMakingStep -> navigateToStepMaking(newEvent.recipeId)
-                is MakingEvent.AddImage -> addImage()
-                is MakingEvent.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
-                is MakingEvent.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
-                is MakingEvent.PresignedUrlRequestSuccessful -> uploadImageToS3(newEvent.presignedUrl)
-                is MakingEvent.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
-                is MakingEvent.PostRecipeFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
+                is RecipeMakingEvent.NavigateToMakingStep -> navigateToStepMaking(newEvent.recipeId)
+                is RecipeMakingEvent.AddImage -> addImage()
+                is RecipeMakingEvent.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
+                is RecipeMakingEvent.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
+                is RecipeMakingEvent.PresignedUrlRequestSuccessful -> uploadImageToS3(newEvent.presignedUrl)
+                is RecipeMakingEvent.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
+                is RecipeMakingEvent.PostRecipeFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
             }
         }
     }
