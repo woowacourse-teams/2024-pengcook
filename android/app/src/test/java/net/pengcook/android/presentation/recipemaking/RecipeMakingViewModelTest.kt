@@ -16,7 +16,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
 import net.pengcook.android.presentation.core.util.Event
-import net.pengcook.android.presentation.making.MakingEvent
+import net.pengcook.android.presentation.making.RecipeMakingEvent
 import net.pengcook.android.presentation.making.RecipeMakingViewModel
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -33,8 +33,8 @@ class RecipeMakingViewModelTest {
 
     private val repository: DefaultMakingRecipeRepository = mockk()
 
-    private val eventObserver: Observer<Event<MakingEvent>> = mockk(relaxed = true)
-    private val eventSlot = slot<Event<MakingEvent>>()
+    private val eventObserver: Observer<Event<RecipeMakingEvent>> = mockk(relaxed = true)
+    private val eventSlot = slot<Event<RecipeMakingEvent>>()
 
     private lateinit var viewModel: RecipeMakingViewModel
 
@@ -68,7 +68,7 @@ class RecipeMakingViewModelTest {
             coVerify { repository.fetchImageUri(keyName) }
             assertEquals(
                 eventSlot.captured.getContentIfNotHandled(),
-                MakingEvent.PresignedUrlRequestSuccessful(url),
+                RecipeMakingEvent.PresignedUrlRequestSuccessful(url),
             )
         }
 
@@ -90,7 +90,7 @@ class RecipeMakingViewModelTest {
             coVerify { repository.fetchImageUri(keyName) }
             assertEquals(
                 eventSlot.captured.getContentIfNotHandled(),
-                MakingEvent.PostImageFailure,
+                RecipeMakingEvent.PostImageFailure,
             )
         }
 
@@ -112,7 +112,7 @@ class RecipeMakingViewModelTest {
             coVerify { repository.uploadImageToS3(presignedUrl, file) }
             assertEquals(
                 eventSlot.captured.getContentIfNotHandled(),
-                MakingEvent.PostImageSuccessful,
+                RecipeMakingEvent.PostImageSuccessful,
             )
         }
 
@@ -136,6 +136,6 @@ class RecipeMakingViewModelTest {
 
             verify { eventObserver.onChanged(capture(eventSlot)) }
             coVerify { repository.uploadImageToS3(presignedUrl, file) }
-            assertEquals(eventSlot.captured.getContentIfNotHandled(), MakingEvent.PostImageFailure)
+            assertEquals(eventSlot.captured.getContentIfNotHandled(), RecipeMakingEvent.PostImageFailure)
         }
 }
