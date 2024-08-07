@@ -66,7 +66,7 @@ class LoginControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(new GoogleLoginRequest(idToken))
-                .when().post("/api/oauth/google/login")
+                .when().post("/oauth/google/login")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -104,7 +104,7 @@ class LoginControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(new GoogleLoginRequest(idToken))
-                .when().post("/api/oauth/google/login")
+                .when().post("/oauth/google/login")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -157,7 +157,7 @@ class LoginControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("/api/oauth/google/sign-up")
+                .when().post("/oauth/google/sign-up")
                 .then().log().all()
                 .statusCode(201)
                 .extract()
@@ -196,7 +196,7 @@ class LoginControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("/api/oauth/google/sign-up")
+                .when().post("/oauth/google/sign-up")
                 .then().log().all()
                 .statusCode(400);
     }
@@ -204,7 +204,8 @@ class LoginControllerTest extends RestDocsSetting {
     @Test
     @DisplayName("refresh token으로 access token을 재발급한다.")
     void refresh() {
-        String refreshToken = jwtTokenManager.createToken(new TokenPayload(1L, "tester@pengcook.net", TokenType.REFRESH));
+        String refreshToken = jwtTokenManager.createToken(
+                new TokenPayload(1L, "tester@pengcook.net", TokenType.REFRESH));
 
         TokenRefreshResponse response = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
@@ -220,7 +221,7 @@ class LoginControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(new TokenRefreshRequest(refreshToken))
-                .when().post("/api/token/refresh")
+                .when().post("/token/refresh")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
