@@ -29,6 +29,7 @@ import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentOnboardingBinding
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class OnboardingFragment : Fragment() {
     private val auth: FirebaseAuth by lazy { Firebase.auth }
@@ -75,6 +76,7 @@ class OnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.viewLogEvent("Onboarding")
         observeUiEvents()
         observeLoadingStatus()
         initializeSignInButton()
