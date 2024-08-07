@@ -1,6 +1,7 @@
 package net.pengcook.recipe.service;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -95,7 +96,7 @@ public class RecipeService {
         Recipe recipe = getRecipeByRecipeId(recipeId);
         String imageUrl = getImageUrl(recipeStepRequest.image());
         String description = recipeStepRequest.description();
-        LocalTime cookingTime = LocalTime.parse(recipeStepRequest.cookingTime());
+        LocalTime cookingTime = getCookingTime(recipeStepRequest.cookingTime());
 
         Optional<RecipeStep> existingRecipeStep = recipeStepRepository.findByRecipeIdAndSequence(
                 recipeId,
@@ -219,5 +220,15 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 이미지 이름입니다.");
         }
         return s3ClientService.getImageUrl(image).url();
+    }
+
+    private LocalTime getCookingTime(String cookingTime) {
+        try {
+            return Optional.ofNullable(cookingTime)
+                    .map(LocalTime::parse)
+                    .orElse(null);
+        } catch (DateTimeParseException exception) {
+            throw new InvalidParameterException("적절하지 않은 조리시간입니다.");
+        }
     }
 }
