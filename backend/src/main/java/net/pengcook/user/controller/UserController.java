@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
+import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
@@ -30,8 +31,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user/me")
-    public UserResponse getUserProfile(@LoginUser UserInfo userInfo) {
+    public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo) {
         return userService.getUserById(userInfo.getId());
+    }
+
+    @GetMapping("/user/{userId}")
+    public ProfileResponse getUserProfile(@PathVariable long userId) {
+        return userService.getUserById(userId);
     }
 
     @PatchMapping("/user/me")

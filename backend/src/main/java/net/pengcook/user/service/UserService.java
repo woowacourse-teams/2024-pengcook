@@ -7,8 +7,10 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserReport;
+import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
+import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.domain.UserBlock;
@@ -31,9 +33,11 @@ public class UserService {
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
 
-    public UserResponse getUserById(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-        return new UserResponse(user);
+    public ProfileResponse getUserById(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+        long recipeCount = recipeRepository.countByAuthorId(userId);
+        return new ProfileResponse(user, recipeCount);
     }
 
     public UsernameCheckResponse checkUsername(String username) {
