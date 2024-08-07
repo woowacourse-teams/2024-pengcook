@@ -93,6 +93,7 @@ public class RecipeService {
         validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
         Recipe recipe = getRecipeByRecipeId(recipeId);
         String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
+        String description = recipeStepRequest.description();
         LocalTime cookingTime = LocalTime.parse(recipeStepRequest.cookingTime());
 
         Optional<RecipeStep> existingRecipeStep = recipeStepRepository.findByRecipeIdAndSequence(
@@ -100,24 +101,11 @@ public class RecipeService {
                 recipeStepRequest.sequence()
         );
 
-        if (existingRecipeStep.isPresent()) {
-            RecipeStep recipeStep = existingRecipeStep.get();
-            recipeStep.setImage(imageUrl);
-            recipeStep.setDescription(recipeStepRequest.description());
-            recipeStep.setCookingTime(cookingTime);
-            return new RecipeStepResponse(recipeStep);
-        }
+        RecipeStep recipeStep = existingRecipeStep
+                .map(currentRecipeStep -> currentRecipeStep.update(imageUrl, description, cookingTime))
+                .orElseGet(() -> saveRecipeStep(recipe, imageUrl, recipeStepRequest, cookingTime));
 
-        RecipeStep recipeStep = new RecipeStep(
-                recipe,
-                imageUrl,
-                recipeStepRequest.description(),
-                recipeStepRequest.sequence(),
-                cookingTime
-        );
-
-        RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
-        return new RecipeStepResponse(savedRecipeStep);
+        return new RecipeStepResponse(recipeStep);
     }
 
     public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
@@ -198,5 +186,17 @@ public class RecipeService {
             recipeStepRepository.findByRecipeIdAndSequence(recipeId, previousSequence)
                     .orElseThrow(() -> new InvalidParameterException("이전 sequence가 등록되지 않았습니다."));
         }
+    }
+
+    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest, LocalTime cookingTime) {
+        RecipeStep recipeStep = new RecipeStep(
+                recipe,
+                imageUrl,
+                recipeStepRequest.description(),
+                recipeStepRequest.sequence(),
+                cookingTime
+        );
+
+        return recipeStepRepository.save(recipeStep);
     }
 }
