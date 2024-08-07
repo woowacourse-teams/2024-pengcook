@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentSearchBinding
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class SearchFragment : Fragment() {
     private val adapter: SearchAdapter by lazy { SearchAdapter() }
@@ -33,6 +34,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.viewLogEvent("Search")
         setUpBindingVariables()
         observeViewModel()
     }

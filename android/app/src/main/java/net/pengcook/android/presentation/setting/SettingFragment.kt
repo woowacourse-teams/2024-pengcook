@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import net.pengcook.android.databinding.FragmentSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class SettingFragment :
     Fragment(),
@@ -45,6 +46,7 @@ class SettingFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.viewLogEvent("Setting")
         binding.adapter = adapter
         binding.appbarActionEventListener = this
     }

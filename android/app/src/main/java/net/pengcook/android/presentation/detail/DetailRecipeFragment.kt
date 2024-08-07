@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
 import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class DetailRecipeFragment : Fragment() {
     private val args: DetailRecipeFragmentArgs by navArgs()
@@ -27,6 +28,7 @@ class DetailRecipeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.viewLogEvent("DetailRecipe")
         fetchRecipe()
         observeNavigationEvent()
     }

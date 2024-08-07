@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.databinding.FragmentProfileBinding
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -33,6 +34,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.viewLogEvent("Profile")
         binding.adapter = adapter
         val layoutManager = GridLayoutManager(requireContext(), 3)
         val spanSizeLookup =
