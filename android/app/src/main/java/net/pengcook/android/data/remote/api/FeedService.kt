@@ -19,7 +19,7 @@ interface FeedService {
         @Path("recipeId") recipeId: Long,
     ): Response<List<RecipeStepResponse>>
 
-    @GET("/categories")
+    @GET("/recipes/search")
     suspend fun fetchRecipesByCategory(
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize: Int,
