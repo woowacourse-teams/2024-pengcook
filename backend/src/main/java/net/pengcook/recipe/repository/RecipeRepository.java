@@ -1,20 +1,30 @@
 package net.pengcook.recipe.repository;
 
+import jakarta.annotation.Nullable;
 import java.util.List;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("""
             SELECT r.id
             FROM Recipe r
+            JOIN FETCH CategoryRecipe cr ON cr.recipe = r
+            JOIN FETCH Category c ON cr.category = c
+            WHERE (:category IS NULL OR c.name = :category)
+            AND (:keyword IS NULL OR CONCAT(r.title, r.description) LIKE CONCAT('%', :keyword, '%'))
             ORDER BY r.id DESC
             """)
-    List<Long> findRecipeIds(Pageable pageable);
+    List<Long> findRecipeIdsByCategoryAndKeyword(
+            @Param("category") @Nullable String category,
+            @Param("keyword") @Nullable String keyword,
+            Pageable pageable
+    );
 
     @Query("""
             SELECT new net.pengcook.recipe.dto.RecipeDataResponse(

@@ -20,7 +20,7 @@ class CategoryRecipeRepositoryTest {
 
     @Test
     @DisplayName("요청한 카테고리와 페이지에 해당하는 레시피 id 목록을 반환한다.")
-    void findRecipeIds() {
+    void findRecipeIdsByCategoryAndKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
 
         List<Long> recipeIds = repository.findRecipeIdsByCategoryName("한식", pageable);
