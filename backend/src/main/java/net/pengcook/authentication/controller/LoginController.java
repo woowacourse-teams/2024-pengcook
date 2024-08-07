@@ -21,18 +21,18 @@ public class LoginController {
 
     private final LoginService LoginService;
 
-    @PostMapping("/api/oauth/google/login")
+    @PostMapping("/oauth/google/login")
     public GoogleLoginResponse loginWithGoogle(@RequestBody @Valid GoogleLoginRequest googleLoginRequest) {
         return LoginService.loginWithGoogle(googleLoginRequest);
     }
 
-    @PostMapping("/api/oauth/google/sign-up")
+    @PostMapping("/oauth/google/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public GoogleSignUpResponse sighUpWithGoogle(@RequestBody @Valid GoogleSignUpRequest googleSignUpRequest) {
         return LoginService.signUpWithGoogle(googleSignUpRequest);
     }
 
-    @PostMapping("/api/token/refresh")
+    @PostMapping("/token/refresh")
     public TokenRefreshResponse refresh(@RequestBody @Valid TokenRefreshRequest tokenRefreshRequest) {
         return LoginService.refresh(tokenRefreshRequest.refreshToken());
     }

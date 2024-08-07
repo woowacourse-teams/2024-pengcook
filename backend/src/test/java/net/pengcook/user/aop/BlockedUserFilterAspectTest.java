@@ -35,7 +35,7 @@ class BlockedUserFilterAspectTest {
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 10)
                 .when()
-                .get("/api/recipes")
+                .get("/recipes")
                 .then().log().all()
                 .extract().jsonPath()
                 .getList("author.authorId", Long.class);
