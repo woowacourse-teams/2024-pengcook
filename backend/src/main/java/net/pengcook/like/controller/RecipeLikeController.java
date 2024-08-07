@@ -26,7 +26,7 @@ public class RecipeLikeController {
             @LoginUser UserInfo userInfo,
             @PathVariable("recipeId") long recipeId
     ) {
-        return likeService.readLikesCount(userInfo, recipeId);
+        return likeService.readLike(userInfo, recipeId);
     }
 
     @PostMapping
