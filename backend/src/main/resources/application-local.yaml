@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/pengcook?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost/pengcook?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
     password: root
 
