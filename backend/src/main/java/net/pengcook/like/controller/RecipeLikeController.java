@@ -22,7 +22,7 @@ public class RecipeLikeController {
     private final RecipeLikeService likeService;
 
     @GetMapping("/{recipeId}")
-    public RecipeLikeResponse readLikesCount(
+    public RecipeLikeResponse readLike(
             @LoginUser UserInfo userInfo,
             @PathVariable("recipeId") long recipeId
     ) {
@@ -30,7 +30,7 @@ public class RecipeLikeController {
     }
 
     @PostMapping
-    public void toggleLike(
+    public void updateLike(
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid RecipeLikeRequest likeRequest
     ) {

@@ -25,12 +25,12 @@ class RecipeLikeControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser(email = "ela@pengcook.net")
-    @DisplayName("게시글의 좋아요 개수를 조회한다.")
+    @DisplayName("게시글의 좋아요 여부를 조회한다.")
     void readLike() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "특정 레시피의 좋아요 개수를 조회한다.",
-                        "레시피별 좋아요 개수 조회 API",
+                        "특정 레시피의 좋아요 여부를 조회한다.",
+                        "레시피별 좋아요 여부 조회 API",
                         pathParameters(
                                 parameterWithName("recipeId").description("레시피 아이디")
                         ),
