@@ -114,6 +114,15 @@ public class RecipeService {
         return convertToMainRecipeResponses(recipeDataResponses);
     }
 
+    public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
+        long userId = request.userId();
+        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
+
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
+        return convertToMainRecipeResponses(recipeDataResponses);
+    }
+
     private List<RecipeStepResponse> convertToRecipeStepResponses(List<RecipeStep> recipeSteps) {
         return recipeSteps.stream()
                 .map(RecipeStepResponse::new)
@@ -170,14 +179,5 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
-    }
-
-    public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
-        long userId = request.userId();
-        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
-        List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
-
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
     }
 }
