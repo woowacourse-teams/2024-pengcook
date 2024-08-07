@@ -184,7 +184,7 @@ public class RecipeService {
         int previousSequence = sequence - 1;
         if (previousSequence >= 1) {
             recipeStepRepository.findByRecipeIdAndSequence(recipeId, previousSequence)
-                    .orElseThrow(() -> new InvalidParameterException("이전 sequence가 등록되지 않았습니다."));
+                    .orElseThrow(() -> new InvalidParameterException("이전 스텝이 등록되지 않았습니다."));
         }
     }
 
