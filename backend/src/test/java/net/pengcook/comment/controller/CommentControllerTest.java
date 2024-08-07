@@ -46,7 +46,7 @@ class CommentControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].message").description("내용"),
                                 fieldWithPath("[].mine").description("소유 여부")
                         )))
-                .when().get("/api/comments/{recipeId}", 1L)
+                .when().get("/comments/{recipeId}", 1L)
                 .then().log().all()
                 .body("size()", is(2));
     }
@@ -68,7 +68,7 @@ class CommentControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("api/comments")
+                .when().post("/comments")
                 .then().log().all()
                 .statusCode(201);
     }
@@ -90,7 +90,7 @@ class CommentControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("api/comments")
+                .when().post("/comments")
                 .then().log().all()
                 .statusCode(404);
     }
@@ -113,7 +113,7 @@ class CommentControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(request)
-                .when().post("api/comments")
+                .when().post("/comments")
                 .then().log().all()
                 .statusCode(400);
     }

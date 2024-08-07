@@ -68,7 +68,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 3)
                 .when()
-                .get("/api/recipes")
+                .get("/recipes")
                 .then().log().all()
                 .body("size()", is(3));
     }
@@ -89,7 +89,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("pageNumber", pageNumber)
                 .queryParam("pageSize", 3)
                 .when()
-                .get("/api/recipes")
+                .get("/recipes")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -110,7 +110,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", pageSize)
                 .when()
-                .get("/api/recipes")
+                .get("/recipes")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -155,7 +155,7 @@ class RecipeControllerTest extends RestDocsSetting {
                         )))
                 .contentType(ContentType.JSON)
                 .body(recipeRequest)
-                .when().post("/api/recipes")
+                .when().post("/recipes")
                 .then().log().all()
                 .statusCode(201)
                 .body("recipeId", is(16));
@@ -200,7 +200,7 @@ class RecipeControllerTest extends RestDocsSetting {
                         )))
                 .contentType(ContentType.JSON)
                 .body(recipeRequest)
-                .when().post("/api/recipes")
+                .when().post("/recipes")
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -225,7 +225,7 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].cookingTime").description("레시피 스텝 소요시간")
                         )))
                 .when()
-                .get("/api/recipes/{recipeId}/steps", 1L)
+                .get("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .body("size()", is(3));
     }
@@ -250,7 +250,7 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("cookingTime").description("레시피 스텝 소요시간")
                         )))
                 .when()
-                .get("/api/recipes/{recipeId}/steps/{sequence}", 1L, 1L)
+                .get("/recipes/{recipeId}/steps/{sequence}", 1L, 1L)
                 .then().log().all()
                 .statusCode(200)
                 .body("description", is("레시피1 설명1"));
@@ -285,7 +285,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .body(recipeStepRequest)
                 .when()
-                .post("/api/recipes/{recipeId}/steps", 1L)
+                .post("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(201);
     }
@@ -311,7 +311,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .body(recipeStepRequest)
                 .when()
-                .post("/api/recipes/{recipeId}/steps", 1L)
+                .post("/recipes/{recipeId}/steps", 1L)
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -354,7 +354,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("category", "한식")
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 3)
-                .when().get("/api/recipes/search")
+                .when().get("/recipes/search")
                 .then().log().all()
                 .body("size()", is(3));
     }

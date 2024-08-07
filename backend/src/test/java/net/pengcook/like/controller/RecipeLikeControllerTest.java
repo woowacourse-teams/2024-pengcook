@@ -34,7 +34,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         responseFields(
                                 fieldWithPath("likesCount").description("좋아요 개수")
                         )))
-                .when().get("/api/likes/{recipeId}", 1L)
+                .when().get("/likes/{recipeId}", 1L)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("likesCount", is(1));
@@ -54,7 +54,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         )))
                 .body(Map.of("recipeId", 2L, "like", true))
                 .contentType(ContentType.JSON)
-                .when().post("/api/likes")
+                .when().post("/likes")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }
@@ -73,7 +73,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         )))
                 .body(Map.of("recipeId", 1L, "like", false))
                 .contentType(ContentType.JSON)
-                .when().post("/api/likes")
+                .when().post("/likes")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
     }
