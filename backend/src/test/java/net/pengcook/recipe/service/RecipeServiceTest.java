@@ -150,6 +150,29 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("레시피 스텝 생성 요청 조리시간 값이 null이어도 정상적으로 생성하고, 조리시간에 null을 저장한다.")
+    void createRecipeStepWithNullCookingTime() {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("image.jpg", "스텝 설명", 1, null);
+
+        RecipeStepResponse recipeStepResponse = recipeService.createRecipeStep(2L, recipeStepRequest);
+
+        assertAll(
+                () -> assertThat(recipeStepResponse.recipeId()).isEqualTo(2L),
+                () -> assertThat(recipeStepResponse.cookingTime()).isNull()
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "aa:bb", "test"})
+    @DisplayName("레시피 스텝 생성 요청 조리시간의 형태가 HH:mm:ss가 아닌 경우 예외가 발생한다.")
+    void createRecipeStepWhenInappropriateCookingTime(String cookingTime) {
+        RecipeStepRequest recipeStepRequest = new RecipeStepRequest("image.jpg", "새로운 스텝 설명", 1, cookingTime);
+
+        assertThatThrownBy(() -> recipeService.createRecipeStep(2L, recipeStepRequest))
+                .isInstanceOf(InvalidParameterException.class);
+    }
+
+    @Test
     @DisplayName("레시피 스텝 등록 시 이미 존재하는 정보가 있으면 새로운 내용으로 수정한다.")
     void createRecipeStepWithExistingRecipeStep() {
         RecipeStepRequest recipeStepRequest = new RecipeStepRequest(

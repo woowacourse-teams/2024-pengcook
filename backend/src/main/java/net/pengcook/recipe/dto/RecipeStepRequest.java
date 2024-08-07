@@ -7,6 +7,6 @@ public record RecipeStepRequest(
         String image,
         @NotBlank String description,
         @Positive int sequence,
-        @NotBlank String cookingTime
+        String cookingTime
 ) {
 }
