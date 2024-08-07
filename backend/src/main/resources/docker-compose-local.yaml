@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: pengcook
       MYSQL_ROOT_PASSWORD: root
       LANG: C.UTF-8
+      TZ: Asia/Seoul
     volumes:
       - db:/var/lib/mysql
     ports:

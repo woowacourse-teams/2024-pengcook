@@ -11,8 +11,11 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       LANG: C.UTF-8
+      TZ: Asia/Seoul
     volumes:
       - db:/var/lib/mysql
+    ports:
+      - 3306:3306
     command:
       - --character-set-server=utf8
       - --collation-server=utf8_general_ci
