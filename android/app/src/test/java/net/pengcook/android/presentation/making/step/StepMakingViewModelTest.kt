@@ -213,7 +213,7 @@ class StepMakingViewModelTest {
         // introduction이 비어있을 때 emptyIntroductionState가 호출되는지 테스트
         runTest {
             // given
-            viewModel = StepMakingViewModel(1, 15, stepMakingRepository)
+            viewModel = StepMakingViewModel(2, 15, stepMakingRepository)
             advanceUntilIdle()
 
             // when
@@ -256,8 +256,9 @@ class StepMakingViewModelTest {
         // introduction이 비어있을 때 스텝 제작을 완료할 수 없는지 테스트
         runTest {
             // given
-            viewModel = StepMakingViewModel(1, 15, stepMakingRepository)
+            viewModel = StepMakingViewModel(2, 15, stepMakingRepository)
             advanceUntilIdle()
+            assertEquals("", viewModel.introductionContent.getOrAwaitValue())
 
             // when
             viewModel.customAction()
