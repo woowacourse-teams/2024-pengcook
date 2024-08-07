@@ -199,8 +199,11 @@ public class RecipeService {
         }
     }
 
-    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest,
-                                      LocalTime cookingTime) {
+    private RecipeStep saveRecipeStep(
+            Recipe recipe, String imageUrl,
+            RecipeStepRequest recipeStepRequest,
+            LocalTime cookingTime
+    ) {
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
                 imageUrl,
