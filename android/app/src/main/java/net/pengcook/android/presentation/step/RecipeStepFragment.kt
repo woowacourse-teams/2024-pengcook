@@ -20,14 +20,14 @@ class RecipeStepFragment : Fragment() {
         RecipeStepViewModelFactory(
             recipeId = recipeId,
             feedRepository =
-            DefaultFeedRepository(
-                feedRemoteDataSource =
-                DefaultFeedRemoteDataSource(
-                    RetrofitClient.service(
-                        FeedService::class.java,
-                    ),
+                DefaultFeedRepository(
+                    feedRemoteDataSource =
+                        DefaultFeedRemoteDataSource(
+                            RetrofitClient.service(
+                                FeedService::class.java,
+                            ),
+                        ),
                 ),
-            ),
         )
     }
 

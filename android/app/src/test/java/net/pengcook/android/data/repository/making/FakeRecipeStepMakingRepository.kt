@@ -2,10 +2,7 @@ package net.pengcook.android.data.repository.making
 
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
 import net.pengcook.android.data.model.step.request.RecipeStepRequest
-<<<<<<<< HEAD:android/app/src/test/java/net/pengcook/android/data/repository/making/FakeRecipeStepMakingRepository.kt
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
-========
->>>>>>>> 8c945d3 (:bug: fix bugs):android/app/src/main/java/net/pengcook/android/data/repository/making/step/FakeRecipeStepMakingRepository.kt
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.RecipeStep
@@ -28,7 +25,11 @@ class FakeRecipeStepMakingRepository(
         recipeStep: RecipeStep,
     ): Result<Unit> =
         runCatching {
-            val response = recipeStepMakingDataSource.uploadRecipeStep(recipeId, recipeStep.toRecipeStepRequest())
+            val response =
+                recipeStepMakingDataSource.uploadRecipeStep(
+                    recipeId,
+                    recipeStep.toRecipeStepRequest(),
+                )
             body(response, RESPONSE_CODE_SUCCESS)
         }
 
