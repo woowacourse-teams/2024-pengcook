@@ -65,11 +65,11 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @DisplayName("username이 중복되지 않으면 사용 가능하다.")
+    @DisplayName("username이 중복되는지 확인한다.")
     void checkUsername() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "username이 중복되면 사용 불가능하다.",
+                        "username이 중복되는지 확인합니다.",
                         "사용자 이름 중복 체크 API",
                         responseFields(
                                 fieldWithPath("available").description("사용 가능 여부")
@@ -84,11 +84,11 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @DisplayName("username이 중복되면 사용 불가능하다.")
+    @DisplayName("username이 중복되는지 확인한다.")
     void checkUsernameWhenDuplicateUsername() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "username이 중복되면 사용 불가능하다.",
+                        "username이 중복되는지 확인합니다.",
                         "사용자 이름 중복 체크 API",
                         queryParameters(
                                 parameterWithName("username").description("사용자 이름")
@@ -107,7 +107,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser
-    @DisplayName("유저를 신고한다.")
+    @DisplayName("사용자를 신고한다.")
     void report() {
         UserReportRequest spamReportRequest = new UserReportRequest(
                 1,
@@ -117,8 +117,8 @@ class UserControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "유저를 신고한다.",
-                        "유저 신고 API",
+                        "사용자를 신고합니다.",
+                        "사용자 신고 API",
                         requestFields(
                                 fieldWithPath("reporteeId").description("피신고자 id"),
                                 fieldWithPath("reason").description("사유"),
