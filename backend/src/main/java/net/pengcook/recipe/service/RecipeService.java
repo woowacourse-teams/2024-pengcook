@@ -20,6 +20,7 @@ import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -169,5 +170,14 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
+        long userId = request.userId();
+        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
+
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
+        return convertToMainRecipeResponses(recipeDataResponses);
     }
 }

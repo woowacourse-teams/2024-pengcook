@@ -8,6 +8,7 @@ import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
+import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -66,4 +67,12 @@ public class RecipeController {
     ) {
         return recipeService.readRecipesOfCategory(recipeOfCategoryRequest);
     }
+
+    @GetMapping("/search/user")
+    public List<MainRecipeResponse> readRecipesOfUser(
+            @ModelAttribute @Valid RecipeOfUserRequest recipeOfUserRequest
+    ) {
+        return recipeService.readRecipesOfUser(recipeOfUserRequest);
+    }
+
 }

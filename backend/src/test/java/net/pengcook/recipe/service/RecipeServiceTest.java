@@ -14,6 +14,7 @@ import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
+import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -145,4 +146,21 @@ class RecipeServiceTest {
                 Arguments.of(1, 3, List.of(9L, 14L, 15L))
         );
     }
+
+    @Test
+    @DisplayName("특정 사용자의 레시피를 찾는다.")
+    void readRecipesOfUser() {
+        RecipeOfUserRequest request = new RecipeOfUserRequest(1L, 0, 3);
+        List<Long> expected = List.of(15L, 14L, 13L);
+        int pageSize = 3;
+        
+        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipesOfUser(request);
+        List<Long> actual = mainRecipeResponses.stream().map(MainRecipeResponse::recipeId).toList();
+
+        assertAll(
+                () -> assertThat(actual.size()).isEqualTo(pageSize),
+                () -> assertThat(actual).containsAll(expected)
+        );
+    }
+
 }
