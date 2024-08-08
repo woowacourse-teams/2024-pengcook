@@ -1,0 +1,16 @@
+name: Issue Automation
+
+on:
+  issues:
+    types: [ opened ]
+  pull_request:
+    types: [ opened, closed ]
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create new Branch
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

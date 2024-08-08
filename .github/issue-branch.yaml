@@ -1,0 +1,17 @@
+mode: immediate
+branchName: ${issue.number}
+branches:
+  - label: BE
+    name: be/dev
+    prefix: be/feat/
+  - label: AN
+    name: an/dev
+    prefix: an/feat/
+autoLinkIssue: true
+autoCloseIssue: true
+openPR: true
+copyIssueDescriptionToPR: true
+copyIssueLabelsToPR: true
+copyIssueAssigneeToPR: true
+copyIssueProjectsToPR: true
+copyIssueMilestoneToPR: true
