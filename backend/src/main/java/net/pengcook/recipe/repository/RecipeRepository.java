@@ -12,10 +12,10 @@ import org.springframework.data.repository.query.Param;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("""
-            SELECT r.id
+            SELECT DISTINCT r.id
             FROM Recipe r
-            JOIN FETCH CategoryRecipe cr ON cr.recipe = r
-            JOIN FETCH Category c ON cr.category = c
+            LEFT JOIN CategoryRecipe cr ON cr.recipe = r
+            LEFT JOIN Category c ON cr.category = c
             WHERE (:category IS NULL OR c.name = :category)
             AND (:keyword IS NULL OR CONCAT(r.title, r.description) LIKE CONCAT('%', :keyword, '%'))
             ORDER BY r.id DESC
