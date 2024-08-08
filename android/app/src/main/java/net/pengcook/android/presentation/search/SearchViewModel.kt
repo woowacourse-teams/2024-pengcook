@@ -12,7 +12,7 @@ import androidx.paging.filter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import net.pengcook.android.data.datasource.SearchPagingSource
+import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
@@ -27,10 +27,9 @@ class SearchViewModel(
     val uiEvent: LiveData<Event<SearchUiEvent>>
         get() = _uiEvent
 
-    private val searchPagingSource: SearchPagingSource =
-        SearchPagingSource(
+    private val searchPagingSource: FeedPagingSource =
+        FeedPagingSource(
             feedRepository = feedRepository,
-            searchEventListener = this,
         )
 
     val allRecipes: Flow<PagingData<Recipe>> =
