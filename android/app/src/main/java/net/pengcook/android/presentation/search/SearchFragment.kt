@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSearchBinding
-import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class SearchFragment : Fragment() {
     private val adapter: SearchAdapter by lazy { SearchAdapter(viewModel) }
