@@ -2,22 +2,31 @@ package net.pengcook.user.dto;
 
 import net.pengcook.user.domain.User;
 
-public record UserResponse(
+public record ProfileResponse(
         long id,
         String email,
         String username,
         String nickname,
         String image,
-        String region
+        String region,
+        String introduction,
+        long follower,
+        long following,
+        long recipeCount
 ) {
-    public UserResponse(User user) {
+
+    public ProfileResponse(User user, long recipeCount) {
         this(
                 user.getId(),
                 user.getEmail(),
                 user.getUsername(),
                 user.getNickname(),
                 user.getImage(),
-                user.getRegion()
+                user.getRegion(),
+                "hello world",
+                0,
+                0,
+                recipeCount
         );
     }
 }

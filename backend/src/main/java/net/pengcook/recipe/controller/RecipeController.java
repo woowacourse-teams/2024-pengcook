@@ -8,11 +8,13 @@ import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeOfCategoryRequest;
+import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.service.RecipeService;
+import net.pengcook.recipe.service.RecipeStepService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final RecipeStepService recipeStepService;
 
     @GetMapping
     public List<MainRecipeResponse> readRecipes(@ModelAttribute @Valid PageRecipeRequest pageRecipeRequest) {
@@ -41,14 +44,28 @@ public class RecipeController {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 
+    @GetMapping("/search")
+    public List<MainRecipeResponse> readRecipesOfCategory(
+            @ModelAttribute @Valid RecipeOfCategoryRequest recipeOfCategoryRequest
+    ) {
+        return recipeService.readRecipesOfCategory(recipeOfCategoryRequest);
+    }
+
+    @GetMapping("/search/user")
+    public List<MainRecipeResponse> readRecipesOfUser(
+            @ModelAttribute @Valid RecipeOfUserRequest recipeOfUserRequest
+    ) {
+        return recipeService.readRecipesOfUser(recipeOfUserRequest);
+    }
+
     @GetMapping("/{recipeId}/steps")
     public List<RecipeStepResponse> readRecipeSteps(@PathVariable long recipeId) {
-        return recipeService.readRecipeSteps(recipeId);
+        return recipeStepService.readRecipeSteps(recipeId);
     }
 
     @GetMapping("/{recipeId}/steps/{sequence}")
     public RecipeStepResponse readRecipeStep(@PathVariable long recipeId, @PathVariable long sequence) {
-        return recipeService.readRecipeStep(recipeId, sequence);
+        return recipeStepService.readRecipeStep(recipeId, sequence);
     }
 
     @PostMapping("/{recipeId}/steps")
@@ -57,13 +74,6 @@ public class RecipeController {
             @PathVariable long recipeId,
             @RequestBody @Valid RecipeStepRequest recipeStepRequest
     ) {
-        return recipeService.createRecipeStep(recipeId, recipeStepRequest);
-    }
-
-    @GetMapping("/search")
-    public List<MainRecipeResponse> readRecipesOfCategory(
-            @ModelAttribute @Valid RecipeOfCategoryRequest recipeOfCategoryRequest
-    ) {
-        return recipeService.readRecipesOfCategory(recipeOfCategoryRequest);
+        return recipeStepService.createRecipeStep(recipeId, recipeStepRequest);
     }
 }

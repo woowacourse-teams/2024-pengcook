@@ -44,4 +44,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             WHERE r.id IN :recipeIds
             """)
     List<RecipeDataResponse> findRecipeData(List<Long> recipeIds);
+
+    int countByAuthorId(long userId);
+
+    @Query("""
+            SELECT r.id
+            FROM Recipe r
+            WHERE r.author.id = :userId
+            ORDER BY r.id DESC
+            """)
+    List<Long> findRecipeIdsByUserId(long userId, Pageable pageable);
 }

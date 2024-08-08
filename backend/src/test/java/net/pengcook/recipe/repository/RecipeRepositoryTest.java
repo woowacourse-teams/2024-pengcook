@@ -49,4 +49,14 @@ class RecipeRepositoryTest {
                 () -> assertThat(recipeData).contains(expectedData)
         );
     }
+
+    @Test
+    @DisplayName("사용자 id로 작성된 레시피 id 목록을 최신 순으로 반환한다.")
+    void findRecipeIdsByUserId() {
+        Pageable pageable = PageRequest.of(0, 3);
+
+        List<Long> recipeIds = repository.findRecipeIdsByUserId(1L, pageable);
+
+        assertThat(recipeIds).containsExactly(15L, 14L, 13L);
+    }
 }

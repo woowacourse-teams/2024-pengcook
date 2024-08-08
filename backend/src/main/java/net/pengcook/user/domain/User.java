@@ -46,4 +46,11 @@ public class User {
     public boolean isSameUser(long userId) {
         return this.id == userId;
     }
+
+    public void update(String username, String nickname, String image, String region) {
+        this.username = username;
+        this.nickname = nickname;
+        this.image = image;
+        this.region = region;
+    }
 }

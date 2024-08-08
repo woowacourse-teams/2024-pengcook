@@ -83,8 +83,6 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipesWhenInvalidPageNumber(String pageNumber) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생합니다.",
-                        "레시피 조회 API",
                         queryParameters(
                                 parameterWithName("pageNumber").description("페이지 번호"),
                                 parameterWithName("pageSize").description("페이지 크기")
@@ -104,8 +102,6 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipesWhenInvalidPageSize(String pageSize) {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생합니다.",
-                        "레시피 조회 API",
                         queryParameters(
                                 parameterWithName("pageNumber").description("페이지 번호"),
                                 parameterWithName("pageSize").description("페이지 크기")
@@ -187,8 +183,6 @@ class RecipeControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "새로운 레시피 개요 등록 시 올바르지 않은 필드 값을 입력하면 예외가 발생합니다.",
-                        "신규 레시피 생성 API",
                         requestFields(
                                 fieldWithPath("title").description("레시피 제목"),
                                 fieldWithPath("cookingTime").description("조리 시간"),
@@ -300,8 +294,6 @@ class RecipeControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "특정 레시피의 레시피 스텝을 생성 시 올바르지 않은 필드 값을 입력하면 에외가 발생합니다.",
-                        "특정 레시피 레시피 스텝 생성 API",
                         pathParameters(
                                 parameterWithName("recipeId").description("레시피 스텝을 추가할 레시피 아이디")
                         ),
@@ -419,6 +411,49 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 3)
                 .when().get("/recipes/search")
+                .then().log().all()
+                .body("size()", is(3));
+    }
+
+    @Test
+    @DisplayName("사용자별 레시피 개요 목록을 조회한다.")
+    void readRecipesOfUser() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 사용자가 작성한 레시피 목록을 조회합니다.",
+                        "사용자별 레시피 조회 API",
+                        queryParameters(
+                                parameterWithName("userId").description("사용자 아이디"),
+                                parameterWithName("pageNumber").description("페이지 번호"),
+                                parameterWithName("pageSize").description("페이지 크기")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("레시피 목록"),
+                                fieldWithPath("[].recipeId").description("레시피 아이디"),
+                                fieldWithPath("[].title").description("레시피 제목"),
+                                fieldWithPath("[].author").description("작성자 정보"),
+                                fieldWithPath("[].author.authorId").description("작성자 아이디"),
+                                fieldWithPath("[].author.authorName").description("작성자 이름"),
+                                fieldWithPath("[].author.authorImage").description("작성자 이미지"),
+                                fieldWithPath("[].cookingTime").description("조리 시간"),
+                                fieldWithPath("[].thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("[].difficulty").description("난이도"),
+                                fieldWithPath("[].likeCount").description("좋아요 수"),
+                                fieldWithPath("[].commentCount").description("댓글 수"),
+                                fieldWithPath("[].description").description("레시피 설명"),
+                                fieldWithPath("[].createdAt").description("레시피 생성일시"),
+                                fieldWithPath("[].category").description("카테고리 목록"),
+                                fieldWithPath("[].category[].categoryId").description("카테고리 아이디"),
+                                fieldWithPath("[].category[].categoryName").description("카테고리 이름"),
+                                fieldWithPath("[].ingredient").description("재료 목록"),
+                                fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
+                                fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
+                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부")
+                        )))
+                .queryParam("userId", 1L)
+                .queryParam("pageNumber", 1)
+                .queryParam("pageSize", 3)
+                .when().get("/recipes/search/user")
                 .then().log().all()
                 .body("size()", is(3));
     }

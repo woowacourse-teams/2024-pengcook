@@ -53,7 +53,7 @@ class LoginControllerTest extends RestDocsSetting {
 
         GoogleLoginResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "이미 가입된 계정으로 로그인하여 토큰을 반환합니다.",
+                        "이미 가입된 계정으로 로그인하면 토큰을 반환하고, 처음 로그인하면 등록되지 않은 계정을 알립니다.",
                         "구글 로그인 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token")
@@ -91,7 +91,7 @@ class LoginControllerTest extends RestDocsSetting {
 
         GoogleLoginResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "처음 로그인하여 등록되지 않은 계정을 알립니다.",
+                        "이미 가입된 계정으로 로그인하면 토큰을 반환하고, 처음 로그인하면 등록되지 않은 계정을 알립니다.",
                         "구글 로그인 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token")
@@ -126,7 +126,8 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "new_face",
                 "신입",
-                "KOREA"
+                "KOREA",
+                "new_face.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -142,7 +143,8 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("country").description("국가")
+                                fieldWithPath("country").description("국가"),
+                                fieldWithPath("image").description("사용자 사진")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("사용자 ID"),
@@ -175,7 +177,8 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "loki",
                 "로키",
-                "KOREA"
+                "KOREA",
+                "loki.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -185,13 +188,12 @@ class LoginControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "이미 등록된 계정으로 회원가입 시도 시 예외를 발생합니다.",
-                        "구글 회원가입 API",
                         requestFields(
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("country").description("국가")
+                                fieldWithPath("country").description("국가"),
+                                fieldWithPath("image").description("사용자 사진")
                         )
                 ))
                 .contentType(ContentType.JSON)

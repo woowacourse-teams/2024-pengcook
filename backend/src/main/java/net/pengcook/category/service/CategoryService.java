@@ -20,6 +20,10 @@ public class CategoryService {
         categories.forEach(category -> saveCategoryRecipe(recipe, category));
     }
 
+    public void deleteCategoryRecipe(Recipe recipe) {
+        categoryRecipeRepository.deleteByRecipe(recipe);
+    }
+
     private void saveCategoryRecipe(Recipe recipe, String name) {
         Category category = categoryRepository.findByName(name)
                 .orElseGet(() -> categoryRepository.save(new Category(name)));

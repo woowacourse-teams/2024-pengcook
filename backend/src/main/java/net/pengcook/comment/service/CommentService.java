@@ -8,6 +8,7 @@ import net.pengcook.comment.domain.Comment;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
+import net.pengcook.comment.exception.UnauthorizedDeletionException;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
@@ -39,5 +40,23 @@ public class CommentService {
         Comment comment = new Comment(user, recipe, request.message(), LocalDateTime.now());
 
         commentRepository.save(comment);
+    }
+
+    public void deleteComment(long commentId, UserInfo userInfo) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("해당되는 댓글이 없습니다."));
+
+        if (!isCommentOwner(userInfo, comment)) {
+            throw new UnauthorizedDeletionException("삭제 권한이 없습니다.");
+        }
+
+        commentRepository.delete(comment);
+    }
+
+    private boolean isCommentOwner(UserInfo userInfo, Comment comment) {
+        User owner = comment.getUser();
+        long userId = userInfo.getId();
+
+        return owner.isSameUser(userId);
     }
 }

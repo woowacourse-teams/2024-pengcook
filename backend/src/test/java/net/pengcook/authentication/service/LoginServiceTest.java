@@ -90,7 +90,8 @@ class LoginServiceTest {
                 idToken,
                 "new_face",
                 "신입",
-                "KOREA"
+                "KOREA",
+                "new_face.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -113,7 +114,8 @@ class LoginServiceTest {
                 idToken,
                 "loki",
                 "로키",
-                "KOREA"
+                "KOREA",
+                "loki.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -129,7 +131,8 @@ class LoginServiceTest {
     @Test
     @DisplayName("refresh token을 이용해 access token을 재발급한다.")
     void refresh() {
-        String refreshToken = jwtTokenManager.createToken(new TokenPayload(1L, "tester@pengcook.net", TokenType.REFRESH));
+        String refreshToken = jwtTokenManager.createToken(
+                new TokenPayload(1L, "tester@pengcook.net", TokenType.REFRESH));
 
         TokenRefreshResponse refresh = loginService.refresh(refreshToken);
 

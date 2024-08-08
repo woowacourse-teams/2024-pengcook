@@ -43,7 +43,7 @@ public class RecipeStep {
     }
 
     public RecipeStep update(String imageUrl, String description, LocalTime cookingTime) {
-        this.image  = imageUrl;
+        this.image = imageUrl;
         this.description = description;
         this.cookingTime = cookingTime;
 

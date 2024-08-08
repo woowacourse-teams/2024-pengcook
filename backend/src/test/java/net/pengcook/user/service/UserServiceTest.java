@@ -5,14 +5,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import net.pengcook.user.domain.BlockedUserGroup;
-import java.util.NoSuchElementException;
 import net.pengcook.user.domain.UserReport;
-import net.pengcook.user.dto.UserReportRequest;
+import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.UpdateProfileRequest;
+import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
+import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
-import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.exception.UserNotFoundException;
+import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,19 +38,23 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    @DisplayName("id를 통해 사용자의 정보를 불러올 수 있다.")
+    @DisplayName("id를 통해 사용자의 정보를 불러온다.")
     void getUserById() {
         long id = 1L;
-        UserResponse expected = new UserResponse(
-                id,
+        ProfileResponse expected = new ProfileResponse(
+                1L,
                 "loki@pengcook.net",
                 "loki",
                 "로키",
                 "loki.jpg",
-                "KOREA"
+                "KOREA",
+                "hello world",
+                0L,
+                0L,
+                15L
         );
 
-        UserResponse actual = userService.getUserById(id);
+        ProfileResponse actual = userService.getUserById(id);
 
         assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
     }
@@ -61,6 +67,33 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUserById(id))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("사용자 프로필을 수정한다.")
+    void updateProfile() {
+        long id = 1L;
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse expected = new UpdateProfileResponse(
+                id,
+                "loki@pengcook.net",
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse actual = userService.updateProfile(id, request);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

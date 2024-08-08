@@ -14,44 +14,51 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.UpdateProfileRequest;
+import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserReportRequest;
-import net.pengcook.user.dto.UserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.jdbc.Sql;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @WithLoginUserTest
 @Sql("/data/users.sql")
 class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
-    @DisplayName("id를 통해 사용자의 정보를 조회한다.")
-    void getUserProfile() {
-        UserResponse expected = new UserResponse(
+    @DisplayName("로그인된 사용자의 정보를 조회한다.")
+    void getUserProfileWithUserInfo() {
+        ProfileResponse expected = new ProfileResponse(
                 1L,
                 "loki@pengcook.net",
                 "loki",
                 "로키",
                 "loki.jpg",
-                "KOREA"
+                "KOREA",
+                "hello world",
+                0L,
+                0L,
+                15L
         );
 
-        UserResponse actual = RestAssured.given(spec).log().all()
+        ProfileResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "사용자 ID를 통해 사용자 정보를 조회합니다.",
-                        "사용자 정보 조회 API",
+                        "로그인된 사용자 정보를 조회합니다.",
+                        "로그인된 사용자 정보 조회 API",
                         responseFields(
                                 fieldWithPath("id").description("사용자 ID"),
                                 fieldWithPath("email").description("사용자 이메일"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
-                                fieldWithPath("region").description("사용자 국가")
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개"),
+                                fieldWithPath("follower").description("팔로워 수"),
+                                fieldWithPath("following").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수")
                         )
                 ))
                 .contentType(ContentType.JSON)
@@ -59,17 +66,115 @@ class UserControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(200)
                 .extract()
-                .as(UserResponse.class);
+                .as(ProfileResponse.class);
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("username이 중복되지 않으면 사용 가능하다.")
+    @DisplayName("userId로 사용자 정보를 확인한다.")
+    void getUserProfileWithUserId() {
+        ProfileResponse expected = new ProfileResponse(
+                1L,
+                "loki@pengcook.net",
+                "loki",
+                "로키",
+                "loki.jpg",
+                "KOREA",
+                "hello world",
+                0L,
+                0L,
+                15L
+        );
+
+        ProfileResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "userId로 사용자 정보를 조회합니다.",
+                        "사용자 정보 조회 API",
+                        responseFields(
+                                fieldWithPath("id").description("사용자 ID"),
+                                fieldWithPath("email").description("사용자 이메일"),
+                                fieldWithPath("username").description("사용자 아이디"),
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("image").description("사용자 프로필 이미지"),
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개"),
+                                fieldWithPath("follower").description("팔로워 수"),
+                                fieldWithPath("following").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when().get("/user/{userId}", 1L)
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(ProfileResponse.class);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("로그인된 사용자의 정보를 수정한다.")
+    void updateUserProfile() {
+        UpdateProfileRequest request = new UpdateProfileRequest(
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse expected = new UpdateProfileResponse(
+                1L,
+                "loki@pengcook.net",
+                "loki_changed",
+                "로키_changed",
+                "loki_changed.jpg",
+                "KOREA",
+                "hello world"
+        );
+
+        UpdateProfileResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "로그인된 사용자 정보를 변경합니다.",
+                        "사용자 정보 수정 API",
+                        requestFields(
+                                fieldWithPath("username").description("사용자 아이디"),
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("image").description("사용자 프로필 이미지"),
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개")
+                        ),
+                        responseFields(
+                                fieldWithPath("userId").description("사용자 ID"),
+                                fieldWithPath("email").description("사용자 이메일"),
+                                fieldWithPath("username").description("사용자 아이디"),
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("image").description("사용자 프로필 이미지"),
+                                fieldWithPath("region").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .patch("/user/me")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(UpdateProfileResponse.class);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("username이 중복되는지 확인한다.")
     void checkUsername() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "username이 중복되면 사용 불가능하다.",
+                        "username이 중복되는지 확인합니다.",
                         "사용자 이름 중복 체크 API",
                         responseFields(
                                 fieldWithPath("available").description("사용 가능 여부")
@@ -84,11 +189,11 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @DisplayName("username이 중복되면 사용 불가능하다.")
+    @DisplayName("username이 중복되는지 확인한다.")
     void checkUsernameWhenDuplicateUsername() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "username이 중복되면 사용 불가능하다.",
+                        "username이 중복되는지 확인합니다.",
                         "사용자 이름 중복 체크 API",
                         queryParameters(
                                 parameterWithName("username").description("사용자 이름")
@@ -107,7 +212,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser
-    @DisplayName("유저를 신고한다.")
+    @DisplayName("사용자를 신고한다.")
     void report() {
         UserReportRequest spamReportRequest = new UserReportRequest(
                 1,
@@ -117,8 +222,8 @@ class UserControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "유저를 신고한다.",
-                        "유저 신고 API",
+                        "사용자를 신고합니다.",
+                        "사용자 신고 API",
                         requestFields(
                                 fieldWithPath("reporteeId").description("피신고자 id"),
                                 fieldWithPath("reason").description("사유"),
