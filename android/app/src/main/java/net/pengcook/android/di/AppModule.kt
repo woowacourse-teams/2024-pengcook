@@ -2,6 +2,7 @@ package net.pengcook.android.di
 
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
+import net.pengcook.android.data.repository.comment.CommentRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.like.LikeRepository
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
@@ -19,6 +20,8 @@ interface AppModule {
     val makingRecipeRepository: MakingRecipeRepository
 
     val likeRepository: LikeRepository
+
+    val commentRepository: CommentRepository
 
     fun <T> service(apiService: Class<T>): T
 }

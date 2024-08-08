@@ -161,15 +161,16 @@
                             android:id="@+id/tv_likes_recipe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginBottom="14dp"
-                            android:textColor="@color/black"
+                            android:onClick="@{() -> vm.onNavigateToComment()}"
                             android:textSize="13sp"
+                            android:padding="4dp"
                             app:favoriteCount="@{Recipe.likeCount}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
-                            tools:text="1,200 likes" />
+                            tools:text="12 Comments" />
 
                         <ImageView
                             android:id="@+id/iv_favorite"
