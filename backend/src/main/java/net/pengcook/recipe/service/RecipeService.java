@@ -120,7 +120,7 @@ public class RecipeService {
 
     public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
         long userId = request.userId();
-        Pageable pageable = PageRequest.of(request.pageNumber(), request.pageSize());
+        Pageable pageable = getPageable(request.pageNumber(), request.pageSize());
         List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
@@ -198,7 +198,8 @@ public class RecipeService {
         }
     }
 
-    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest, LocalTime cookingTime) {
+    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest,
+                                      LocalTime cookingTime) {
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
                 imageUrl,
