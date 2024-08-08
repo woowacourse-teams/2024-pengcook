@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{String.valueOf(recipe.favoriteCount)}"
+                android:text="@{String.valueOf(recipe.likeCount)}"
                 app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
