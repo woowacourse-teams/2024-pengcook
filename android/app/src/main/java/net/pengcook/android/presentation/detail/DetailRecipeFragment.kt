@@ -36,6 +36,7 @@ class DetailRecipeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("DetailRecipe")
         fetchRecipe()
         observeViewModel()
@@ -48,7 +49,11 @@ class DetailRecipeFragment : Fragment() {
 
     private fun observeError() {
         viewModel.error.observe(viewLifecycleOwner) { _ ->
-            Toast.makeText(requireContext(), getString(R.string.detail_like_error), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.detail_like_error),
+                Toast.LENGTH_SHORT,
+            ).show()
         }
     }
 
@@ -60,11 +65,21 @@ class DetailRecipeFragment : Fragment() {
             }
         }
 
+        viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            findNavController().navigateUp()
+        }
+
         viewModel.navigateToCommentEvent.observe(viewLifecycleOwner) { navigationEvent ->
             val navigationAvailable = navigationEvent.getContentIfNotHandled() ?: return@observe
             if (navigationAvailable) {
                 navigateToComment()
             }
+        }
+
+        viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            findNavController().navigateUp()
         }
     }
 

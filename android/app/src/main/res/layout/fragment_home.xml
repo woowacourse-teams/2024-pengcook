@@ -20,60 +20,26 @@
         <!-- Logo and Recipe Input -->
         <ImageView
             android:id="@+id/main_logo"
-            android:layout_width="91dp"
-            android:layout_height="42dp"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/logo_test"
+            android:layout_marginVertical="8dp"
+            android:src="@drawable/peng_cook"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/newRecipeInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:hint="Have a new recipe?"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@id/newRecipeIcon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_logo" />
-
-        <ImageView
-            android:id="@+id/newRecipeIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_new_recipe"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_logo" />
-
-        <TextView
-            android:id="@+id/followingText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Following"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newRecipeInput" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/homeRcView"/>
 
         <!-- RecyclerView for posts -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeRcView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
+            android:paddingHorizontal="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/followingText"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/main_logo"
             tools:listitem="@layout/item_feed" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

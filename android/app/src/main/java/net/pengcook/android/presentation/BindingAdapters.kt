@@ -171,3 +171,19 @@ fun TextView.setCommentCount(count: Int) {
     }
     text = context.getString(R.string.comment_format_plural).format(count)
 }
+
+@BindingAdapter("count")
+fun setFormattedLikeCount(
+    textView: TextView,
+    count: Long,
+) {
+    textView.text = formatCount(count)
+}
+
+private fun formatCount(count: Long): String {
+    return when {
+        count >= 1_000_000 -> String.format("%.1fM", count / 1_000_000.0)
+        count >= 1_000 -> String.format("%.1fk", count / 1_000.0)
+        else -> count.toString()
+    }
+}

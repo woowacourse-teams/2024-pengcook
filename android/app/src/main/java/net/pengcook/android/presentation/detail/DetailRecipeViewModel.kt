@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.like.LikeRepository
+import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
 
 class DetailRecipeViewModel(
     private val recipe: Recipe,
     private val likeRepository: LikeRepository,
-) : ViewModel() {
+) : ViewModel(), AppbarSingleActionEventListener {
     private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
     val navigateToStepEvent: LiveData<Event<Boolean>>
         get() = _navigateToStepEvent
@@ -20,6 +21,10 @@ class DetailRecipeViewModel(
     private val _navigateToCommentEvent = MutableLiveData<Event<Boolean>>()
     val navigateToCommentEvent: LiveData<Event<Boolean>>
         get() = _navigateToCommentEvent
+
+    private val _navigateBackEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val navigateBackEvent: LiveData<Event<Unit>>
+        get() = _navigateBackEvent
 
     private val _isLike = MutableLiveData<Boolean>()
     val isLike: LiveData<Boolean> get() = _isLike
@@ -72,5 +77,9 @@ class DetailRecipeViewModel(
                 }
             }
         }
+    }
+
+    override fun onNavigateBack() {
+        _navigateBackEvent.value = Event(Unit)
     }
 }
