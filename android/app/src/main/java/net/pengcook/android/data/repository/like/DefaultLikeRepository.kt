@@ -20,7 +20,7 @@ class DefaultLikeRepository(
             body(response, RESPONSE_CODE_SUCCESS).isLike
         }
 
-    override suspend fun postLike(
+    override suspend fun postIsLike(
         recipeId: Long,
         isLike: Boolean,
     ): Result<Unit> =
