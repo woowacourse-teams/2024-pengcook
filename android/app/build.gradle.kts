@@ -134,6 +134,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation("androidx.paging:paging-common:$pagingVersion")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
