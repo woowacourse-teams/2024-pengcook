@@ -10,7 +10,7 @@ import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.model.User
 import net.pengcook.android.presentation.search.SearchEventListener
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
