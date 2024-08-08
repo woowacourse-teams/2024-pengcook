@@ -159,7 +159,10 @@ fun ImageView.drawable(
 }
 
 @BindingAdapter("count")
-fun setFormattedLikeCount(textView: TextView, count: Long) {
+fun setFormattedLikeCount(
+    textView: TextView,
+    count: Long,
+) {
     textView.text = formatCount(count)
 }
 
