@@ -41,7 +41,6 @@ public class UserController {
     }
 
     @PatchMapping("/user/me")
-    @ResponseStatus(HttpStatus.OK)
     public UpdateProfileResponse updateUserProfile(
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid UpdateProfileRequest updateProfileRequest
