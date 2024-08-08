@@ -17,29 +17,29 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface AuthorizationService {
-    @POST("/api/token/refresh")
+    @POST("/token/refresh")
     suspend fun fetchAccessToken(
         @Body refreshToken: RefreshTokenRequest,
     ): Response<RefreshedTokensResponse>
 
-    @GET("/api/user/me")
+    @GET("/user/me")
     suspend fun fetchUserInformation(
         @Header("Authorization") accessToken: String,
     ): Response<UserInformationResponse>
 
-    @POST("/api/oauth/{platform}/login")
+    @POST("/oauth/{platform}/login")
     suspend fun signIn(
         @Path("platform") platform: String,
         @Body idToken: IdTokenRequest,
     ): Response<SignInResponse>
 
-    @POST("/api/oauth/{platform}/sign-up")
+    @POST("/oauth/{platform}/sign-up")
     suspend fun signUp(
         @Path("platform") platform: String,
         @Body signUpData: SignUpRequest,
     ): Response<SignUpResponse>
 
-    @GET("/api/user/username/check")
+    @GET("/user/username/check")
     suspend fun checkUsernameDuplication(
         @Query("username") username: String,
     ): Response<UsernameDuplicationResponse>

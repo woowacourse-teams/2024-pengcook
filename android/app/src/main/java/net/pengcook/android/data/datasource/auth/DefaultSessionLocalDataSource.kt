@@ -27,7 +27,13 @@ class DefaultSessionLocalDataSource(
     }
 
     override suspend fun updateAccessToken(accessToken: String?) {
-        dataStore.modifyValue(KEY_ACCESS_TOKEN, accessToken)
+        val token =
+            if (accessToken != null) {
+                "${PREFIX_BEARER_TOKEN}$accessToken"
+            } else {
+                null
+            }
+        dataStore.modifyValue(KEY_ACCESS_TOKEN, token)
     }
 
     override suspend fun updateRefreshToken(refreshToken: String?) {
@@ -89,6 +95,7 @@ class DefaultSessionLocalDataSource(
 
     companion object {
         private const val TAG = "DefaultAuthorizationLocalDataSource"
+        private const val PREFIX_BEARER_TOKEN = "Bearer "
         private const val EXCEPTION_ERROR_READING_EXCEPTION = "Error reading preferences."
         private val KEY_ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val KEY_REFRESH_TOKEN = stringPreferencesKey("refresh_token")

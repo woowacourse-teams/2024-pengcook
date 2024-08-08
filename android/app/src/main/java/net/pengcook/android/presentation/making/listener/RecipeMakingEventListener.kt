@@ -1,7 +1,9 @@
 package net.pengcook.android.presentation.making.listener
 
-interface RecipeMakingEventListener {
-    fun onNavigateToMakingStep()
+import net.pengcook.android.presentation.signup.BottomButtonClickListener
 
+interface RecipeMakingEventListener : BottomButtonClickListener {
     fun onAddImage()
+
+    override fun onConfirm()
 }

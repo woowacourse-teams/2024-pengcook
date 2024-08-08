@@ -1,55 +1,48 @@
 package net.pengcook.android.presentation.making
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.domain.model.recipemaking.RecipeDescription
+import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
 import java.io.File
 
 class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepository) :
-    ViewModel(), RecipeMakingEventListener {
-    private val _uiEvent: MutableLiveData<Event<MakingEvent>> = MutableLiveData()
-    val uiEvent: LiveData<Event<MakingEvent>>
+    ViewModel(), RecipeMakingEventListener, SpinnerItemChangeListener {
+    private val _uiEvent: MutableLiveData<Event<RecipeMakingEvent>> = MutableLiveData()
+    val uiEvent: LiveData<Event<RecipeMakingEvent>>
         get() = _uiEvent
 
+    private val _categorySelectedValue: MutableLiveData<String> = MutableLiveData()
+    val categorySelectedValue: LiveData<String>
+        get() = _categorySelectedValue
+
     val titleContent = MutableLiveData<String>()
-    val categorySelectedValue = MutableLiveData<String>()
     val ingredientContent = MutableLiveData<String>()
-    val difficultySelectedValue = MutableLiveData<String>()
+    val difficultySelectedValue = MutableLiveData(0.0f)
     val introductionContent = MutableLiveData<String>()
 
-    private val _imageUri = MutableLiveData<String>()
-    val imageUri: LiveData<String>
-        get() = _imageUri
-    private val _uploadSuccess = MutableLiveData<Boolean>()
-    val uploadSuccess: LiveData<Boolean>
-        get() = _uploadSuccess
+    private val _currentImage: MutableLiveData<Uri> = MutableLiveData()
+    val currentImage: LiveData<Uri>
+        get() = _currentImage
 
-    private val _uploadError = MutableLiveData<String>()
-    val uploadError: LiveData<String>
-        get() = _uploadError
-
-    override fun onNavigateToMakingStep() {
-        _uiEvent.value = Event(MakingEvent.NavigateToMakingStep)
-    }
-
-    override fun onAddImage() {
-        _uiEvent.value = Event(MakingEvent.AddImage)
-    }
+    private var thumbnailTitle: String? = null
 
     // Function to fetch a pre-signed URL from the repository
     fun fetchImageUri(keyName: String) {
         viewModelScope.launch {
             try {
                 val uri = makingRecipeRepository.fetchImageUri(keyName)
-                _imageUri.value = uri
+                _uiEvent.value = Event(RecipeMakingEvent.PresignedUrlRequestSuccessful(uri))
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uploadError.value = "Pre-signed URL 요청 실패: ${e.message}"
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
             }
         }
     }
@@ -62,12 +55,73 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         viewModelScope.launch {
             try {
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
-                _uploadSuccess.value = true
+                thumbnailTitle = file.name
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageSuccessful)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uploadSuccess.value = false
-                _uploadError.value = "이미지 업로드 실패: ${e.message}"
+                _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
             }
         }
+    }
+
+    fun changeCurrentImage(uri: Uri) {
+        _currentImage.value = uri
+    }
+
+    override fun onAddImage() {
+        _uiEvent.value = Event(RecipeMakingEvent.AddImage)
+    }
+
+    override fun onConfirm() {
+        viewModelScope.launch {
+            val category = categorySelectedValue.value?.trim()
+            val introduction = introductionContent.value?.trim()
+            val difficulty = difficultySelectedValue.value
+            val ingredients = ingredientContent.value?.trim()
+            val title = titleContent.value?.trim()
+
+            if (category.isNullOrEmpty() ||
+                introduction.isNullOrEmpty() ||
+                difficulty == null ||
+                ingredients.isNullOrEmpty() ||
+                title.isNullOrEmpty() ||
+                thumbnailTitle.isNullOrEmpty()
+            ) {
+                _uiEvent.value = Event(RecipeMakingEvent.DescriptionFormNotCompleted)
+                return@launch
+            }
+
+            postRecipeDescription(category, introduction, difficulty, ingredients, title)
+        }
+    }
+
+    override fun onSelectionChange(item: String) {
+        _categorySelectedValue.value = item
+    }
+
+    private suspend fun postRecipeDescription(
+        category: String,
+        introduction: String,
+        difficulty: Float,
+        ingredients: String,
+        title: String,
+    ) {
+        val recipeDescription =
+            RecipeDescription(
+                categories = listOf(category),
+                cookingTime = "00:00:00",
+                description = introduction,
+                difficulty = (difficulty * 2).toInt(),
+                ingredients = ingredients.split(",").map { it.trim() },
+                thumbnail = thumbnailTitle ?: return,
+                title = title,
+            )
+
+        makingRecipeRepository.postRecipeDescription(recipeDescription)
+            .onSuccess { recipeId ->
+                _uiEvent.value = Event(RecipeMakingEvent.NavigateToMakingStep(recipeId))
+            }.onFailure {
+                _uiEvent.value = Event(RecipeMakingEvent.PostRecipeFailure)
+            }
     }
 }

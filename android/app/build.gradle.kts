@@ -8,6 +8,9 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -105,6 +108,14 @@ dependencies {
     // Firebase Authentication
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")

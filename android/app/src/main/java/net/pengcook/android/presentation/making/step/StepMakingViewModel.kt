@@ -31,6 +31,10 @@ class StepMakingViewModel(
     val imageUrl: LiveData<String>
         get() = _imageUrl
 
+    private val _fetchedRecipeStep = MutableLiveData<RecipeStep?>()
+    val fetchedRecipeStep: LiveData<RecipeStep?>
+        get() = _fetchedRecipeStep
+
     private val isIntroductionContentEmpty = MutableLiveData<Boolean>(true)
 
     private var _emptyIntroductionState = MutableLiveData<Event<Boolean>>()
@@ -53,6 +57,10 @@ class StepMakingViewModel(
     val quitStepMakingState: LiveData<Event<Boolean>>
         get() = _quitStepMakingState
 
+    private var _uploadErrorState = MutableLiveData<Event<Boolean>>()
+    val uploadErrorState: LiveData<Event<Boolean>>
+        get() = _uploadErrorState
+
     init {
         initStepData(stepNumber.value!!)
     }
@@ -66,6 +74,8 @@ class StepMakingViewModel(
         } else if (isUploadingImage.value == true) {
             _uploadingImageState.value = Event(true)
         } else {
+            if (stepNumber.value == maximumStep) return
+            uploadStepData(stepNumber.value!!)
             _stepNumber.value = _stepNumber.value?.plus(1)
             initStepData(stepNumber.value!!)
             isIntroductionContentEmpty.value = false
@@ -74,6 +84,7 @@ class StepMakingViewModel(
 
     override fun validatePreviousPageableCondition() {
         if (stepNumber.value == 1) return
+        uploadStepData(stepNumber.value!!)
         _stepNumber.value = _stepNumber.value?.minus(1)
         initStepData(stepNumber.value!!)
     }
@@ -115,27 +126,28 @@ class StepMakingViewModel(
                 sequence = stepNumber,
             )
 
+        _fetchedRecipeStep.value = result.getOrNull()
         return result.getOrNull()
     }
 
-    private suspend fun uploadStepData(stepNumber: Int) {
+    private fun uploadStepData(stepNumber: Int) {
         // Upload step data to repository
-        recipeStepMakingRepository.uploadRecipeStep(
-            recipeId = recipeId,
-            recipeStep =
-                RecipeStep(
+        viewModelScope.launch {
+            recipeStepMakingRepository
+                .uploadRecipeStep(
                     recipeId = recipeId,
-                    sequence = stepNumber,
-                    description = introductionContent.value ?: "",
-                    image = imageUrl.value ?: "",
-                    stepId = 1L,
-                ),
-        )
+                    recipeStep =
+                        RecipeStep(
+                            recipeId = recipeId,
+                            sequence = stepNumber,
+                            description = introductionContent.value ?: "",
+                            image = imageUrl.value ?: "",
+                            stepId = 1L,
+                        ),
+                ).onSuccess {
+                }.onFailure {
+                    _uploadErrorState.value = Event(true)
+                }
+        }
     }
-}
-
-sealed interface StepMakingUiEvent {
-    data object EmptyIntroductionState : StepMakingUiEvent
-
-    data object UploadIngImageState : StepMakingUiEvent
 }
