@@ -16,6 +16,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.regex.Pattern;
 import net.pengcook.RestDocsSetting;
+import net.pengcook.authentication.annotation.WithLoginUser;
+import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.TokenType;
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 
+@WithLoginUserTest
 @Sql("/data/users.sql")
 class LoginControllerTest extends RestDocsSetting {
 
@@ -233,5 +236,31 @@ class LoginControllerTest extends RestDocsSetting {
                 () -> assertThat(response.accessToken()).matches(JWT_PATTERN),
                 () -> assertThat(response.refreshToken()).isNotSameAs(refreshToken)
         );
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("로그인이 되었는지 확인한다.")
+    void checkToken() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "로그인이 되었는지 확인합니다.",
+                        "로그인 확인 API"
+                ))
+                .contentType(ContentType.JSON)
+                .when().get("/token/check")
+                .then().log().all()
+                .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("로그인이 되어있지 않으면 예외가 발생한다.")
+    void checkTokenWhenNoLogin() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH))
+                .contentType(ContentType.JSON)
+                .when().get("/token/check")
+                .then().log().all()
+                .statusCode(404);
     }
 }

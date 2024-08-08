@@ -14,6 +14,7 @@ import net.pengcook.authentication.dto.GoogleSignUpResponse;
 import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
+import net.pengcook.authentication.exception.NoSuchUserException;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -97,5 +98,10 @@ public class LoginService {
         } catch (FirebaseAuthException e) {
             throw new FirebaseTokenException("구글 인증에 실패했습니다.");
         }
+    }
+
+    public void checkToken(long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
     }
 }
