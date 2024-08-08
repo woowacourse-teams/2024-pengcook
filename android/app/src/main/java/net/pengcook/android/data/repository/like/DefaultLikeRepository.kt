@@ -11,7 +11,7 @@ class DefaultLikeRepository(
     private val likeRemoteDataSource: LikeRemoteDataSource,
 ) : LikeRepository,
     NetworkResponseHandler() {
-    override suspend fun getIsLike(recipeId: Long): Result<Boolean> =
+    override suspend fun loadIsLike(recipeId: Long): Result<Boolean> =
         runCatching {
             val accessToken =
                 sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
