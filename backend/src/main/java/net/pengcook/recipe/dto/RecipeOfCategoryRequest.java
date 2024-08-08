@@ -1,4 +1,4 @@
-package net.pengcook.category.dto;
+package net.pengcook.recipe.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

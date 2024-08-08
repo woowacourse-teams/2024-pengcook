@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.category.dto.RecipeOfCategoryRequest;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.service.CategoryService;
 import net.pengcook.image.service.S3ClientService;
@@ -21,6 +20,7 @@ import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeOfCategoryRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -188,7 +188,12 @@ public class RecipeService {
         }
     }
 
-    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest, LocalTime cookingTime) {
+    private RecipeStep saveRecipeStep(
+            Recipe recipe,
+            String imageUrl,
+            RecipeStepRequest recipeStepRequest,
+            LocalTime cookingTime
+    ) {
         RecipeStep recipeStep = new RecipeStep(
                 recipe,
                 imageUrl,
