@@ -1,18 +1,24 @@
 package net.pengcook.android.data.remote.api
 
+import net.pengcook.android.data.model.like.IsLikeRequest
+import net.pengcook.android.data.model.like.IsLikeResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface LikeService {
-    @GET("/api/likes/{recipeId}")
+    @GET("likes/{recipeId}")
     suspend fun fetchLikeCount(
+        @Header("Authorization") accessToken: String,
         @Path("recipeId") recipeId: Long,
-    ): Response<Int>
+    ): Response<IsLikeResponse>
 
-    @POST("/api/likes/{recipeId}")
+    @POST("likes")
     suspend fun postLike(
-        @Path("recipeId") recipeId: Long,
+        @Header("Authorization") accessToken: String,
+        @Body isLikeRequest: IsLikeRequest,
     ): Response<Unit>
 }

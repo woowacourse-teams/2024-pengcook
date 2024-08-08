@@ -8,6 +8,7 @@ import net.pengcook.android.data.datasource.auth.DefaultSessionLocalDataSource
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
+import net.pengcook.android.data.datasource.like.DefaultLikeRemoteDataSource
 import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSource
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
@@ -15,6 +16,7 @@ import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataS
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
@@ -23,6 +25,8 @@ import net.pengcook.android.data.repository.auth.DefaultSessionRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
+import net.pengcook.android.data.repository.like.DefaultLikeRepository
+import net.pengcook.android.data.repository.like.LikeRepository
 import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingRepository
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
@@ -77,6 +81,8 @@ class DefaultAppModule(
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
         DefaultMakingRecipeRemoteDataSource(service(MakingRecipeService::class.java))
 
+    private val likeRemoteDataSource = DefaultLikeRemoteDataSource(service(LikeService::class.java))
+
     override val feedRepository: FeedRepository =
         DefaultFeedRepository(feedRemoteDataSource)
 
@@ -88,4 +94,7 @@ class DefaultAppModule(
 
     override val makingRecipeRepository: MakingRecipeRepository =
         DefaultMakingRecipeRepository(sessionLocalDataSource, makingRecipeRemoteDataSource)
+
+    override val likeRepository: LikeRepository =
+        DefaultLikeRepository(sessionLocalDataSource, likeRemoteDataSource)
 }

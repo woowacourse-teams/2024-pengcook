@@ -16,21 +16,23 @@ class DetailRecipeViewModel(
     private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
     val navigateToStepEvent: LiveData<Event<Boolean>> get() = _navigateToStepEvent
 
-    private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite: LiveData<Boolean> get() = _isFavorite
-
-    private val _likeCount = MutableLiveData<Int>()
-    val likeCount: LiveData<Int> get() = _likeCount
+    private val _isLike = MutableLiveData<Boolean>()
+    val isLike: LiveData<Boolean> get() = _isLike
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
+
+    private val _likeCount = MutableLiveData(recipe.likeCount)
+    val likeCount: LiveData<Long> get() = _likeCount
 
     init {
         loadLikeData()
     }
 
     fun toggleFavorite() {
-        _isFavorite.value = _isFavorite.value?.not()
+        _isLike.value = _isLike.value?.not()
+        if (_isLike.value == true) _likeCount.value = _likeCount.value?.plus(1)
+        else _likeCount.value = _likeCount.value?.minus(1)
         postLike()
     }
 
@@ -40,9 +42,8 @@ class DetailRecipeViewModel(
 
     private fun loadLikeData() {
         viewModelScope.launch {
-            likeRepository.getLikeCount(recipe.recipeId).onSuccess { count ->
-                _likeCount.value = count
-                _isFavorite.value = count > 0
+            likeRepository.getIsLike(recipeId = recipe.recipeId).onSuccess { isLike ->
+                _isLike.value = isLike
             }.onFailure { throwable ->
                 _error.value = throwable.message
             }
@@ -51,8 +52,10 @@ class DetailRecipeViewModel(
 
     private fun postLike() {
         viewModelScope.launch {
-            likeRepository.postLike(recipe.recipeId).onFailure { throwable ->
-                _error.value = throwable.message
+            isLike.value?.let {
+                likeRepository.postLike(recipe.recipeId, it).onFailure { throwable ->
+                    _error.value = throwable.message
+                }
             }
         }
     }
