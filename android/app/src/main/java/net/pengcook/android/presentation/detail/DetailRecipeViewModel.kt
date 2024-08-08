@@ -56,7 +56,7 @@ class DetailRecipeViewModel(
     private fun postLike() {
         viewModelScope.launch {
             isLike.value?.let {
-                likeRepository.postLike(recipe.recipeId, it).onFailure { throwable ->
+                likeRepository.postIsLike(recipe.recipeId, it).onFailure { throwable ->
                     _error.value = throwable.message
                 }
             }
