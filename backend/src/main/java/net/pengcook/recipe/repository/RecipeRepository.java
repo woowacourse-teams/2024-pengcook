@@ -18,12 +18,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             LEFT JOIN Category c ON cr.category = c
             WHERE (:category IS NULL OR c.name = :category)
             AND (:keyword IS NULL OR CONCAT(r.title, r.description) LIKE CONCAT('%', :keyword, '%'))
+            AND (:userId IS NULL OR r.author.id = :userId)
             ORDER BY r.id DESC
             """)
     List<Long> findRecipeIdsByCategoryAndKeyword(
+            Pageable pageable,
             @Param("category") @Nullable String category,
             @Param("keyword") @Nullable String keyword,
-            Pageable pageable
+            @Param("userId") @Nullable Long userId
     );
 
     @Query("""

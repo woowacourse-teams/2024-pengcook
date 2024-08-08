@@ -28,7 +28,7 @@ class RecipeRepositoryTest {
     void findRecipeIdsByCategoryAndKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeIdsByCategoryAndKeyword(null, null, pageable);
+        List<Long> recipeIds = repository.findRecipeIdsByCategoryAndKeyword(pageable, null, null, null);
 
         assertThat(recipeIds).containsExactly(15L, 14L, 13L);
     }

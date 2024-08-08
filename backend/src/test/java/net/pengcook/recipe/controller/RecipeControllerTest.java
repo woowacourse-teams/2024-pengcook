@@ -42,10 +42,11 @@ class RecipeControllerTest extends RestDocsSetting {
                         "특정 페이지의 레시피 목록을 조회합니다.",
                         "레시피 조회 API",
                         queryParameters(
+                                parameterWithName("pageNumber").description("페이지 번호"),
+                                parameterWithName("pageSize").description("페이지 크기"),
                                 parameterWithName("category").description("조회 카테고리").optional(),
                                 parameterWithName("keyword").description("제목 또는 설명 검색 키워드").optional(),
-                                parameterWithName("pageNumber").description("페이지 번호"),
-                                parameterWithName("pageSize").description("페이지 크기")
+                                parameterWithName("userId").description("작성자 아이디").optional()
                         ),
                         responseFields(
                                 fieldWithPath("[]").description("레시피 목록"),
