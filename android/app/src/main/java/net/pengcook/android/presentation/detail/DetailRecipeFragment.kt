@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
@@ -46,8 +47,8 @@ class DetailRecipeFragment : Fragment() {
     }
 
     private fun observeError() {
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        viewModel.error.observe(viewLifecycleOwner) { _ ->
+            Toast.makeText(requireContext(), getString(R.string.detail_like_error), Toast.LENGTH_SHORT).show()
         }
     }
 
