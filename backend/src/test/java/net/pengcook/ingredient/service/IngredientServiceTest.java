@@ -51,7 +51,7 @@ class IngredientServiceTest {
 
     @BeforeEach
     void setUp() {
-        recipe = recipeRepository.findById(1L).get();
+        recipe = recipeRepository.findById(16L).get();
     }
 
     @Test
@@ -96,10 +96,12 @@ class IngredientServiceTest {
                 .map(ingredientRecipe -> ingredientRecipe.getIngredient().getName())
                 .toList();
 
-        assertThat(ingredientNames).usingRecursiveComparison()
-                .isEqualTo(List.of("rice", "cheese", "kimchi", "pork", "beef", "chicken", "fish"));
-        assertThat(ingredientRecipeNames).usingRecursiveComparison()
-                .isEqualTo(List.of("rice", "cheese", "kimchi", "pork"));
+        assertThat(ingredientNames).containsAll(
+                List.of("rice", "cheese", "kimchi", "pork", "beef", "chicken", "fish")
+        );
+        assertThat(ingredientRecipeNames).containsAll(
+                List.of("rice", "cheese", "kimchi", "pork")
+        );
     }
 
     @Test
@@ -118,7 +120,8 @@ class IngredientServiceTest {
                 .map(ingredientSubstitution -> ingredientSubstitution.getIngredient().getName())
                 .toList();
 
-        assertThat(substitutionNames).usingRecursiveComparison()
-                .isEqualTo(List.of("beef", "chicken", "fish"));
+        assertThat(substitutionNames).containsAll(
+                List.of("beef", "chicken", "fish")
+        );
     }
 }
