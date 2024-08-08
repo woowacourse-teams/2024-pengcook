@@ -38,6 +38,9 @@
     <style name="Body.Regular.B2" parent="Body.Regular">
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="Body.Regular.B3" parent="Body.Regular">
+        <item name="android:textSize">12sp</item>
+    </style>
     <style name="Body.Medium.B1" parent="Body.Medium">
         <item name="android:textSize">18sp</item>
     </style>
