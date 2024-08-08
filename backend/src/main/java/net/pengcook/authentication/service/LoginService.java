@@ -35,8 +35,10 @@ public class LoginService {
         if (user == null) {
             return new GoogleLoginResponse(false, null, null);
         }
-        String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
-        String refreshToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.REFRESH));
+        String accessToken = jwtTokenManager.createToken(
+                new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
+        String refreshToken = jwtTokenManager.createToken(
+                new TokenPayload(user.getId(), user.getEmail(), TokenType.REFRESH));
 
         return new GoogleLoginResponse(true, accessToken, refreshToken);
     }
@@ -62,7 +64,8 @@ public class LoginService {
         tokenPayload.validateRefreshToken("refresh token이 아닙니다.");
 
         return new TokenRefreshResponse(
-                jwtTokenManager.createToken(new TokenPayload(tokenPayload.userId(), tokenPayload.email(), TokenType.ACCESS)),
+                jwtTokenManager.createToken(
+                        new TokenPayload(tokenPayload.userId(), tokenPayload.email(), TokenType.ACCESS)),
                 jwtTokenManager.createToken(tokenPayload)
         );
     }
@@ -70,11 +73,20 @@ public class LoginService {
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleSignUpRequest.idToken());
 
+        if (googleSignUpRequest.image() == null) {
+            return new User(
+                    decodedToken.getEmail(),
+                    googleSignUpRequest.username(),
+                    googleSignUpRequest.nickname(),
+                    decodedToken.getPicture(),
+                    googleSignUpRequest.country()
+            );
+        }
         return new User(
                 decodedToken.getEmail(),
                 googleSignUpRequest.username(),
                 googleSignUpRequest.nickname(),
-                decodedToken.getPicture(),
+                googleSignUpRequest.image(),
                 googleSignUpRequest.country()
         );
     }
