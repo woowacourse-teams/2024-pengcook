@@ -6,14 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import net.pengcook.android.R
+import net.pengcook.android.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Security.insertProviderAt(Conscrypt.newProvider(), 1)
-
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
 
@@ -31,5 +35,7 @@ class MainActivity : AppCompatActivity() {
                 else -> bottomNav.visibility = View.GONE
             }
         }
+
+        binding.bottomNav.itemIconTintList = null
     }
 }

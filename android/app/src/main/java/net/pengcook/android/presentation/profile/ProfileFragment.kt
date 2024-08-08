@@ -34,6 +34,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("Profile")
         binding.adapter = adapter
         val layoutManager = GridLayoutManager(requireContext(), 3)

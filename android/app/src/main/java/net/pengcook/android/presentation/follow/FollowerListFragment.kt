@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.databinding.FragmentFollowerListBinding
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class FollowerListFragment : Fragment() {
     private var _binding: FragmentFollowerListBinding? = null
@@ -37,7 +38,8 @@ class FollowerListFragment : Fragment() {
         binding.viewModel = viewModel
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("FollowerList")
         viewModel.pagingDataFlow.observe(viewLifecycleOwner) {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 adapter.submitData(it)
