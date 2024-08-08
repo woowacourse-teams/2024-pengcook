@@ -45,7 +45,7 @@ class DetailRecipeViewModel(
 
     private fun loadLikeData() {
         viewModelScope.launch {
-            likeRepository.getIsLike(recipeId = recipe.recipeId).onSuccess { isLike ->
+            likeRepository.loadIsLike(recipeId = recipe.recipeId).onSuccess { isLike ->
                 _isLike.value = isLike
             }.onFailure { throwable ->
                 _error.value = throwable.message
