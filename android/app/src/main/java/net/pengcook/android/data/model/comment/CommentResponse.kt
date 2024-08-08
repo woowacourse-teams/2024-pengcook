@@ -1,10 +1,6 @@
-package net.pengcook.android.presentation.core.model
+package net.pengcook.android.data.model.comment
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class Comment(
+data class CommentResponse(
     val commentId: Long,
     val userId: Long,
     val userImage: String,
@@ -12,4 +8,4 @@ data class Comment(
     val createdAt: String,
     val message: String,
     val mine: Boolean,
-) : Parcelable
+)
