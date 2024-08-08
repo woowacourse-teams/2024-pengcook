@@ -81,8 +81,6 @@ class CommentControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피에 댓글을 등록할 때 유효하지 않은 레시피 아이디를 입력하면 예외가 발생합니다.",
-                        "댓글 조회 API",
                         requestFields(
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("message").description("댓글 내용")
@@ -104,8 +102,6 @@ class CommentControllerTest extends RestDocsSetting {
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "레시피에 댓글을 등록할 때 유효하지 않은 댓글 내용을 입력하면 예외가 발생합니다.",
-                        "댓글 조회 API",
                         requestFields(
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("message").description("댓글 내용")

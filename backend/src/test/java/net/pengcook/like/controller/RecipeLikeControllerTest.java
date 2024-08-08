@@ -29,7 +29,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
     void readLike() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "특정 레시피의 좋아요 여부를 조회한다.",
+                        "특정 레시피의 좋아요 여부를 조회합니다.",
                         "레시피별 좋아요 여부 조회 API",
                         pathParameters(
                                 parameterWithName("recipeId").description("레시피 아이디")
