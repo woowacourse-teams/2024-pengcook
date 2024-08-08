@@ -115,6 +115,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
+                style="@style/Body.Regular.B3"
                 tools:text="1.2k" />
 
             <!-- Comment icon and count -->
@@ -122,6 +123,7 @@
                 android:id="@+id/comment_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:padding="2dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/ic_comment"
@@ -137,6 +139,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/comment_icon"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
+                style="@style/Body.Regular.B3"
                 tools:text="800" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

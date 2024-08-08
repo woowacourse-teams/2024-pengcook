@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp"
-            app:layout_anchor="@+id/abl_default">
+            app:layout_anchor="@+id/abl_default"
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/tv_title"
