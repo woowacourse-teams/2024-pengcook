@@ -45,7 +45,7 @@ class RecipeServiceTest {
     @CsvSource(value = {"0,2,15", "1,2,13", "1,3,12"})
     @DisplayName("요청받은 페이지의 레시피 개요 목록을 조회한다.")
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
-        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize);
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null);
         List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageRecipeRequest);
 
         assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
@@ -56,7 +56,7 @@ class RecipeServiceTest {
     void readRecipesWhenPageOffsetIsGreaterThanIntMaxValue() {
         int pageNumber = 1073741824;
         int pageSize = 2;
-        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize);
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null);
 
         assertThatThrownBy(() -> recipeService.readRecipes(pageRecipeRequest))
                 .isInstanceOf(InvalidParameterException.class);
