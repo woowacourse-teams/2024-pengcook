@@ -101,6 +101,7 @@ public class LoginService {
     }
 
     public void checkToken(long userId) {
-        userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
     }
 }
