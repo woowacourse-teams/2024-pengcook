@@ -3,7 +3,7 @@
     <style name="CustomDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>
-        <item name="dividerColor">#B471BF</item>
+        <item name="dividerColor">@color/gray_300</item>
     </style>
 
     <style name="RatingBar" parent="Widget.AppCompat.RatingBar">

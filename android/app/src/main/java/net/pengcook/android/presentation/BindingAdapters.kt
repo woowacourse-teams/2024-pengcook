@@ -158,6 +158,20 @@ fun ImageView.drawable(
     setImageResource(drawableId)
 }
 
+@BindingAdapter("bind:commentCount")
+fun TextView.setCommentCount(count: Int) {
+    val context = context
+    if (count == 0) {
+        text = context.getString(R.string.comment_format_none)
+        return
+    }
+    if (count == 1) {
+        text = context.getString(R.string.comment_format_singular).format(count)
+        return
+    }
+    text = context.getString(R.string.comment_format_plural).format(count)
+}
+
 @BindingAdapter("count")
 fun setFormattedLikeCount(
     textView: TextView,
@@ -172,18 +186,4 @@ private fun formatCount(count: Long): String {
         count >= 1_000 -> String.format("%.1fk", count / 1_000.0)
         else -> count.toString()
     }
-}
-
-@BindingAdapter("bind:commentCount")
-fun TextView.setCommentCount(count: Int) {
-    val context = context
-    if (count == 0) {
-        text = context.getString(R.string.comment_format_none)
-        return
-    }
-    if (count == 1) {
-        text = context.getString(R.string.comment_format_singular).format(count)
-        return
-    }
-    text = context.getString(R.string.comment_format_plural).format(count)
 }

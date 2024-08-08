@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pengcook</string>
+    <string name="app_name">PengCook</string>
     <string name="hello_blank_fragment">hello world</string>
 
     <string name="time_format_required">%d mins</string>

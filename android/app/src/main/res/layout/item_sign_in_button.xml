@@ -12,6 +12,10 @@
         <variable
             name="content"
             type="String" />
+
+        <variable
+            name="buttonClickListener"
+            type="net.pengcook.android.presentation.signup.BottomButtonClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +31,7 @@
             android:paddingHorizontal="12dp"
             android:text="@{content}"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> buttonClickListener.onConfirm()}"
             app:layout_constraintTop_toTopOf="parent"
             tools:drawableLeft="@drawable/ic_google_40"
             tools:text="Sign in With Google" />

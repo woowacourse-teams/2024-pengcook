@@ -115,6 +115,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
+                style="@style/Body.Regular.B3"
                 tools:text="1.2k" />
 
             <!-- Comment icon and count -->
@@ -137,6 +138,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/comment_icon"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
+                style="@style/Body.Regular.B3"
                 tools:text="800" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,6 +76,11 @@ class DetailRecipeFragment : Fragment() {
                 navigateToComment()
             }
         }
+
+        viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            findNavController().navigateUp()
+        }
     }
 
     private fun fetchRecipe() {
