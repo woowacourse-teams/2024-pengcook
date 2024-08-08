@@ -22,14 +22,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
             <!-- Recipe image -->
             <ImageView
                 android:id="@+id/recipe_image"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:background="@color/gray_300"
+                android:layout_height="343dp"
+                android:background="@color/gray_100"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{recipe.thumbnail}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -40,11 +41,9 @@
             <!-- User profile picture -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profile_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="@dimen/item_feed_padding"
-                android:layout_marginTop="@dimen/item_feed_padding"
-                android:layout_marginEnd="8dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="12dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{recipe.user.profile}"
@@ -112,11 +111,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{String.valueOf(recipe.likeCount)}"
+                app:count="@{recipe.likeCount}"
                 app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
-                tools:text="1200" />
+                tools:text="1.2k" />
 
             <!-- Comment icon and count -->
             <ImageView
@@ -134,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{String.valueOf(recipe.commentCount)}"
+                app:count="@{recipe.commentCount}"
                 app:layout_constraintBottom_toBottomOf="@id/comment_icon"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
