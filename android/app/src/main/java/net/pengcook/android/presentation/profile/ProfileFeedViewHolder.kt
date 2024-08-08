@@ -13,6 +13,6 @@ class ProfileFeedViewHolder(
     }
 
     fun bind(recipe: Recipe) {
-        binding.imageUrl = recipe.thumbnail
+        binding.recipe = recipe
     }
 }

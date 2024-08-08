@@ -2,6 +2,9 @@
     <string name="app_name">PengCook</string>
     <string name="hello_blank_fragment">hello world</string>
 
+    <string name="likes_format_singular">%d like</string>
+    <string name="likes_format_plural">%,d likes</string>
+    <string name="likes_format_zero"> </string>
     <string name="time_format_required">%d mins</string>
     <string name="separator">,&#160;</string>
 
@@ -90,6 +93,7 @@
     <string name="setting_menu_privacy_policy">Privacy Policy</string>
     <string name="setting_menu_privacy_terms">Terms of Use</string>
     <string name="setting_menu_account">Account</string>
+    <string name="setting_account_appbar_title">Account</string>
     <string name="making_warning_form_not_completed">Fill in the forms completely.</string>
     <string name="making_warning_post_failure">Recipe Post Failed.</string>
     <string name="following">Following</string>
@@ -103,5 +107,7 @@
 
     <string name="detail_comment_format_singular">%d Comment</string>
     <string name="detail_comment_format_plural">%,d Comments</string>
+    <string name="setting_account_sign_out">Sign out</string>
+    <string name="setting_account_delete_account">Delete Account</string>
 
 </resources>
