@@ -25,7 +25,6 @@ import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
-import net.pengcook.authentication.dto.TokenCheckResponse;
 import net.pengcook.authentication.dto.TokenRefreshRequest;
 import net.pengcook.authentication.dto.TokenRefreshResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -243,26 +242,15 @@ class LoginControllerTest extends RestDocsSetting {
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("로그인이 되었는지 확인한다.")
     void checkToken() {
-        TokenCheckResponse response = RestAssured.given(spec).log().all()
+        RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "로그인이 되었는지 확인합니다.",
-                        "로그인 확인 API",
-                        responseFields(
-                                fieldWithPath("userId").description("사용자 ID"),
-                                fieldWithPath("email").description("사용자 이메일")
-                        )
+                        "로그인 확인 API"
                 ))
                 .contentType(ContentType.JSON)
                 .when().get("/token/check")
                 .then().log().all()
-                .statusCode(200)
-                .extract()
-                .as(TokenCheckResponse.class);
-
-        assertAll(
-                () -> assertThat(response.userId()).isEqualTo(1L),
-                () -> assertThat(response.email()).isEqualTo("loki@pengcook.net")
-        );
+                .statusCode(200);
     }
 
     @Test

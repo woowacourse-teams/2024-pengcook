@@ -11,7 +11,6 @@ import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
-import net.pengcook.authentication.dto.TokenCheckResponse;
 import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
@@ -101,8 +100,7 @@ public class LoginService {
         }
     }
 
-    public TokenCheckResponse checkToken(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
-        return new TokenCheckResponse(user.getId(), user.getEmail());
+    public void checkToken(long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
     }
 }
