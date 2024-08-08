@@ -9,11 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import net.pengcook.android.data.datasource.like.DefaultLikeRemoteDataSource
-import net.pengcook.android.data.remote.api.LikeService
-import net.pengcook.android.data.repository.like.DefaultLikeRepository
-import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
@@ -22,12 +19,9 @@ class DetailRecipeFragment : Fragment() {
     private val binding by lazy { FragmentDetailRecipeBinding.inflate(layoutInflater) }
     private val recipe: Recipe by lazy { args.recipe }
 
-    private val likeService = RetrofitClient.service(LikeService::class.java)
-    private val likeRemoteDataSource = DefaultLikeRemoteDataSource(likeService)
-    private val likeRepository = DefaultLikeRepository(likeRemoteDataSource)
-
     private val viewModel: DetailRecipeViewModel by viewModels {
-        DetailRecipeViewModelFactory(recipe, likeRepository)
+        val application = (requireContext().applicationContext) as DefaultPengcookApplication
+        DetailRecipeViewModelFactory(recipe, application.appModule.likeRepository)
     }
 
     override fun onCreateView(
@@ -43,8 +37,18 @@ class DetailRecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnalyticsLogging.viewLogEvent("DetailRecipe")
         fetchRecipe()
-        observeNavigationEvent()
         observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        observeError()
+        observeNavigationEvent()
+    }
+
+    private fun observeError() {
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun observeNavigationEvent() {
@@ -53,12 +57,6 @@ class DetailRecipeFragment : Fragment() {
             if (navigationAvailable) {
                 navigateToStep()
             }
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
