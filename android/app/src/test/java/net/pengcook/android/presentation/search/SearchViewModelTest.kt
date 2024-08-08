@@ -11,7 +11,7 @@ import net.pengcook.android.data.repository.feed.FakeFeedRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
