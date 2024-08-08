@@ -81,8 +81,6 @@ class DefaultAppModule(
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
         DefaultMakingRecipeRemoteDataSource(service(MakingRecipeService::class.java))
 
-    private val likeRemoteDataSource = DefaultLikeRemoteDataSource(service(LikeService::class.java))
-
     override val feedRepository: FeedRepository =
         DefaultFeedRepository(feedRemoteDataSource)
 
@@ -94,6 +92,8 @@ class DefaultAppModule(
 
     override val makingRecipeRepository: MakingRecipeRepository =
         DefaultMakingRecipeRepository(sessionLocalDataSource, makingRecipeRemoteDataSource)
+
+    private val likeRemoteDataSource = DefaultLikeRemoteDataSource(service(LikeService::class.java))
 
     override val likeRepository: LikeRepository =
         DefaultLikeRepository(sessionLocalDataSource, likeRemoteDataSource)
