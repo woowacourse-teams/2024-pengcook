@@ -49,6 +49,7 @@
 
     <string name="search_appbar">Search</string>
     <string name="search_searchbar_hint">Search</string>
+    <string name="search_message_failure">Search Error Occurred.</string>
 
     <string name="step_making_hint">Write Recipe Introduction</string>
     <string name="making_step_title">Recipe title</string>
