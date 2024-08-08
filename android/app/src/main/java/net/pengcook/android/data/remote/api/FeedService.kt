@@ -21,11 +21,4 @@ interface FeedService {
     suspend fun fetchRecipeSteps(
         @Path("recipeId") recipeId: Long,
     ): Response<List<RecipeStepResponse>>
-
-    @GET("/recipes/search")
-    suspend fun fetchRecipesByCategory(
-        @Query("pageNumber") pageNumber: Int,
-        @Query("pageSize") pageSize: Int,
-        @Query("category") category: String,
-    ): Response<List<FeedItemResponse>>
 }
