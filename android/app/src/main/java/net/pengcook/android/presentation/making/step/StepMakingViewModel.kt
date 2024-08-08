@@ -71,8 +71,8 @@ class StepMakingViewModel(
     val uiEvent: LiveData<Event<RecipeStepMakingEvent>>
         get() = _uiEvent
 
-    private val _currentImage: MutableLiveData<Uri> = MutableLiveData()
-    val currentImage: LiveData<Uri>
+    private val _currentImage: MutableLiveData<Uri?> = MutableLiveData()
+    val currentImage: LiveData<Uri?>
         get() = _currentImage
 
     init {
