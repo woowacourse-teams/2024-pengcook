@@ -9,4 +9,8 @@
     <color name="gray">#FFD4D4DA</color>
     <color name="favorite">#FF0000</color>
     <color name="not_favorite">#FFFFFF</color>
+    <color name="yellow_weak">#FFFFFDF8</color>
+    <color name="yellow_regular">#FFFEFAE0</color>
+    <color name="yellow_medium">#FFFFCE52</color>
+    <color name="yellow_strong">#FFEBA800</color>
 </resources>

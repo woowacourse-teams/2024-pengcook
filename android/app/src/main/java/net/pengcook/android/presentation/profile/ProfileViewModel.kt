@@ -1,6 +1,7 @@
 package net.pengcook.android.presentation.profile
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -9,63 +10,38 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import net.pengcook.android.presentation.core.model.Recipe
-import net.pengcook.android.presentation.core.model.User
+import net.pengcook.android.presentation.core.util.Event
 
-class ProfileViewModel : ViewModel(), DoubleButtonClickListener, ProfileFeedClickListener {
+class ProfileViewModel(
+    private val profilePagingSource: ProfilePagingSource,
+) : ViewModel(), DoubleButtonClickListener, ProfileFeedClickListener {
+    private val _uiEvent: MutableLiveData<Event<ProfileUiEvent>> = MutableLiveData()
+    val uiEvent: LiveData<Event<ProfileUiEvent>>
+        get() = _uiEvent
+
     val items: LiveData<PagingData<ProfileViewItem>> =
         Pager(
-            config = PagingConfig(pageSize = 10),
-            pagingSourceFactory = {
-                ProfilePagingSource(
-                    fetchProfile =
-                        suspend {
-                            runCatching {
-                                Profile(
-                                    "test1",
-                                    "nickname1",
-                                    "https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg",
-                                    1L,
-                                    2L,
-                                    "",
-                                )
-                            }
-                        },
-                    fetchFeeds = this::getFeed,
-                )
-            },
-        )
-            .liveData
-            .cachedIn(viewModelScope)
-
-    private suspend fun getFeed(
-        pageNumber: Int,
-        size: Int,
-    ): Result<List<Recipe>> {
-        return runCatching {
-            List(size) {
-                Recipe(
-                    it.toLong(),
-                    "recipe",
-                    emptyList(),
-                    "",
-                    "https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg",
-                    User(1L, "user1", "https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg"),
-                    1L,
-                    emptyList(),
-                    1,
-                    "",
-                    1,
-                )
-            }
-        }
-    }
+            config = PagingConfig(pageSize = 30, initialLoadSize = 30),
+            pagingSourceFactory = { profilePagingSource },
+        ).liveData.cachedIn(viewModelScope)
 
     override fun onLeftButtonClick() {
+        _uiEvent.value = Event(ProfileUiEvent.NavigateToEditProfile)
     }
 
     override fun onRightButtonClick() {
+        _uiEvent.value = Event(ProfileUiEvent.NavigateToSetting)
     }
 
-    override fun onClick(recipeId: Long) {
+    override fun onClick(recipe: Recipe) {
+        _uiEvent.value = Event(ProfileUiEvent.NavigateToRecipeDetail(recipe))
     }
+}
+
+sealed interface ProfileUiEvent {
+    data object NavigateToEditProfile : ProfileUiEvent
+
+    data object NavigateToSetting : ProfileUiEvent
+
+    data class NavigateToRecipeDetail(val recipe: Recipe) : ProfileUiEvent
 }

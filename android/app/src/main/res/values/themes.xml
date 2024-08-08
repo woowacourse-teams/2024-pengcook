@@ -13,4 +13,10 @@
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
     </style>
+
+    <style name="Theme.Pengcook.Splash" parent="Theme.Pengcook">
+        <item name="android:windowSplashScreenBackground" tools:targetApi="S">@color/yellow_regular</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@drawable/pengcook_splash_icon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="S">@color/yellow_weak</item>
+    </style>
 </resources>

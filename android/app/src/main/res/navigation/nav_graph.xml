@@ -170,13 +170,24 @@
         android:id="@+id/profileFragment"
         android:name="net.pengcook.android.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/settingFragment"
         android:name="net.pengcook.android.presentation.setting.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_accountSettingFragment"
+            app:destination="@id/accountSettingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/followListFragment"
@@ -190,6 +201,18 @@
         <argument
             android:name="recipeId"
             app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/accountSettingFragment"
+        android:name="net.pengcook.android.presentation.setting.AccountSettingFragment"
+        android:label="fragment_account_setting"
+        tools:layout="@layout/fragment_account_setting" >
+        <action
+            android:id="@+id/action_accountSettingFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>

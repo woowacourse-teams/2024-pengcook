@@ -1,5 +1,7 @@
 package net.pengcook.android.presentation.profile
 
+import net.pengcook.android.presentation.core.model.Recipe
+
 interface ProfileFeedClickListener {
-    fun onClick(recipeId: Long)
+    fun onClick(recipe: Recipe)
 }

@@ -15,4 +15,6 @@ enum class MenuItem(
     PRIVACY_POLICY(R.drawable.ic_search_24, R.string.setting_menu_privacy_policy),
     TERMS_OF_USE(R.drawable.ic_search_24, R.string.setting_menu_privacy_terms),
     ACCOUNT(R.drawable.ic_search_24, R.string.setting_menu_account),
+    SIGN_OUT(R.drawable.ic_search_24, R.string.setting_account_sign_out),
+    DELETE_ACCOUNT(R.drawable.ic_search_24, R.string.setting_account_delete_account),
 }

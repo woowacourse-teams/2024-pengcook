@@ -22,7 +22,7 @@ fun FeedItemResponse.toRecipe(): Recipe =
         ingredients = ingredient.map(IngredientResponse::toIngredient),
         difficulty = difficulty,
         introduction = description,
-        commentCount = 0,
+        commentCount = commentCount,
     )
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =

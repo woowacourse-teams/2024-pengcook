@@ -15,12 +15,15 @@ import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSo
 import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
+import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
+import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.CommentService
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
+import net.pengcook.android.data.remote.api.ProfileService
 import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
@@ -36,6 +39,8 @@ import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingR
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.data.repository.profile.DefaultProfileRepository
+import net.pengcook.android.data.repository.profile.ProfileRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -108,4 +113,10 @@ class DefaultAppModule(
 
     override val likeRepository: LikeRepository =
         DefaultLikeRepository(sessionLocalDataSource, likeRemoteDataSource)
+
+    private val profileRemoteDataSource: ProfileRemoteDataSource =
+        DefaultProfileRemoteDataSource(service(ProfileService::class.java))
+
+    override val profileRepository: ProfileRepository =
+        DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
 }
