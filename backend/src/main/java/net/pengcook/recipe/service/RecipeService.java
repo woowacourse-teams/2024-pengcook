@@ -94,9 +94,9 @@ public class RecipeService {
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
         validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
         Recipe recipe = getRecipeByRecipeId(recipeId);
-        String imageUrl = getImageUrl(recipeStepRequest.image());
+        String imageUrl = getValidatedImageUrl(recipeStepRequest.image());
         String description = recipeStepRequest.description();
-        LocalTime cookingTime = getCookingTime(recipeStepRequest.cookingTime());
+        LocalTime cookingTime = getValidatedCookingTime(recipeStepRequest.cookingTime());
 
         Optional<RecipeStep> existingRecipeStep = recipeStepRepository.findByRecipeIdAndSequence(
                 recipeId,
@@ -215,7 +215,7 @@ public class RecipeService {
         return recipeStepRepository.save(recipeStep);
     }
 
-    private String getImageUrl(String image) {
+    private String getValidatedImageUrl(String image) {
         if (image == null) {
             return null;
         }
@@ -225,7 +225,7 @@ public class RecipeService {
         return s3ClientService.getImageUrl(image).url();
     }
 
-    private LocalTime getCookingTime(String cookingTime) {
+    private LocalTime getValidatedCookingTime(String cookingTime) {
         try {
             return Optional.ofNullable(cookingTime)
                     .map(LocalTime::parse)
