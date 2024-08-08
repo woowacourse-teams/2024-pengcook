@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import java.io.File
 import java.io.IOException
@@ -99,6 +100,8 @@ class RecipeMakingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("RecipeMaking")
         initBinding()
         observeUiEvent()
         setUpCategorySpinner()

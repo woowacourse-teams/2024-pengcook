@@ -3,17 +3,25 @@ package net.pengcook.android.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import net.pengcook.android.R
+import net.pengcook.android.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+//    private val
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Security.insertProviderAt(Conscrypt.newProvider(), 1)
+        setContentView(binding.root)
 
-        setContentView(R.layout.activity_main)
+        val splashScreen = installSplashScreen()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
 
@@ -31,5 +39,7 @@ class MainActivity : AppCompatActivity() {
                 else -> bottomNav.visibility = View.GONE
             }
         }
+
+        binding.bottomNav.itemIconTintList = null
     }
 }

@@ -8,6 +8,9 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
+
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -106,6 +109,14 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.1.0")
 
@@ -115,6 +126,10 @@ dependencies {
     // Preferences Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    // splash
+    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
+    implementation("androidx.startup:startup-runtime:1.1.1")
+
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
     testImplementation("junit:junit:4.13.2")
@@ -123,6 +138,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.robolectric:robolectric:4.13")
+    testImplementation("androidx.paging:paging-common:$pagingVersion")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")

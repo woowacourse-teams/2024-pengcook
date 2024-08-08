@@ -50,14 +50,20 @@ fun favoriteCountText(
     val context = view.context
     val countContent =
         if (count == 1L) {
-            context.getString(R.string.likes_format_singular).format(count)
-        } else if (count > 0) {
-            context.getString(R.string.likes_format_plural).format(count)
+            context.getString(R.string.detail_comment_format_singular).format(count)
         } else {
-            context.getString(R.string.likes_format_zero)
+            context.getString(R.string.detail_comment_format_plural).format(count)
         }
 
     view.text = countContent
+}
+
+@BindingAdapter("isFavorite")
+fun setFavorite(
+    imageView: ImageView,
+    isFavorite: Boolean,
+) {
+    imageView.isSelected = isFavorite
 }
 
 @BindingAdapter("app:ingredients")
@@ -150,4 +156,34 @@ fun ImageView.drawable(
     @DrawableRes drawableId: Int,
 ) {
     setImageResource(drawableId)
+}
+
+@BindingAdapter("bind:commentCount")
+fun TextView.setCommentCount(count: Int) {
+    val context = context
+    if (count == 0) {
+        text = context.getString(R.string.comment_format_none)
+        return
+    }
+    if (count == 1) {
+        text = context.getString(R.string.comment_format_singular).format(count)
+        return
+    }
+    text = context.getString(R.string.comment_format_plural).format(count)
+}
+
+@BindingAdapter("count")
+fun setFormattedLikeCount(
+    textView: TextView,
+    count: Long,
+) {
+    textView.text = formatCount(count)
+}
+
+private fun formatCount(count: Long): String {
+    return when {
+        count >= 1_000_000 -> String.format("%.1fM", count / 1_000_000.0)
+        count >= 1_000 -> String.format("%.1fk", count / 1_000.0)
+        else -> count.toString()
+    }
 }

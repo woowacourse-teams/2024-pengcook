@@ -5,17 +5,20 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import net.pengcook.android.data.model.SearchData
 import net.pengcook.android.databinding.ItemSearchImageBinding
+import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
-class SearchAdapter : PagingDataAdapter<SearchData, SearchAdapter.SearchViewHolder>(diffUtil) {
+class SearchAdapter(
+    private val feedItemEventListener: FeedItemEventListener,
+) : PagingDataAdapter<Recipe, SearchAdapter.SearchViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): SearchViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemSearchImageBinding.inflate(layoutInflater)
-        return SearchViewHolder(binding)
+        return SearchViewHolder(binding, feedItemEventListener)
     }
 
     override fun onBindViewHolder(
@@ -26,26 +29,32 @@ class SearchAdapter : PagingDataAdapter<SearchData, SearchAdapter.SearchViewHold
         if (item != null) holder.bind(item)
     }
 
-    class SearchViewHolder(private val binding: ItemSearchImageBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: SearchData) {
-            binding.imageUrl = item.imageUrl
+    class SearchViewHolder(
+        private val binding: ItemSearchImageBinding,
+        feedItemEventListener: FeedItemEventListener,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.feedItemEventListener = feedItemEventListener
+        }
+
+        fun bind(recipe: Recipe) {
+            binding.recipe = recipe
         }
     }
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<SearchData>() {
+            object : DiffUtil.ItemCallback<Recipe>() {
                 override fun areItemsTheSame(
-                    oldItem: SearchData,
-                    newItem: SearchData,
+                    oldItem: Recipe,
+                    newItem: Recipe,
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem.recipeId == newItem.recipeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: SearchData,
-                    newItem: SearchData,
+                    oldItem: Recipe,
+                    newItem: Recipe,
                 ): Boolean {
                     return oldItem == newItem
                 }

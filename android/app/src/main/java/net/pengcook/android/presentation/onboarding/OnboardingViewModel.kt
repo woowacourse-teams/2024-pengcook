@@ -9,11 +9,12 @@ import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.core.util.Event
+import net.pengcook.android.presentation.signup.BottomButtonClickListener
 
 class OnboardingViewModel(
     private val authorizationRepository: AuthorizationRepository,
     private val sessionRepository: SessionRepository,
-) : ViewModel() {
+) : ViewModel(), BottomButtonClickListener {
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
@@ -27,9 +28,13 @@ class OnboardingViewModel(
         platformToken: String,
     ) {
         viewModelScope.launch {
-            _isLoading.value = true
             signInWithServer(platformName, platformToken)
         }
+    }
+
+    override fun onConfirm() {
+        _isLoading.value = true
+        _uiEvent.value = Event(OnboardingUiEvent.StartSignIn)
     }
 
     private suspend fun signInWithServer(

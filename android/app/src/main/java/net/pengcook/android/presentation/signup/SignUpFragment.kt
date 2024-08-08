@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSignUpBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -59,6 +60,8 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("SignUp")
         setUpBindingVariables()
         setUpCountrySpinner()
         observeViewModel()

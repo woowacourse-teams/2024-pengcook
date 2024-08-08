@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/selector_menu_home"
         android:title="Home" />
 
     <item
         android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/selector_menu_search"
         android:title="Search" />
 
     <item
         android:id="@+id/recipeMakingFragment"
-        android:icon="@drawable/ic_add_recipe"
+        android:icon="@drawable/ic_add_filled"
         android:title="MakeRecipe" />
 
     <item
         android:id="@+id/categoryFragment"
-        android:icon="@drawable/ic_category"
+        android:icon="@drawable/selector_menu_category"
         android:title="Category" />
 
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/selector_menu_profile"
         android:title="Profile" />
 </menu>

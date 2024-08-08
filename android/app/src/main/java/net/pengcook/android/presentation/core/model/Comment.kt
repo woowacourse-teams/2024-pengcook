@@ -5,8 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Comment(
-    val id: Long,
-    val user: User,
-    val comment: String,
-    val date: Long,
+    val commentId: Long,
+    val userId: Long,
+    val userImage: String,
+    val userName: String,
+    val createdAt: String,
+    val message: String,
+    val mine: Boolean,
 ) : Parcelable

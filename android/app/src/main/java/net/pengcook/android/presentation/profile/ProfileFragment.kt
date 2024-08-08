@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentProfileBinding
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.DefaultPengcookApplication
 
 class ProfileFragment : Fragment() {
@@ -44,6 +45,8 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("Profile")
         binding.adapter = adapter
         val layoutManager = GridLayoutManager(requireContext(), 3)
         val spanSizeLookup =

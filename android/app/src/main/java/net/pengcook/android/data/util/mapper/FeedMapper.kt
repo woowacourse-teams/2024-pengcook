@@ -18,11 +18,11 @@ fun FeedItemResponse.toRecipe(): Recipe =
         cookingTime = cookingTime,
         thumbnail = thumbnail,
         user = author.toUser(),
-        favoriteCount = likeCount,
+        likeCount = likeCount,
         ingredients = ingredient.map(IngredientResponse::toIngredient),
         difficulty = difficulty,
         introduction = description,
-        commentCount = 0,
+        commentCount = commentCount,
     )
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =

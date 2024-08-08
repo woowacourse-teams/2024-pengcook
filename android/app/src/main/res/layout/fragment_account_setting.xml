@@ -10,8 +10,8 @@
             type="net.pengcook.android.presentation.setting.SettingItemRecyclerViewAdapter" />
 
         <variable
-            name="appbarEventListener"
-            type="net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener" />
+            name="viewModel"
+            type="net.pengcook.android.presentation.setting.AccountSettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             layout="@layout/item_appbar_with_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:appbarEventListener="@{appbarEventListener}"
+            app:appbarEventListener="@{viewModel}"
             app:icon="@{@drawable/ic_back_24}"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@{@string/setting_account_appbar_title}" />

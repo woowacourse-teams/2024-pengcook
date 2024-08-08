@@ -14,10 +14,12 @@ import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentHomeBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels {
-        val appModule = (requireContext().applicationContext as DefaultPengcookApplication).appModule
+        val appModule =
+            (requireContext().applicationContext as DefaultPengcookApplication).appModule
         HomeViewModelFactory(appModule.feedRepository)
     }
     private lateinit var binding: FragmentHomeBinding
@@ -39,6 +41,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("Home")
         initBinding()
         observing()
     }

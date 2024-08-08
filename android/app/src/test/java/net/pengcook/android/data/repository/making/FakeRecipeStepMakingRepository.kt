@@ -25,7 +25,11 @@ class FakeRecipeStepMakingRepository(
         recipeStep: RecipeStep,
     ): Result<Unit> =
         runCatching {
-            val response = recipeStepMakingDataSource.uploadRecipeStep(recipeId, recipeStep.toRecipeStepRequest())
+            val response =
+                recipeStepMakingDataSource.uploadRecipeStep(
+                    recipeId,
+                    recipeStep.toRecipeStepRequest(),
+                )
             body(response, RESPONSE_CODE_SUCCESS)
         }
 

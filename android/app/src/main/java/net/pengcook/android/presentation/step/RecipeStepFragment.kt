@@ -12,6 +12,7 @@ import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.repository.feed.DefaultFeedRepository
 import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentRecipeStepBinding
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class RecipeStepFragment : Fragment() {
     private val recipeId: Long = 1L
@@ -52,6 +53,8 @@ class RecipeStepFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("RecipeStep")
         viewModel.fetchRecipeSteps()
 
         viewModel.recipeSteps.observe(viewLifecycleOwner) { recipeSteps ->

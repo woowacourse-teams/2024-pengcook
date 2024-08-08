@@ -21,13 +21,15 @@
 
         <include
             android:id="@+id/abl_detail_recipe"
-            layout="@layout/appbar_custom"
+            layout="@layout/item_appbar_with_action"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:recipeTitle="@{Recipe.title}" />
+            app:title="@{Recipe.title}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:appbarEventListener="@{vm}" />
 
         <ScrollView
             android:layout_width="0dp"
@@ -53,9 +55,9 @@
 
                     <ImageView
                         android:id="@+id/iv_user_border"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_margin="10dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="16dp"
                         android:background="@drawable/shape_profile_user"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
@@ -67,7 +69,7 @@
                         android:id="@+id/iv_user_profile"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:layout_margin="12dp"
+                        android:layout_margin="16dp"
                         android:background="@drawable/shape_profile_user"
                         android:clipToOutline="true"
                         android:scaleType="centerCrop"
@@ -83,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:text="@{Recipe.user.username}"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
                         android:translationZ="1dp"
                         app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"
                         app:layout_constraintStart_toEndOf="@id/iv_user_profile"
@@ -137,6 +139,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="12dp"
                             app:category="@{Recipe.category}"
+                            android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="Category : Korean" />
@@ -158,37 +161,39 @@
                             android:id="@+id/tv_likes_recipe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginBottom="14dp"
-                            android:textColor="@color/black"
+                            android:onClick="@{() -> vm.onNavigateToComment()}"
                             android:textSize="13sp"
-                            app:favoriteCount="@{Recipe.favoriteCount}"
+                            android:padding="4dp"
+                            app:favoriteCount="@{Recipe.likeCount}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
-                            tools:text="1,200 likes" />
+                            tools:text="12 Comments" />
 
                         <ImageView
                             android:id="@+id/iv_favorite"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="12dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="20dp"
                             android:background="@drawable/ic_circle"
+                            android:onClick="@{() -> vm.toggleLike()}"
                             android:padding="7dp"
-                            android:src="@drawable/ic_favorite"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
-                            app:layout_constraintEnd_toStartOf="@id/iv_mention" />
-
-                        <ImageView
-                            android:id="@+id/iv_mention"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/ic_circle"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_mention"
+                            android:src="@drawable/selector_favorite"
+                            app:isFavorite="@{vm.isLike}"
                             app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
                             app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.likeCount.toString()}"
+                            android:textSize="15sp"
+                            app:layout_constraintEnd_toEndOf="@id/iv_favorite"
+                            app:layout_constraintStart_toStartOf="@id/iv_favorite"
+                            app:layout_constraintTop_toBottomOf="@id/iv_favorite"
+                            tools:text="count" />
 
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
@@ -232,7 +237,7 @@
                             android:id="@+id/tv_required_time_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="16dp"
                             android:text="Time Required"
                             android:textColor="@color/black"
                             android:textSize="16sp"

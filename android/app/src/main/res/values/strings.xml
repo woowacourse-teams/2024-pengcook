@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pengcook</string>
+    <string name="app_name">PengCook</string>
     <string name="hello_blank_fragment">hello world</string>
 
     <string name="likes_format_singular">%d like</string>
@@ -9,12 +9,12 @@
     <string name="separator">,&#160;</string>
 
     <string name="onboarding_app_title">PengCook</string>
-    <string name="onboarding_introduction">Easy Cook!\nYour Recipe!</string>
+    <string name="onboarding_introduction">Easy Cook! Your Recipe!</string>
     <string name="onboarding_google_sign_in">Sign In with Google</string>
     <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">An unexpected error occurred.</string>
-
+    <string name="detail_like_error">Failed to like the recipe</string>
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
     <string name="signup_username_hint">Enter Your Username</string>
@@ -49,6 +49,7 @@
 
     <string name="search_appbar">Search</string>
     <string name="search_searchbar_hint">Search</string>
+    <string name="search_message_failure">Search Error Occurred.</string>
 
     <string name="step_making_hint">Write Recipe Introduction</string>
     <string name="making_step_title">Recipe title</string>
@@ -95,6 +96,17 @@
     <string name="setting_account_appbar_title">Account</string>
     <string name="making_warning_form_not_completed">Fill in the forms completely.</string>
     <string name="making_warning_post_failure">Recipe Post Failed.</string>
+    <string name="following">Following</string>
+
+    <string name="comment_hint">Comment</string>
+    <string name="comment_empty_list">There is no comment yet.</string>
+    <string name="comment_appbar_title">Comments</string>
+    <string name="comment_format_none">No Comments</string>
+    <string name="comment_format_singular">Comment %d</string>
+    <string name="comment_format_plural">Comments %,d</string>
+
+    <string name="detail_comment_format_singular">%d Comment</string>
+    <string name="detail_comment_format_plural">%,d Comments</string>
     <string name="setting_account_sign_out">Sign out</string>
     <string name="setting_account_delete_account">Delete Account</string>
 

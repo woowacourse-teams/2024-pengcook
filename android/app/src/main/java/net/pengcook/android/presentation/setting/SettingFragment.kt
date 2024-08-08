@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class SettingFragment :
     Fragment(),
@@ -47,6 +48,8 @@ class SettingFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.viewLogEvent("Setting")
         binding.adapter = adapter
         binding.appbarActionEventListener = this
     }

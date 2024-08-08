@@ -11,13 +11,10 @@ class DefaultFeedRemoteDataSource(
     override suspend fun fetchRecipes(
         pageNumber: Int,
         pageSize: Int,
-    ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(pageNumber, pageSize)
+        category: String?,
+        keyword: String?,
+        userId: Long?,
+    ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(pageNumber, pageSize, category, keyword, userId)
 
     override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
-
-    override suspend fun fetchRecipesByCategory(
-        pageNumber: Int,
-        pageSize: Int,
-        category: String,
-    ): Response<List<FeedItemResponse>> = feedService.fetchRecipesByCategory(pageNumber, pageSize, category)
 }

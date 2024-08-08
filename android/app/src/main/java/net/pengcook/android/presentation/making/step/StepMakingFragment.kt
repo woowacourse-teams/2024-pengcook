@@ -8,15 +8,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import net.pengcook.android.databinding.FragmentMakingStepBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class StepMakingFragment : Fragment() {
     private var _binding: FragmentMakingStepBinding? = null
     private val binding: FragmentMakingStepBinding
         get() = _binding!!
     private val viewModel: StepMakingViewModel by viewModels {
-        val appModule = (requireContext().applicationContext as DefaultPengcookApplication).appModule
+        val appModule =
+            (requireContext().applicationContext as DefaultPengcookApplication).appModule
         StepMakingViewModelFactory(
             recipeId = 1,
             maximumStep = 15,
@@ -39,6 +42,7 @@ class StepMakingFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
+        AnalyticsLogging.viewLogEvent("RecipeMaking")
         observeViewModel()
     }
 
@@ -80,7 +84,7 @@ class StepMakingFragment : Fragment() {
     private fun observeQuitStepMakingState() {
         viewModel.quitStepMakingState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
-                findNavController().popBackStack()
+                findNavController().navigateUp()
             }
         }
     }
@@ -88,9 +92,8 @@ class StepMakingFragment : Fragment() {
     private fun observeCompleteStepMakingState() {
         viewModel.completeStepMakingState.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
-                // Seems like legacy code
-                findNavController().popBackStack()
-                findNavController().popBackStack()
+                val action = StepMakingFragmentDirections.actionStepMakingFragmentToHomeFragment()
+                findNavController().navigate(action)
             }
         }
     }
