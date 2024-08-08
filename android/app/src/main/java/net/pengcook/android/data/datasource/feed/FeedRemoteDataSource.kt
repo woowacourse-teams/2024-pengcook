@@ -8,13 +8,10 @@ interface FeedRemoteDataSource {
     suspend fun fetchRecipes(
         pageNumber: Int,
         pageSize: Int,
+        category: String?,
+        keyword: String?,
+        userId: Long?,
     ): Response<List<FeedItemResponse>>
 
     suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>>
-
-    suspend fun fetchRecipesByCategory(
-        pageNumber: Int,
-        pageSize: Int,
-        category: String,
-    ): Response<List<FeedItemResponse>>
 }

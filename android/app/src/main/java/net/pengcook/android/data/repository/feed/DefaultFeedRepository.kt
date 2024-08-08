@@ -16,9 +16,13 @@ class DefaultFeedRepository(
     override suspend fun fetchRecipes(
         pageNumber: Int,
         pageSize: Int,
+        category: String?,
+        keyword: String?,
+        userId: Long?,
     ): Result<List<Recipe>> =
         runCatching {
-            val response = feedRemoteDataSource.fetchRecipes(pageNumber, pageSize)
+            val response =
+                feedRemoteDataSource.fetchRecipes(pageNumber, pageSize, category, keyword, userId)
             body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
         }
 
@@ -26,17 +30,6 @@ class DefaultFeedRepository(
         runCatching {
             val response = feedRemoteDataSource.fetchRecipeSteps(recipeId)
             body(response, RESPONSE_CODE_SUCCESS).map(RecipeStepResponse::toRecipeStep)
-        }
-
-    override suspend fun fetchRecipesByCategory(
-        pageNumber: Int,
-        pageSize: Int,
-        category: String,
-    ): Result<List<Recipe>> =
-        runCatching {
-            val response =
-                feedRemoteDataSource.fetchRecipesByCategory(pageNumber, pageSize, category)
-            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
         }
 
     companion object {

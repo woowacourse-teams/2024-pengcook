@@ -9,7 +9,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
-import net.pengcook.android.data.datasource.CategoryFeedPagingSource
+import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.model.Recipe
@@ -30,9 +30,9 @@ class CategoryFeedListViewModel(
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = {
-                CategoryFeedPagingSource(
+                FeedPagingSource(
+                    feedRepository = feedRepository,
                     category = category,
-                    fetchFeeds = feedRepository::fetchRecipesByCategory,
                 )
             },
         ).liveData

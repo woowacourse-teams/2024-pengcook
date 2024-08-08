@@ -1,7 +1,6 @@
 package net.pengcook.android.di
 
 import android.content.Context
-import net.pengcook.android.BuildConfig
 import net.pengcook.android.data.datasource.auth.AuthorizationRemoteDataSource
 import net.pengcook.android.data.datasource.auth.DefaultAuthorizationRemoteDataSource
 import net.pengcook.android.data.datasource.auth.DefaultSessionLocalDataSource
@@ -52,7 +51,7 @@ class DefaultAppModule(
     private val retrofit =
         Retrofit
             .Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl("http://192.168.1.38:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

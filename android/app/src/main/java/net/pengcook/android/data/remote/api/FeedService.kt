@@ -12,6 +12,9 @@ interface FeedService {
     suspend fun fetchRecipes(
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize: Int,
+        @Query("category") category: String?,
+        @Query("keyword") keyword: String?,
+        @Query("userId") userId: Long?,
     ): Response<List<FeedItemResponse>>
 
     @GET("/recipes/{recipeId}/steps")
