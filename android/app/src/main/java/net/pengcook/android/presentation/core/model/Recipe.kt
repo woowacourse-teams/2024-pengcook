@@ -11,7 +11,7 @@ data class Recipe(
     val cookingTime: String,
     val thumbnail: String,
     val user: User,
-    val favoriteCount: Long,
+    val likeCount: Long,
     val ingredients: List<Ingredient>,
     val difficulty: Int,
     val introduction: String,

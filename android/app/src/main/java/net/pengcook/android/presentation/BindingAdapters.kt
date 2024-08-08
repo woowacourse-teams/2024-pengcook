@@ -60,6 +60,14 @@ fun favoriteCountText(
     view.text = countContent
 }
 
+@BindingAdapter("isFavorite")
+fun setFavorite(
+    imageView: ImageView,
+    isFavorite: Boolean,
+) {
+    imageView.isSelected = isFavorite
+}
+
 @BindingAdapter("app:ingredients")
 fun splitIngredients(
     view: TextView,

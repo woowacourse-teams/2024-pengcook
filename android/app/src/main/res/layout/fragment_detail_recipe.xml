@@ -162,7 +162,7 @@
                             android:layout_marginBottom="14dp"
                             android:textColor="@color/black"
                             android:textSize="13sp"
-                            app:favoriteCount="@{Recipe.favoriteCount}"
+                            app:favoriteCount="@{Recipe.likeCount}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
@@ -170,25 +170,26 @@
 
                         <ImageView
                             android:id="@+id/iv_favorite"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="12dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="20dp"
                             android:background="@drawable/ic_circle"
+                            android:onClick="@{() -> vm.toggleLike()}"
                             android:padding="7dp"
-                            android:src="@drawable/ic_favorite"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
-                            app:layout_constraintEnd_toStartOf="@id/iv_mention" />
-
-                        <ImageView
-                            android:id="@+id/iv_mention"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/ic_circle"
-                            android:padding="7dp"
-                            android:src="@drawable/ic_mention"
+                            android:src="@drawable/selector_favorite"
+                            app:isFavorite="@{vm.isLike}"
                             app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
                             app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.likeCount.toString()}"
+                            android:textSize="15sp"
+                            app:layout_constraintEnd_toEndOf="@id/iv_favorite"
+                            app:layout_constraintStart_toStartOf="@id/iv_favorite"
+                            app:layout_constraintTop_toBottomOf="@id/iv_favorite"
+                            tools:text="count" />
 
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"

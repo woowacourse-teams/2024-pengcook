@@ -94,7 +94,7 @@ class StepMakingViewModel(
     }
 
     override fun customAction() {
-        if (isIntroductionContentEmpty.value == true) {
+        if (introductionContent.value.isNullOrEmpty()) {
             _emptyIntroductionState.value = Event(true)
             return
         }

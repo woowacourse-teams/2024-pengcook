@@ -7,18 +7,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSearchBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class SearchFragment : Fragment() {
-    private val adapter: SearchAdapter by lazy { SearchAdapter() }
+    private val adapter: SearchAdapter by lazy { SearchAdapter(viewModel) }
     private var _binding: FragmentSearchBinding? = null
     private val binding: FragmentSearchBinding
         get() = _binding!!
-    private val viewModel: SearchViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels {
+        val application = requireContext().applicationContext as DefaultPengcookApplication
+        SearchViewModelFactory(application.appModule.feedRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +52,26 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.items.observe(viewLifecycleOwner) { pagingData ->
-            viewLifecycleOwner.lifecycleScope.launch {
-                withContext(Dispatchers.Main) {
-                    adapter.submitData(pagingData)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.allRecipes.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
+                adapter.notifyDataSetChanged()
+            }
+        }
+
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val newEvent = event?.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is SearchUiEvent.RecipeSelected -> {
+                    val action =
+                        SearchFragmentDirections.actionSearchFragmentToDetailRecipeFragment(
+                            recipe = newEvent.recipe,
+                        )
+                    findNavController().navigate(action)
+                }
+
+                is SearchUiEvent.SearchFailure -> {
+                    showSnackBar(getString(R.string.search_message_failure))
                 }
             }
         }
@@ -58,5 +81,12 @@ class SearchFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.adapter = adapter
         binding.viewModel = viewModel
+        binding.ablSearchFragment.itemSearchBar.etSearch.setOnEditorActionListener(
+            SearchActionListener(),
+        )
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
     }
 }
