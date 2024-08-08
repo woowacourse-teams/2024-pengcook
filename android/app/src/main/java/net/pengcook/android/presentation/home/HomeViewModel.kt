@@ -25,7 +25,7 @@ class HomeViewModel(
     val feedData: LiveData<PagingData<Recipe>> =
         Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { FeedPagingSource(fetchFeeds = feedRepository::fetchRecipes) },
+            pagingSourceFactory = { FeedPagingSource(feedRepository) },
         )
             .liveData
             .cachedIn(viewModelScope)

@@ -78,9 +78,14 @@ class OnboardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("Onboarding")
+        initializeBindingVariables()
         observeUiEvents()
         observeLoadingStatus()
-        initializeSignInButton()
+    }
+
+    private fun initializeBindingVariables() {
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     override fun onDestroyView() {
@@ -117,15 +122,15 @@ class OnboardingFragment : Fragment() {
                         OnboardingFragmentDirections.actionOnboardingFragmentToSignUpFragment(event.platformName)
                     findNavController().navigate(action)
                 }
+
+                is OnboardingUiEvent.StartSignIn -> signInWithGoogle()
             }
         }
     }
 
-    private fun initializeSignInButton() {
+    private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
-        binding.btnGoogleSignIn.btnSignIn.setOnClickListener {
-            googleSignInLauncher.launch(signInIntent)
-        }
+        googleSignInLauncher.launch(signInIntent)
     }
 
     private fun handleGoogleSignInResult(task: Task<GoogleSignInAccount>) {

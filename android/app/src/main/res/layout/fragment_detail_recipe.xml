@@ -21,13 +21,15 @@
 
         <include
             android:id="@+id/abl_detail_recipe"
-            layout="@layout/appbar_custom"
+            layout="@layout/item_appbar_with_action"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:recipeTitle="@{Recipe.title}" />
+            app:title="@{Recipe.title}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:appbarEventListener="@{vm}" />
 
         <ScrollView
             android:layout_width="0dp"

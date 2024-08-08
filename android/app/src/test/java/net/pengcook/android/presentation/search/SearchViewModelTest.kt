@@ -44,7 +44,14 @@ class SearchViewModelTest {
             viewModel = SearchViewModel(feedRepository)
 
             // when
-            val recipe = feedRepository.fetchRecipes(0, 20).getOrThrow().first()
+            val recipe =
+                feedRepository.fetchRecipes(
+                    pageNumber = 0,
+                    pageSize = 20,
+                    category = null,
+                    keyword = null,
+                    userId = null,
+                ).getOrThrow().first()
             viewModel.onNavigateToDetail(recipe)
 
             // then
