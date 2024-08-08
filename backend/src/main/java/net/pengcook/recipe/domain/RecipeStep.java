@@ -41,4 +41,12 @@ public class RecipeStep {
     public long recipeId() {
         return recipe.getId();
     }
+
+    public RecipeStep update(String imageUrl, String description, LocalTime cookingTime) {
+        this.image  = imageUrl;
+        this.description = description;
+        this.cookingTime = cookingTime;
+
+        return this;
+    }
 }

@@ -3,11 +3,11 @@ package net.pengcook.like.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.Optional;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.like.domain.RecipeLike;
-import net.pengcook.like.exception.RecipeLikeException;
+import net.pengcook.like.exception.RecipeNotFoundException;
+import net.pengcook.like.exception.UserNotFoundException;
 import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,80 +24,108 @@ class RecipeLikeServiceTest {
     private RecipeLikeService recipeLikeService;
     @Autowired
     private RecipeLikeRepository likeRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Test
-    @DisplayName("레시피의 좋아요 개수를 조회한다.")
-    void readLikesCountOne() {
+    @DisplayName("내가 좋아요를 한 게시글인지 조회한다.")
+    void readLikeMine() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 1L;
 
-        int likesCount = recipeLikeService.readLikesCount(recipeId).likesCount();
+        boolean like = recipeLikeService.readLike(userInfo, recipeId).isLike();
 
-        assertThat(likesCount).isOne();
+        assertThat(like).isTrue();
     }
 
     @Test
-    @DisplayName("레시피의 좋아요 개수를 조회한다.")
-    void readLikesCountZero() {
+    @DisplayName("내가 좋아요를 하지 않은 게시글인지 조회한다.")
+    void readLikeNotMine() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 2L;
 
-        int likesCount = recipeLikeService.readLikesCount(recipeId).likesCount();
+        boolean like = recipeLikeService.readLike(userInfo, recipeId).isLike();
 
-        assertThat(likesCount).isZero();
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 레시피에 좋아요를 조회할 경우 예외가 발생한다.")
-    void readLikesWhenNotExistRecipe() {
-        long recipeId = 7L;
-
-        assertThatThrownBy(() -> recipeLikeService.readLikesCount(recipeId))
-                .isInstanceOf(RecipeLikeException.class)
-                .hasMessage("존재하지 않는 레시피 입니다.");
+        assertThat(like).isFalse();
     }
 
     @Test
     @DisplayName("좋아요가 없는 게시글에 좋아요를 추가한다.")
-    void toggleLikeOnEmpty() {
+    void addLikeOnEmpty() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 2L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
         recipeLikeService.addLike(userInfo, recipeId);
-        Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
-        assertThat(like).isPresent();
+        assertThat(exists).isTrue();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount + 1);
     }
 
     @Test
-    @DisplayName("이미 좋아요를 한 게시글에 좋아요를 취소한다.")
-    void toggleLikeOnPresent() {
+    @DisplayName("좋아요가 없는 게시글에 좋아요를 취소해도 아무일이 일어나지 않는다.")
+    void deleteLikeOnEmpty() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
-        long recipeId = 1L;
+        long recipeId = 2L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
         recipeLikeService.deleteLike(userInfo, recipeId);
-        Optional<RecipeLike> like = likeRepository.findByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
 
-        assertThat(like).isEmpty();
+        assertThat(exists).isFalse();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount);
     }
 
     @Test
-    @DisplayName("존재하지 않는 유저가 레시피의 좋아요를 변경할 경우 예외가 발생한다.")
-    void toggleLikeWhenNotExistUser() {
+    @DisplayName("좋아요를 한 게시글에 좋아요를 추가해도 아무일이 일어나지 않는다.")
+    void addLikeOnPresent() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+        long recipeId = 1L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        recipeLikeService.addLike(userInfo, recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        assertThat(exists).isTrue();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount);
+    }
+
+    @Test
+    @DisplayName("좋아요를 한 게시글에 좋아요를 취소한다.")
+    void deleteLikeOnPresent() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+        long recipeId = 1L;
+        int prevLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        recipeLikeService.deleteLike(userInfo, recipeId);
+        boolean exists = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        int curLikeCount = recipeRepository.findById(recipeId).orElseThrow().getLikeCount();
+
+        assertThat(exists).isFalse();
+        assertThat(curLikeCount).isEqualTo(prevLikeCount - 1);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 유저가 레시피의 좋아요를 추가할 경우 예외가 발생한다.")
+    void addLikeWhenNotExistUser() {
         UserInfo userInfo = new UserInfo(4L, "seyang@pengcook.net");
         long recipeId = 1L;
 
         assertThatThrownBy(() -> recipeLikeService.addLike(userInfo, recipeId))
-                .isInstanceOf(RecipeLikeException.class)
-                .hasMessage("존재하지 않는 유저 입니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
-    @DisplayName("존재하지 않는 레시피에 대해 좋아요를 변경할 경우 예외가 발생한다.")
-    void toggleLikeWhenNotExistRecipe() {
+    @DisplayName("존재하지 않는 레시피에 대해 좋아요를 추가할 경우 예외가 발생한다.")
+    void addLikeWhenNotExistRecipe() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         long recipeId = 7L;
 
-        assertThatThrownBy(() -> recipeLikeService.deleteLike(userInfo, recipeId))
-                .isInstanceOf(RecipeLikeException.class)
-                .hasMessage("존재하지 않는 레시피 입니다.");
+        assertThatThrownBy(() -> recipeLikeService.addLike(userInfo, recipeId))
+                .isInstanceOf(RecipeNotFoundException.class);
     }
 }

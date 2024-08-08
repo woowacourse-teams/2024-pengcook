@@ -22,16 +22,19 @@ public class RecipeLikeController {
     private final RecipeLikeService likeService;
 
     @GetMapping("/{recipeId}")
-    public RecipeLikeResponse readLikesCount(@PathVariable("recipeId") long recipeId) {
-        return likeService.readLikesCount(recipeId);
+    public RecipeLikeResponse readLike(
+            @LoginUser UserInfo userInfo,
+            @PathVariable("recipeId") long recipeId
+    ) {
+        return likeService.readLike(userInfo, recipeId);
     }
 
     @PostMapping
-    public void toggleLike(
+    public void updateLike(
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid RecipeLikeRequest likeRequest
     ) {
-        if (likeRequest.like()) {
+        if (likeRequest.isLike()) {
             likeService.addLike(userInfo, likeRequest.recipeId());
             return;
         }

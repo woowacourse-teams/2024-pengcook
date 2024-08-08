@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
@@ -90,19 +91,22 @@ public class RecipeService {
     }
 
     public RecipeStepResponse createRecipeStep(long recipeId, RecipeStepRequest recipeStepRequest) {
-        Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
+        validateRecipeStepSequence(recipeId, recipeStepRequest.sequence());
+        Recipe recipe = getRecipeByRecipeId(recipeId);
         String imageUrl = s3ClientService.getImageUrl(recipeStepRequest.image()).url();
-        RecipeStep recipeStep = new RecipeStep(
-                recipe,
-                imageUrl,
-                recipeStepRequest.description(),
-                recipeStepRequest.sequence(),
-                LocalTime.parse(recipeStepRequest.cookingTime())
+        String description = recipeStepRequest.description();
+        LocalTime cookingTime = LocalTime.parse(recipeStepRequest.cookingTime());
+
+        Optional<RecipeStep> existingRecipeStep = recipeStepRepository.findByRecipeIdAndSequence(
+                recipeId,
+                recipeStepRequest.sequence()
         );
 
-        RecipeStep savedRecipeStep = recipeStepRepository.save(recipeStep);
-        return new RecipeStepResponse(savedRecipeStep);
+        RecipeStep recipeStep = existingRecipeStep
+                .map(currentRecipeStep -> currentRecipeStep.update(imageUrl, description, cookingTime))
+                .orElseGet(() -> saveRecipeStep(recipe, imageUrl, recipeStepRequest, cookingTime));
+
+        return new RecipeStepResponse(recipeStep);
     }
 
     public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
@@ -179,5 +183,30 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    private Recipe getRecipeByRecipeId(long recipeId) {
+        return recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
+    }
+
+    private void validateRecipeStepSequence(long recipeId, int sequence) {
+        int previousSequence = sequence - 1;
+        if (previousSequence >= 1) {
+            recipeStepRepository.findByRecipeIdAndSequence(recipeId, previousSequence)
+                    .orElseThrow(() -> new InvalidParameterException("이전 스텝이 등록되지 않았습니다."));
+        }
+    }
+
+    private RecipeStep saveRecipeStep(Recipe recipe, String imageUrl, RecipeStepRequest recipeStepRequest, LocalTime cookingTime) {
+        RecipeStep recipeStep = new RecipeStep(
+                recipe,
+                imageUrl,
+                recipeStepRequest.description(),
+                recipeStepRequest.sequence(),
+                cookingTime
+        );
+
+        return recipeStepRepository.save(recipeStep);
     }
 }

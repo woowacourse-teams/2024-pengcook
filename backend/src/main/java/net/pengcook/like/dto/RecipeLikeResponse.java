@@ -1,4 +1,4 @@
 package net.pengcook.like.dto;
 
-public record RecipeLikeResponse(int likesCount) {
+public record RecipeLikeResponse(boolean isLike) {
 }
