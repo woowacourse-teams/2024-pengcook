@@ -16,7 +16,7 @@ class DefaultLikeRepository(
             val accessToken =
                 sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
             val response =
-                likeRemoteDataSource.fetchLikeCount(accessToken = accessToken, recipeId = recipeId)
+                likeRemoteDataSource.fetchIsLike(accessToken = accessToken, recipeId = recipeId)
             body(response, RESPONSE_CODE_SUCCESS).isLike
         }
 
