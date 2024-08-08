@@ -126,7 +126,8 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "new_face",
                 "신입",
-                "KOREA"
+                "KOREA",
+                "new_face.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -142,7 +143,8 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("country").description("국가")
+                                fieldWithPath("country").description("국가"),
+                                fieldWithPath("image").description("사용자 사진")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("사용자 ID"),
@@ -175,7 +177,8 @@ class LoginControllerTest extends RestDocsSetting {
                 idToken,
                 "loki",
                 "로키",
-                "KOREA"
+                "KOREA",
+                "loki.jpg"
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -189,7 +192,8 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("idToken").description("Google ID Token"),
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
-                                fieldWithPath("country").description("국가")
+                                fieldWithPath("country").description("국가"),
+                                fieldWithPath("image").description("사용자 사진")
                         )
                 ))
                 .contentType(ContentType.JSON)
