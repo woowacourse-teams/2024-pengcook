@@ -13,8 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentProfileBinding
-import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null

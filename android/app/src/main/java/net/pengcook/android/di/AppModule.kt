@@ -6,8 +6,8 @@ import net.pengcook.android.data.repository.comment.CommentRepository
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.like.LikeRepository
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
-import net.pengcook.android.data.repository.profile.ProfileRepository
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.data.repository.profile.ProfileRepository
 
 interface AppModule {
     val authorizationRepository: AuthorizationRepository
