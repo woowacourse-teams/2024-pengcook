@@ -76,6 +76,7 @@ class OnboardingFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("Onboarding")
         observeUiEvents()
         observeLoadingStatus()
