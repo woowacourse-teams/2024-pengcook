@@ -31,8 +31,11 @@ class DetailRecipeViewModel(
 
     fun toggleFavorite() {
         _isLike.value = _isLike.value?.not()
-        if (_isLike.value == true) _likeCount.value = _likeCount.value?.plus(1)
-        else _likeCount.value = _likeCount.value?.minus(1)
+        if (_isLike.value == true) {
+            _likeCount.value = _likeCount.value?.plus(1)
+        } else {
+            _likeCount.value = _likeCount.value?.minus(1)
+        }
         postLike()
     }
 

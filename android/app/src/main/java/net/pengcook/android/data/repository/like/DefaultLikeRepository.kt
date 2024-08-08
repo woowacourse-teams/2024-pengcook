@@ -20,14 +20,17 @@ class DefaultLikeRepository(
             body(response, RESPONSE_CODE_SUCCESS).isLike
         }
 
-    override suspend fun postLike(recipeId: Long, isLike: Boolean): Result<Unit> =
+    override suspend fun postLike(
+        recipeId: Long,
+        isLike: Boolean,
+    ): Result<Unit> =
         runCatching {
             val accessToken =
                 sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
             val response =
                 likeRemoteDataSource.postLike(
                     accessToken = accessToken,
-                    IsLikeRequest(recipeId, isLike)
+                    IsLikeRequest(recipeId, isLike),
                 )
             body(response, RESPONSE_CODE_SUCCESS)
         }
