@@ -47,9 +47,10 @@ public class RecipeService {
     public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
         List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
+                pageable,
                 pageRecipeRequest.category(),
                 pageRecipeRequest.keyword(),
-                pageable
+                pageRecipeRequest.userId()
         );
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);

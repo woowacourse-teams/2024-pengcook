@@ -7,6 +7,7 @@ public record PageRecipeRequest(
         @Min(0) int pageNumber,
         @Min(1) int pageSize,
         @Nullable String category,
-        @Nullable String keyword
+        @Nullable String keyword,
+        @Nullable Long userId
 ) {
 }
