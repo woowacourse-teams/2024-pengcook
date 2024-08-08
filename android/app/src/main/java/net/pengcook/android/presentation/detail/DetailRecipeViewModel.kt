@@ -29,7 +29,7 @@ class DetailRecipeViewModel(
         loadLikeData()
     }
 
-    fun toggleFavorite() {
+    fun toggleLike() {
         _isLike.value = _isLike.value?.not()
         if (_isLike.value == true) {
             _likeCount.value = _likeCount.value?.plus(1)
