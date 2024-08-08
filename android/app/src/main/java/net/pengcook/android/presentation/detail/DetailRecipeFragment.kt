@@ -59,6 +59,13 @@ class DetailRecipeFragment : Fragment() {
                 navigateToStep()
             }
         }
+
+        viewModel.navigateToCommentEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            val navigationAvailable = navigationEvent.getContentIfNotHandled() ?: return@observe
+            if (navigationAvailable) {
+                navigateToComment()
+            }
+        }
     }
 
     private fun fetchRecipe() {
@@ -69,6 +76,11 @@ class DetailRecipeFragment : Fragment() {
 
     private fun navigateToStep() {
         val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToComment() {
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = 1170)
         findNavController().navigate(action)
     }
 

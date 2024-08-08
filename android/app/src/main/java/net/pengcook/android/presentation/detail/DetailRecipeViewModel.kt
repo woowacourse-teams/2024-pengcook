@@ -14,7 +14,12 @@ class DetailRecipeViewModel(
     private val likeRepository: LikeRepository,
 ) : ViewModel() {
     private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
-    val navigateToStepEvent: LiveData<Event<Boolean>> get() = _navigateToStepEvent
+    val navigateToStepEvent: LiveData<Event<Boolean>>
+        get() = _navigateToStepEvent
+
+    private val _navigateToCommentEvent = MutableLiveData<Event<Boolean>>()
+    val navigateToCommentEvent: LiveData<Event<Boolean>>
+        get() = _navigateToCommentEvent
 
     private val _isLike = MutableLiveData<Boolean>()
     val isLike: LiveData<Boolean> get() = _isLike
@@ -43,13 +48,19 @@ class DetailRecipeViewModel(
         _navigateToStepEvent.value = Event(true)
     }
 
+    fun onNavigateToComment() {
+        _navigateToCommentEvent.value = Event(true)
+    }
+
     private fun loadLikeData() {
         viewModelScope.launch {
-            likeRepository.loadIsLike(recipeId = recipe.recipeId).onSuccess { isLike ->
-                _isLike.value = isLike
-            }.onFailure { _ ->
-                _error.value = Event(Unit)
-            }
+            likeRepository
+                .loadIsLike(recipeId = recipe.recipeId)
+                .onSuccess { isLike ->
+                    _isLike.value = isLike
+                }.onFailure { _ ->
+                    _error.value = Event(Unit)
+                }
         }
     }
 
