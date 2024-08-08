@@ -48,6 +48,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <include
+            android:id="@+id/item_search_bar"
             layout="@layout/item_search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
