@@ -14,7 +14,7 @@
     <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">An unexpected error occurred.</string>
-
+    <string name="detail_like_error">Failed to like the recipe</string>
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
     <string name="signup_username_hint">Enter Your Username</string>

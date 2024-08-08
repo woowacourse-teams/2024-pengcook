@@ -19,8 +19,8 @@ class DetailRecipeViewModel(
     private val _isLike = MutableLiveData<Boolean>()
     val isLike: LiveData<Boolean> get() = _isLike
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+    private val _error = MutableLiveData<Event<Unit>>()
+    val error: LiveData<Event<Unit>> get() = _error
 
     private val _likeCount = MutableLiveData(recipe.likeCount)
     val likeCount: LiveData<Long> get() = _likeCount
@@ -47,8 +47,8 @@ class DetailRecipeViewModel(
         viewModelScope.launch {
             likeRepository.loadIsLike(recipeId = recipe.recipeId).onSuccess { isLike ->
                 _isLike.value = isLike
-            }.onFailure { throwable ->
-                _error.value = throwable.message
+            }.onFailure { _ ->
+                _error.value = Event(Unit)
             }
         }
     }
@@ -56,8 +56,8 @@ class DetailRecipeViewModel(
     private fun postLike() {
         viewModelScope.launch {
             isLike.value?.let {
-                likeRepository.postIsLike(recipe.recipeId, it).onFailure { throwable ->
-                    _error.value = throwable.message
+                likeRepository.postIsLike(recipe.recipeId, it).onFailure { _ ->
+                    _error.value = Event(Unit)
                 }
             }
         }
