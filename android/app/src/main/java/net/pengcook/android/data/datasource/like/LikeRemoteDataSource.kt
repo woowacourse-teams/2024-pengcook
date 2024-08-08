@@ -5,7 +5,7 @@ import net.pengcook.android.data.model.like.IsLikeResponse
 import retrofit2.Response
 
 interface LikeRemoteDataSource {
-    suspend fun fetchLikeCount(
+    suspend fun fetchIsLike(
         accessToken: String,
         recipeId: Long,
     ): Response<IsLikeResponse>

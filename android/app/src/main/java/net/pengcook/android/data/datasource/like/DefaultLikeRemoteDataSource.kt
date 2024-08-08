@@ -8,7 +8,7 @@ import retrofit2.Response
 class DefaultLikeRemoteDataSource(
     private val likeService: LikeService,
 ) : LikeRemoteDataSource {
-    override suspend fun fetchLikeCount(
+    override suspend fun fetchIsLike(
         accessToken: String,
         recipeId: Long,
     ): Response<IsLikeResponse> = likeService.fetchLikeCount(accessToken, recipeId)
