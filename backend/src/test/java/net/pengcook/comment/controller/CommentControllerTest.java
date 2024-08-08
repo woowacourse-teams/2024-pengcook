@@ -113,4 +113,51 @@ class CommentControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(400);
     }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("댓글을 삭제한다.")
+    void deleteComment() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "댓글을 삭제합니다.",
+                        "댓글 삭제 API",
+                        pathParameters(
+                                parameterWithName("commentId").description("댓글 아이디")
+                        )
+                ))
+                .when().delete("/comments/{commentId}", 2L)
+                .then().log().all()
+                .statusCode(204);
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("존재하지 않는 댓글을 삭제하려고 하면 예외가 발생한다.")
+    void deleteCommentWhenNotExistComment() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        pathParameters(
+                                parameterWithName("commentId").description("댓글 아이디")
+                        )
+                ))
+                .when().delete("/comments/{commentId}", 1000L)
+                .then().log().all()
+                .statusCode(404);
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("본인 댓글이 아닌 댓글을 삭제하려고 하면 예외가 발생한다.")
+    void deleteCommentWhenNotCommentOwner() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        pathParameters(
+                                parameterWithName("commentId").description("댓글 아이디")
+                        )
+                ))
+                .when().delete("/comments/{commentId}", 1L)
+                .then().log().all()
+                .statusCode(403);
+    }
 }

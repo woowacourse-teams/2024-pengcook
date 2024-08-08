@@ -9,6 +9,7 @@ import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.service.CommentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,5 +34,11 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createComment(@RequestBody @Valid CreateCommentRequest request, @LoginUser UserInfo userInfo) {
         commentService.createComment(request, userInfo);
+    }
+
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@PathVariable long commentId, @LoginUser UserInfo userInfo) {
+        commentService.deleteComment(commentId, userInfo);
     }
 }

@@ -1,12 +1,15 @@
 package net.pengcook.comment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
+import net.pengcook.comment.exception.NotFoundException;
+import net.pengcook.comment.exception.UnauthorizedDeletionException;
 import net.pengcook.comment.repository.CommentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,5 +55,35 @@ class CommentServiceTest {
         commentService.createComment(request, userInfo);
 
         assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1);
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.")
+    void deleteComment() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+
+        commentService.deleteComment(2L, userInfo);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 댓글을 삭제하려고 하면 예외가 발생한다.")
+    void deleteCommentWhenNotExistComment() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+
+        assertThatThrownBy(() -> commentService.deleteComment(1000L, userInfo))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("해당되는 댓글이 없습니다.");
+    }
+
+    @Test
+    @DisplayName("본인 댓글이 아닌 댓글을 삭제하려고 하면 예외가 발생한다.")
+    void deleteCommentWhenNotCommentOwner() {
+        UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+
+        assertThatThrownBy(() -> commentService.deleteComment(1L, userInfo))
+                .isInstanceOf(UnauthorizedDeletionException.class)
+                .hasMessage("삭제 권한이 없습니다.");
     }
 }
