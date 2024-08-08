@@ -174,7 +174,7 @@
                             android:layout_height="36dp"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/ic_circle"
-                            android:onClick="@{() -> vm.toggleFavorite()}"
+                            android:onClick="@{() -> vm.toggleLike()}"
                             android:padding="7dp"
                             android:src="@drawable/selector_favorite"
                             app:isFavorite="@{vm.isLike}"
