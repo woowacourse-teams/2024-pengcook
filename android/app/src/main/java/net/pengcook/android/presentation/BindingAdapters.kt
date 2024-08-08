@@ -34,12 +34,10 @@ fun loadImage(
     view: ImageView,
     uri: Uri?,
 ) {
-    if (uri != null) {
-        Glide
-            .with(view.context)
-            .load(uri)
-            .into(view)
-    }
+    Glide
+        .with(view.context)
+        .load(uri)
+        .into(view)
 }
 
 @BindingAdapter("app:favoriteCount")
