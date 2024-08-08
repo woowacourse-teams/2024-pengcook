@@ -126,6 +126,10 @@ dependencies {
     // Preferences Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    // splash
+    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
+    implementation("androidx.startup:startup-runtime:1.1.1")
+
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
     testImplementation("junit:junit:4.13.2")

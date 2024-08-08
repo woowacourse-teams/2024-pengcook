@@ -11,4 +11,5 @@ data class FeedItemResponse(
     val recipeId: Long,
     val thumbnail: String,
     val title: String,
+    val commentCount: Long,
 )

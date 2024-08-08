@@ -7,17 +7,28 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentProfileBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
         get() = _binding!!
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by viewModels {
+        val application = (requireContext().applicationContext as DefaultPengcookApplication)
+        val profilePagingSource =
+            ProfilePagingSource(
+                profileFeedType = ProfileFeedType.MyFeed,
+                profileRepository = application.appModule.profileRepository,
+            )
+        ProfileViewModelFactory(profilePagingSource)
+    }
     private val adapter: ProfileAdapter by lazy { ProfileAdapter(viewModel, viewModel) }
 
     override fun onCreateView(
@@ -52,6 +63,26 @@ class ProfileFragment : Fragment() {
         viewModel.items.observe(viewLifecycleOwner) { pagingData ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 adapter.submitData(pagingData)
+            }
+        }
+
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            val newEvent = event?.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is ProfileUiEvent.NavigateToEditProfile -> {
+                }
+
+                is ProfileUiEvent.NavigateToRecipeDetail -> {
+                    val action =
+                        ProfileFragmentDirections.actionProfileFragmentToDetailRecipeFragment(
+                            recipe = newEvent.recipe,
+                        )
+                    findNavController().navigate(action)
+                }
+
+                is ProfileUiEvent.NavigateToSetting -> {
+                    findNavController().navigate(R.id.action_profileFragment_to_settingFragment)
+                }
             }
         }
     }

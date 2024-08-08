@@ -1,10 +1,11 @@
 package net.pengcook.android.presentation.profile
 
+import net.pengcook.android.domain.model.profile.UserProfile
 import net.pengcook.android.presentation.core.model.Recipe
 
 sealed class ProfileViewItem(open val viewType: Int) {
     class ProfileDescription(
-        val profile: Profile,
+        val profile: UserProfile,
         override val viewType: Int = VIEW_TYPE_PROFILE_DESC,
     ) : ProfileViewItem(viewType)
 

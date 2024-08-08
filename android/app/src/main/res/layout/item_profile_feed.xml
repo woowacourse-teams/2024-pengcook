@@ -5,12 +5,8 @@
     <data>
 
         <variable
-            name="recipeId"
-            type="long" />
-
-        <variable
-            name="imageUrl"
-            type="String" />
+            name="recipe"
+            type="net.pengcook.android.presentation.core.model.Recipe" />
 
         <variable
             name="profileFeedClickListener"
@@ -31,8 +27,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl="@{imageUrl}"
-            android:onClick="@{() -> profileFeedClickListener.onClick(recipeId)}"
+            app:imageUrl="@{recipe.thumbnail}"
+            android:onClick="@{() -> profileFeedClickListener.onClick(recipe)}"
             android:scaleType="centerCrop"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

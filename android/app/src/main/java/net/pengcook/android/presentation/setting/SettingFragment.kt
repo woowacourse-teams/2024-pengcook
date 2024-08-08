@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
@@ -65,10 +67,13 @@ class SettingFragment :
             MenuItem.LANGUAGE -> {}
             MenuItem.PRIVACY_POLICY -> {}
             MenuItem.TERMS_OF_USE -> {}
-            MenuItem.ACCOUNT -> {}
+            MenuItem.ACCOUNT ->
+                findNavController().navigate(R.id.action_settingFragment_to_accountSettingFragment)
+            else -> Unit
         }
     }
 
     override fun onNavigateBack() {
+        findNavController().navigateUp()
     }
 }
