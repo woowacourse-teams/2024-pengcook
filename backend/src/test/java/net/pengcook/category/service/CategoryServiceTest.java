@@ -46,4 +46,16 @@ class CategoryServiceTest {
                 () -> assertThat(categoryRecipeRepository.count()).isEqualTo(INITIAL_CATEGORY_RECIPE_COUNT + 2)
         );
     }
+
+    @Test
+    @DisplayName("특정 레시피가 포함된 레시피별 카테고리 정보를 지운다.")
+    void deleteCategoryRecipe() {
+        User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
+        Recipe recipe = new Recipe(2L, "김밥", author, LocalTime.of(1, 0, 0), "김밥이미지.jpg",
+                8, 1, 0, "김밥 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0));
+
+        categoryService.deleteCategoryRecipe(recipe);
+
+        assertThat(categoryRecipeRepository.count()).isEqualTo(INITIAL_CATEGORY_RECIPE_COUNT - 2);
+    }
 }
