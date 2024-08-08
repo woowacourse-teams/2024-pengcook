@@ -7,7 +7,6 @@ import net.pengcook.authentication.dto.GoogleLoginRequest;
 import net.pengcook.authentication.dto.GoogleLoginResponse;
 import net.pengcook.authentication.dto.GoogleSignUpRequest;
 import net.pengcook.authentication.dto.GoogleSignUpResponse;
-import net.pengcook.authentication.dto.TokenCheckResponse;
 import net.pengcook.authentication.dto.TokenRefreshRequest;
 import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.resolver.LoginUser;
@@ -42,7 +41,7 @@ public class LoginController {
     }
 
     @GetMapping("/token/check")
-    public TokenCheckResponse checkToken(@LoginUser UserInfo userInfo) {
-        return LoginService.checkToken(userInfo.getId());
+    public void checkToken(@LoginUser UserInfo userInfo) {
+        LoginService.checkToken(userInfo.getId());
     }
 }
