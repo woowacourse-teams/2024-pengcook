@@ -115,7 +115,10 @@ class DefaultAppModule(
         DefaultLikeRepository(sessionLocalDataSource, likeRemoteDataSource)
 
     private val profileRemoteDataSource: ProfileRemoteDataSource =
-        DefaultProfileRemoteDataSource(service(ProfileService::class.java))
+        DefaultProfileRemoteDataSource(
+            service(ProfileService::class.java),
+            service(FeedService::class.java),
+        )
 
     override val profileRepository: ProfileRepository =
         DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)

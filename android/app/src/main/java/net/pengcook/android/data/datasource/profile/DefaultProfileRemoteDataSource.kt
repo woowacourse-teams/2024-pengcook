@@ -4,11 +4,13 @@ import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.data.model.profile.UpdateProfileResponse
 import net.pengcook.android.data.model.profile.UserProfileResponse
+import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.remote.api.ProfileService
 import retrofit2.Response
 
 class DefaultProfileRemoteDataSource(
     private val profileService: ProfileService,
+    private val feedService: FeedService,
 ) : ProfileRemoteDataSource {
     override suspend fun fetchUserInformation(userId: Long): Response<UserProfileResponse> {
         return profileService.fetchUserInformation(userId)
@@ -30,6 +32,12 @@ class DefaultProfileRemoteDataSource(
         pageNumber: Int,
         pageSize: Int,
     ): Response<List<FeedItemResponse>> {
-        return profileService.fetchUserFeeds(userId, pageNumber, pageSize)
+        return feedService.fetchRecipes(
+            pageNumber = pageNumber,
+            pageSize = pageSize,
+            category = null,
+            keyword = null,
+            userId = userId,
+        )
     }
 }
