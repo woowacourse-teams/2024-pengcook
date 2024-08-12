@@ -119,6 +119,9 @@
         android:id="@+id/recipeStepFragment"
         android:name="net.pengcook.android.presentation.step.RecipeStepFragment"
         android:label="RecipeStepFragment">
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
         <action
             android:id="@+id/action_recipeStepFragment_to_detailRecipeFragment"
             app:destination="@id/detailRecipeFragment" />
