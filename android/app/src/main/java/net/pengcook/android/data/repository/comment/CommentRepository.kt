@@ -9,4 +9,6 @@ interface CommentRepository {
         recipeId: Long,
         message: String,
     ): Result<Unit>
+
+    suspend fun deleteComment(commentId: Long): Result<Unit>
 }

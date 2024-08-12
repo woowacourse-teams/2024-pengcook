@@ -33,6 +33,10 @@ class FakeCommentRepository(
             body(response, RESPONSE_CODE_SUCCESS)
         }
 
+    override suspend fun deleteComment(commentId: Long): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
     private fun CommentResponse.toComment(): Comment =
         Comment(
             commentId = commentId,
