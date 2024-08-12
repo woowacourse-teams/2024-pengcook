@@ -11,5 +11,8 @@ class CommentViewHolder(
     fun bind(comment: Comment) {
         binding.comment = comment
         binding.eventHandler = commentEventHandler
+        binding.ivCommentMenu.setOnClickListener {
+            commentEventHandler.onMenuButtonClicked(comment)
+        }
     }
 }

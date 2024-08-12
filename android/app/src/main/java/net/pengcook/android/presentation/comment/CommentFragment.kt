@@ -7,12 +7,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
+import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuBottomFragment
+import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuCallback
+import net.pengcook.android.presentation.core.model.Comment
 
-class CommentFragment : Fragment() {
+class CommentFragment :
+    Fragment(),
+    CommentMenuCallback {
     private var _binding: FragmentCommentBinding? = null
     private val binding: FragmentCommentBinding
         get() = _binding!!
@@ -23,15 +30,6 @@ class CommentFragment : Fragment() {
     private val viewModel: CommentViewModel by viewModels {
         val appModule =
             (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        /*CommentViewModelFactory(
-            recipeId = 1L,
-            commentRepository =
-                FakeCommentRepository(
-                    dataSource = FakeCommentDataSource(),
-                ),
-            DefaultSessionLocalDataSource(requireContext().dataStore),
-        )*/
-
         CommentViewModelFactory(
             recipeId = recipeId,
             commentRepository = appModule.commentRepository,
@@ -58,7 +56,7 @@ class CommentFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.adapter = adapter
-        setUpComments()
+        // setUpComments()
         observeViewModels()
     }
 
@@ -70,12 +68,14 @@ class CommentFragment : Fragment() {
     private fun observeViewModels() {
         observeCommentEmptyState()
         observeComments()
+        observeQuitCommentEvent()
+        observeShowCommentMenuEvent()
     }
 
-    private fun setUpComments() {
+/*    private fun setUpComments() {
         val comments = viewModel.comments
         adapter.submitList(comments.value)
-    }
+    }*/
 
     private fun observeCommentEmptyState() {
         viewModel.isCommentEmpty.observe(viewLifecycleOwner) { event ->
@@ -92,7 +92,52 @@ class CommentFragment : Fragment() {
         }
     }
 
+    private fun observeQuitCommentEvent() {
+        viewModel.quitCommentEvent.observe(viewLifecycleOwner) { event ->
+            val quitComment = event.getContentIfNotHandled() ?: return@observe
+            if (quitComment) {
+                navigateBack()
+            }
+        }
+    }
+
+    private fun observeShowCommentMenuEvent() {
+        viewModel.showCommentMenuEvent.observe(viewLifecycleOwner) { event ->
+            val comment = event.getContentIfNotHandled() ?: return@observe
+            showCommentMenuBottomFragment(comment)
+        }
+    }
+
+    private fun navigateBack() {
+        // TODO : Add animation
+        val navOptions =
+            NavOptions
+                .Builder()
+                .setPopExitAnim(R.anim.slide_out_down)
+                .build()
+
+        findNavController().navigateUp()
+    }
+
+    private fun showCommentMenuBottomFragment(comment: Comment) {
+        val commentMenuBottomFragment = CommentMenuBottomFragment.newInstance(comment, this)
+        commentMenuBottomFragment.show(parentFragmentManager, commentMenuBottomFragment.tag)
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onReport(comment: Comment) {
+        showToast(getString(R.string.comment_reported).format(comment.userName))
+    }
+
+    override fun onBlock(comment: Comment) {
+        viewModel.onBlockComment(comment)
+    }
+
+    override fun onDelete(comment: Comment) {
+        viewModel.onDeleteComment(comment.commentId)
+        showToast(getString(R.string.comment_deleted))
     }
 }
