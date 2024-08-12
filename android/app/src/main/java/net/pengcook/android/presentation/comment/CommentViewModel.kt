@@ -1,6 +1,5 @@
 package net.pengcook.android.presentation.comment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,6 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.comment.CommentRepository
-import net.pengcook.android.presentation.core.listener.ActionEventHandler
 import net.pengcook.android.presentation.core.model.Comment
 import net.pengcook.android.presentation.core.util.Event
 
@@ -16,7 +14,6 @@ class CommentViewModel(
     private val recipeId: Long,
     private val commentRepository: CommentRepository,
 ) : ViewModel(),
-    ActionEventHandler,
     CommentEventHandler {
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>>
@@ -28,45 +25,45 @@ class CommentViewModel(
                 MutableLiveData(comments.size)
             }
 
+    private val blockedUserIds = MutableLiveData<List<Long>>()
+
     val commentContent: MutableLiveData<String> = MutableLiveData()
 
     private val _isCommentEmpty: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isCommentEmpty: LiveData<Event<Boolean>>
         get() = _isCommentEmpty
 
+    private val _quitCommentEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val quitCommentEvent: LiveData<Event<Boolean>>
+        get() = _quitCommentEvent
+
+    private val _showCommentMenuEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
+    val showCommentMenuEvent: LiveData<Event<Comment>>
+        get() = _showCommentMenuEvent
+
     init {
         initializeComments()
     }
 
     override fun onAction() {
-        /*val content = commentContent.value
-
-        viewModelScope.launch {
-            if (content != null) {
-                commentRepository.postComment(
-                    recipeId = recipeId,
-                    message = content,
-                )
-            }
-        }
-*/
         viewModelScope.launch {
             postComment()
             commentContent.value = ""
         }
     }
 
+    override fun onNavigateBack() {
+        _quitCommentEvent.value = Event(true)
+    }
+
     private fun initializeComments() {
-        Log.d("crong", "initializeComments")
         viewModelScope.launch {
             val comments = fetchComments()
             if (comments.isEmpty()) {
                 _isCommentEmpty.value = Event(true)
                 return@launch
             }
-            _comments.value = comments
-            Log.d("crong", "comments: $comments")
-            Log.d("crong", "comments size : ${comments.size}")
+            _comments.value = comments.filter { it.userId !in (blockedUserIds.value ?: emptyList()) }
         }
     }
 
@@ -94,7 +91,30 @@ class CommentViewModel(
         return result.getOrNull() ?: emptyList()
     }
 
-    override fun onMenuButtonClicked() {
-        TODO("bottom dialog sheet fragment show")
+    override fun onMenuButtonClicked(comment: Comment) {
+        _showCommentMenuEvent.value = Event(comment)
+    }
+
+    fun onBlockComment(comment: Comment) {
+        blockedUserIds.value = blockedUserIds.value?.plus(comment.userId) ?: listOf(comment.userId)
+        val commentsAfterBlock =
+            _comments.value?.filter {
+                it.userId !in (blockedUserIds.value ?: emptyList())
+            } ?: emptyList()
+        _comments.value = commentsAfterBlock
+    }
+
+    fun onDeleteComment(commentId: Long) {
+        viewModelScope.launch {
+            deleteComment(commentId)
+        }
+        initializeComments()
+    }
+
+    private suspend fun deleteComment(commentId: Long) {
+        val result = commentRepository.deleteComment(commentId)
+        if (result.isSuccess) {
+            initializeComments()
+        }
     }
 }
