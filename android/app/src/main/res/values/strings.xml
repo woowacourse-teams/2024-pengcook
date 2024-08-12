@@ -110,4 +110,9 @@
     <string name="setting_account_sign_out">Sign out</string>
     <string name="setting_account_delete_account">Delete Account</string>
 
+    <string name="step_appbar_title">Recipe Step</string>
+
+    <string name="comment_reported">User %s Reported</string>
+    <string name="comment_deleted">Comment Deleted</string>
+
 </resources>
