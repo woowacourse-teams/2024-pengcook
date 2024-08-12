@@ -49,11 +49,12 @@ class DetailRecipeFragment : Fragment() {
 
     private fun observeError() {
         viewModel.error.observe(viewLifecycleOwner) { _ ->
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.detail_like_error),
-                Toast.LENGTH_SHORT,
-            ).show()
+            Toast
+                .makeText(
+                    requireContext(),
+                    getString(R.string.detail_like_error),
+                    Toast.LENGTH_SHORT,
+                ).show()
         }
     }
 
@@ -90,12 +91,12 @@ class DetailRecipeFragment : Fragment() {
     }
 
     private fun navigateToStep() {
-        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment()
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment(recipeId = recipe.recipeId)
         findNavController().navigate(action)
     }
 
     private fun navigateToComment() {
-        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = 1170)
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = recipe.recipeId)
         findNavController().navigate(action)
     }
 
