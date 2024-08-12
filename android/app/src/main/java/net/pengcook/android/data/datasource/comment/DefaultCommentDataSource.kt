@@ -17,4 +17,9 @@ class DefaultCommentDataSource(
         accessToken: String,
         commentRequest: CommentRequest,
     ): Response<Unit> = commentService.postComment(accessToken, commentRequest)
+
+    override suspend fun deleteComment(
+        accessToken: String,
+        commentId: Long,
+    ): Response<Unit> = commentService.deleteComment(accessToken, commentId)
 }
