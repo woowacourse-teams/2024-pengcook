@@ -14,4 +14,9 @@ interface CommentDataSource {
         accessToken: String,
         commentRequest: CommentRequest,
     ): Response<Unit>
+
+    suspend fun deleteComment(
+        accessToken: String,
+        commentId: Long,
+    ): Response<Unit>
 }

@@ -45,6 +45,13 @@ class FakeCommentDataSource : CommentDataSource {
         return Response.success(Unit)
     }
 
+    override suspend fun deleteComment(
+        accessToken: String,
+        commentId: Long,
+    ): Response<Unit> {
+        TODO("Not yet implemented")
+    }
+
     private fun CommentRecord.toCommentResponse() =
         CommentResponse(
             commentId = commentId,
