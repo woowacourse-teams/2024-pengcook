@@ -25,7 +25,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -147,4 +147,7 @@ dependencies {
 
     // Image Cropper
     implementation("commons-io:commons-io:2.4")
+
+    // AR Core
+    implementation("com.google.ar:core:1.11.0")
 }
