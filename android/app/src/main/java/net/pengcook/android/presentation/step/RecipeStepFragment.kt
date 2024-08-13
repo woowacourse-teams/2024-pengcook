@@ -9,28 +9,19 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
-import net.pengcook.android.data.remote.api.FeedService
-import net.pengcook.android.data.repository.feed.DefaultFeedRepository
-import net.pengcook.android.data.util.network.RetrofitClient
 import net.pengcook.android.databinding.FragmentRecipeStepBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 class RecipeStepFragment : Fragment() {
     private val args by navArgs<RecipeStepFragmentArgs>()
     private val recipeId: Long by lazy { args.recipeId }
     private val viewModel: RecipeStepViewModel by viewModels {
+        val appModule =
+            (requireContext().applicationContext as DefaultPengcookApplication).appModule
         RecipeStepViewModelFactory(
             recipeId = recipeId,
-            feedRepository =
-                DefaultFeedRepository(
-                    feedRemoteDataSource =
-                        DefaultFeedRemoteDataSource(
-                            RetrofitClient.service(
-                                FeedService::class.java,
-                            ),
-                        ),
-                ),
+            feedRepository = appModule.feedRepository,
         )
     }
 
