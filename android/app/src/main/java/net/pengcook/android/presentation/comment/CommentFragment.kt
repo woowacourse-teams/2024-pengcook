@@ -14,12 +14,9 @@ import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuBottomFragment
-import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuCallback
 import net.pengcook.android.presentation.core.model.Comment
 
-class CommentFragment :
-    Fragment(),
-    CommentMenuCallback {
+class CommentFragment : Fragment() {
     private var _binding: FragmentCommentBinding? = null
     private val binding: FragmentCommentBinding
         get() = _binding!!
@@ -70,6 +67,7 @@ class CommentFragment :
         observeComments()
         observeQuitCommentEvent()
         observeShowCommentMenuEvent()
+        observeCommentMenuEvents()
     }
 
     private fun observeCommentEmptyState() {
@@ -115,7 +113,7 @@ class CommentFragment :
     }
 
     private fun showCommentMenuBottomFragment(comment: Comment) {
-        val commentMenuBottomFragment = CommentMenuBottomFragment.newInstance(comment, this)
+        val commentMenuBottomFragment = CommentMenuBottomFragment.newInstance(comment, viewModel)
         commentMenuBottomFragment.show(parentFragmentManager, commentMenuBottomFragment.tag)
     }
 
@@ -123,16 +121,31 @@ class CommentFragment :
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onReport(comment: Comment) {
-        showToast(getString(R.string.comment_reported).format(comment.userName))
+    private fun observeCommentMenuEvents() {
+        observeReportCommentEvent()
+        observeBlockCommentEvent()
+        observeDeleteCommentEvent()
     }
 
-    override fun onBlock(comment: Comment) {
-        viewModel.onBlockComment(comment)
+    private fun observeReportCommentEvent() {
+        viewModel.reportCommentEvent.observe(viewLifecycleOwner) { event ->
+            val comment = event.getContentIfNotHandled() ?: return@observe
+            showToast(getString(R.string.comment_reported).format(comment.userName))
+        }
     }
 
-    override fun onDelete(comment: Comment) {
-        viewModel.onDeleteComment(comment.commentId)
-        showToast(getString(R.string.comment_deleted))
+    private fun observeBlockCommentEvent() {
+        viewModel.blockCommentEvent.observe(viewLifecycleOwner) { event ->
+            val comment = event.getContentIfNotHandled() ?: return@observe
+            viewModel.onBlockComment(comment)
+        }
+    }
+
+    private fun observeDeleteCommentEvent() {
+        viewModel.deleteCommentEvent.observe(viewLifecycleOwner) { event ->
+            val comment = event.getContentIfNotHandled() ?: return@observe
+            viewModel.onDeleteComment(comment.commentId)
+            showToast(getString(R.string.comment_deleted))
+        }
     }
 }
