@@ -7,6 +7,7 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.comment.CommentRepository
+import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuCallback
 import net.pengcook.android.presentation.core.model.Comment
 import net.pengcook.android.presentation.core.util.Event
 
@@ -14,7 +15,8 @@ class CommentViewModel(
     private val recipeId: Long,
     private val commentRepository: CommentRepository,
 ) : ViewModel(),
-    CommentEventHandler {
+    CommentEventHandler,
+    CommentMenuCallback {
     private val _comments: MutableLiveData<List<Comment>> = MutableLiveData()
     val comments: LiveData<List<Comment>>
         get() = _comments
@@ -40,6 +42,18 @@ class CommentViewModel(
     private val _showCommentMenuEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
     val showCommentMenuEvent: LiveData<Event<Comment>>
         get() = _showCommentMenuEvent
+
+    private val _reportCommentEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
+    val reportCommentEvent: LiveData<Event<Comment>>
+        get() = _reportCommentEvent
+
+    private val _blockCommentEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
+    val blockCommentEvent: LiveData<Event<Comment>>
+        get() = _blockCommentEvent
+
+    private val _deleteCommentEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
+    val deleteCommentEvent: LiveData<Event<Comment>>
+        get() = _deleteCommentEvent
 
     init {
         initializeComments()
@@ -116,5 +130,17 @@ class CommentViewModel(
         if (result.isSuccess) {
             initializeComments()
         }
+    }
+
+    override fun onReport(comment: Comment) {
+        _reportCommentEvent.value = Event(comment)
+    }
+
+    override fun onBlock(comment: Comment) {
+        _blockCommentEvent.value = Event(comment)
+    }
+
+    override fun onDelete(comment: Comment) {
+        _deleteCommentEvent.value = Event(comment)
     }
 }
