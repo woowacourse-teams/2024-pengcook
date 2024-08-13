@@ -16,7 +16,7 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
         get() = _binding!!
 
     private val selectedComment: Comment? by lazy { arguments?.getParcelable("selected_comment") }
-    private var callback: CommentMenuCallback? = null
+    private lateinit var callback: CommentMenuCallback
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         super.onCreateDialog(savedInstanceState).apply {
@@ -41,17 +41,20 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
         binding.comment = selectedComment
 
         binding.tvReport.setOnClickListener {
-            selectedComment?.let { callback?.onReport(it) }
+            val comment = selectedComment ?: return@setOnClickListener
+            callback.onReport(comment)
             dismiss()
         }
 
         binding.tvBlock.setOnClickListener {
-            selectedComment?.let { callback?.onBlock(it) }
+            val comment = selectedComment ?: return@setOnClickListener
+            callback.onBlock(comment)
             dismiss()
         }
 
         binding.tvDelete.setOnClickListener {
-            selectedComment?.let { callback?.onDelete(it) }
+            val comment = selectedComment ?: return@setOnClickListener
+            callback.onDelete(comment)
             dismiss()
         }
     }
