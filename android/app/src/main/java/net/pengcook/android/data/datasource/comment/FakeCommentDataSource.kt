@@ -49,7 +49,8 @@ class FakeCommentDataSource : CommentDataSource {
         accessToken: String,
         commentId: Long,
     ): Response<Unit> {
-        TODO("Not yet implemented")
+        comments.removeIf { it.commentId == commentId }
+        return Response.success(Unit)
     }
 
     private fun CommentRecord.toCommentResponse() =

@@ -33,9 +33,11 @@ class FakeCommentRepository(
             body(response, RESPONSE_CODE_SUCCESS)
         }
 
-    override suspend fun deleteComment(commentId: Long): Result<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun deleteComment(commentId: Long): Result<Unit> =
+        runCatching {
+            val response = dataSource.deleteComment("accessToken", commentId)
+            body(response, RESPONSE_CODE_SUCCESS)
+        }
 
     private fun CommentResponse.toComment(): Comment =
         Comment(
