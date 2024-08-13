@@ -80,7 +80,6 @@ dependencies {
 
     implementation(libs.firebase.auth)
     implementation(libs.androidx.material3.android)
-    implementation(libs.core)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.core.ktx)
@@ -147,7 +146,4 @@ dependencies {
 
     // Image Cropper
     implementation("commons-io:commons-io:2.4")
-
-    // AR Core
-    implementation("com.google.ar:core:1.11.0")
 }
