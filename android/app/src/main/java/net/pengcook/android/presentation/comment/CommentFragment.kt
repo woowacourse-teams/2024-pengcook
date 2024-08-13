@@ -72,11 +72,6 @@ class CommentFragment :
         observeShowCommentMenuEvent()
     }
 
-/*    private fun setUpComments() {
-        val comments = viewModel.comments
-        adapter.submitList(comments.value)
-    }*/
-
     private fun observeCommentEmptyState() {
         viewModel.isCommentEmpty.observe(viewLifecycleOwner) { event ->
             val isCommentEmpty = event.getContentIfNotHandled() ?: return@observe
