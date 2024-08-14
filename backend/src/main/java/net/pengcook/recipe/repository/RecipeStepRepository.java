@@ -10,4 +10,6 @@ public interface RecipeStepRepository extends JpaRepository<RecipeStep, Long> {
     List<RecipeStep> findAllByRecipeIdOrderBySequence(long recipeId);
 
     Optional<RecipeStep> findByRecipeIdAndSequence(long recipeId, long sequence);
+
+    void deleteByRecipeId(long recipeId);
 }

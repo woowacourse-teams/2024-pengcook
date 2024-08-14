@@ -15,6 +15,7 @@ import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.recipe.service.RecipeStepService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +56,12 @@ public class RecipeController {
             @ModelAttribute @Valid RecipeOfUserRequest recipeOfUserRequest
     ) {
         return recipeService.readRecipesOfUser(recipeOfUserRequest);
+    }
+
+    @DeleteMapping("/{recipeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRecipe(@LoginUser UserInfo userInfo, @PathVariable long recipeId) {
+        recipeService.deleteRecipe(userInfo, recipeId);
     }
 
     @GetMapping("/{recipeId}/steps")
