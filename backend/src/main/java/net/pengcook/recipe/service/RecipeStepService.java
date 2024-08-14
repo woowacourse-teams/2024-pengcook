@@ -37,6 +37,10 @@ public class RecipeStepService {
         recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(savedRecipe, recipeStepRequest));
     }
 
+    public void deleteRecipeStepsByRecipe(long recipeId) {
+        recipeStepRepository.deleteByRecipeId(recipeId);
+    }
+
     private void saveRecipeStep(Recipe savedRecipe, RecipeStepRequest recipeStepRequest) {
         String imageUrl = getValidatedImageUrl(recipeStepRequest.image());
         LocalTime cookingTime = getValidatedCookingTime(recipeStepRequest.cookingTime());

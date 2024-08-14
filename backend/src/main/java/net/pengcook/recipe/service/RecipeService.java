@@ -4,13 +4,17 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.service.CategoryService;
+import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.S3ClientService;
+import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
+import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
@@ -23,6 +27,7 @@ import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
+import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
@@ -44,6 +49,9 @@ public class RecipeService {
     private final IngredientService ingredientService;
     private final S3ClientService s3ClientService;
     private final RecipeStepService recipeStepService;
+    private final IngredientRecipeService ingredientRecipeService;
+    private final CommentService commentService;
+    private final RecipeLikeService recipeLikeService;
 
     public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
@@ -96,6 +104,20 @@ public class RecipeService {
         return convertToMainRecipeResponses(recipeDataResponses);
     }
 
+    public void deleteRecipe(UserInfo userInfo, long recipeId) {
+        Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
+
+        targetRecipe.ifPresent(recipe -> {
+            verifyUserCanDeleteRecipe(userInfo, recipe);
+            ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
+            categoryService.deleteCategoryRecipe(recipe);
+            commentService.deleteCommentsByRecipe(recipe.getId());
+            recipeLikeService.deleteLikesByRecipe(recipe.getId());
+            recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
+            recipeRepository.delete(recipe);
+        });
+    }
+
     private List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
         Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
                 .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
@@ -146,5 +168,11 @@ public class RecipeService {
             throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
         }
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    private void verifyUserCanDeleteRecipe(UserInfo userInfo, Recipe recipe) {
+        if (recipe.getAuthor().getId() != userInfo.getId()) {
+            throw new UnauthorizedException("레시피를 삭제할 수 없습니다.");
+        }
     }
 }
