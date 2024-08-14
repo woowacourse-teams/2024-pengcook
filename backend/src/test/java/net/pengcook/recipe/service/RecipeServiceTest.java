@@ -33,7 +33,8 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(value = "/data/recipe.sql")
 class RecipeServiceTest {
 
-    public static final int INITIAL_RECIPE_COUNT = 15;
+    private static final int INITIAL_RECIPE_COUNT = 15;
+
     @Autowired
     private RecipeService recipeService;
     @Autowired
