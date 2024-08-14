@@ -60,7 +60,11 @@ public class RecipeLikeService {
         recipeRepository.save(recipe);
     }
 
-    public void deleteLikes(long recipeId) {
-        likeRepository.deleteByRecipeId(recipeId);
+    public void deleteLikesByRecipe(Recipe recipe) {
+        likeRepository.deleteByRecipeId(recipe.getId());
+    }
+
+    public void deleteLikesByUser(User user) {
+        likeRepository.deleteByRecipeId(user.getId());
     }
 }
