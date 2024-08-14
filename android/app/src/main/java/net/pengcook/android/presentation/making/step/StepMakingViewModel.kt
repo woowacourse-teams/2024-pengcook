@@ -45,7 +45,7 @@ class StepMakingViewModel(
     val emptyIntroductionState: LiveData<Event<Boolean>>
         get() = _emptyIntroductionState
 
-    private var _isUploadingImage = MutableLiveData<Boolean>(false)
+    private var _isUploadingImage = MutableLiveData<Boolean>(true)
     val isUploadingImage: LiveData<Boolean>
         get() = _isUploadingImage
 

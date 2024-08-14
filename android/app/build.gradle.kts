@@ -70,6 +70,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
     val retrofitVersion = "2.11.0"

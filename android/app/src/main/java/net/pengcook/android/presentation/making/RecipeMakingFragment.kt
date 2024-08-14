@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
+import net.pengcook.android.di.DatabaseModule
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
@@ -36,6 +37,7 @@ class RecipeMakingFragment : Fragment() {
         RecipeMakingViewModelFactory(application.appModule.makingRecipeRepository)
     }
 
+    private val dao = DatabaseModule().provideRecipeDao()
     private lateinit var photoUri: Uri
     private var currentPhotoPath: String? = null
 
