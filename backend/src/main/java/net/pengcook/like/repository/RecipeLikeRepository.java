@@ -8,4 +8,6 @@ public interface RecipeLikeRepository extends JpaRepository<RecipeLike, Long> {
     boolean existsByUserIdAndRecipeId(long userId, long recipeId);
 
     void deleteByUserIdAndRecipeId(long userId, long recipeId);
+
+    void deleteByRecipeId(long recipeId);
 }

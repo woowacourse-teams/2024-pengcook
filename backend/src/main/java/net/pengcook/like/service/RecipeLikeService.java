@@ -59,4 +59,8 @@ public class RecipeLikeService {
         likeRepository.deleteByUserIdAndRecipeId(userInfo.getId(), recipeId);
         recipeRepository.save(recipe);
     }
+
+    public void deleteLikes(long recipeId) {
+        likeRepository.deleteByRecipeId(recipeId);
+    }
 }
