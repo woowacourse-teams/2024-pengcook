@@ -2,7 +2,6 @@ package net.pengcook.android.presentation.making
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,10 +18,8 @@ import net.pengcook.android.databinding.FragmentRecipeMakingBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
+import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.File
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class RecipeMakingFragment : Fragment() {
     private var _binding: FragmentRecipeMakingBinding? = null
@@ -39,6 +34,9 @@ class RecipeMakingFragment : Fragment() {
     private lateinit var photoUri: Uri
     private var currentPhotoPath: String? = null
 
+    private val imageUtils: ImageUtils by lazy {
+        ImageUtils(requireContext())
+    }
     private val permissionArray =
         arrayOf(
             Manifest.permission.CAMERA,
@@ -67,19 +65,36 @@ class RecipeMakingFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    showSnackBar(getString(R.string.image_selection_failed))
+                    processImageUri(photoUri)
                 }
             } ?: run {
                 showSnackBar(getString(R.string.image_selection_failed))
             }
         }
 
+    private fun takePicture() {
+        val photoFile: File = imageUtils.createImageFile()
+        photoUri = imageUtils.getUriForFile(photoFile)
+        currentPhotoPath = photoFile.absolutePath
+        viewModel.changeCurrentImage(photoUri)
+        takePictureLauncher.launch(photoUri)
+    }
+
+    private fun processImageUri(uri: Uri) {
+        currentPhotoPath = imageUtils.processImageUri(uri)
+        if (currentPhotoPath != null) {
+            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+        } else {
+            showSnackBar(getString(R.string.image_selection_failed))
+        }
+    }
+
     // 사진 촬영 ActivityResultLauncher
     private val takePictureLauncher =
         registerForActivityResult(
             ActivityResultContracts.TakePicture(),
         ) { success ->
-            if (success) {
+            if (success && currentPhotoPath != null) {
                 viewModel.fetchImageUri(File(currentPhotoPath!!).name)
             } else {
                 showSnackBar(getString(R.string.photo_capture_failed))
@@ -128,13 +143,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun addImage() {
-        if (permissionArray.all {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    it,
-                ) == PackageManager.PERMISSION_GRANTED
-            }
-        ) {
+        if (imageUtils.isPermissionGranted(permissionArray)) {
             showImageSourceDialog()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -154,34 +163,8 @@ class RecipeMakingFragment : Fragment() {
             }.show()
     }
 
-    private fun takePicture() {
-        val photoFile: File = createImageFile()
-        photoUri =
-            FileProvider.getUriForFile(
-                requireContext(),
-                "net.pengcook.android.fileprovider",
-                photoFile,
-            )
-        viewModel.changeCurrentImage(photoUri)
-        takePictureLauncher.launch(photoUri)
-    }
-
     private fun selectImageFromAlbum() {
         contentLauncher.launch("image/*")
-    }
-
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? = requireContext().getExternalFilesDir(null)
-        return File
-            .createTempFile(
-                "JPEG_${timeStamp}_",
-                ".jpg",
-                storageDir,
-            ).apply {
-                currentPhotoPath = absolutePath
-            }
     }
 
     private fun uploadImageToS3(presignedUrl: String) {

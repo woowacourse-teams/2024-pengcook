@@ -35,6 +35,13 @@ class DefaultCommentRepository(
             body(response, VALID_POST_CODE)
         }
 
+    override suspend fun deleteComment(commentId: Long): Result<Unit> =
+        runCatching {
+            val accessToken = sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+            val response = commentDataSource.deleteComment(accessToken, commentId)
+            body(response, RESPONSE_CODE_SUCCESS)
+        }
+
     private fun CommentResponse.toComment(): Comment =
         Comment(
             commentId = commentId,

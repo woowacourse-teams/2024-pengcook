@@ -8,6 +8,10 @@
         <variable
             name="recipeStep"
             type="net.pengcook.android.presentation.core.model.RecipeStep" />
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.step.RecipeStepViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,9 +21,12 @@
 
         <include
             android:id="@+id/appbar"
-            layout="@layout/appbar_custom"
+            layout="@layout/item_appbar_with_action"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            app:title="@{@string/step_appbar_title}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:appbarEventListener="@{vm}"
             android:text="Kimchi Soup" />
 
         <androidx.viewpager2.widget.ViewPager2
