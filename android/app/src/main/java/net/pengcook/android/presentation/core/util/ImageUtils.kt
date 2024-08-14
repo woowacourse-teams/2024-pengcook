@@ -11,8 +11,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object ImageUtils {
-    private fun createTempImageFile(context: Context): File {
+class ImageUtils(private val context: Context) {
+    private fun createTempImageFile(): File {
         val timeStamp: String =
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir: File? = context.getExternalFilesDir(null)
@@ -23,7 +23,7 @@ object ImageUtils {
         )
     }
 
-    fun createImageFile(context: Context): File {
+    fun createImageFile(): File {
         val timeStamp: String =
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir: File? = context.getExternalFilesDir(null)
@@ -35,10 +35,7 @@ object ImageUtils {
             )
     }
 
-    fun getUriForFile(
-        context: Context,
-        file: File,
-    ): Uri {
+    fun getUriForFile(file: File): Uri {
         return FileProvider.getUriForFile(
             context,
             "net.pengcook.android.fileprovider",
@@ -46,14 +43,11 @@ object ImageUtils {
         )
     }
 
-    fun processImageUri(
-        context: Context,
-        uri: Uri,
-    ): String? {
+    fun processImageUri(uri: Uri): String? {
         return try {
             val inputStream = context.contentResolver.openInputStream(uri)
             if (inputStream != null) {
-                val tempFile = createTempImageFile(context)
+                val tempFile = createTempImageFile()
                 tempFile.outputStream().use { outputStream ->
                     inputStream.copyTo(outputStream)
                 }
@@ -67,10 +61,7 @@ object ImageUtils {
         }
     }
 
-    fun isPermissionGranted(
-        context: Context,
-        permissions: Array<String>,
-    ): Boolean {
+    fun isPermissionGranted(permissions: Array<String>): Boolean {
         return permissions.all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }

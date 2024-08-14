@@ -34,6 +34,9 @@ class RecipeMakingFragment : Fragment() {
     private lateinit var photoUri: Uri
     private var currentPhotoPath: String? = null
 
+    private val imageUtils: ImageUtils by lazy {
+        ImageUtils(requireContext())
+    }
     private val permissionArray =
         arrayOf(
             Manifest.permission.CAMERA,
@@ -70,15 +73,15 @@ class RecipeMakingFragment : Fragment() {
         }
 
     private fun takePicture() {
-        val photoFile: File = ImageUtils.createImageFile(requireContext())
-        photoUri = ImageUtils.getUriForFile(requireContext(), photoFile)
+        val photoFile: File = imageUtils.createImageFile()
+        photoUri = imageUtils.getUriForFile(photoFile)
         currentPhotoPath = photoFile.absolutePath
         viewModel.changeCurrentImage(photoUri)
         takePictureLauncher.launch(photoUri)
     }
 
     private fun processImageUri(uri: Uri) {
-        currentPhotoPath = ImageUtils.processImageUri(requireContext(), uri)
+        currentPhotoPath = imageUtils.processImageUri(uri)
         if (currentPhotoPath != null) {
             viewModel.fetchImageUri(File(currentPhotoPath!!).name)
         } else {
@@ -140,7 +143,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun addImage() {
-        if (ImageUtils.isPermissionGranted(requireContext(), permissionArray)) {
+        if (imageUtils.isPermissionGranted(permissionArray)) {
             showImageSourceDialog()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
