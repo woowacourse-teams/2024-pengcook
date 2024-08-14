@@ -25,10 +25,10 @@ class RecipeRepositoryTest {
 
     @Test
     @DisplayName("요청한 페이지에 해당하는 레시피 id 목록을 반환한다.")
-    void findRecipeIds() {
+    void findRecipeIdsByCategoryAndKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeIds(pageable);
+        List<Long> recipeIds = repository.findRecipeIdsByCategoryAndKeyword(pageable, null, null, null);
 
         assertThat(recipeIds).containsExactly(15L, 14L, 13L);
     }

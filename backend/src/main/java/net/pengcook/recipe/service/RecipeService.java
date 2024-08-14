@@ -43,10 +43,16 @@ public class RecipeService {
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
     private final S3ClientService s3ClientService;
+    private final RecipeStepService recipeStepService;
 
     public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
-        List<Long> recipeIds = recipeRepository.findRecipeIds(pageable);
+        List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
+                pageable,
+                pageRecipeRequest.category(),
+                pageRecipeRequest.keyword(),
+                pageRecipeRequest.userId()
+        );
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
         return convertToMainRecipeResponses(recipeDataResponses);
@@ -67,6 +73,7 @@ public class RecipeService {
         Recipe savedRecipe = recipeRepository.save(recipe);
         categoryService.saveCategories(savedRecipe, recipeRequest.categories());
         ingredientService.register(recipeRequest.ingredients(), savedRecipe);
+        recipeStepService.saveRecipeSteps(savedRecipe.getId(), recipeRequest.recipeSteps());
 
         return new RecipeResponse(savedRecipe);
     }
