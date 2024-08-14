@@ -130,7 +130,7 @@ class RecipeLikeServiceTest {
     }
 
     @Test
-    @DisplayName("레시피에 해당하는 모든 좋아요를 삭제한다.")
+    @DisplayName("해당 레시피의 모든 좋아요를 삭제한다.")
     void deleteLikesByRecipe() {
         long recipeId = 1L;
         long expectedLikeCount = likeRepository.count() - 2;
@@ -142,7 +142,7 @@ class RecipeLikeServiceTest {
     }
 
     @Test
-    @DisplayName("유저 아이디에 해당하는 모든 좋아요를 삭제한다.")
+    @DisplayName("해당 사용자의 모든 좋아요를 삭제한다.")
     void deleteLikesByUser() {
         long userId = 1L;
         long actualLikeCount = likeRepository.count() - 1;
