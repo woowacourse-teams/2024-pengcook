@@ -128,4 +128,28 @@ class RecipeLikeServiceTest {
         assertThatThrownBy(() -> recipeLikeService.addLike(userInfo, recipeId))
                 .isInstanceOf(RecipeNotFoundException.class);
     }
+
+    @Test
+    @DisplayName("레시피에 해당하는 모든 좋아요를 삭제한다.")
+    void deleteLikesByRecipe() {
+        long recipeId = 1L;
+        long expectedLikeCount = likeRepository.count() - 2;
+
+        recipeLikeService.deleteLikesByRecipe(recipeId);
+        long actualLikeCount = likeRepository.count();
+
+        assertThat(actualLikeCount).isEqualTo(expectedLikeCount);
+    }
+
+    @Test
+    @DisplayName("유저 아이디에 해당하는 모든 좋아요를 삭제한다.")
+    void deleteLikesByUser() {
+        long userId = 1L;
+        long actualLikeCount = likeRepository.count() - 1;
+
+        recipeLikeService.deleteLikesByUser(userId);
+        long expectedLikeCount = likeRepository.count();
+
+        assertThat(actualLikeCount).isEqualTo(expectedLikeCount);
+    }
 }
