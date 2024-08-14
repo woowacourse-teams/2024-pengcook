@@ -292,4 +292,36 @@ class RecipeControllerTest extends RestDocsSetting {
                 .body("[1].author.authorId", is(1))
                 .body("[2].author.authorId", is(1));
     }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("레시피를 삭제한다.")
+    void deleteRecipe() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피를 삭제합니다.",
+                        "레시피 삭제 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 아이디")
+                        )))
+                .when()
+                .delete("/recipes/{recipeId}", 1L)
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("본인이 작성하지 않은 레시피 삭제를 시도하면 예외가 발생한다.")
+    void deleteRecipeWhenNonAuthor() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 아이디")
+                        )))
+                .when()
+                .delete("/recipes/{recipeId}", 1L)
+                .then().log().all()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
 }

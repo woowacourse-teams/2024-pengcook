@@ -17,6 +17,8 @@ import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.exception.InvalidParameterException;
+import net.pengcook.recipe.exception.UnauthorizedException;
+import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,8 +33,11 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(value = "/data/recipe.sql")
 class RecipeServiceTest {
 
+    public static final int INITIAL_RECIPE_COUNT = 15;
     @Autowired
     private RecipeService recipeService;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     static Stream<Arguments> provideParameters() {
         return Stream.of(
@@ -125,5 +130,27 @@ class RecipeServiceTest {
                 () -> assertThat(actual.size()).isEqualTo(pageSize),
                 () -> assertThat(actual).containsAll(expected)
         );
+    }
+
+    @Test
+    @DisplayName("레시피를 삭제한다.")
+    void deleteRecipe() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        recipeService.deleteRecipe(userInfo, 1L);
+
+        assertAll(
+                () -> assertThat(recipeRepository.findById(1L)).isEmpty(),
+                () -> assertThat(recipeRepository.count()).isEqualTo(INITIAL_RECIPE_COUNT - 1)
+        );
+    }
+
+    @Test
+    @DisplayName("본인이 작성하지 않은 레시피 삭제를 시도하면 예외가 발생한다.")
+    void deleteRecipeWhenNonAuthor() {
+        UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
+
+        assertThatThrownBy(() -> recipeService.deleteRecipe(userInfo, 1L))
+                .isInstanceOf(UnauthorizedException.class);
     }
 }
