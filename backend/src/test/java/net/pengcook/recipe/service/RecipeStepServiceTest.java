@@ -104,4 +104,12 @@ class RecipeStepServiceTest {
         assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(2L, recipeStepRequests))
                 .isInstanceOf(InvalidParameterException.class);
     }
+
+    @Test
+    @DisplayName("레시피에 해당되는 레시피 스텝을 삭제한다.")
+    void deleteRecipeStepsByRecipe() {
+        recipeStepService.deleteRecipeStepsByRecipe(1L);
+
+        assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT - 3);
+    }
 }
