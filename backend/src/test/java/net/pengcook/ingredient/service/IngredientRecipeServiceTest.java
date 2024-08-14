@@ -7,7 +7,6 @@ import net.pengcook.ingredient.domain.IngredientRecipe;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.repository.IngredientRecipeRepository;
 import net.pengcook.ingredient.repository.IngredientSubstitutionRepository;
-import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,11 +39,10 @@ class IngredientRecipeServiceTest {
     @Test
     @DisplayName("레시피에 종속된 ingredientRecipe를 제거한다.")
     void deleteIngredientRecipe() {
-        Recipe recipe = recipeRepository.findById(1L).get();
         int initialSize = ingredientRecipeRepository.findAll().size();
-        int targetSize = extractIngredientRecipeSize(recipe);
+        int targetSize = extractIngredientRecipeSize(1L);
 
-        ingredientRecipeService.deleteIngredientRecipe(recipe);
+        ingredientRecipeService.deleteIngredientRecipe(1L);
 
         int expectedSize = ingredientRecipeRepository.findAll().size();
         assertThat(expectedSize).isEqualTo(initialSize - targetSize);
@@ -53,26 +51,25 @@ class IngredientRecipeServiceTest {
     @Test
     @DisplayName("레시피에 종속된 ingredientSubstitution을 제거한다.")
     void deleteIngredientRecipeWithSubstitution() {
-        Recipe recipe = recipeRepository.findById(1L).get();
         int initialSize = ingredientSubstitutionRepository.findAll().size();
-        int targetSize = extractIngredientSubstitutionSize(recipe);
+        int targetSize = extractIngredientSubstitutionSize(1L);
 
-        ingredientRecipeService.deleteIngredientRecipe(recipe);
+        ingredientRecipeService.deleteIngredientRecipe(1L);
 
         int expectedSize = ingredientSubstitutionRepository.findAll().size();
         assertThat(expectedSize).isEqualTo(initialSize - targetSize);
     }
 
-    private int extractIngredientRecipeSize(Recipe recipe) {
-        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipe(recipe);
+    private int extractIngredientRecipeSize(long recipeId) {
+        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipeId(recipeId);
         return ingredientRecipes.stream()
                 .map((ingredientRecipe -> ingredientRecipe.getIngredient().getName()))
                 .toList()
                 .size();
     }
 
-    private int extractIngredientSubstitutionSize(Recipe recipe) {
-        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipe(recipe);
+    private int extractIngredientSubstitutionSize(long recipeId) {
+        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipeId(recipeId);
         return ingredientRecipes.stream()
                 .filter(ingredientRecipe -> ingredientRecipe.getRequirement() == Requirement.ALTERNATIVE)
                 .mapToInt(
