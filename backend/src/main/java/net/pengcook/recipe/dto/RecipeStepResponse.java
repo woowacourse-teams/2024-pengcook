@@ -9,7 +9,8 @@ public record RecipeStepResponse(
         String image,
         String description,
         int sequence,
-        LocalTime cookingTime) {
+        LocalTime cookingTime
+) {
 
     public RecipeStepResponse(RecipeStep recipeStep) {
         this(

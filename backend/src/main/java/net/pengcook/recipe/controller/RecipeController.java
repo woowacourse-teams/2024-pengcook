@@ -11,7 +11,6 @@ import net.pengcook.recipe.dto.RecipeOfCategoryRequest;
 import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
-import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.recipe.service.RecipeStepService;
@@ -61,19 +60,5 @@ public class RecipeController {
     @GetMapping("/{recipeId}/steps")
     public List<RecipeStepResponse> readRecipeSteps(@PathVariable long recipeId) {
         return recipeStepService.readRecipeSteps(recipeId);
-    }
-
-    @GetMapping("/{recipeId}/steps/{sequence}")
-    public RecipeStepResponse readRecipeStep(@PathVariable long recipeId, @PathVariable long sequence) {
-        return recipeStepService.readRecipeStep(recipeId, sequence);
-    }
-
-    @PostMapping("/{recipeId}/steps")
-    @ResponseStatus(HttpStatus.CREATED)
-    public RecipeStepResponse createRecipeStep(
-            @PathVariable long recipeId,
-            @RequestBody @Valid RecipeStepRequest recipeStepRequest
-    ) {
-        return recipeStepService.createRecipeStep(recipeId, recipeStepRequest);
     }
 }
