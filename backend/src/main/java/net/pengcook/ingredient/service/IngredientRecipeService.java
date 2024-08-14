@@ -21,8 +21,8 @@ public class IngredientRecipeService {
         return ingredientRecipeRepository.save(ingredientRecipe);
     }
 
-    public void deleteIngredientRecipe(Recipe recipe) {
-        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipe(recipe);
+    public void deleteIngredientRecipe(long recipeId) {
+        List<IngredientRecipe> ingredientRecipes = ingredientRecipeRepository.findAllByRecipeId(recipeId);
         for (IngredientRecipe ingredientRecipe : ingredientRecipes) {
             ingredientSubstitutionService.delete(ingredientRecipe);
             ingredientRecipeRepository.delete(ingredientRecipe);
