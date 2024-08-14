@@ -14,6 +14,7 @@ public record RecipeRequest(
         @Min(0) @Max(10) int difficulty,
         @NotBlank String description,
         @NotEmpty List<String> categories,
-        @NotEmpty List<IngredientCreateRequest> ingredients
+        @NotEmpty List<IngredientCreateRequest> ingredients,
+        List<RecipeStepRequest> recipeSteps
 ) {
 }
