@@ -86,4 +86,20 @@ class CommentServiceTest {
                 .isInstanceOf(UnauthorizedDeletionException.class)
                 .hasMessage("삭제 권한이 없습니다.");
     }
+
+    @Test
+    @DisplayName("특정 레시피의 댓글들을 삭제한다.")
+    void deleteCommentsByRecipe() {
+        commentService.deleteCommentsByRecipe(1L);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
+    }
+
+    @Test
+    @DisplayName("특정 사용자의 댓글들을 삭제한다.")
+    void deleteCommentsByUser() {
+        commentService.deleteCommentsByUser(2L);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
+    }
 }

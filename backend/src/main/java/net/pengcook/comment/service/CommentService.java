@@ -53,6 +53,14 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    public void deleteCommentsByRecipe(long recipeId) {
+        commentRepository.deleteByRecipeId(recipeId);
+    }
+
+    public void deleteCommentsByUser(long userId) {
+        commentRepository.deleteByUserId(userId);
+    }
+
     private boolean isCommentOwner(UserInfo userInfo, Comment comment) {
         User owner = comment.getUser();
         long userId = userInfo.getId();
