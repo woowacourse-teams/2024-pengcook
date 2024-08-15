@@ -32,3 +32,15 @@ management:
     web:
       exposure:
         include: prometheus
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook:
+          Logbook: TRACE
+logbook:
+  predicate:
+    exclude:
+      - path: /actuator/**
+      - path: /swagger-ui/**
