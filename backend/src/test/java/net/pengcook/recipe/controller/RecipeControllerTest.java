@@ -121,6 +121,44 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @Sql({"/data/recipe.sql", "/data/like.sql"})
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("내가 좋아요한 레시피 개요 목록을 조회한다.")
+    void readLikeRecipes() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "내가 좋아요한 레시피 목록을 조회합니다.",
+                        "좋아요한 레시피 조회 API",
+                        responseFields(
+                                fieldWithPath("[]").description("레시피 목록"),
+                                fieldWithPath("[].recipeId").description("레시피 아이디"),
+                                fieldWithPath("[].title").description("레시피 제목"),
+                                fieldWithPath("[].author").description("작성자 정보"),
+                                fieldWithPath("[].author.authorId").description("작성자 아이디"),
+                                fieldWithPath("[].author.authorName").description("작성자 이름"),
+                                fieldWithPath("[].author.authorImage").description("작성자 이미지"),
+                                fieldWithPath("[].cookingTime").description("조리 시간"),
+                                fieldWithPath("[].thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("[].difficulty").description("난이도"),
+                                fieldWithPath("[].likeCount").description("좋아요 수"),
+                                fieldWithPath("[].commentCount").description("댓글 수"),
+                                fieldWithPath("[].description").description("레시피 설명"),
+                                fieldWithPath("[].createdAt").description("레시피 생성일시"),
+                                fieldWithPath("[].category").description("카테고리 목록"),
+                                fieldWithPath("[].category[].categoryId").description("카테고리 아이디"),
+                                fieldWithPath("[].category[].categoryName").description("카테고리 이름"),
+                                fieldWithPath("[].ingredient").description("재료 목록"),
+                                fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
+                                fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
+                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부")
+                        )))
+                .when()
+                .get("/recipes/likes")
+                .then().log().all()
+                .body("size()", is(1));
+    }
+
+    @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("새로운 레시피를 생성한다.")
     void createRecipe() {

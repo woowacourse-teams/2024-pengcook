@@ -72,6 +72,20 @@ class RecipeServiceTest {
     }
 
     @Test
+    @Sql({"/data/recipe.sql", "/data/like.sql"})
+    @DisplayName("내가 좋아하는 모든 게시글 개요를 조회한다.")
+    void readLikeRecipes() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        List<MainRecipeResponse> actual = recipeService.readLikeRecipes(userInfo);
+
+        assertAll(
+                () -> assertThat(actual.size()).isOne(),
+                () -> assertThat(actual.getFirst().author().authorId()).isEqualTo(userInfo.getId())
+        );
+    }
+
+    @Test
     @DisplayName("새로운 레시피를 생성한다.")
     void createRecipe() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");

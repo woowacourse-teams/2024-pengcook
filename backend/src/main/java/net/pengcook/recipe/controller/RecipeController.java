@@ -39,6 +39,11 @@ public class RecipeController {
         return recipeService.readRecipes(userInfo, pageRecipeRequest);
     }
 
+    @GetMapping("/likes")
+    public List<MainRecipeResponse> readLikeRecipes(@LoginUser UserInfo userInfo) {
+        return recipeService.readLikeRecipes(userInfo);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody @Valid RecipeRequest recipeRequest) {
