@@ -17,10 +17,3 @@ springdoc:
   enable-default-api-docs: false
   api-docs:
     path: /openapi3.yaml
-
-logging:
-  level:
-    org:
-      zalando:
-        logbook:
-          Logbook: TRACE
