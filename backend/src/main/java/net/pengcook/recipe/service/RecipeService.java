@@ -14,6 +14,7 @@ import net.pengcook.image.service.S3ClientService;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.like.service.RecipeLikeService;
+import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
@@ -39,6 +40,7 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final RecipeLikeRepository likeRepository;
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
@@ -59,6 +61,13 @@ public class RecipeService {
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
         return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+    }
+
+    public List<MainRecipeResponse> readLikeRecipes(UserInfo userInfo) {
+        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        System.out.println("likeRecipeIds = " + likeRecipeIds);
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
+        return convertToMainRecipeResponses(recipeDataResponses);
     }
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {

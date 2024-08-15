@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
-@Sql(value = "/data/like.sql")
+@Sql({"/data/recipe.sql", "/data/like.sql"})
 @WithLoginUserTest
 class RecipeLikeControllerTest extends RestDocsSetting {
 
@@ -37,7 +37,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                         responseFields(
                                 fieldWithPath("isLike").description("나의 좋아요 여부")
                         )))
-                .when().get("/likes/{recipeId}", 1L)
+                .when().get("/likes/{recipeId}", 2L)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("isLike", is(true));
@@ -55,7 +55,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("isLike").description("나의 좋아요 여부")
                         )))
-                .body(Map.of("recipeId", 2L, "isLike", true))
+                .body(Map.of("recipeId", 3L, "isLike", true))
                 .contentType(ContentType.JSON)
                 .when().post("/likes")
                 .then().log().all()
@@ -74,7 +74,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                                 fieldWithPath("recipeId").description("레시피 아이디"),
                                 fieldWithPath("isLike").description("좋아요 여부")
                         )))
-                .body(Map.of("recipeId", 1L, "isLike", false))
+                .body(Map.of("recipeId", 2L, "isLike", false))
                 .contentType(ContentType.JSON)
                 .when().post("/likes")
                 .then().log().all()
