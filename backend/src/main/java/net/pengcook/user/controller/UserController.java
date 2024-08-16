@@ -2,16 +2,19 @@ package net.pengcook.user.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportReasonResponse;
+import net.pengcook.user.dto.ReportReasonResponses;
+import net.pengcook.user.dto.ReportRequest;
+import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserReportRequest;
-import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -62,11 +65,16 @@ public class UserController {
 
     @PostMapping("/user/report")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReportResponse report(
+    public ReportResponse report(
             @LoginUser UserInfo userInfo,
-            @RequestBody UserReportRequest userReportRequest
+            @RequestBody @Valid ReportRequest reportRequest
     ) {
-        return userService.reportUser(userInfo.getId(), userReportRequest);
+        return userService.report(userInfo.getId(), reportRequest);
+    }
+
+    @GetMapping("/user/report/reason")
+    public List<ReportReasonResponse> getReportReasons() {
+        return ReportReasonResponses.REASONS;
     }
 
     @PostMapping("/user/block")

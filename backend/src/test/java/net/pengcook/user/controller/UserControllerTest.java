@@ -2,7 +2,9 @@ package net.pengcook.user.controller;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -14,7 +16,10 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.user.domain.Reason;
+import net.pengcook.user.domain.Type;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
@@ -257,14 +262,39 @@ class UserControllerTest extends RestDocsSetting {
                 .body("reportId", is(1))
                 .body("reporterId", is(9))
                 .body("reporteeId", is(1))
-                .body("reason", is("SPAM"))
-                .body("details", is("스팸 컨텐츠입니다."));
                 .body("reason", is(Reason.SPAM_CONTENT.name()))
                 .body("type", is(Type.RECIPE.name()))
                 .body("targetId", is(1))
                 .body("details", nullValue());
     }
 
+    @Test
+    @DisplayName("신고 사유 목록을 조회한다.")
+    void getReportReasons() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "신고 사유 목록을 조회합니다",
+                        "신고 사유 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("[]").description("신고 사유 목록"),
+                                fieldWithPath("[].reason").description("신고 사유 종류"),
+                                fieldWithPath("[].message").description("신고 사유 메시지")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when().get("/user/report/reason")
+                .then().log().all()
+                .statusCode(200)
+                .body("[0].reason", equalTo(Reason.INAPPROPRIATE_CONTENT.name()))
+                .body("[0].message", equalTo(Reason.INAPPROPRIATE_CONTENT.getMessage()))
+                .body("[1].reason", equalTo(Reason.SPAM_CONTENT.name()))
+                .body("[1].message", equalTo(Reason.SPAM_CONTENT.getMessage()))
+                .body("[2].reason", equalTo(Reason.ABUSIVE_LANGUAGE.name()))
+                .body("[2].message", equalTo(Reason.ABUSIVE_LANGUAGE.getMessage()))
+                .body("[3].reason", equalTo(Reason.COPYRIGHT_INFRINGEMENT.name()))
+                .body("[3].message", equalTo(Reason.COPYRIGHT_INFRINGEMENT.getMessage()))
+                .body("[4].reason", equalTo(Reason.OTHERS.name()))
+                .body("[4].message", equalTo(Reason.OTHERS.getMessage()));
     }
 
     @Test
@@ -319,7 +349,7 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(204);
 
         boolean exists = userRepository.existsByEmail("loki@pengcook.net");
-        
+
         assertThat(exists).isFalse();
     }
 }
