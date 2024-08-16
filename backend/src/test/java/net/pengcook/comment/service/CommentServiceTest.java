@@ -23,7 +23,7 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts = "/data/comment.sql")
 class CommentServiceTest {
 
-    private static final int INITIAL_COMMENT_COUNT = 3;
+    private static final int INITIAL_COMMENT_COUNT = 4;
 
     @Autowired
     private CommentService commentService;
@@ -38,7 +38,9 @@ class CommentServiceTest {
                 new CommentOfRecipeResponse(1L, 2L, "loki.jpg", "loki", LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                         "great", false),
                 new CommentOfRecipeResponse(2L, 1L, "ela.jpg", "ela", LocalDateTime.of(2024, 1, 2, 0, 0, 0),
-                        "thank you", true)
+                        "thank you", true),
+                new CommentOfRecipeResponse(4L, 3L, "ato.jpg", "ato", LocalDateTime.of(2024, 1, 3, 0, 0, 0),
+                        "haha", false)
         );
 
         List<CommentOfRecipeResponse> actual = commentService.readComments(1L, userInfo);
@@ -92,7 +94,7 @@ class CommentServiceTest {
     void deleteCommentsByRecipe() {
         commentService.deleteCommentsByRecipe(1L);
 
-        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 3);
     }
 
     @Test
