@@ -39,11 +39,24 @@ class RecipeServiceTest {
     @CsvSource(value = {"0,2,15", "1,2,13", "1,3,12"})
     @DisplayName("요청받은 페이지의 레시피 개요 목록을 조회한다.")
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
-        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(
-                pageNumber, pageSize, null, null, null);
-        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(pageRecipeRequest);
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
+        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
 
         assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
+    }
+
+    @Test
+    @DisplayName("레시피 개요 조회 시 조회자가 작성한 글인지 여부를 함께 응답한다.")
+    void readRecipesWithUserInfo() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 2, null, null, null);
+        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
+
+        assertAll(
+                () -> assertThat(mainRecipeResponses.getFirst().mine()).isEqualTo(false),
+                () -> assertThat(mainRecipeResponses.getLast().mine()).isEqualTo(true)
+        );
     }
 
     @Test
@@ -51,10 +64,10 @@ class RecipeServiceTest {
     void readRecipesWhenPageOffsetIsGreaterThanIntMaxValue() {
         int pageNumber = 1073741824;
         int pageSize = 2;
-        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(
-                pageNumber, pageSize, null, null, null);
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
 
-        assertThatThrownBy(() -> recipeService.readRecipes(pageRecipeRequest))
+        assertThatThrownBy(() -> recipeService.readRecipes(userInfo, pageRecipeRequest))
                 .isInstanceOf(InvalidParameterException.class);
     }
 

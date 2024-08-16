@@ -34,6 +34,7 @@ class RecipeControllerTest extends RestDocsSetting {
     private static final int INITIAL_RECIPE_COUNT = 15;
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("레시피 개요 목록을 조회한다.")
     void readRecipes() {
         RestAssured.given(spec).log().all()
@@ -68,7 +69,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].ingredient").description("재료 목록"),
                                 fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
                                 fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
-                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부")
+                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("[].mine").description("조회자 작성여부")
                         )))
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 3)
@@ -81,6 +83,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"-1", "invalid", " ", "1.2"})
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("레시피 조회 시 페이지 번호가 0 이상의 정수가 아니면 예외가 발생한다.")
     void readRecipesWhenInvalidPageNumber(String pageNumber) {
         RestAssured.given(spec).log().all()
@@ -100,6 +103,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"-1", "0", "invalid", " ", "1.2"})
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("레시피 조회 시 페이지 사이즈가 1 이상의 정수가 아니면 예외가 발생한다.")
     void readRecipesWhenInvalidPageSize(String pageSize) {
         RestAssured.given(spec).log().all()
@@ -248,6 +252,7 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("카테고리별 레시피 개요 목록을 조회한다.")
     void readRecipesOfCategory() {
         RestAssured.given(spec).log().all()
@@ -263,6 +268,7 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("키워드로 레시피 개요 목록을 조회한다.")
     void readRecipesOfKeyword() {
         RestAssured.given(spec).log().all()
@@ -278,6 +284,7 @@ class RecipeControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("사용자별 레시피 개요 목록을 조회한다.")
     void readRecipesOfUser() {
         RestAssured.given(spec).log().all()

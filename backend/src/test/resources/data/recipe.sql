@@ -21,6 +21,12 @@ ALTER TABLE ingredient_recipe ALTER COLUMN id RESTART;
 TRUNCATE TABLE recipe_step;
 ALTER TABLE recipe_step ALTER COLUMN id RESTART;
 
+TRUNCATE TABLE user_block;
+ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
+
+TRUNCATE TABLE user_report;
+ALTER TABLE user_report ALTER COLUMN id RESTART WITH 1;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 INSERT INTO users (email, username, nickname, image, region)
@@ -60,7 +66,7 @@ VALUES ('김치볶음밥', 1, '00:30:00', '김치볶음밥이미지.jpg', 3, 2, 
        ('초콜릿 케이크', 1, '01:20:00', '초콜릿케이크이미지.jpg', 5, 6, 0, '초콜릿 케이크 조리법', '2024-07-02 13:00:00'),
        ('베지터블 스프', 1, '00:50:00', '베지터블스프이미지.jpg', 3, 2, 0, '베지터블 스프 조리법', '2024-07-02 13:00:00'),
        ('카레라이스', 1, '00:30:00', '카레라이스이미지.jpg', 3, 2, 0, '카레라이스 조리법', '2024-07-02 13:00:00'),
-       ('새우볶음밥', 1, '00:25:00', '새우볶음밥이미지.jpg', 2, 3, 0, '새우볶음밥 조리법', '2024-07-02 13:00:00');
+       ('새우볶음밥', 2, '00:25:00', '새우볶음밥이미지.jpg', 2, 3, 0, '새우볶음밥 조리법', '2024-07-02 13:00:00');
 
 INSERT INTO category_recipe (category_id, recipe_id)
 VALUES (1, 2),  -- 김밥은 한식

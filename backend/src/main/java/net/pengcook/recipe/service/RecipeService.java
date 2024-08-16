@@ -49,7 +49,7 @@ public class RecipeService {
     private final CommentService commentService;
     private final RecipeLikeService recipeLikeService;
 
-    public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
+    public List<MainRecipeResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
         List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
                 pageable,
@@ -59,7 +59,7 @@ public class RecipeService {
         );
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
     }
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
@@ -96,19 +96,23 @@ public class RecipeService {
         });
     }
 
-    private List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
+    private List<MainRecipeResponse> convertToMainRecipeResponses(
+            UserInfo userInfo,
+            List<RecipeDataResponse> recipeDataResponses
+    ) {
         Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
                 .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
                 .values();
 
         return groupedRecipeData.stream()
-                .map(this::getMainRecipeResponse)
+                .map(data -> getMainRecipeResponse(userInfo, data))
                 .sorted(Comparator.comparing(MainRecipeResponse::recipeId).reversed())
                 .collect(Collectors.toList());
     }
 
-    private MainRecipeResponse getMainRecipeResponse(List<RecipeDataResponse> groupedResponses) {
+    private MainRecipeResponse getMainRecipeResponse(UserInfo userInfo, List<RecipeDataResponse> groupedResponses) {
         RecipeDataResponse firstResponse = groupedResponses.getFirst();
+        boolean mine = firstResponse.authorId() == userInfo.getId();
 
         return new MainRecipeResponse(
                 firstResponse.recipeId(),
@@ -122,7 +126,8 @@ public class RecipeService {
                 firstResponse.description(),
                 firstResponse.createdAt(),
                 getCategoryResponses(groupedResponses),
-                getIngredientResponses(groupedResponses)
+                getIngredientResponses(groupedResponses),
+                mine
         );
     }
 
