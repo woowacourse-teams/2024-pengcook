@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
     List<UserBlock> findAllByBlockerId(long id);
 
-    void deleteByBlockeeId(long userId);
+    void deleteByBlockeeId(long blockeeId);
 
-    void deleteByBlockerId(long userId);
+    void deleteByBlockerId(long blockerId);
 }
