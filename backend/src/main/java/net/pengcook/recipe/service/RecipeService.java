@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.service.CategoryService;
 import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.S3ClientService;
@@ -22,8 +21,6 @@ import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
-import net.pengcook.recipe.dto.RecipeOfCategoryRequest;
-import net.pengcook.recipe.dto.RecipeOfUserRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
@@ -42,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
-    private final CategoryRecipeRepository categoryRecipeRepository;
     private final UserRepository userRepository;
 
     private final CategoryService categoryService;
@@ -84,24 +80,6 @@ public class RecipeService {
         recipeStepService.saveRecipeSteps(savedRecipe.getId(), recipeRequest.recipeSteps());
 
         return new RecipeResponse(savedRecipe);
-    }
-
-    public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
-        String categoryName = request.category();
-        Pageable pageable = getValidatedPageable(request.pageNumber(), request.pageSize());
-        List<Long> recipeIds = categoryRecipeRepository.findRecipeIdsByCategoryName(categoryName, pageable);
-
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
-    }
-
-    public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
-        long userId = request.userId();
-        Pageable pageable = getValidatedPageable(request.pageNumber(), request.pageSize());
-        List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
-
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
     }
 
     public void deleteRecipe(UserInfo userInfo, long recipeId) {
