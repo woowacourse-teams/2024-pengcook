@@ -209,7 +209,7 @@ class UserServiceTest {
 
         userService.deleteUser(userInfo);
         boolean deletedUserRecipes = recipeRepository.findAll().stream()
-                .noneMatch(recipe -> recipe.getAuthor().getId() == userInfo.getId());
+                .noneMatch(recipe -> recipe.getAuthor().isSameUser(userInfo.getId()));
 
         assertThat(deletedUserRecipes).isTrue();
     }
@@ -221,7 +221,7 @@ class UserServiceTest {
 
         userService.deleteUser(userInfo);
         boolean deletedUserComments = commentRepository.findAll().stream()
-                .noneMatch(comment -> comment.getUser().getId() == userInfo.getId());
+                .noneMatch(comment -> comment.getUser().isSameUser(userInfo.getId()));
 
         assertThat(deletedUserComments).isTrue();
     }
@@ -233,7 +233,7 @@ class UserServiceTest {
 
         userService.deleteUser(userInfo);
         boolean deletedUserLikes = recipeLikeRepository.findAll().stream()
-                .noneMatch(like -> like.getUser().getId() == userInfo.getId());
+                .noneMatch(like -> like.getUser().isSameUser(userInfo.getId()));
 
         assertThat(deletedUserLikes).isTrue();
     }
