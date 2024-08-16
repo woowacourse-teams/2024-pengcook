@@ -44,3 +44,4 @@ logbook:
     exclude:
       - path: /actuator/**
       - path: /swagger-ui/**
+      - path: /openapi3.yaml/**
