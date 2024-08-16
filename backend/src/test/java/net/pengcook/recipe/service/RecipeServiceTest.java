@@ -54,8 +54,8 @@ class RecipeServiceTest {
         List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
 
         assertAll(
-                () -> assertThat(mainRecipeResponses.getFirst().mine()).isEqualTo(false),
-                () -> assertThat(mainRecipeResponses.getLast().mine()).isEqualTo(true)
+                () -> assertThat(mainRecipeResponses.getFirst().mine()).isFalse(),
+                () -> assertThat(mainRecipeResponses.getLast().mine()).isTrue()
         );
     }
 
