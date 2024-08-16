@@ -63,7 +63,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             SELECT r.id
             FROM Recipe r
             WHERE r.author.id = :userId
-            ORDER BY r.id DESC
             """)
     List<Long> findRecipeIdsByUserId(long userId);
 
