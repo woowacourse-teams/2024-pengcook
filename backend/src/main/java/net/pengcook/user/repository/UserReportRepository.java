@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserReportRepository extends JpaRepository<UserReport, Long> {
 
-    void deleteByReporteeId(long userId);
+    void deleteByReporteeId(long reporteeId);
 
-    void deleteByReporterId(long userId);
+    void deleteByReporterId(long reporterId);
 }
