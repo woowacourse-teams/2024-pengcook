@@ -259,7 +259,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("사용자를 삭제하면 사용자와 관련있는 차단목록을 지운다.")
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 신고목록을 지운다.")
     void deleteUserWithUserReports() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
 
