@@ -18,6 +18,7 @@ import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.UserNotFoundException;
+import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,8 @@ class UserServiceTest {
     CommentRepository commentRepository;
     @Autowired
     RecipeLikeRepository recipeLikeRepository;
+    @Autowired
+    UserBlockRepository userBlockRepository;
     @Autowired
     UserReportRepository userReportRepository;
     @Autowired
@@ -236,5 +239,39 @@ class UserServiceTest {
                 .noneMatch(like -> like.getUser().isSameUser(userInfo.getId()));
 
         assertThat(deletedUserLikes).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 차단목록을 지운다.")
+    void deleteUserWithBlocks() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserBlockee = userBlockRepository.findAll().stream()
+                .noneMatch(userBlock -> userBlock.getBlockee().isSameUser(userInfo.getId()));
+        boolean deletedUserBlocker = userBlockRepository.findAll().stream()
+                .noneMatch(userBlock -> userBlock.getBlocker().isSameUser(userInfo.getId()));
+
+        assertAll(
+                () -> assertThat(deletedUserBlockee).isTrue(),
+                () -> assertThat(deletedUserBlocker).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 차단목록을 지운다.")
+    void deleteUserWithUserReports() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserReportee = userReportRepository.findAll().stream()
+                .noneMatch(userReport -> userReport.getReportee().isSameUser(userInfo.getId()));
+        boolean deletedUserReporter = userReportRepository.findAll().stream()
+                .noneMatch(userReport -> userReport.getReporter().isSameUser(userInfo.getId()));
+
+        assertAll(
+                () -> assertThat(deletedUserReportee).isTrue(),
+                () -> assertThat(deletedUserReporter).isTrue()
+        );
     }
 }
