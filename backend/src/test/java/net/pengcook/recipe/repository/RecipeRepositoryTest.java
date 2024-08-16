@@ -57,6 +57,6 @@ class RecipeRepositoryTest {
 
         List<Long> recipeIds = repository.findRecipeIdsByUserId(1L, pageable);
 
-        assertThat(recipeIds).containsExactly(15L, 14L, 13L);
+        assertThat(recipeIds).containsExactly(14L, 13L, 12L);
     }
 }

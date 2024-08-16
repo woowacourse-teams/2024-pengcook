@@ -16,6 +16,7 @@ public record MainRecipeResponse(
         String description,
         LocalDateTime createdAt,
         List<CategoryResponse> category,
-        List<IngredientResponse> ingredient
+        List<IngredientResponse> ingredient,
+        boolean mine
 ) {
 }

@@ -32,8 +32,11 @@ public class RecipeController {
     private final RecipeStepService recipeStepService;
 
     @GetMapping
-    public List<MainRecipeResponse> readRecipes(@ModelAttribute @Valid PageRecipeRequest pageRecipeRequest) {
-        return recipeService.readRecipes(pageRecipeRequest);
+    public List<MainRecipeResponse> readRecipes(
+            @LoginUser UserInfo userInfo,
+            @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
+    ) {
+        return recipeService.readRecipes(userInfo, pageRecipeRequest);
     }
 
     @PostMapping
