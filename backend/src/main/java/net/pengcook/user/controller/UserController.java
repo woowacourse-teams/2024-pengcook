@@ -15,6 +15,7 @@ import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,12 @@ public class UserController {
             @RequestBody @Valid UpdateProfileRequest updateProfileRequest
     ) {
         return userService.updateProfile(userInfo.getId(), updateProfileRequest);
+    }
+
+    @DeleteMapping("/user/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@LoginUser UserInfo userInfo) {
+        userService.deleteUser(userInfo);
     }
 
     @GetMapping("/user/username/check")

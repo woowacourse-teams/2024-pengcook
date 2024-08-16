@@ -19,13 +19,18 @@ import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserReportRequest;
+import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
 @Sql("/data/users.sql")
 class UserControllerTest extends RestDocsSetting {
+
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
@@ -285,5 +290,24 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(201)
                 .body("blocker.id", is(1))
                 .body("blockee.id", is(2));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자를 삭제한다.")
+    void deleteUser() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 삭제합니다.",
+                        "사용자 삭제 API"
+                ))
+                .contentType(ContentType.JSON)
+                .when().delete("/user/me")
+                .then().log().all()
+                .statusCode(204);
+
+        boolean exists = userRepository.existsByEmail("loki@pengcook.net");
+        
+        assertThat(exists).isFalse();
     }
 }

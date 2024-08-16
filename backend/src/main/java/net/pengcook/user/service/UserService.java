@@ -1,9 +1,14 @@
 package net.pengcook.user.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
@@ -27,8 +32,12 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
 
+    private final RecipeService recipeService;
+
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
+    private final CommentRepository commentRepository;
+    private final RecipeLikeRepository recipeLikeRepository;
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
 
@@ -90,5 +99,24 @@ public class UserService {
         return userBlockRepository.findAllByBlockerId(blockerId).stream()
                 .map(UserBlock::getBlockee)
                 .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockedUserGroup::new));
+    }
+
+    @Transactional
+    public void deleteUser(UserInfo userInfo) {
+        User user = userRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+
+        commentRepository.deleteByUserId(userInfo.getId());
+        recipeLikeRepository.deleteByUserId(userInfo.getId());
+        userBlockRepository.deleteByBlockerId(userInfo.getId());
+        userBlockRepository.deleteByBlockeeId(userInfo.getId());
+        userReportRepository.deleteByReporterId(userInfo.getId());
+        userReportRepository.deleteByReporteeId(userInfo.getId());
+        List<Long> userRecipes = recipeRepository.findRecipeIdsByUserId(userInfo.getId());
+        for (Long recipeId : userRecipes) {
+            recipeService.deleteRecipe(userInfo, recipeId);
+        }
+
+        userRepository.delete(user);
     }
 }
