@@ -21,7 +21,11 @@ ALTER TABLE ingredient_recipe ALTER COLUMN id RESTART;
 TRUNCATE TABLE recipe_step;
 ALTER TABLE recipe_step ALTER COLUMN id RESTART;
 
-ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+TRUNCATE TABLE comment;
+ALTER TABLE comment ALTER COLUMN id RESTART;
+
+TRUNCATE TABLE recipe_like;
+ALTER TABLE recipe_like ALTER COLUMN id RESTART;
 
 TRUNCATE TABLE user_block;
 ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
@@ -152,10 +156,37 @@ VALUES (1, 1, 'REQUIRED'),  -- 김치볶음밥
        (17, 13, 'REQUIRED'), -- 베지터블 스프
        (18, 14, 'OPTIONAL'); -- 카레라이스
 
+INSERT INTO comment (user_id, recipe_id, message, created_at)
+VALUES ('2', '1', 'great', '2024-01-01'),
+       ('1', '1', 'thank you','2024-01-02'),
+       ('1', '3', 'thank you','2024-01-02'),
+       ('1', '4', 'thank you too','2024-01-02'),
+       ('1', '5', 'thank you a lot','2024-01-02'),
+       ('2', '2', 'good', '2024-05-05');
+
+INSERT INTO recipe_like (recipe_id, user_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (2, 3),
+       (2, 4),
+       (2, 5),
+       (2, 6),
+       (2, 7),
+       (4, 4),
+       (4, 1),
+       (4, 3),
+       (4, 6),
+       (4, 5),
+       (5, 1);
+
 INSERT INTO recipe_step (recipe_id, image, description, sequence)
 VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
        (1, '레시피1 설명3 이미지', '레시피1 설명3', 3),
        (1, '레시피1 설명2 이미지', '레시피1 설명2', 2);
+
 INSERT INTO user_block (blocker_id, blockee_id)
 VALUES (1, 2),
        (1, 3)
