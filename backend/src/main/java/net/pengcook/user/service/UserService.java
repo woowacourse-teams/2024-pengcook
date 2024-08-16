@@ -14,11 +14,11 @@ import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportRequest;
+import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserReportRequest;
-import net.pengcook.user.dto.UserReportResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.NotFoundException;
@@ -78,20 +78,22 @@ public class UserService {
                 new UserResponse(userBlock.getBlockee()));
     }
 
-    public UserReportResponse reportUser(long reporterId, UserReportRequest userReportRequest) {
+    public ReportResponse report(long reporterId, ReportRequest reportRequest) {
         User reporter = userRepository.findById(reporterId)
                 .orElseThrow(() -> new NotFoundException("신고자 정보를 조회할 수 없습니다."));
-        User reportee = userRepository.findById(userReportRequest.reporteeId())
+        User reportee = userRepository.findById(reportRequest.reporteeId())
                 .orElseThrow(() -> new NotFoundException("피신고자 정보를 조회할 수 없습니다."));
         UserReport userReport = new UserReport(
                 reporter,
                 reportee,
-                userReportRequest.reason(),
-                userReportRequest.details()
+                reportRequest.reason(),
+                reportRequest.type(),
+                reportRequest.targetId(),
+                reportRequest.details()
         );
 
         UserReport savedUserReport = userReportRepository.save(userReport);
-        return new UserReportResponse(savedUserReport);
+        return new ReportResponse(savedUserReport);
     }
 
     public BlockedUserGroup getBlockedUserGroup(long blockerId) {
