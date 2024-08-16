@@ -22,7 +22,7 @@ public record CommentOfRecipeResponse(
                 comment.getUser().getUsername(),
                 comment.getCreatedAt(),
                 comment.getMessage(),
-                comment.getUser().getId() == userInfo.getId()
+                userInfo.isSameUser(comment.getUser().getId())
         );
     }
 }
