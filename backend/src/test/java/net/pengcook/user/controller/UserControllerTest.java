@@ -217,29 +217,35 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser
-    @DisplayName("사용자를 신고한다.")
+    @DisplayName("레시피 또는 유저 또는 댓글을 신고한다.")
     void report() {
-        UserReportRequest spamReportRequest = new UserReportRequest(
+        ReportRequest spamReportRequest = new ReportRequest(
                 1,
-                "SPAM",
-                "스팸 컨텐츠입니다."
+                Reason.SPAM_CONTENT,
+                Type.RECIPE,
+                1L,
+                null
         );
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "사용자를 신고합니다.",
-                        "사용자 신고 API",
+                        "레시피 또는 유저 또는 댓글을 신고한다.",
+                        "신고 API",
                         requestFields(
                                 fieldWithPath("reporteeId").description("피신고자 id"),
-                                fieldWithPath("reason").description("사유"),
-                                fieldWithPath("details").description("내용")
+                                fieldWithPath("reason").description("신고 사유"),
+                                fieldWithPath("type").description("신고 대상 종류"),
+                                fieldWithPath("targetId").description("신고 대상 id"),
+                                fieldWithPath("details").description("상세 내용")
                         ),
                         responseFields(
                                 fieldWithPath("reportId").description("신고 id"),
                                 fieldWithPath("reporterId").description("신고자 id"),
                                 fieldWithPath("reporteeId").description("피신고자 id"),
-                                fieldWithPath("reason").description("사유"),
-                                fieldWithPath("details").description("내용"),
+                                fieldWithPath("reason").description("신고 사유"),
+                                fieldWithPath("type").description("신고 대상 종류"),
+                                fieldWithPath("targetId").description("신고 대상 id"),
+                                fieldWithPath("details").description("상세 내용"),
                                 fieldWithPath("createdAt").description("신고 일자")
                         )))
                 .contentType(ContentType.JSON)
@@ -253,6 +259,12 @@ class UserControllerTest extends RestDocsSetting {
                 .body("reporteeId", is(1))
                 .body("reason", is("SPAM"))
                 .body("details", is("스팸 컨텐츠입니다."));
+                .body("reason", is(Reason.SPAM_CONTENT.name()))
+                .body("type", is(Type.RECIPE.name()))
+                .body("targetId", is(1))
+                .body("details", nullValue());
+    }
+
     }
 
     @Test

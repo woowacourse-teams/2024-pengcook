@@ -9,12 +9,14 @@ import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
+import net.pengcook.user.domain.Reason;
+import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.UserNotFoundException;
@@ -127,20 +129,24 @@ class UserServiceTest {
 
     @Test
     @DisplayName("신고 테이블에 신고 내역을 저장한다.")
-    void reportUser() {
-        UserReportRequest spamReportRequest = new UserReportRequest(
-                2,
-                "SPAM",
-                "스팸 컨텐츠입니다."
+    void report() {
+        ReportRequest spamReportRequest = new ReportRequest(
+                1L,
+                Reason.SPAM_CONTENT,
+                Type.RECIPE,
+                1L,
+                null
         );
-        userService.reportUser(1, spamReportRequest);
+        userService.report(2, spamReportRequest);
 
         UserReport actual = userReportRepository.findById(1L).get();
         assertAll(
-                () -> assertThat(actual.getReporter().getId()).isEqualTo(1),
-                () -> assertThat(actual.getReportee().getId()).isEqualTo(2),
-                () -> assertThat(actual.getReason()).isEqualTo("SPAM"),
-                () -> assertThat(actual.getDetails()).isEqualTo("스팸 컨텐츠입니다.")
+                () -> assertThat(actual.getReporter().getId()).isEqualTo(2),
+                () -> assertThat(actual.getReportee().getId()).isEqualTo(1),
+                () -> assertThat(actual.getReason()).isEqualTo(Reason.SPAM_CONTENT),
+                () -> assertThat(actual.getType()).isEqualTo(Type.RECIPE),
+                () -> assertThat(actual.getTargetId()).isEqualTo(1L),
+                () -> assertThat(actual.getDetails()).isNull()
         );
     }
 
