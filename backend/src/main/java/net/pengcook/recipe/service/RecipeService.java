@@ -15,7 +15,6 @@ import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
@@ -112,22 +111,12 @@ public class RecipeService {
 
     private MainRecipeResponse getMainRecipeResponse(UserInfo userInfo, List<RecipeDataResponse> groupedResponses) {
         RecipeDataResponse firstResponse = groupedResponses.getFirst();
-        boolean mine = firstResponse.authorId() == userInfo.getId();
 
         return new MainRecipeResponse(
-                firstResponse.recipeId(),
-                firstResponse.title(),
-                new AuthorResponse(firstResponse.authorId(), firstResponse.authorName(), firstResponse.authorImage()),
-                firstResponse.cookingTime(),
-                firstResponse.thumbnail(),
-                firstResponse.difficulty(),
-                firstResponse.likeCount(),
-                firstResponse.commentCount(),
-                firstResponse.description(),
-                firstResponse.createdAt(),
+                userInfo,
+                firstResponse,
                 getCategoryResponses(groupedResponses),
-                getIngredientResponses(groupedResponses),
-                mine
+                getIngredientResponses(groupedResponses)
         );
     }
 
