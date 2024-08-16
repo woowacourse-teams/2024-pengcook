@@ -27,8 +27,7 @@
                     "level":"%level",
                     "class":"%logger{36}",
                     "thread":"%thread",
-                    "message": "%replace(%replace(%message){"\\","\\\\"}){"\"","\\\""}",
-                    "requestId": "%X{X-Request-ID}"
+                    "message": "%replace(%replace(%message){"\\","\\\\"}){"\"","\\\""}"
                     }
                 </pattern>
             </message>
