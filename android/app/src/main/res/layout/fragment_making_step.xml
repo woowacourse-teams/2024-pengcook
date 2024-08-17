@@ -26,6 +26,12 @@
         android:layout_height="match_parent">
 
         <include
+            layout="@layout/item_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visible="@{vm.isLoading}" />
+
+        <include
             android:id="@+id/abl_step_making"
             layout="@layout/item_appbar_with_double_action"
             android:layout_width="match_parent"
@@ -37,7 +43,6 @@
             app:leftIcon="@{@drawable/ic_close}"
             app:rightIcon="@{@drawable/ic_complete_making}"
             app:title="@{@string/making_step_title}" />
-
 
         <ScrollView
             android:layout_width="0dp"
@@ -70,14 +75,14 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        bind:imageUri="@{vm.currentImage}" />
+                        bind:imageUri="@{vm.imageUri}" />
 
                     <ImageView
                         android:id="@+id/makingRecipeAddImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_add_photo"
-                        android:visibility="@{vm.currentImage == null ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{vm.imageUri == null ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +126,7 @@
                 android:background="@drawable/bg_radius_outlined"
                 android:fontFamily="@font/notosans_bold"
                 android:gravity="center"
-                android:onClick="@{() -> eventHandler.validatePreviousPageableCondition()}"
+                android:onClick="@{() -> eventHandler.moveToPreviousPage()}"
                 android:text="@string/back_making_step"
                 android:textColor="@color/black_100"
                 android:textSize="16sp"
@@ -140,21 +145,21 @@
                 android:layout_height="52dp"
                 android:layout_margin="24dp"
                 android:layout_marginHorizontal="16dp"
-                android:background="@drawable/bg_radius_filled"
-                android:backgroundTint="@color/black_100"
+                android:background="@drawable/selector_bottom_button"
                 android:fontFamily="@font/notosans_bold"
                 android:gravity="center"
-                android:onClick="@{() -> vm.validateNextPageableCondition()}"
+                android:onClick="@{() -> vm.moveToNextPage()}"
                 android:text="@string/making_next_step"
-                android:textColor="@color/white"
+                android:textColor="@color/black_100"
                 android:textSize="16sp"
+                android:enabled="@{true}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@id/btn_back_step_making_recipe"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:visibility="@{vm.stepNumber != vm.maxStepPage}" />
+                bind:visibility="@{vm.stepNumber != vm.maximumStep}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

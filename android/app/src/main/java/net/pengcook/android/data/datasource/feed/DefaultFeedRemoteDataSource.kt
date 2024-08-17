@@ -9,12 +9,13 @@ class DefaultFeedRemoteDataSource(
     private val feedService: FeedService,
 ) : FeedRemoteDataSource {
     override suspend fun fetchRecipes(
+        accessToken: String,
         pageNumber: Int,
         pageSize: Int,
         category: String?,
         keyword: String?,
         userId: Long?,
-    ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(pageNumber, pageSize, category, keyword, userId)
+    ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
 
     override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
 }

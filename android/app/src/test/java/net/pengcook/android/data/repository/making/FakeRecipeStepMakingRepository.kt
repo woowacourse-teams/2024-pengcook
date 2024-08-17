@@ -1,37 +1,31 @@
 package net.pengcook.android.data.repository.making
 
-import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingRemoteDataSource
 import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
-import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.RecipeStep
+import net.pengcook.android.presentation.core.model.RecipeStepMaking
 
 class FakeRecipeStepMakingRepository(
-    private val recipeStepMakingDataSource: RecipeStepMakingDataSource,
+    private val recipeStepMakingRemoteDataSource: RecipeStepMakingRemoteDataSource,
 ) : NetworkResponseHandler(),
     RecipeStepMakingRepository {
     override suspend fun fetchRecipeStep(
         recipeId: Long,
         sequence: Int,
-    ): Result<RecipeStep> =
-        runCatching {
-            val response = recipeStepMakingDataSource.fetchRecipeStep(recipeId, sequence)
-            body(response, RESPONSE_CODE_SUCCESS).toRecipeStep()
-        }
+    ): Result<RecipeStepMaking?> = TODO()
 
-    override suspend fun uploadRecipeStep(
+    override suspend fun saveRecipeStep(
         recipeId: Long,
-        recipeStep: RecipeStep,
-    ): Result<Unit> =
-        runCatching {
-            val response =
-                recipeStepMakingDataSource.uploadRecipeStep(
-                    recipeId,
-                    recipeStep.toRecipeStepRequest(),
-                )
-            body(response, RESPONSE_CODE_SUCCESS)
-        }
+        recipeStep: RecipeStepMaking,
+    ): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteRecipeSteps(recipeId: Long) {
+        TODO("Not yet implemented")
+    }
 
     private fun RecipeStep.toRecipeStepRequest(): RecipeStepRequest =
         RecipeStepRequest(

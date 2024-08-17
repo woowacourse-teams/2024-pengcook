@@ -1,6 +1,7 @@
 package net.pengcook.android.data.repository.making
 
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.domain.model.recipemaking.RecipeCreation
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
 import java.io.File
 
@@ -17,9 +18,23 @@ class FakeMakingRecipeRepository : MakingRecipeRepository {
     ) {
     }
 
-    override suspend fun postRecipeDescription(recipeDescription: RecipeDescription): Result<Long> {
-        return runCatching {
-            id++
-        }
+    override suspend fun fetchTotalRecipeData(): Result<RecipeCreation?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchRecipeDescription(): Result<RecipeDescription?> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveRecipeDescription(recipeDescription: RecipeDescription): Result<Long> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun postNewRecipe(newRecipe: RecipeCreation): Result<Long> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteRecipeDescription(recipeId: Long) {
+        TODO("Not yet implemented")
     }
 }
