@@ -8,7 +8,6 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportReasonResponse;
-import net.pengcook.user.dto.ReportReasonResponses;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
@@ -74,7 +73,7 @@ public class UserController {
 
     @GetMapping("/user/report/reason")
     public List<ReportReasonResponse> getReportReasons() {
-        return ReportReasonResponses.REASONS;
+        return ReportReasonResponse.REASONS;
     }
 
     @PostMapping("/user/block")
