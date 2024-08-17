@@ -37,6 +37,7 @@ class RecipeMakingFragment : Fragment() {
     private val imageUtils: ImageUtils by lazy {
         ImageUtils(requireContext())
     }
+
     private val permissionArray =
         arrayOf(
             Manifest.permission.CAMERA,
@@ -71,23 +72,6 @@ class RecipeMakingFragment : Fragment() {
                 showSnackBar(getString(R.string.image_selection_failed))
             }
         }
-
-    private fun takePicture() {
-        val photoFile: File = imageUtils.createImageFile()
-        photoUri = imageUtils.getUriForFile(photoFile)
-        currentPhotoPath = photoFile.absolutePath
-        viewModel.changeCurrentImage(photoUri)
-        takePictureLauncher.launch(photoUri)
-    }
-
-    private fun processImageUri(uri: Uri) {
-        currentPhotoPath = imageUtils.processImageUri(uri)
-        if (currentPhotoPath != null) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            showSnackBar(getString(R.string.image_selection_failed))
-        }
-    }
 
     // 사진 촬영 ActivityResultLauncher
     private val takePictureLauncher =
@@ -127,6 +111,23 @@ class RecipeMakingFragment : Fragment() {
         _binding = null
     }
 
+    private fun takePicture() {
+        val photoFile: File = imageUtils.createImageFile()
+        photoUri = imageUtils.getUriForFile(photoFile)
+        currentPhotoPath = photoFile.absolutePath
+        viewModel.changeCurrentImage(photoUri)
+        takePictureLauncher.launch(photoUri)
+    }
+
+    private fun processImageUri(uri: Uri) {
+        currentPhotoPath = imageUtils.processImageUri(uri)
+        if (currentPhotoPath != null) {
+            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+        } else {
+            showSnackBar(getString(R.string.image_selection_failed))
+        }
+    }
+
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
@@ -138,6 +139,7 @@ class RecipeMakingFragment : Fragment() {
                 is RecipeMakingEvent.PresignedUrlRequestSuccessful -> uploadImageToS3(newEvent.presignedUrl)
                 is RecipeMakingEvent.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
                 is RecipeMakingEvent.PostRecipeFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
+                is RecipeMakingEvent.MakingCancellation -> findNavController().navigateUp()
             }
         }
     }
@@ -181,6 +183,7 @@ class RecipeMakingFragment : Fragment() {
     private fun initBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
+        binding.appbarEventListener = viewModel
     }
 
     private fun setUpCategorySpinner() {

@@ -4,7 +4,7 @@ import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import retrofit2.Response
 
-class FakeRecipeStepMakingDatasource : RecipeStepMakingDataSource {
+class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
     private val recipeSteps =
         mutableListOf(
             RecipeStepResponse(
@@ -42,7 +42,7 @@ class FakeRecipeStepMakingDatasource : RecipeStepMakingDataSource {
         sequence: Int,
     ): Response<RecipeStepResponse> = Response.success(recipeSteps.find { it.recipeId == recipeId && it.sequence == sequence })
 
-    override suspend fun uploadRecipeStep(
+    suspend fun uploadRecipeStep(
         recipeId: Long,
         recipeStepRequest: RecipeStepRequest,
     ): Response<Unit> {

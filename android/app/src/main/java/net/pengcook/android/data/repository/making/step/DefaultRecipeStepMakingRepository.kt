@@ -1,39 +1,74 @@
 package net.pengcook.android.data.repository.making.step
 
-import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
-import net.pengcook.android.data.model.step.request.RecipeStepRequest
-import net.pengcook.android.data.util.mapper.toRecipeStep
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import net.pengcook.android.data.datasource.making.RecipeStepMakingCacheDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingLocalDataSource
+import net.pengcook.android.data.model.step.RecipeStepEntity
 import net.pengcook.android.data.util.network.NetworkResponseHandler
-import net.pengcook.android.presentation.core.model.RecipeStep
+import net.pengcook.android.presentation.core.model.RecipeStepMaking
 
 class DefaultRecipeStepMakingRepository(
-    private val recipeStepMakingDataSource: RecipeStepMakingDataSource,
+    private val recipeStepMakingLocalDataSource: RecipeStepMakingLocalDataSource,
+    private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
 ) : NetworkResponseHandler(),
     RecipeStepMakingRepository {
     override suspend fun fetchRecipeStep(
         recipeId: Long,
         sequence: Int,
-    ): Result<RecipeStep> =
+    ): Result<RecipeStepMaking?> =
         runCatching {
-            val response = recipeStepMakingDataSource.fetchRecipeStep(recipeId, sequence)
-            body(response, RESPONSE_CODE_SUCCESS).toRecipeStep()
+//            val stepFromCache =
+//                recipeStepMakingCacheDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
+//                    .getOrNull()
+//            if (stepFromCache != null) return@runCatching stepFromCache
+            val stepFromDb =
+                recipeStepMakingLocalDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
+                    ?.toRecipeStepMaking()
+            if (stepFromDb != null) {
+                recipeStepMakingCacheDataSource.saveRecipeStep(
+                    recipeId = recipeId,
+                    recipeStep = stepFromDb,
+                )
+            }
+            stepFromDb
         }
 
-    override suspend fun uploadRecipeStep(
+    override suspend fun saveRecipeStep(
         recipeId: Long,
-        recipeStep: RecipeStep,
+        recipeStep: RecipeStepMaking,
     ): Result<Unit> =
         runCatching {
-            val response = recipeStepMakingDataSource.uploadRecipeStep(recipeId, recipeStep.toRecipeStepRequest())
-            body(response, RESPONSE_CODE_SUCCESS)
+            val recipeStepEntity = recipeStep.toRecipeStepEntity()
+//            recipeStepMakingCacheDataSource.saveRecipeStep(recipeId, recipeStep)
+            recipeStepMakingLocalDataSource.insertCreatedRecipeStep(recipeStepEntity)
         }
 
-    private fun RecipeStep.toRecipeStepRequest(): RecipeStepRequest =
-        RecipeStepRequest(
-            image = image,
+    override fun deleteRecipeSteps(recipeId: Long) {
+        CoroutineScope(Job()).launch {
+            recipeStepMakingLocalDataSource.deleteRecipeStepsByRecipeId(recipeId)
+        }
+    }
+
+    private fun RecipeStepMaking.toRecipeStepEntity(): RecipeStepEntity =
+        RecipeStepEntity(
+            recipeDescriptionId = recipeId,
+            cookingTime = "00:00:00",
+            stepNumber = sequence,
             description = description,
-            sequence = sequence,
-            cookingTime = "00:05:00",
+            imageUri = imageUri,
+            imageTitle = image,
+        )
+
+    private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
+        RecipeStepMaking(
+            stepId = id,
+            recipeId = recipeDescriptionId,
+            sequence = stepNumber,
+            description = description,
+            imageUri = imageUri,
+            image = imageTitle,
         )
 
     companion object {

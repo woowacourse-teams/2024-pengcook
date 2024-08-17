@@ -6,6 +6,7 @@ import retrofit2.Response
 
 interface FeedRemoteDataSource {
     suspend fun fetchRecipes(
+        accessToken: String,
         pageNumber: Int,
         pageSize: Int,
         category: String?,

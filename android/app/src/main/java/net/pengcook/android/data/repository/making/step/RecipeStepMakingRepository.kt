@@ -1,15 +1,17 @@
 package net.pengcook.android.data.repository.making.step
 
-import net.pengcook.android.presentation.core.model.RecipeStep
+import net.pengcook.android.presentation.core.model.RecipeStepMaking
 
 interface RecipeStepMakingRepository {
     suspend fun fetchRecipeStep(
         recipeId: Long,
         sequence: Int,
-    ): Result<RecipeStep>
+    ): Result<RecipeStepMaking?>
 
-    suspend fun uploadRecipeStep(
+    suspend fun saveRecipeStep(
         recipeId: Long,
-        recipeStep: RecipeStep,
+        recipeStep: RecipeStepMaking,
     ): Result<Unit>
+
+    fun deleteRecipeSteps(recipeId: Long)
 }

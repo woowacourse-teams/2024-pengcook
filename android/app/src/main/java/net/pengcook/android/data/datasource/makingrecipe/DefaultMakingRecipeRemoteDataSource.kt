@@ -1,7 +1,8 @@
 package net.pengcook.android.data.datasource.makingrecipe
 
-import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionRequest
-import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionResponse
+import net.pengcook.android.data.local.database.dao.RecipeDescriptionDao
+import net.pengcook.android.data.model.makingrecipe.RecipeCreationResponse
+import net.pengcook.android.data.model.makingrecipe.request.RecipeCreationRequest
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -11,6 +12,7 @@ import java.io.File
 
 class DefaultMakingRecipeRemoteDataSource(
     private val makingRecipeService: MakingRecipeService,
+    private val recipeDescriptionDao: RecipeDescriptionDao,
 ) : MakingRecipeRemoteDataSource, NetworkResponseHandler() {
     override suspend fun fetchImageUri(keyName: String): String {
         val response = makingRecipeService.fetchImageUri(keyName)
@@ -32,10 +34,15 @@ class DefaultMakingRecipeRemoteDataSource(
         }
     }
 
-    override suspend fun postRecipeDescription(
+    override suspend fun uploadNewRecipe(
         accessToken: String,
-        recipeDescriptionRequest: RecipeDescriptionRequest,
-    ): Response<RecipeDescriptionResponse> {
-        return makingRecipeService.postRecipeDescription(accessToken, recipeDescriptionRequest)
+        newRecipe: RecipeCreationRequest,
+    ): Response<RecipeCreationResponse> {
+        return makingRecipeService.postNewRecipe(accessToken, newRecipe)
+//        return body(response, RECIPE_POST_VALID_CODE)
+    }
+
+    companion object {
+        private const val RECIPE_POST_VALID_CODE = 201
     }
 }
