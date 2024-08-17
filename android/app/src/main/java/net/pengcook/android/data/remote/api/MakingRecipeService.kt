@@ -1,8 +1,8 @@
 package net.pengcook.android.data.remote.api
 
 import net.pengcook.android.data.model.PresignedUrlResponse
-import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionRequest
-import net.pengcook.android.data.model.makingrecipe.RecipeDescriptionResponse
+import net.pengcook.android.data.model.makingrecipe.RecipeCreationResponse
+import net.pengcook.android.data.model.makingrecipe.request.RecipeCreationRequest
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,8 +26,8 @@ interface MakingRecipeService {
     ): Response<Unit>
 
     @POST("/recipes")
-    suspend fun postRecipeDescription(
+    suspend fun postNewRecipe(
         @Header("Authorization") accessToken: String,
-        @Body recipeDescription: RecipeDescriptionRequest,
-    ): Response<RecipeDescriptionResponse>
+        @Body newRecipe: RecipeCreationRequest,
+    ): Response<RecipeCreationResponse>
 }
