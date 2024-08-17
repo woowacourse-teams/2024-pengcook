@@ -222,7 +222,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser
-    @DisplayName("레시피 또는 유저 또는 댓글을 신고한다.")
+    @DisplayName("레시피 또는 사용자 또는 댓글을 신고한다.")
     void report() {
         ReportRequest spamReportRequest = new ReportRequest(
                 1,
@@ -273,7 +273,7 @@ class UserControllerTest extends RestDocsSetting {
     void getReportReasons() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "신고 사유 목록을 조회합니다",
+                        "신고 사유 목록을 조회합니다.",
                         "신고 사유 목록 조회 API",
                         responseFields(
                                 fieldWithPath("[]").description("신고 사유 목록"),
