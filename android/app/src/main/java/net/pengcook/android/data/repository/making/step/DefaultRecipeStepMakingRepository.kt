@@ -19,10 +19,6 @@ class DefaultRecipeStepMakingRepository(
         sequence: Int,
     ): Result<RecipeStepMaking?> =
         runCatching {
-//            val stepFromCache =
-//                recipeStepMakingCacheDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
-//                    .getOrNull()
-//            if (stepFromCache != null) return@runCatching stepFromCache
             val stepFromDb =
                 recipeStepMakingLocalDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
                     ?.toRecipeStepMaking()
@@ -41,7 +37,6 @@ class DefaultRecipeStepMakingRepository(
     ): Result<Unit> =
         runCatching {
             val recipeStepEntity = recipeStep.toRecipeStepEntity()
-//            recipeStepMakingCacheDataSource.saveRecipeStep(recipeId, recipeStep)
             recipeStepMakingLocalDataSource.insertCreatedRecipeStep(recipeStepEntity)
         }
 
@@ -56,9 +51,9 @@ class DefaultRecipeStepMakingRepository(
             recipeDescriptionId = recipeId,
             cookingTime = "00:00:00",
             stepNumber = sequence,
-            description = description,
-            imageUri = imageUri,
-            imageTitle = image,
+            description = description.ifEmpty { null },
+            imageUri = imageUri.ifEmpty { null },
+            imageTitle = image.ifEmpty { null },
         )
 
     private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
@@ -66,14 +61,8 @@ class DefaultRecipeStepMakingRepository(
             stepId = id,
             recipeId = recipeDescriptionId,
             sequence = stepNumber,
-            description = description,
-            imageUri = imageUri,
-            image = imageTitle,
+            description = description ?: "",
+            imageUri = imageUri ?: "",
+            image = imageTitle ?: "",
         )
-
-    companion object {
-        private const val EXCEPTION_HTTP_CODE = "Http code is not appropriate."
-        private const val EXCEPTION_NULL_BODY = "Response body is null."
-        private const val RESPONSE_CODE_SUCCESS = 200
-    }
 }

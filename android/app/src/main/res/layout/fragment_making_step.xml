@@ -26,12 +26,6 @@
         android:layout_height="match_parent">
 
         <include
-            layout="@layout/item_loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:visible="@{vm.isLoading}" />
-
-        <include
             android:id="@+id/abl_step_making"
             layout="@layout/item_appbar_with_double_action"
             android:layout_width="match_parent"
@@ -149,7 +143,7 @@
                 android:fontFamily="@font/notosans_bold"
                 android:gravity="center"
                 android:onClick="@{() -> vm.moveToNextPage()}"
-                android:text="@string/making_next_step"
+                android:text="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true) ? @string/making_uploading_image : @string/making_next_step}"
                 android:textColor="@color/black_100"
                 android:textSize="16sp"
                 android:enabled="@{true}"
@@ -162,6 +156,12 @@
                 bind:visibility="@{vm.stepNumber != vm.maximumStep}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            layout="@layout/item_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visible="@{vm.isLoading}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

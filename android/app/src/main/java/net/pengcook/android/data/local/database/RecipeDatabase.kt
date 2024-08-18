@@ -15,7 +15,7 @@ import net.pengcook.android.data.model.step.RecipeStepEntity
 
 @Database(
     entities = [RecipeDescriptionEntity::class, RecipeStepEntity::class, CategoryEntity::class, IngredientEntity::class],
-    version = 4,
+    version = 5,
 )
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDescriptionDao(): RecipeDescriptionDao

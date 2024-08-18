@@ -111,9 +111,9 @@ class DefaultMakingRecipeRepository(
         RecipeStepMaking(
             recipeId = recipeDescriptionId,
             sequence = stepNumber,
-            description = description,
-            image = imageTitle,
-            imageUri = imageUri,
+            description = description ?: "",
+            image = imageTitle ?: "",
+            imageUri = imageUri ?: "",
             stepId = id,
         )
 
