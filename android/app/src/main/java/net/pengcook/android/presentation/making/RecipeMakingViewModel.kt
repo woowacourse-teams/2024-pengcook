@@ -32,6 +32,9 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
     val ingredientContent = MutableLiveData<String>()
     val difficultySelectedValue = MutableLiveData(0.0f)
     val introductionContent = MutableLiveData<String>()
+    val hourContent = MutableLiveData<String>()
+    val minuteContent = MutableLiveData<String>()
+    val secondContent = MutableLiveData<String>()
 
     private val _currentImage: MutableLiveData<Uri> = MutableLiveData()
     val currentImage: LiveData<Uri>
@@ -98,19 +101,37 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
             val difficulty = difficultySelectedValue.value
             val ingredients = ingredientContent.value?.trim()
             val title = titleContent.value?.trim()
+            val hour = hourContent.value
+            val minute = minuteContent.value
+            val second = secondContent.value
 
             if (category.isNullOrEmpty() ||
                 introduction.isNullOrEmpty() ||
                 difficulty == null ||
                 ingredients.isNullOrEmpty() ||
                 title.isNullOrEmpty() ||
-                thumbnailTitle.isNullOrEmpty()
+                thumbnailTitle.isNullOrEmpty() ||
+                hour == null ||
+                minute == null ||
+                second == null
             ) {
                 _uiEvent.value = Event(RecipeMakingEvent.DescriptionFormNotCompleted)
                 return@launch
             }
 
-            postRecipeDescription(category, introduction, difficulty, ingredients, title)
+            saveRecipeDescription(
+                category = category,
+                introduction = introduction,
+                difficulty = difficulty,
+                ingredients = ingredients,
+                title = title,
+                timeRequired =
+                    FORMAT_TIME_REQUIRED.format(
+                        hour.toIntOrNull() ?: 0,
+                        minute.toIntOrNull() ?: 0,
+                        second.toIntOrNull() ?: 0,
+                    ),
+            )
         }
     }
 
@@ -140,7 +161,7 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
 
     private fun restoreDescriptionContents(existingRecipe: RecipeDescription) {
         titleContent.value = existingRecipe.title
-        ingredientContent.value = existingRecipe.ingredients.joinToString(", ")
+        ingredientContent.value = existingRecipe.ingredients.joinToString(SEPARATOR_INGREDIENTS)
         difficultySelectedValue.value = existingRecipe.difficulty.toFloat() / 2
         introductionContent.value = existingRecipe.description
         thumbnailTitle = existingRecipe.thumbnail
@@ -150,21 +171,22 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         _currentImage.value = Uri.parse(existingRecipe.imageUri)
     }
 
-    private suspend fun postRecipeDescription(
+    private suspend fun saveRecipeDescription(
         category: String,
         introduction: String,
         difficulty: Float,
         ingredients: String,
         title: String,
+        timeRequired: String,
     ) {
         val recipeDescription =
             RecipeDescription(
                 recipeDescriptionId = recipeId ?: return,
                 categories = listOf(category),
-                cookingTime = "00:00:00",
+                cookingTime = timeRequired,
                 description = introduction,
                 difficulty = (difficulty * 2).toInt(),
-                ingredients = ingredients.split(",").map { it.trim() },
+                ingredients = ingredients.split(SEPARATOR_INGREDIENTS).map { it.trim() },
                 thumbnail = thumbnailTitle ?: return,
                 title = title,
                 imageUri = currentImage.value.toString(),
@@ -176,5 +198,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
             }.onFailure {
                 _uiEvent.value = Event(RecipeMakingEvent.PostRecipeFailure)
             }
+    }
+
+    companion object {
+        private const val SEPARATOR_INGREDIENTS = ","
+        private const val FORMAT_TIME_REQUIRED = "%02d:%02d:%02d"
     }
 }

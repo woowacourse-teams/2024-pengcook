@@ -58,6 +58,7 @@
     <string name="making_form_recipe_title">Recipe Title</string>
     <string name="making_form_category">Category</string>
     <string name="making_form_ingredient">Ingredient</string>
+    <string name="making_form_time_required">Time Required</string>
     <string name="making_form_difficulty">Difficulty</string>
     <string name="making_form_introduction">Introduction</string>
 

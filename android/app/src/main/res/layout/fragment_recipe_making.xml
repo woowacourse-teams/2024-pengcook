@@ -65,7 +65,6 @@
                     app:layout_constraintTop_toBottomOf="@id/iv_add_image"
                     app:title="@{@string/making_form_recipe_title}" />
 
-                <!-- Category Spinner -->
                 <include
                     android:id="@+id/makingRecipeCategory"
                     layout="@layout/item_form_spinner"
@@ -79,7 +78,6 @@
                     app:title="@{@string/making_form_category}"
                     app:spinnerItemChangeListener="@{vm}"/>
 
-                <!-- Ingredient EditText -->
                 <include
                     android:id="@+id/makingRecipeIngredient"
                     layout="@layout/item_form_text"
@@ -93,8 +91,20 @@
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
                     app:title="@{@string/making_form_ingredient}" />
 
+                <include
+                    android:id="@+id/item_time_required"
+                    layout="@layout/item_time_amount_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="@{@string/making_form_time_required}"
+                    app:hour="@={vm.hourContent}"
+                    app:minute="@={vm.minuteContent}"
+                    app:second="@={vm.secondContent}"
+                    android:layout_marginVertical="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"/>
 
-                <!-- Difficulty Spinner -->
                 <include
                     android:id="@+id/makingRecipeDifficulty"
                     layout="@layout/item_form_rating"
@@ -103,11 +113,10 @@
                     android:layout_marginVertical="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
+                    app:layout_constraintTop_toBottomOf="@id/item_time_required"
                     app:selectedRating="@={vm.difficultySelectedValue}"
                     app:title="@{@string/making_form_difficulty}" />
 
-                <!-- Introduction EditText -->
                 <include
                     android:id="@+id/makingRecipeIntroduction"
                     layout="@layout/item_form_text_medium"
@@ -124,7 +133,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <!-- Next Button -->
         <include
             android:id="@+id/nextButton"
             layout="@layout/item_button_bottom"
@@ -135,7 +143,6 @@
             app:enabled="@{true}"
             app:buttonText="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true) ? @string/making_uploading_image : @string/making_next_step}"
             app:layout_constraintBottom_toBottomOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
