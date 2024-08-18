@@ -19,6 +19,7 @@ import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
+import net.pengcook.android.presentation.core.util.MinMaxInputFilter
 import java.io.File
 
 class RecipeMakingFragment : Fragment() {
@@ -102,6 +103,7 @@ class RecipeMakingFragment : Fragment() {
         AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("RecipeMaking")
         initBinding()
+        initTimeFormatInput()
         observeUiEvent()
         setUpCategorySpinner()
     }
@@ -184,6 +186,17 @@ class RecipeMakingFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = viewModel
         binding.appbarEventListener = viewModel
+    }
+
+    private fun initTimeFormatInput() {
+        val etHour = binding.itemTimeRequired.etHour
+        val etMinute = binding.itemTimeRequired.etMinute
+        val etSecond = binding.itemTimeRequired.etSecond
+        arrayOf(MinMaxInputFilter(0, 59)).also { filters ->
+            etHour.filters = filters
+            etMinute.filters = filters
+            etSecond.filters = filters
+        }
     }
 
     private fun setUpCategorySpinner() {
