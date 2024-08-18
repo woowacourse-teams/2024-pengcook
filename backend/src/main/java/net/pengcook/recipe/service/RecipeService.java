@@ -65,7 +65,6 @@ public class RecipeService {
 
     public List<MainRecipeResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
-        System.out.println("likeRecipeIds = " + likeRecipeIds);
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
         return convertToMainRecipeResponses(userInfo, recipeDataResponses);
     }
