@@ -100,7 +100,6 @@ class DefaultAppModule(
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
         DefaultMakingRecipeRemoteDataSource(
             service(MakingRecipeService::class.java),
-            database.recipeDescriptionDao(),
         )
 
     private val makingRecipeLocalDataSource: MakingRecipeLocalDataSource =

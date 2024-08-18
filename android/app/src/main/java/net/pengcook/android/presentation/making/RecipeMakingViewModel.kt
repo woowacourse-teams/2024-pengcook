@@ -2,7 +2,6 @@ package net.pengcook.android.presentation.making
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +13,7 @@ import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
 import java.io.File
+import kotlin.coroutines.cancellation.CancellationException
 
 class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepository) :
     ViewModel(),
@@ -41,25 +41,26 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
     val imageUploaded: LiveData<Boolean>
         get() = _imageUploaded
 
+    private val _imageSelected: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageSelected: LiveData<Boolean>
+        get() = _imageSelected
+
     private var thumbnailTitle: String? = null
 
     private var recipeId: Long? = null
 
-    private val _completed: MediatorLiveData<Boolean> = MediatorLiveData()
-    val completed: LiveData<Boolean> = _completed
-
     init {
-        initializeSourceForCompletion()
         initRecipeDescription()
     }
 
     fun fetchImageUri(keyName: String) {
         viewModelScope.launch {
+            _imageSelected.value = true
             try {
                 val uri = makingRecipeRepository.fetchImageUri(keyName)
                 _uiEvent.value = Event(RecipeMakingEvent.PresignedUrlRequestSuccessful(uri))
             } catch (e: Exception) {
-                e.printStackTrace()
+                if (e is CancellationException) throw e
                 _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
             }
         }
@@ -121,17 +122,6 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         _uiEvent.value = Event(RecipeMakingEvent.MakingCancellation)
     }
 
-    private fun initializeSourceForCompletion() {
-        _completed.apply {
-            addSource(imageUploaded) { _completed.value = completed() }
-            addSource(titleContent) { _completed.value = completed() }
-            addSource(ingredientContent) { _completed.value = completed() }
-            addSource(difficultySelectedValue) { _completed.value = completed() }
-            addSource(introductionContent) { _completed.value = completed() }
-            addSource(categorySelectedValue) { _completed.value = completed() }
-        }
-    }
-
     private fun initRecipeDescription() {
         viewModelScope.launch {
             makingRecipeRepository.fetchRecipeDescription()
@@ -148,16 +138,6 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         }
     }
 
-    private fun completed(): Boolean {
-        return imageUploaded.value == true &&
-            !categorySelectedValue.value.isNullOrEmpty() &&
-            !introductionContent.value.isNullOrEmpty() &&
-            difficultySelectedValue.value != null &&
-            !ingredientContent.value.isNullOrEmpty() &&
-            !titleContent.value.isNullOrEmpty() &&
-            !thumbnailTitle.isNullOrEmpty()
-    }
-
     private fun restoreDescriptionContents(existingRecipe: RecipeDescription) {
         titleContent.value = existingRecipe.title
         ingredientContent.value = existingRecipe.ingredients.joinToString(", ")
@@ -165,6 +145,7 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         introductionContent.value = existingRecipe.description
         thumbnailTitle = existingRecipe.thumbnail
         _imageUploaded.value = true
+        _imageSelected.value = true
         _categorySelectedValue.value = existingRecipe.categories.first()
         _currentImage.value = Uri.parse(existingRecipe.imageUri)
     }

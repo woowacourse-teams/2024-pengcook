@@ -66,6 +66,7 @@
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
     <string name="making_next_step">Next Step</string>
+    <string name="making_uploading_image">Uploading Image...</string>
     <string name="back_making_step">Back</string>
     <string name="camera_permission_granted">Camera permission is allowed.</string>
     <string name="camera_permission_needed">Camera permission is required.</string>

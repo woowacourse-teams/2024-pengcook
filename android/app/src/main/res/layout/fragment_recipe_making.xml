@@ -133,7 +133,7 @@
             android:layout_margin="16dp"
             app:buttonClickListener="@{vm}"
             app:enabled="@{true}"
-            app:buttonText="@{@string/making_next}"
+            app:buttonText="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true) ? @string/making_uploading_image : @string/making_next_step}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
 
