@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
-@Sql({"/data/recipe.sql", "/data/like.sql"})
+@Sql("/data/like.sql")
 @Import(RecipeLikeService.class)
 @DataJpaTest
 class RecipeLikeServiceTest {
