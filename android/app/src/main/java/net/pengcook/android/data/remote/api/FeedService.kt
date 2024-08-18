@@ -4,12 +4,14 @@ import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.step.RecipeStepResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FeedService {
     @GET("/recipes")
     suspend fun fetchRecipes(
+        @Header("Authorization") accessToken: String,
         @Query("pageNumber") pageNumber: Int,
         @Query("pageSize") pageSize: Int,
         @Query("category") category: String?,

@@ -30,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Next"
+            android:background="@drawable/selector_bottom_button"
             android:enabled="@{enabled}"
             android:text="@{buttonText}"
             android:onClick="@{() -> buttonClickListener.onConfirm()}"
