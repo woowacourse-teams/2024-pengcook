@@ -13,8 +13,8 @@ import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.S3ClientService;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
-import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
@@ -67,7 +67,7 @@ public class RecipeService {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
         System.out.println("likeRecipeIds = " + likeRecipeIds);
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
     }
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
