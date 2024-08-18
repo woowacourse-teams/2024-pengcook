@@ -150,7 +150,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].ingredient").description("재료 목록"),
                                 fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
                                 fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
-                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부")
+                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("[].mine").description("조회자 작성여부")
                         )))
                 .when()
                 .get("/recipes/likes")
