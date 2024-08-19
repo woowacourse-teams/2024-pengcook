@@ -7,21 +7,15 @@ import kotlinx.coroutines.launch
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
-import net.pengcook.android.data.model.makingrecipe.entity.CreatedRecipe
-import net.pengcook.android.data.model.makingrecipe.entity.CreatedRecipeDescription
-import net.pengcook.android.data.model.makingrecipe.entity.IngredientEntity
-import net.pengcook.android.data.model.makingrecipe.request.IngredientRequest
-import net.pengcook.android.data.model.makingrecipe.request.RecipeCreationRequest
-import net.pengcook.android.data.model.makingrecipe.request.RecipeStepRequest
-import net.pengcook.android.data.model.step.RecipeStepEntity
 import net.pengcook.android.data.util.mapper.toCategoryEntities
 import net.pengcook.android.data.util.mapper.toIngredientEntities
+import net.pengcook.android.data.util.mapper.toRecipeCreation
+import net.pengcook.android.data.util.mapper.toRecipeCreationRequest
+import net.pengcook.android.data.util.mapper.toRecipeDescription
 import net.pengcook.android.data.util.mapper.toRecipeDescriptionEntity
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.domain.model.recipemaking.RecipeCreation
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
-import net.pengcook.android.presentation.core.model.Ingredient
-import net.pengcook.android.presentation.core.model.RecipeStepMaking
 import java.io.File
 
 class DefaultMakingRecipeRepository(
@@ -82,74 +76,6 @@ class DefaultMakingRecipeRepository(
             makingRecipeLocalDataSource.deleteCreatedRecipeById(recipeId)
         }
     }
-
-    private fun CreatedRecipe.toRecipeCreation(): RecipeCreation =
-        RecipeCreation(
-            title = recipeDescription.title,
-            introduction = recipeDescription.description,
-            cookingTime = recipeDescription.cookingTime,
-            difficulty = recipeDescription.difficulty,
-            ingredients = ingredients.map { it.toIngredient() },
-            categories = categories.map { it.categoryName },
-            thumbnail = recipeDescription.thumbnail,
-            steps = steps.map { it.toRecipeStepMaking() },
-        )
-
-    private fun RecipeCreation.toRecipeCreationRequest(): RecipeCreationRequest =
-        RecipeCreationRequest(
-            categories = categories,
-            cookingTime = cookingTime,
-            description = introduction,
-            difficulty = difficulty,
-            ingredients = ingredients.map { it.toIngredientRequest() },
-            recipeSteps = steps.map { it.toRecipeStepRequest() },
-            thumbnail = thumbnail,
-            title = title,
-        )
-
-    private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
-        RecipeStepMaking(
-            recipeId = recipeDescriptionId,
-            sequence = stepNumber,
-            description = description ?: "",
-            image = imageTitle ?: "",
-            imageUri = imageUri ?: "",
-            stepId = id,
-        )
-
-    private fun IngredientEntity.toIngredient(): Ingredient =
-        Ingredient(
-            ingredientId = id,
-            ingredientName = name,
-            requirement = requirement,
-        )
-
-    private fun Ingredient.toIngredientRequest(): IngredientRequest =
-        IngredientRequest(
-            name = ingredientName,
-            requirement = requirement,
-        )
-
-    private fun RecipeStepMaking.toRecipeStepRequest(): RecipeStepRequest =
-        RecipeStepRequest(
-            cookingTime = "00:00:00",
-            description = description,
-            image = image,
-            sequence = sequence,
-        )
-
-    private fun CreatedRecipeDescription.toRecipeDescription(): RecipeDescription =
-        RecipeDescription(
-            recipeDescriptionId = recipeDescription.id,
-            categories = categories.map { it.categoryName },
-            cookingTime = recipeDescription.cookingTime,
-            description = recipeDescription.description,
-            difficulty = recipeDescription.difficulty,
-            ingredients = ingredients.map { it.name },
-            thumbnail = recipeDescription.thumbnail,
-            title = recipeDescription.title,
-            imageUri = recipeDescription.imageUri,
-        )
 
     companion object {
         private const val VALID_POST_CODE = 201
