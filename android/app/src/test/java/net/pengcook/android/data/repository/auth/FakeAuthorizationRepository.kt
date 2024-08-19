@@ -81,4 +81,8 @@ class FakeAuthorizationRepository(
     override suspend fun fetchUserInformation(accessToken: String): Result<UserInformation> {
         return runCatching { userInformation ?: throw IllegalStateException() }
     }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        TODO("Not yet implemented")
+    }
 }
