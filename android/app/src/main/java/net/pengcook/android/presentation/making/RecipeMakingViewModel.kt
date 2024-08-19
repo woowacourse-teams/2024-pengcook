@@ -164,9 +164,9 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
         ingredientContent.value = existingRecipe.ingredients.joinToString(SEPARATOR_INGREDIENTS)
         difficultySelectedValue.value = existingRecipe.difficulty.toFloat() / 2
         introductionContent.value = existingRecipe.description
-        hourContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(0)
-        minuteContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(1)
-        secondContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(2)
+        hourContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(0) ?: ""
+        minuteContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(1) ?: ""
+        secondContent.value = existingRecipe.cookingTime.split(SEPARATOR_TIME).getOrNull(2) ?: ""
         thumbnailTitle = existingRecipe.thumbnail
         _imageUploaded.value = true
         _imageSelected.value = true
