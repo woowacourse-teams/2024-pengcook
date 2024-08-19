@@ -95,7 +95,7 @@ class StepMakingViewModel(
         if (stepNumber.value == 1) return
 
         if (introduction.isNullOrEmpty() && imageSelected.value != true) {
-            changePage(StepAction.PREVIOUS)
+            moveStep(StepAction.PREVIOUS)
             return
         }
 
@@ -185,12 +185,7 @@ class StepMakingViewModel(
         }
     }
 
-    private fun completed(): Boolean {
-        return imageUploaded.value == true &&
-            !introductionContent.value.isNullOrEmpty()
-    }
-
-    private fun changePage(stepAction: StepAction) {
+    private fun moveStep(stepAction: StepAction) {
         when (stepAction) {
             StepAction.NEXT -> {
                 resetData()
@@ -283,7 +278,7 @@ class StepMakingViewModel(
             .onSuccess {
                 stepCompletion[stepNumber] =
                     recipeStep.imageUri.isNotEmpty() && recipeStep.description.isNotEmpty() && recipeStep.image.isNotEmpty()
-                changePage(stepAction)
+                moveStep(stepAction)
             }.onFailure {
                 _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostFailure)
             }
