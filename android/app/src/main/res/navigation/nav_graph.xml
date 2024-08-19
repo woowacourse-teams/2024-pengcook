@@ -208,7 +208,7 @@
 
     <fragment
         android:id="@+id/accountSettingFragment"
-        android:name="net.pengcook.android.presentation.setting.AccountSettingFragment"
+        android:name="net.pengcook.android.presentation.setting.account.AccountSettingFragment"
         android:label="fragment_account_setting"
         tools:layout="@layout/fragment_account_setting" >
         <action
