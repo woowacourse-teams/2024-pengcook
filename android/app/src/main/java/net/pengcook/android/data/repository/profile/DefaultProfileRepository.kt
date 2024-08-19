@@ -45,7 +45,10 @@ class DefaultProfileRepository(
         pageSize: Int,
     ): Result<List<Recipe>> {
         return runCatching {
-            val response = profileRemoteDataSource.fetchUserFeeds(userId, pageNumber, pageSize)
+            val accessToken =
+                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+            val response =
+                profileRemoteDataSource.fetchUserFeeds(accessToken, userId, pageNumber, pageSize)
             body(response, CODE_SUCCESSFUL).map { recipeResponse -> recipeResponse.toRecipe() }
         }
     }

@@ -1,5 +1,5 @@
 package net.pengcook.android.data.model.makingrecipe
 
-data class RecipeDescriptionResponse(
+data class RecipeCreationResponse(
     val recipeId: Long,
 )
