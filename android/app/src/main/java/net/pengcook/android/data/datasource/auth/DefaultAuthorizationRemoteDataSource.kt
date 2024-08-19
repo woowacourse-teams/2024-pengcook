@@ -39,4 +39,8 @@ class DefaultAuthorizationRemoteDataSource(
     override suspend fun fetchUserInformation(accessToken: String): Response<UserInformationResponse> {
         return authorizationService.fetchUserInformation(accessToken)
     }
+
+    override suspend fun deleteAccount(accessToken: String): Response<Unit> {
+        return authorizationService.deleteAccount(accessToken)
+    }
 }

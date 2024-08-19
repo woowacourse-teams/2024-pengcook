@@ -26,4 +26,6 @@ interface AuthorizationRemoteDataSource {
     suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RefreshedTokensResponse>
 
     suspend fun fetchUserInformation(accessToken: String): Response<UserInformationResponse>
+
+    suspend fun deleteAccount(accessToken: String): Response<Unit>
 }

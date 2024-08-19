@@ -1,6 +1,8 @@
 package net.pengcook.android.data.repository.auth
 
+import kotlinx.coroutines.flow.first
 import net.pengcook.android.data.datasource.auth.AuthorizationRemoteDataSource
+import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
 import net.pengcook.android.data.util.mapper.toRefreshedTokens
@@ -18,6 +20,7 @@ import net.pengcook.android.domain.model.auth.UserSignUpForm
 
 class DefaultAuthorizationRepository(
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
+    private val sessionLocalDataSource: SessionLocalDataSource,
 ) : AuthorizationRepository, NetworkResponseHandler() {
     override suspend fun signIn(
         platformName: String,
@@ -66,8 +69,18 @@ class DefaultAuthorizationRepository(
         }
     }
 
+    override suspend fun deleteAccount(): Result<Unit> {
+        return runCatching {
+            val accessToken =
+                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+            val response = authorizationRemoteDataSource.deleteAccount(accessToken)
+            body(response, RESPONSE_CODE_DELETE_SUCCESS)
+        }
+    }
+
     companion object {
         private const val RESPONSE_CODE_SUCCESS = 200
         private const val RESPONSE_CODE_SIGN_IN_SUCCESS = 201
+        private const val RESPONSE_CODE_DELETE_SUCCESS = 204
     }
 }

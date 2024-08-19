@@ -22,4 +22,6 @@ interface AuthorizationRepository {
     suspend fun fetchAccessToken(refreshToken: String): Result<RefreshedTokens>
 
     suspend fun fetchUserInformation(accessToken: String): Result<UserInformation>
+
+    suspend fun deleteAccount(): Result<Unit>
 }

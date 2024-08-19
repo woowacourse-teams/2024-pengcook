@@ -82,14 +82,14 @@ class DefaultAppModule(
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource =
         DefaultAuthorizationRemoteDataSource(service(AuthorizationService::class.java))
 
-    override val authorizationRepository: AuthorizationRepository =
-        DefaultAuthorizationRepository(authorizationRemoteDataSource)
-
     private val sessionLocalDataSource: SessionLocalDataSource =
         DefaultSessionLocalDataSource(appContext.dataStore)
 
     override val sessionRepository: SessionRepository =
         DefaultSessionRepository(sessionLocalDataSource)
+
+    override val authorizationRepository: AuthorizationRepository =
+        DefaultAuthorizationRepository(authorizationRemoteDataSource, sessionLocalDataSource)
 
     private val feedRemoteDataSource: FeedRemoteDataSource =
         DefaultFeedRemoteDataSource(service(FeedService::class.java))
