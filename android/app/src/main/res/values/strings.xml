@@ -11,7 +11,10 @@
     <string name="onboarding_app_title">PengCook</string>
     <string name="onboarding_introduction">Easy Cook! Your Recipe!</string>
     <string name="onboarding_google_sign_in">Sign In with Google</string>
-    <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
+    <string name="onboarding_terms">
+        By creating an account, you agree to our&lt;br/>
+        &lt;a href="https://pengcook.net/terms-of-service">&lt;u>Terms&lt;/u>&lt;/a> and &lt;a href="https://pengcook.net/privacy-policy">&lt;u>Privacy Policy&lt;/u>&lt;/a>.
+    </string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">An unexpected error occurred.</string>
     <string name="detail_like_error">Failed to like the recipe</string>
