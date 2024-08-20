@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.image.service.S3ClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.service.RecipeService;
@@ -40,6 +41,7 @@ public class UserService {
     private final RecipeLikeRepository recipeLikeRepository;
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
+    private final S3ClientService s3ClientService;
 
     public ProfileResponse getUserById(long userId) {
         User user = userRepository.findById(userId)
@@ -57,10 +59,16 @@ public class UserService {
     public UpdateProfileResponse updateProfile(long userId, UpdateProfileRequest updateProfileRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
+
+        String userImage = updateProfileRequest.image();
+        if (!userImage.startsWith("http")) {
+            userImage = s3ClientService.getImageUrl(userImage).url();
+        }
+
         user.update(
                 updateProfileRequest.username(),
                 updateProfileRequest.nickname(),
-                updateProfileRequest.image(),
+                userImage,
                 updateProfileRequest.region()
         );
         return new UpdateProfileResponse(user);

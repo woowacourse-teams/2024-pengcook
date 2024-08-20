@@ -15,6 +15,7 @@ import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
 import net.pengcook.authentication.exception.NoSuchUserException;
+import net.pengcook.image.service.S3ClientService;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class LoginService {
     private final FirebaseAuth firebaseAuth;
     private final UserRepository userRepository;
     private final JwtTokenManager jwtTokenManager;
+    private final S3ClientService s3ClientService;
 
     public GoogleLoginResponse loginWithGoogle(GoogleLoginRequest googleLoginRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleLoginRequest.idToken());
@@ -74,20 +76,19 @@ public class LoginService {
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleSignUpRequest.idToken());
 
-        if (googleSignUpRequest.image() == null) {
-            return new User(
-                    decodedToken.getEmail(),
-                    googleSignUpRequest.username(),
-                    googleSignUpRequest.nickname(),
-                    decodedToken.getPicture(),
-                    googleSignUpRequest.country()
-            );
+        String userImage = googleSignUpRequest.image();
+        if (userImage == null) {
+            userImage = decodedToken.getPicture();
         }
+        if (!userImage.startsWith("http")) {
+            userImage = s3ClientService.getImageUrl(userImage).url();
+        }
+
         return new User(
                 decodedToken.getEmail(),
                 googleSignUpRequest.username(),
                 googleSignUpRequest.nickname(),
-                googleSignUpRequest.image(),
+                userImage,
                 googleSignUpRequest.country()
         );
     }
