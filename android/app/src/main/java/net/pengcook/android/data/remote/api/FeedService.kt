@@ -3,6 +3,7 @@ package net.pengcook.android.data.remote.api
 import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.step.RecipeStepResponse
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -23,4 +24,10 @@ interface FeedService {
     suspend fun fetchRecipeSteps(
         @Path("recipeId") recipeId: Long,
     ): Response<List<RecipeStepResponse>>
+
+    @DELETE("/recipes/{recipeId}")
+    suspend fun deleteRecipe(
+        @Header("Authorization") accessToken: String,
+        @Path("recipeId") recipeId: Long,
+    ): Response<Unit>
 }
