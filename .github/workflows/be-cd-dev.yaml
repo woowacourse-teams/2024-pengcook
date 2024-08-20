@@ -43,11 +43,11 @@ jobs:
         working-directory: ./backend
         run: ./gradlew build -x test -x bootJar
 
-      - name: Test and Create OAS
+      - name: Test
         env:
           JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
         working-directory: ./backend
-        run: ./gradlew copyOasToSwagger
+        run: ./gradlew test
 
       - name: Create bootJar
         working-directory: ./backend
