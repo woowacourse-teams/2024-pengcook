@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.0.100.98/pengcook?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: ENC(cn6onsNXSnrnvANMmBDbQSB6OP/o03OBqiJ/pNSOQcMqMEBjJ/Z9O2XwRHz91Mwby+b/6BE/dgWVwdNyj+mtQMkuBfp/gLsTbsTx59qPfOw5XWZfCFadailfuzzMYXeWFrz/myWwyXFAB9BodfQinJD8t4M0d3SnfP1an6fzrp4=)
     username: ENC(DlL3wN5qVKsCmYegk8VBzuI14OT3CkqeYA5Cg7NPObiTUeM+1oJsGKEWkUdnRcMf)
     password: ENC(Xljdaq5zSKNLXbvnubUmz/nwBDWvx9P0AOj6Co1OiywEbasCulkNi98VI4uapwYA)
 
@@ -39,9 +39,8 @@ logging:
       zalando:
         logbook:
           Logbook: TRACE
+
 logbook:
   predicate:
     exclude:
       - path: /actuator/**
-      - path: /swagger-ui/**
-      - path: /openapi3.yaml/**
