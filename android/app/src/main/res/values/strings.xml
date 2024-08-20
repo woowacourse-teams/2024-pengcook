@@ -17,7 +17,7 @@
     </string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">An unexpected error occurred.</string>
-    <string name="detail_like_error">Failed to like the recipe</string>
+    <string name="detail_error">Failed action</string>
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
     <string name="signup_username_hint">Enter Your Username</string>
@@ -121,5 +121,9 @@
 
     <string name="comment_reported">User %s Reported</string>
     <string name="comment_deleted">Comment Deleted</string>
+
+    <string name="report_title_bottom">Please choose the reason of report</string>
+    <string name="report_title_dialog">Choose reason of report</string>
+
 
 </resources>
