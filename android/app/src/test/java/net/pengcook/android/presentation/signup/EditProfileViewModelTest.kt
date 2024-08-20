@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalCoroutinesApi::class)
-class SignUpViewModelTest {
+class EditProfileViewModelTest {
     private lateinit var viewModel: SignUpViewModel
     private lateinit var sessionRepository: SessionRepository
     private lateinit var authorizationRepository: AuthorizationRepository
