@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - be/dev
-      - be/feat/324
 
 concurrency:
   group: ${{ github.ref }}
