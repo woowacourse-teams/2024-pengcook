@@ -1,10 +1,12 @@
 package net.pengcook.android.presentation.detail
 
+import ReportDialogFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -22,7 +24,12 @@ class DetailRecipeFragment : Fragment() {
 
     private val viewModel: DetailRecipeViewModel by viewModels {
         val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        DetailRecipeViewModelFactory(recipe, application.appModule.likeRepository)
+        DetailRecipeViewModelFactory(
+            recipe = recipe,
+            likeRepository = application.appModule.likeRepository,
+            feedRepository = application.appModule.feedRepository,
+            userControlRepository = application.appModule.userControlRepository,
+        )
     }
 
     override fun onCreateView(
@@ -40,6 +47,44 @@ class DetailRecipeFragment : Fragment() {
         AnalyticsLogging.viewLogEvent("DetailRecipe")
         fetchRecipe()
         observeViewModel()
+        setupMenu()
+    }
+
+    private fun setupMenu() {
+        binding.ivMenu.setOnClickListener {
+            showPopupMenu(it)
+        }
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        val menuRes =
+            if (recipe.mine) {
+                R.menu.menu_detail_mine
+            } else {
+                R.menu.menu_detail_other
+            }
+        popupMenu.menuInflater.inflate(menuRes, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_block -> {
+                    viewModel.blockUser()
+                    true
+                }
+                R.id.action_delete -> {
+                    viewModel.deleteRecipe()
+                    true
+                }
+                R.id.action_report -> {
+                    // Handle report action
+                    val dialog = ReportDialogFragment.newInstance(recipe)
+                    dialog.show(parentFragmentManager, "ReportReasonDialog")
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 
     private fun observeViewModel() {
@@ -52,7 +97,7 @@ class DetailRecipeFragment : Fragment() {
             Toast
                 .makeText(
                     requireContext(),
-                    getString(R.string.detail_like_error),
+                    getString(R.string.detail_error),
                     Toast.LENGTH_SHORT,
                 ).show()
         }
@@ -81,6 +126,25 @@ class DetailRecipeFragment : Fragment() {
         viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
             navigationEvent.getContentIfNotHandled() ?: return@observe
             findNavController().navigateUp()
+        }
+
+        viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            findNavController().navigateUp()
+        }
+
+        viewModel.navigateBackWithDeleteEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            Toast.makeText(requireContext(), "Recipe deleted", Toast.LENGTH_SHORT).show()
+            val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
+            findNavController().navigate(action)
+        }
+
+        viewModel.navigateBackWithBlockEvent.observe(viewLifecycleOwner) { navigationEvent ->
+            navigationEvent.getContentIfNotHandled() ?: return@observe
+            Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show()
+            val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
+            findNavController().navigate(action)
         }
     }
 
