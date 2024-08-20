@@ -13,4 +13,6 @@ interface FeedRepository {
     ): Result<List<Recipe>>
 
     suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>>
+
+    suspend fun deleteRecipe(recipeId: Long): Result<Unit>
 }

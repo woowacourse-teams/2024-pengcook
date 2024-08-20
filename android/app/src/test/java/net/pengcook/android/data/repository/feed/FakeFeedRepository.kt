@@ -4,7 +4,9 @@ import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.model.RecipeStep
 import net.pengcook.android.presentation.core.model.User
 
-class FakeFeedRepository(private val error: Boolean = false) : FeedRepository {
+class FakeFeedRepository(
+    private val error: Boolean = false,
+) : FeedRepository {
     private var pageNumber = 0
 
     override suspend fun fetchRecipes(
@@ -13,8 +15,8 @@ class FakeFeedRepository(private val error: Boolean = false) : FeedRepository {
         category: String?,
         keyword: String?,
         userId: Long?,
-    ): Result<List<Recipe>> {
-        return runCatching {
+    ): Result<List<Recipe>> =
+        runCatching {
             if (error) {
                 throw RuntimeException()
             }
@@ -31,16 +33,19 @@ class FakeFeedRepository(private val error: Boolean = false) : FeedRepository {
                     difficulty = 5,
                     introduction = "introduction$index",
                     commentCount = 10,
+                    mine = false,
                 )
             }
         }
-    }
 
-    override suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>> {
-        return runCatching {
+    override suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>> =
+        runCatching {
             List(10) {
                 RecipeStep(it.toLong() + 1, 1L, "description${it + 1}", "image${it + 1}", it + 1)
             }
         }
+
+    override suspend fun deleteRecipe(recipeId: Long): Result<Unit> {
+        TODO("Not yet implemented")
     }
 }
