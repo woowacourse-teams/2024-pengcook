@@ -14,6 +14,8 @@ import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.FakeAuthorizationRepository
 import net.pengcook.android.data.repository.auth.FakeSessionRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
+import net.pengcook.android.data.repository.image.FakeImageRepository
+import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -25,10 +27,11 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalCoroutinesApi::class)
-class EditProfileViewModelTest {
+class SignUpViewModelTest {
     private lateinit var viewModel: SignUpViewModel
     private lateinit var sessionRepository: SessionRepository
     private lateinit var authorizationRepository: AuthorizationRepository
+    private val imageRepository: ImageRepository = FakeImageRepository()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -62,10 +65,11 @@ class EditProfileViewModelTest {
                     platformName = "google",
                     authorizationRepository = authorizationRepository,
                     sessionRepository = sessionRepository,
+                    imageRepository = imageRepository,
                 )
 
             // when
-            viewModel.changeProfileImage(Uri.parse("new_uri"))
+            viewModel.changeCurrentImage(Uri.parse("new_uri"))
             advanceUntilIdle()
 
             // then
@@ -89,6 +93,7 @@ class EditProfileViewModelTest {
                     platformName = "google",
                     authorizationRepository = authorizationRepository,
                     sessionRepository = sessionRepository,
+                    imageRepository = imageRepository,
                 )
 
             // when
