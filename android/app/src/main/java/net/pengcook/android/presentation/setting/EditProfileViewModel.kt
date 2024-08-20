@@ -28,6 +28,8 @@ class EditProfileViewModel(
     BottomButtonClickListener,
     SpinnerItemChangeListener,
     AppbarSingleActionEventListener {
+    private lateinit var existingUsername: String
+
     val usernameContent: MutableLiveData<String> = MutableLiveData()
     val nicknameContent: MutableLiveData<String> = MutableLiveData()
     val country: MutableLiveData<String> = MutableLiveData()
@@ -58,6 +60,7 @@ class EditProfileViewModel(
         viewModelScope.launch {
             profileRepository.fetchMyUserInformation()
                 .onSuccess { userProfile ->
+                    existingUsername = userProfile.username
                     usernameContent.value = userProfile.username
                     nicknameContent.value = userProfile.nickname
                     country.value = userProfile.region
@@ -169,6 +172,7 @@ class EditProfileViewModel(
     }
 
     private suspend fun usernameAvailable(username: String): Boolean {
+        if (username == existingUsername) return true
         authorizationRepository
             .checkUsernameDuplication(username)
             .onSuccess { available ->
