@@ -3,7 +3,7 @@ package net.pengcook.android.data.remote.api
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.RenewedTokensResponse
 import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
@@ -21,7 +21,7 @@ interface AuthorizationService {
     @POST("/token/refresh")
     suspend fun fetchAccessToken(
         @Body refreshToken: RefreshTokenRequest,
-    ): Response<RefreshedTokensResponse>
+    ): Response<RenewedTokensResponse>
 
     @GET("/user/me")
     suspend fun fetchUserInformation(
@@ -44,6 +44,11 @@ interface AuthorizationService {
     suspend fun checkUsernameDuplication(
         @Query("username") username: String,
     ): Response<UsernameDuplicationResponse>
+
+    @GET("/token/check")
+    suspend fun checkSignInStatus(
+        @Header("Authorization") accessToken: String,
+    ): Response<Unit>
 
     @DELETE("/user/me")
     suspend fun deleteAccount(
