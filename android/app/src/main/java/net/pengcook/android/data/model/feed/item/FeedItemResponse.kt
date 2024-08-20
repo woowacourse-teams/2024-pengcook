@@ -12,4 +12,5 @@ data class FeedItemResponse(
     val thumbnail: String,
     val title: String,
     val commentCount: Long,
+    val mine: Boolean,
 )
