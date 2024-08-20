@@ -83,6 +83,9 @@ class FakeAuthorizationRepository(
     }
 
     override suspend fun deleteAccount(): Result<Unit> {
-        TODO("Not yet implemented")
+        return runCatching {
+            fakeTokenLocalDataSource.clearAll()
+            userInformation = null
+        }
     }
 }
