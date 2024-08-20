@@ -16,4 +16,5 @@ data class Recipe(
     val difficulty: Int,
     val introduction: String,
     val commentCount: Long,
+    val mine: Boolean,
 ) : Parcelable
