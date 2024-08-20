@@ -18,4 +18,9 @@ class DefaultFeedRemoteDataSource(
     ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
 
     override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
+
+    override suspend fun deleteRecipe(
+        accessToken: String,
+        recipeId: Long,
+    ): Response<Unit> = feedService.deleteRecipe(accessToken, recipeId)
 }
