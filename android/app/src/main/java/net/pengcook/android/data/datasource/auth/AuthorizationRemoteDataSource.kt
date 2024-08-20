@@ -27,5 +27,7 @@ interface AuthorizationRemoteDataSource {
 
     suspend fun fetchUserInformation(accessToken: String): Response<UserInformationResponse>
 
+    suspend fun checkSignInStatus(accessToken: String): Response<Unit>
+
     suspend fun deleteAccount(accessToken: String): Response<Unit>
 }
