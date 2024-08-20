@@ -2,12 +2,15 @@ package net.pengcook.android.presentation.comment.bottomsheet
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentMenuBottomBinding
+import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Comment
 
 class CommentMenuBottomFragment : BottomSheetDialogFragment() {
@@ -15,7 +18,17 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
     private val binding
         get() = _binding!!
 
+    private val viewModel: CommentMenuBottomViewModel by viewModels {
+        val appModule =
+            (requireContext().applicationContext as DefaultPengcookApplication).appModule
+        CommentMenuBottomViewModelFactory(
+            userControlRepository = appModule.userControlRepository,
+        )
+    }
+
     private val selectedComment: Comment? by lazy { arguments?.getParcelable("selected_comment") }
+
+    private val adapter: ReportReasonAdapter by lazy { ReportReasonAdapter(viewModel) }
     private lateinit var callback: CommentMenuCallback
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
@@ -40,12 +53,6 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.comment = selectedComment
 
-        binding.tvReport.setOnClickListener {
-            val comment = selectedComment ?: return@setOnClickListener
-            callback.onReport(comment)
-            dismiss()
-        }
-
         binding.tvBlock.setOnClickListener {
             val comment = selectedComment ?: return@setOnClickListener
             callback.onBlock(comment)
@@ -55,6 +62,23 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
         binding.tvDelete.setOnClickListener {
             val comment = selectedComment ?: return@setOnClickListener
             callback.onDelete(comment)
+            dismiss()
+        }
+
+        binding.adapter = adapter
+        binding.vm = viewModel
+        viewModel.reportState.observe(viewLifecycleOwner) { state ->
+            if (state) {
+                Log.d("crong", "$state")
+            }
+        }
+
+        viewModel.reportReasons.observe(viewLifecycleOwner) { reasons ->
+            adapter.submitList(reasons)
+        }
+
+        viewModel.selectedReportReason.observe(viewLifecycleOwner) { reason ->
+            callback.onReport(selectedComment!!, reason)
             dismiss()
         }
     }
