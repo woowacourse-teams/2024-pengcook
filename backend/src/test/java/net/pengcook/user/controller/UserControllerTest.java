@@ -16,6 +16,7 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.image.service.S3ClientService;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
 import net.pengcook.user.dto.ProfileResponse;
@@ -35,6 +36,9 @@ class UserControllerTest extends RestDocsSetting {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    S3ClientService s3ClientService;
 
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
@@ -140,7 +144,7 @@ class UserControllerTest extends RestDocsSetting {
                 "loki@pengcook.net",
                 "loki_changed",
                 "로키_changed",
-                "loki_changed.jpg",
+                s3ClientService.getImageUrl("loki_changed.jpg").url(),
                 "KOREA",
                 "hello world"
         );

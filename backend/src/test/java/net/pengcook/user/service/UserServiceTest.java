@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.image.service.S3ClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
@@ -47,6 +48,8 @@ class UserServiceTest {
     UserReportRepository userReportRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    S3ClientService s3ClientService;
 
     @Test
     @DisplayName("id를 통해 사용자의 정보를 불러온다.")
@@ -97,7 +100,7 @@ class UserServiceTest {
                 "loki@pengcook.net",
                 "loki_changed",
                 "로키_changed",
-                "loki_changed.jpg",
+                s3ClientService.getImageUrl("loki_changed.jpg").url(),
                 "KOREA",
                 "hello world"
         );
