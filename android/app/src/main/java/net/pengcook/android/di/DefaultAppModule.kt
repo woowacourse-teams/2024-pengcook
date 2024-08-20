@@ -23,6 +23,8 @@ import net.pengcook.android.data.datasource.photo.DefaultImageRemoteDataSource
 import net.pengcook.android.data.datasource.photo.ImageRemoteDataSource
 import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
 import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
+import net.pengcook.android.data.datasource.usercontrol.DefaultUserControlDataSource
+import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
 import net.pengcook.android.data.local.database.RecipeDatabase
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
@@ -32,6 +34,7 @@ import net.pengcook.android.data.remote.api.ImageService
 import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.ProfileService
+import net.pengcook.android.data.remote.api.UserControlService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultSessionRepository
@@ -50,6 +53,8 @@ import net.pengcook.android.data.repository.photo.DefaultImageRepository
 import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.data.repository.profile.DefaultProfileRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
+import net.pengcook.android.data.repository.usercontrol.DefaultUserControlRepository
+import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -65,12 +70,14 @@ class DefaultAppModule(
         }
 
     private val client =
-        OkHttpClient.Builder().apply {
-            addInterceptor(interceptor)
-            connectTimeout(30, TimeUnit.SECONDS)
-            readTimeout(20, TimeUnit.SECONDS)
-            writeTimeout(25, TimeUnit.SECONDS)
-        }.build()
+        OkHttpClient
+            .Builder()
+            .apply {
+                addInterceptor(interceptor)
+                connectTimeout(30, TimeUnit.SECONDS)
+                readTimeout(20, TimeUnit.SECONDS)
+                writeTimeout(25, TimeUnit.SECONDS)
+            }.build()
 
     private val retrofit =
         Retrofit
@@ -100,7 +107,10 @@ class DefaultAppModule(
         DefaultFeedRemoteDataSource(service(FeedService::class.java))
 
     override val feedRepository: FeedRepository =
-        DefaultFeedRepository(sessionRepository, feedRemoteDataSource)
+        DefaultFeedRepository(
+            sessionLocalDataSource = sessionLocalDataSource,
+            feedRemoteDataSource = feedRemoteDataSource,
+        )
 
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
         DefaultMakingRecipeRemoteDataSource(
@@ -148,6 +158,12 @@ class DefaultAppModule(
 
     override val profileRepository: ProfileRepository =
         DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
+
+    private val userControlRemoteDataSource: UserControlDataSource =
+        DefaultUserControlDataSource(service(UserControlService::class.java))
+
+    override val userControlRepository: UserControlRepository =
+        DefaultUserControlRepository(sessionLocalDataSource, userControlRemoteDataSource)
 
     private val imageRemoteDataSource: ImageRemoteDataSource =
         DefaultImageRemoteDataSource(service(ImageService::class.java))
