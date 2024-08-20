@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.0.100.98/pengcook?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ENC(DlL3wN5qVKsCmYegk8VBzuI14OT3CkqeYA5Cg7NPObiTUeM+1oJsGKEWkUdnRcMf)
+    password: ENC(Xljdaq5zSKNLXbvnubUmz/nwBDWvx9P0AOj6Co1OiywEbasCulkNi98VI4uapwYA)
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: ENC(D+LidASEUNdtQfNTJ5u/1KEFLFgsfWdLtG1ED4+pIdAbZX1xdQSlkIpJT2S+9LmGTjgZiOZZfLSu8dcj18dWMzudDfob28iSGOZdpPexoqeE5ZxbQgsUDm/AEaEAGJ1AwVmZWWo8sfvg2sidGk/aOd6yr1krrnSOfr088kd8MCpuhu5my/fT5CfgboBB/feJoC+rbM15apC+qGKP8ju+pE1zE/iwvuJwd0bHHWqs0FA=)
+
+firebase:
+  service-account: ENC(/ymh9yA3YtNelW0YEUqwcLbA72FL+j594Mo7ZYqYzv0s/FMe7Hi/+dEZ7NvdtxP8CGgw8rfiyjxJeZGm2lew+Q==)
+  project-name: ENC(Bx4psOQ3Jx2o13s96GCxyiQxzpFFFZwacbt6blpeja8ff/Vzru0jQTIs4EcZNEd+)
+
+cloud:
+  aws:
+    S3:
+      bucket: ENC(rKxRm4yCCuPIbYo59E7ImxNwsSHbrIubVtNyEe6EPbPFM+Bu16dnqPorXLPD18S57aSsrajMY8tYc3XKw7Gwug==)
+      path: ENC(ZMKZRrEXXpiAXq6C/RkvuRX29u8h58J7ZAuA/Xb+NkQ+Ae/Ix1NpErVRcYaYv0cz)
+      s3-url: ENC(O/OI16EMUuXwRIbCifs4WXz4fZFTskquGw4Xg5iKa6/pxz0GbmSrnlqYceinry1y15TEU78j8pmwfJYBZXZlpTTnp1bMpmIqe5fsVjfpX2bZljGTwElJLYY6XEvhnaJe)
+      cloudfront-cname: ENC(eG3jV3fA2iMks/OfVdEoOC1yuP00D/sTquppxx27pJl6YdMcNfFcX1PUwingvuNsNzoUdGO3Oie+upv/OFGcCA==)
+    region:
+      static: ENC(QHjkS/cQk6BtfKT6UkdHZrnxZKGCvSsc15GvFz/KKBf25F5XBWhLAjEtHjk+up3V)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook:
+          Logbook: TRACE
+logbook:
+  predicate:
+    exclude:
+      - path: /actuator/**
+      - path: /swagger-ui/**
+      - path: /openapi3.yaml/**
