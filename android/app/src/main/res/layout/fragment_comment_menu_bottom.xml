@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.comment.bottomsheet.CommentMenuBottomViewModel" />
+
+        <variable
+            name="adapter"
+            type="net.pengcook.android.presentation.comment.bottomsheet.ReportReasonAdapter" />
+
+        <variable
+            name="reportEventHandler"
+            type="net.pengcook.android.presentation.comment.bottomsheet.ReportEventHandler" />
 
         <variable
             name="comment"
@@ -18,7 +31,6 @@
         tools:context=".presentation.comment.bottomsheet.CommentMenuBottomFragment">
 
         <TextView
-            app:visibility="@{!comment.mine}"
             android:id="@+id/tv_username_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,10 +40,10 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{!comment.mine}" />
 
         <TextView
-            app:visibility="@{!comment.mine}"
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,6 +53,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/tv_username_title"
             app:layout_constraintTop_toTopOf="@id/tv_username_title"
+            app:visibility="@{!comment.mine}"
             tools:text="Loki" />
 
         <TextView
@@ -77,16 +90,18 @@
             android:backgroundTint="@color/yellow_medium"
             android:fontFamily="@font/notosans_bold"
             android:gravity="center"
+            android:onClick="@{() -> vm.onReport()}"
             android:padding="14dp"
             android:text="Report"
-            app:visibility="@{!comment.mine}"
             android:textColor="@color/yellow_weak"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_block"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_comment" />
+            app:layout_constraintTop_toBottomOf="@id/tv_comment"
+            bind:isSecondVisible="@{!vm.reportState}"
+            bind:isVisible="@{!comment.mine}" />
 
         <TextView
             android:id="@+id/tv_block"
@@ -97,32 +112,61 @@
             android:fontFamily="@font/notosans_bold"
             android:gravity="center"
             android:padding="14dp"
-            app:visibility="@{!comment.mine}"
             android:text="Block"
             android:textColor="@color/yellow_weak"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_report"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@id/tv_report" />
+            app:layout_constraintStart_toEndOf="@id/tv_report"
+            app:layout_constraintTop_toTopOf="@id/tv_report"
+            bind:isSecondVisible="@{!vm.reportState}"
+            bind:isVisible="@{!comment.mine}" />
 
         <TextView
             android:id="@+id/tv_delete"
-            android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:background="@drawable/bg_radius_filled"
             android:backgroundTint="@color/yellow_medium"
             android:fontFamily="@font/notosans_bold"
             android:padding="14dp"
-            app:visibility="@{comment.mine}"
             android:text="Delete my comment"
             android:textColor="@color/yellow_weak"
             android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_comment" />
+            app:layout_constraintTop_toBottomOf="@id/tv_comment"
+            bind:isSecondVisible="@{!vm.reportState}"
+            bind:isVisible="@{comment.mine}" />
+
+        <TextView
+            android:id="@+id/tv_report_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/report_title_bottom"
+            android:textColor="@color/yellow_strong"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_comment"
+            bind:visibility="@{vm.reportState}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="16dp"
+            android:adapter="@{adapter}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_report_title"
+            bind:visibility="@{vm.reportState}"
+            tools:listitem="@layout/item_report_reason" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
