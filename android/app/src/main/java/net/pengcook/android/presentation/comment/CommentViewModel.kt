@@ -7,13 +7,16 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.comment.CommentRepository
+import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuCallback
 import net.pengcook.android.presentation.core.model.Comment
+import net.pengcook.android.presentation.core.model.ReportReason
 import net.pengcook.android.presentation.core.util.Event
 
 class CommentViewModel(
     private val recipeId: Long,
     private val commentRepository: CommentRepository,
+    private val userControlRepository: UserControlRepository,
 ) : ViewModel(),
     CommentEventHandler,
     CommentMenuCallback {
@@ -77,7 +80,8 @@ class CommentViewModel(
                 _isCommentEmpty.value = Event(true)
                 return@launch
             }
-            _comments.value = comments.filter { it.userId !in (blockedUserIds.value ?: emptyList()) }
+            _comments.value =
+                comments.filter { it.userId !in (blockedUserIds.value ?: emptyList()) }
         }
     }
 
@@ -109,31 +113,55 @@ class CommentViewModel(
         _showCommentMenuEvent.value = Event(comment)
     }
 
+    fun blockUser(comment: Comment) {
+        viewModelScope.launch {
+            userControlRepository.blockUser(comment.userId)
+        }
+    }
+
+    fun onReportComment(
+        comment: Comment,
+        reportReason: ReportReason,
+    ) {
+        viewModelScope.launch {
+            userControlRepository.reportUser(
+                reporteeId = comment.userId,
+                reason = reportReason.reason,
+                type = "COMMENT",
+                targetId = comment.commentId,
+                details = null,
+            )
+            val reloadedComments = fetchComments()
+            _comments.value = reloadedComments
+        }
+    }
+
     fun onBlockComment(comment: Comment) {
-        blockedUserIds.value = blockedUserIds.value?.plus(comment.userId) ?: listOf(comment.userId)
-        val commentsAfterBlock =
-            _comments.value?.filter {
-                it.userId !in (blockedUserIds.value ?: emptyList())
-            } ?: emptyList()
-        _comments.value = commentsAfterBlock
+        viewModelScope.launch {
+            userControlRepository.blockUser(comment.userId)
+            val reloadedComments = fetchComments()
+            _comments.value = reloadedComments
+        }
     }
 
     fun onDeleteComment(commentId: Long) {
         viewModelScope.launch {
             deleteComment(commentId)
+            val reloadedComments = fetchComments()
+            _comments.value = reloadedComments
         }
-        initializeComments()
     }
 
     private suspend fun deleteComment(commentId: Long) {
-        val result = commentRepository.deleteComment(commentId)
-        if (result.isSuccess) {
-            initializeComments()
-        }
+        commentRepository.deleteComment(commentId)
     }
 
-    override fun onReport(comment: Comment) {
+    override fun onReport(
+        comment: Comment,
+        reportReason: ReportReason,
+    ) {
         _reportCommentEvent.value = Event(comment)
+        onReportComment(comment, reportReason)
     }
 
     override fun onBlock(comment: Comment) {

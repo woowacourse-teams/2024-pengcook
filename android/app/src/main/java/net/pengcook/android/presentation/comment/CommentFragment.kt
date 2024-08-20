@@ -30,6 +30,7 @@ class CommentFragment : Fragment() {
         CommentViewModelFactory(
             recipeId = recipeId,
             commentRepository = appModule.commentRepository,
+            userControlRepository = appModule.userControlRepository,
         )
     }
     private val adapter: CommentAdapter by lazy { CommentAdapter(viewModel) }
@@ -53,7 +54,6 @@ class CommentFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.adapter = adapter
-        // setUpComments()
         observeViewModels()
     }
 
@@ -68,6 +68,10 @@ class CommentFragment : Fragment() {
         observeQuitCommentEvent()
         observeShowCommentMenuEvent()
         observeCommentMenuEvents()
+
+        viewModel.comments.observe(viewLifecycleOwner) { comments ->
+            adapter.submitList(comments)
+        }
     }
 
     private fun observeCommentEmptyState() {
