@@ -25,15 +25,16 @@ services:
         cat <<EOF > /prometheus/prometheus.yml
         scrape_configs:
           - job_name: 'pengcook'
-            metrics_path: '/actuator/prometheus'
+            metrics_path: '/prom/actuator/prometheus'
             scrape_interval: 15s
             static_configs:
-              - targets: ['10.0.0.187/prom']
+              - targets: ['10.0.0.187']
         
           - job_name: 'node'
+            metrics_path: '/node/metrics'
             scrape_interval: 15s
             static_configs:
-              - targets: ['10.0.0.187/node']
+              - targets: ['10.0.0.187']
         EOF
         /bin/prometheus
 
