@@ -37,6 +37,7 @@ fun UserSignUpForm.toSignUpRequest(): SignUpRequest =
         idToken = idToken,
         nickname = nickname,
         username = username,
+        image = image,
     )
 
 fun UsernameDuplicationResponse.toUsernameAvailable(): Boolean = available

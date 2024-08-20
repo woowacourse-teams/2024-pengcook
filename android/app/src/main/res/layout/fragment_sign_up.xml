@@ -20,9 +20,9 @@
             layout="@layout/item_appbar_with_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:appbarEventListener="@{viewModel}"
             app:icon="@{@drawable/ic_back_24}"
-            app:title="@{@string/signup_appbar}"
-            app:appbarEventListener="@{viewModel}"/>
+            app:title="@{@string/signup_appbar}" />
 
         <ScrollView
             android:id="@+id/sv_sign_up"
@@ -38,19 +38,23 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="24dp">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_profile_image"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
+                    android:adjustViewBounds="true"
                     android:background="@drawable/bg_radius_outlined"
+                    android:onClick="@{() -> viewModel.addImage()}"
                     android:scaleType="centerCrop"
                     app:imageUri="@{viewModel.imageUri}"
                     app:layout_constraintDimensionRatio="H,1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/radiusImageView"
+                    tools:src="@drawable/ic_launcher_background" />
 
                 <include
                     android:id="@+id/form_username"
@@ -97,7 +101,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             app:buttonClickListener="@{viewModel}"
-            app:buttonText="@{@string/signup_button_next}"
+            app:buttonText="@{(viewModel.imageUploaded == false &amp;&amp; viewModel.imageSelected == true) ? @string/making_uploading_image : @string/making_next_step}"
             app:enabled="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_sign_up" />

@@ -19,6 +19,8 @@ import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeLoca
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
+import net.pengcook.android.data.datasource.photo.DefaultImageRemoteDataSource
+import net.pengcook.android.data.datasource.photo.ImageRemoteDataSource
 import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
 import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
 import net.pengcook.android.data.local.database.RecipeDatabase
@@ -26,6 +28,7 @@ import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.CommentService
 import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.remote.api.ImageService
 import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.ProfileService
@@ -43,6 +46,8 @@ import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingR
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.data.repository.photo.DefaultImageRepository
+import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.data.repository.profile.DefaultProfileRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
 import okhttp3.OkHttpClient
@@ -144,4 +149,10 @@ class DefaultAppModule(
 
     override val profileRepository: ProfileRepository =
         DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
+
+    private val imageRemoteDataSource: ImageRemoteDataSource =
+        DefaultImageRemoteDataSource(service(ImageService::class.java))
+
+    override val imageRepository: ImageRepository =
+        DefaultImageRepository(imageRemoteDataSource)
 }
