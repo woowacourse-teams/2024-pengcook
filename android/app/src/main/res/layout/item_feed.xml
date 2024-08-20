@@ -58,7 +58,8 @@
                 style="@style/Body.Medium.B2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="32dp"
                 android:maxLines="1"
                 android:text="@{recipe.user.username}"
                 app:layout_constraintBottom_toBottomOf="@id/profile_image"
@@ -76,6 +77,7 @@
                 android:contentDescription="TODO"
                 android:padding="12dp"
                 android:src="@drawable/ic_menu_dots"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/profile_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/profile_image" />
@@ -108,6 +110,7 @@
 
             <TextView
                 android:id="@+id/like_count"
+                style="@style/Body.Regular.B3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -115,7 +118,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/like_icon"
                 app:layout_constraintStart_toEndOf="@id/like_icon"
                 app:layout_constraintTop_toTopOf="@id/like_icon"
-                style="@style/Body.Regular.B3"
                 tools:text="1.2k" />
 
             <!-- Comment icon and count -->
@@ -131,6 +133,7 @@
 
             <TextView
                 android:id="@+id/comment_count"
+                style="@style/Body.Regular.B3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -138,7 +141,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/comment_icon"
                 app:layout_constraintStart_toEndOf="@id/comment_icon"
                 app:layout_constraintTop_toTopOf="@id/comment_icon"
-                style="@style/Body.Regular.B3"
                 tools:text="800" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
