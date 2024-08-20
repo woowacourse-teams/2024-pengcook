@@ -113,7 +113,6 @@ jobs:
       - name: Restart docker compose
         run: |
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          docker compose down
           docker compose up -d
 
       - name: Clean up unused Docker images
