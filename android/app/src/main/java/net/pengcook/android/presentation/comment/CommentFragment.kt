@@ -68,10 +68,6 @@ class CommentFragment : Fragment() {
         observeQuitCommentEvent()
         observeShowCommentMenuEvent()
         observeCommentMenuEvents()
-
-        viewModel.comments.observe(viewLifecycleOwner) { comments ->
-            adapter.submitList(comments)
-        }
     }
 
     private fun observeCommentEmptyState() {

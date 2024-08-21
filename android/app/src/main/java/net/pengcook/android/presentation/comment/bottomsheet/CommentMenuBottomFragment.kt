@@ -67,16 +67,30 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
 
         binding.adapter = adapter
         binding.vm = viewModel
+        observeViewModels()
+    }
+
+    private fun observeViewModels() {
+        observeReportState()
+        observeReportReasons()
+        observeSelectedReportReason()
+    }
+
+    private fun observeReportState() {
         viewModel.reportState.observe(viewLifecycleOwner) { state ->
             if (state) {
                 Log.d("crong", "$state")
             }
         }
+    }
 
+    private fun observeReportReasons() {
         viewModel.reportReasons.observe(viewLifecycleOwner) { reasons ->
             adapter.submitList(reasons)
         }
+    }
 
+    private fun observeSelectedReportReason() {
         viewModel.selectedReportReason.observe(viewLifecycleOwner) { reason ->
             callback.onReport(selectedComment!!, reason)
             dismiss()
