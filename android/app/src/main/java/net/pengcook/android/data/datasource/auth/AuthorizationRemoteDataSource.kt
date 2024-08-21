@@ -3,7 +3,7 @@ package net.pengcook.android.data.datasource.auth
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.RenewedTokensResponse
 import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
@@ -23,7 +23,7 @@ interface AuthorizationRemoteDataSource {
 
     suspend fun checkUsernameDuplication(username: String): Response<UsernameDuplicationResponse>
 
-    suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RefreshedTokensResponse>
+    suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RenewedTokensResponse>
 
     suspend fun fetchUserInformation(accessToken: String): Response<UserInformationResponse>
 

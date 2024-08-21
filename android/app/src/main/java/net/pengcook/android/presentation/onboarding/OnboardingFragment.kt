@@ -87,22 +87,6 @@ class OnboardingFragment : Fragment() {
         val textView = binding.tvTerms
         textView.text = Html.fromHtml(getString(R.string.onboarding_terms), Html.FROM_HTML_MODE_LEGACY)
         textView.movementMethod = LinkMovementMethod.getInstance()
-//        val spannableString = SpannableString(getString(R.string.onboarding_terms))
-//
-//        val clickableSpan =
-//            object : ClickableSpan() {
-//                override fun onClick(widget: View) {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.example.com"))
-//                    startActivity(intent)
-//                }
-//            }
-//
-//        val start = spannableString.toString().indexOf("자세히 보기")
-//        val end = start + "자세히 보기".length
-//
-//        spannableString.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//        textView.text = spannableString
-//        textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun initializeBindingVariables() {
