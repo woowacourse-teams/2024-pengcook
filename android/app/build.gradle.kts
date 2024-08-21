@@ -25,7 +25,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -77,10 +77,10 @@ dependencies {
     val gsonVersion = "2.11.0"
     val coreKtx = "1.13.1"
     val coroutineVersion = "1.8.1"
+    val roomVersion = "2.6.1"
 
     implementation(libs.firebase.auth)
     implementation(libs.androidx.material3.android)
-    implementation(libs.core)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.core.ktx)
@@ -129,6 +129,12 @@ dependencies {
     // splash
     implementation("androidx.core:core-splashscreen:1.0.0-rc01")
     implementation("androidx.startup:startup-runtime:1.1.1")
+
+    // room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
 
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")

@@ -28,11 +28,13 @@ class DefaultProfileRemoteDataSource(
     }
 
     override suspend fun fetchUserFeeds(
+        accessToken: String,
         userId: Long,
         pageNumber: Int,
         pageSize: Int,
     ): Response<List<FeedItemResponse>> {
         return feedService.fetchRecipes(
+            accessToken = accessToken,
             pageNumber = pageNumber,
             pageSize = pageSize,
             category = null,

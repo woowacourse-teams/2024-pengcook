@@ -10,6 +10,7 @@ import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -43,4 +44,9 @@ interface AuthorizationService {
     suspend fun checkUsernameDuplication(
         @Query("username") username: String,
     ): Response<UsernameDuplicationResponse>
+
+    @DELETE("/user/me")
+    suspend fun deleteAccount(
+        @Header("Authorization") accessToken: String,
+    ): Response<Unit>
 }

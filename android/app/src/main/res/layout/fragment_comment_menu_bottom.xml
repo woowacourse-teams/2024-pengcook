@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="net.pengcook.android.presentation.core.model.Comment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow_regular"
+        android:padding="24dp"
+        tools:context=".presentation.comment.bottomsheet.CommentMenuBottomFragment">
+
+        <TextView
+            app:visibility="@{!comment.mine}"
+            android:id="@+id/tv_username_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="UserName : "
+            android:textColor="@color/yellow_strong"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            app:visibility="@{!comment.mine}"
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{comment.userName}"
+            android:textColor="@color/yellow_strong"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_username_title"
+            app:layout_constraintTop_toTopOf="@id/tv_username_title"
+            tools:text="Loki" />
+
+        <TextView
+            android:id="@+id/tv_comment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Comment : "
+            android:textColor="@color/yellow_strong"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_username_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_username_title" />
+
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{comment.message}"
+            android:textColor="@color/yellow_strong"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_comment_title"
+            app:layout_constraintTop_toTopOf="@id/tv_comment_title"
+            tools:text="This is a commsdnflasdnflasndflkansdflknasldkfnalskdfnlaskdnflkent" />
+
+        <TextView
+            android:id="@+id/tv_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_radius_filled"
+            android:backgroundTint="@color/yellow_medium"
+            android:fontFamily="@font/notosans_bold"
+            android:gravity="center"
+            android:padding="14dp"
+            android:text="Report"
+            app:visibility="@{!comment.mine}"
+            android:textColor="@color/yellow_weak"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_block"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_comment" />
+
+        <TextView
+            android:id="@+id/tv_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_radius_filled"
+            android:backgroundTint="@color/yellow_medium"
+            android:fontFamily="@font/notosans_bold"
+            android:gravity="center"
+            android:padding="14dp"
+            app:visibility="@{!comment.mine}"
+            android:text="Block"
+            android:textColor="@color/yellow_weak"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@id/tv_report" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_radius_filled"
+            android:backgroundTint="@color/yellow_medium"
+            android:fontFamily="@font/notosans_bold"
+            android:padding="14dp"
+            app:visibility="@{comment.mine}"
+            android:text="Delete my comment"
+            android:textColor="@color/yellow_weak"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_comment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

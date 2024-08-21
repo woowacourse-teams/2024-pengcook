@@ -119,6 +119,9 @@
         android:id="@+id/recipeStepFragment"
         android:name="net.pengcook.android.presentation.step.RecipeStepFragment"
         android:label="RecipeStepFragment">
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
         <action
             android:id="@+id/action_recipeStepFragment_to_detailRecipeFragment"
             app:destination="@id/detailRecipeFragment" />
@@ -205,7 +208,7 @@
 
     <fragment
         android:id="@+id/accountSettingFragment"
-        android:name="net.pengcook.android.presentation.setting.AccountSettingFragment"
+        android:name="net.pengcook.android.presentation.setting.account.AccountSettingFragment"
         android:label="fragment_account_setting"
         tools:layout="@layout/fragment_account_setting" >
         <action

@@ -28,6 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"
+            app:appbarEventListener="@{vm::onNavigateBack}"
             app:icon="@{@drawable/ic_close}"
             app:title="@{@string/comment_appbar_title}" />
 

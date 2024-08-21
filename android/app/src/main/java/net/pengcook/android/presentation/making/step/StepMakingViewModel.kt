@@ -5,65 +5,45 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.domain.model.recipemaking.RecipeCreation
 import net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener
-import net.pengcook.android.presentation.core.model.RecipeStep
+import net.pengcook.android.presentation.core.model.RecipeStepMaking
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.step.listener.StepMakingEventHandler
 import java.io.File
 
 class StepMakingViewModel(
     private val recipeId: Long,
-    private val maximumStep: Int = 15,
+    val maximumStep: Int = 15,
     private val recipeStepMakingRepository: RecipeStepMakingRepository,
     private val makingRecipeRepository: MakingRecipeRepository,
 ) : ViewModel(),
     StepMakingEventHandler,
     AppbarDoubleActionEventListener {
-    private val _maxStepPage = MutableLiveData<Int>(maximumStep)
-    val maxStepPage: LiveData<Int>
-        get() = _maxStepPage
-
     private val _stepNumber = MutableLiveData<Int>(1)
     val stepNumber: LiveData<Int> get() = _stepNumber
 
     val introductionContent = MutableLiveData<String>()
 
-    private val _imageUri = MutableLiveData<Uri>()
-    val imageUri: LiveData<Uri>
+    private val _imageUri = MutableLiveData<Uri?>()
+    val imageUri: LiveData<Uri?>
         get() = _imageUri
 
-    private val _fetchedRecipeStep = MutableLiveData<RecipeStep?>()
-    val fetchedRecipeStep: LiveData<RecipeStep?>
-        get() = _fetchedRecipeStep
+    private var _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
-    private val isIntroductionContentEmpty = MutableLiveData<Boolean>(true)
+    private val _imageUploaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageUploaded: LiveData<Boolean>
+        get() = _imageUploaded
 
-    private var _emptyIntroductionState = MutableLiveData<Event<Boolean>>()
-    val emptyIntroductionState: LiveData<Event<Boolean>>
-        get() = _emptyIntroductionState
-
-    private var _isUploadingImage = MutableLiveData<Boolean>(false)
-    val isUploadingImage: LiveData<Boolean>
-        get() = _isUploadingImage
-
-    private var _uploadingImageState = MutableLiveData<Event<Boolean>>()
-    val uploadingImageState: LiveData<Event<Boolean>>
-        get() = _uploadingImageState
-
-    private var _completeStepMakingState = MutableLiveData<Event<Boolean>>()
-    val completeStepMakingState: LiveData<Event<Boolean>>
-        get() = _completeStepMakingState
-
-    private var _quitStepMakingState = MutableLiveData<Event<Boolean>>()
-    val quitStepMakingState: LiveData<Event<Boolean>>
-        get() = _quitStepMakingState
-
-    private var _uploadErrorState = MutableLiveData<Event<Boolean>>()
-    val uploadErrorState: LiveData<Event<Boolean>>
-        get() = _uploadErrorState
+    private val _imageSelected: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageSelected: LiveData<Boolean>
+        get() = _imageSelected
 
     private var thumbnailTitle: String? = null
 
@@ -71,123 +51,114 @@ class StepMakingViewModel(
     val uiEvent: LiveData<Event<RecipeStepMakingEvent>>
         get() = _uiEvent
 
-    private val _currentImage: MutableLiveData<Uri?> = MutableLiveData()
-    val currentImage: LiveData<Uri?>
-        get() = _currentImage
+    private val stepCompletion: MutableMap<Int, Boolean> = mutableMapOf(1 to false)
 
     init {
-        initStepData(stepNumber.value!!)
+        val stepNumber = stepNumber.value
+        if (stepNumber != null) {
+            initStepData(stepNumber)
+        }
     }
 
     override fun onAddImage() {
         _uiEvent.value = Event(RecipeStepMakingEvent.AddImage)
     }
 
-    override fun validateNextPageableCondition() {
-        // Check if the introduction content is empty or Uploading image
-        _currentImage.value = null
-        isIntroductionContentEmpty.value = introductionContent.value.isNullOrBlank()
+    override fun moveToNextPage() {
+        val imageUploaded = imageUploaded.value
+        val introduction = introductionContent.value
+        if (imageUploaded != true) {
+            _uiEvent.value = Event(RecipeStepMakingEvent.ImageNotUploaded)
+            return
+        }
 
-        if (isIntroductionContentEmpty.value == true) {
-            _emptyIntroductionState.value = Event(true)
-        } else if (isUploadingImage.value == true) {
-            _uploadingImageState.value = Event(true)
-        } else {
-            if (stepNumber.value == maximumStep) return
-            uploadStepData(stepNumber.value!!)
-            _stepNumber.value = _stepNumber.value?.plus(1)
-            _currentImage.value = null
-            initStepData(stepNumber.value!!)
-            isIntroductionContentEmpty.value = false
+        if (stepNumber.value !in stepCompletion.keys && introduction.isNullOrEmpty()) {
+            _uiEvent.value = Event(RecipeStepMakingEvent.FormNotCompleted)
+            return
+        }
+
+        if (stepNumber.value == maximumStep) return
+
+        viewModelScope.launch {
+            saveStepData(stepNumber.value!!, StepAction.NEXT)
         }
     }
 
-    override fun validatePreviousPageableCondition() {
+    override fun moveToPreviousPage() {
+        val imageUploaded = imageUploaded.value
+        val introduction = introductionContent.value
+        if (imageUploaded != true && imageSelected.value == true) {
+            _uiEvent.value = Event(RecipeStepMakingEvent.ImageNotUploaded)
+            return
+        }
+
         if (stepNumber.value == 1) return
-        uploadStepData(stepNumber.value!!)
-        _stepNumber.value = _stepNumber.value?.minus(1)
-        _currentImage.value = null
-        initStepData(stepNumber.value!!)
+
+        if (introduction.isNullOrEmpty() && imageSelected.value != true) {
+            moveStep(StepAction.PREVIOUS)
+            return
+        }
+
+        viewModelScope.launch {
+            saveStepData(stepNumber.value!!, StepAction.PREVIOUS)
+        }
     }
 
     override fun navigationAction() {
-        _quitStepMakingState.value = Event(true)
+        _uiEvent.value = Event(RecipeStepMakingEvent.NavigateBackToDescription)
     }
 
     override fun customAction() {
-        if (introductionContent.value.isNullOrEmpty()) {
-            _emptyIntroductionState.value = Event(true)
-            return
-        }
         viewModelScope.launch {
-            uploadStepData(stepNumber.value!!)
-        }
-        _completeStepMakingState.value = Event(true)
-    }
-
-    private fun initStepData(stepNumber: Int) {
-        viewModelScope.launch {
-            val data = fetchStepData(stepNumber)
-
-            if (data == null) {
-                introductionContent.value = ""
-                _currentImage.value = null
-            } else {
-                introductionContent.value = data.description
-                _currentImage.value = Uri.parse(data.image)
+            if (imageSelected.value != true) {
+                _uiEvent.value = Event(RecipeStepMakingEvent.FormNotCompleted)
+                return@launch
             }
+
+            if (imageUploaded.value != true) {
+                _uiEvent.value = Event(RecipeStepMakingEvent.ImageNotUploaded)
+                return@launch
+            }
+
+            _isLoading.value = true
+            saveStepData(stepNumber.value!!, StepAction.COMPLETE)
+
+            val notCompleted = stepCompletion.values.any { !it }
+
+            if (notCompleted) {
+                _isLoading.value = false
+                _uiEvent.value = Event(RecipeStepMakingEvent.FormNotCompleted)
+                return@launch
+            }
+
+            val recipeCreation = recipeCreation()
+            if (recipeCreation == null) {
+                _isLoading.value = false
+                _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostFailure)
+                return@launch
+            }
+
+            postRecipe(recipeCreation)
         }
     }
 
-    private suspend fun fetchStepData(stepNumber: Int): RecipeStep? {
-        // Fetch step data from repository
-        _currentImage.value = null
-        val result =
-            recipeStepMakingRepository.fetchRecipeStep(
-                recipeId = recipeId,
-                sequence = stepNumber,
-            )
-
-        _fetchedRecipeStep.value = result.getOrNull()
-        return result.getOrNull()
+    fun changeCurrentImage(uri: Uri) {
+        _imageUri.value = uri
     }
 
-    private fun uploadStepData(stepNumber: Int) {
-        // Upload step data to repository
-        viewModelScope.launch {
-            recipeStepMakingRepository
-                .uploadRecipeStep(
-                    recipeId = recipeId,
-                    recipeStep =
-                        RecipeStep(
-                            recipeId = recipeId,
-                            sequence = stepNumber,
-                            description = introductionContent.value ?: return@launch,
-                            image = thumbnailTitle ?: return@launch,
-                            stepId = 1L,
-                        ),
-                ).onSuccess {
-                    _currentImage.value = null
-                }.onFailure {
-                    _uploadErrorState.value = Event(true)
-                }
-        }
-    }
-
-    // Function to fetch a pre-signed URL from the repository
     fun fetchImageUri(keyName: String) {
         viewModelScope.launch {
+            _imageSelected.value = true
             try {
                 val uri = makingRecipeRepository.fetchImageUri(keyName)
                 _uiEvent.value = Event(RecipeStepMakingEvent.PresignedUrlRequestSuccessful(uri))
             } catch (e: Exception) {
-                e.printStackTrace()
+                if (e is CancellationException) throw e
                 _uiEvent.value = Event(RecipeStepMakingEvent.PostImageFailure)
             }
         }
     }
 
-    // Function to upload image to S3
     fun uploadImageToS3(
         presignedUrl: String,
         file: File,
@@ -197,6 +168,7 @@ class StepMakingViewModel(
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
                 thumbnailTitle = file.name
                 _uiEvent.value = Event(RecipeStepMakingEvent.PostImageSuccessful)
+                _imageUploaded.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
                 _uiEvent.value = Event(RecipeStepMakingEvent.PostImageFailure)
@@ -204,7 +176,111 @@ class StepMakingViewModel(
         }
     }
 
-    fun changeCurrentImage(uri: Uri) {
-        _currentImage.value = uri
+    private fun initStepData(stepNumber: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _imageUri.value = null
+            fetchRecipeStep(stepNumber)
+            _isLoading.value = false
+        }
+    }
+
+    private fun moveStep(stepAction: StepAction) {
+        when (stepAction) {
+            StepAction.NEXT -> {
+                resetData()
+                _stepNumber.value = this.stepNumber.value?.plus(1)
+                initStepData(this.stepNumber.value!!)
+            }
+
+            StepAction.PREVIOUS -> {
+                resetData()
+                _stepNumber.value = this.stepNumber.value?.minus(1)
+                initStepData(this.stepNumber.value!!)
+            }
+
+            StepAction.COMPLETE -> Unit
+        }
+    }
+
+    private fun resetData() {
+        _imageUri.value = null
+        _imageSelected.value = false
+        _imageUploaded.value = false
+        introductionContent.value = ""
+        thumbnailTitle = null
+    }
+
+    private suspend fun postRecipe(recipeCreation: RecipeCreation) {
+        makingRecipeRepository.postNewRecipe(recipeCreation)
+            .onSuccess {
+                _isLoading.value = false
+                makingRecipeRepository.deleteRecipeDescription(recipeId)
+                recipeStepMakingRepository.deleteRecipeSteps(recipeId)
+                _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostSuccessful)
+            }.onFailure {
+                _isLoading.value = false
+                _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostFailure)
+            }
+    }
+
+    private suspend fun recipeCreation(): RecipeCreation? {
+        val recipeData = makingRecipeRepository.fetchTotalRecipeData().getOrNull() ?: return null
+        return RecipeCreation(
+            title = recipeData.title,
+            thumbnail = recipeData.thumbnail,
+            cookingTime = recipeData.cookingTime,
+            difficulty = recipeData.difficulty,
+            ingredients = recipeData.ingredients,
+            steps = recipeData.steps,
+            categories = recipeData.categories,
+            introduction = recipeData.introduction,
+        )
+    }
+
+    private suspend fun fetchRecipeStep(stepNumber: Int) {
+        recipeStepMakingRepository.fetchRecipeStep(
+            recipeId = recipeId,
+            sequence = stepNumber,
+        ).onSuccess { recipeStep ->
+            if (recipeStep == null) return@onSuccess
+            introductionContent.value = recipeStep.description
+            if (recipeStep.imageUri.isNotEmpty()) {
+                _imageUri.value = Uri.parse(recipeStep.imageUri)
+            }
+            thumbnailTitle = recipeStep.image
+            _imageUploaded.value = thumbnailTitle != null
+            _imageSelected.value = thumbnailTitle != null
+        }.onFailure {
+            introductionContent.value = ""
+            _imageUri.value = null
+            thumbnailTitle = null
+            _imageUploaded.value = false
+            _imageSelected.value = false
+        }
+    }
+
+    private suspend fun saveStepData(
+        stepNumber: Int,
+        stepAction: StepAction,
+    ) {
+        val recipeStep =
+            RecipeStepMaking(
+                recipeId = recipeId,
+                sequence = stepNumber,
+                description = introductionContent.value ?: "",
+                image = thumbnailTitle ?: "",
+                stepId = 1L,
+                imageUri = imageUri.value?.toString() ?: "",
+            )
+
+        recipeStepMakingRepository.saveRecipeStep(recipeId = recipeId, recipeStep = recipeStep)
+            .onSuccess {
+                stepCompletion[stepNumber] =
+                    recipeStep.imageUri.isNotEmpty() && recipeStep.description.isNotEmpty() && recipeStep.image.isNotEmpty()
+                moveStep(stepAction)
+            }.onFailure {
+                _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostFailure)
+            }
     }
 }
