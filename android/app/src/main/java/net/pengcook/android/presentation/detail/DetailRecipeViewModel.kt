@@ -19,25 +19,9 @@ class DetailRecipeViewModel(
     private val userControlRepository: UserControlRepository,
 ) : ViewModel(),
     AppbarSingleActionEventListener {
-    private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
-    val navigateToStepEvent: LiveData<Event<Boolean>>
-        get() = _navigateToStepEvent
-
-    private val _navigateToCommentEvent = MutableLiveData<Event<Boolean>>()
-    val navigateToCommentEvent: LiveData<Event<Boolean>>
-        get() = _navigateToCommentEvent
-
-    private val _navigateBackEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val navigateBackEvent: LiveData<Event<Unit>>
-        get() = _navigateBackEvent
-
-    private val _navigateBackWithDeleteEvent: MutableLiveData<Event<String>> = MutableLiveData()
-    val navigateBackWithDeleteEvent: LiveData<Event<String>>
-        get() = _navigateBackWithDeleteEvent
-
-    private val _navigateBackWithBlockEvent: MutableLiveData<Event<String>> = MutableLiveData()
-    val navigateBackWithBlockEvent: LiveData<Event<String>>
-        get() = _navigateBackWithBlockEvent
+    private val _uiState: MutableLiveData<Event<DetailRecipeUiEvent>> = MutableLiveData()
+    val uiState: LiveData<Event<DetailRecipeUiEvent>>
+        get() = _uiState
 
     private val _isLike = MutableLiveData<Boolean>()
     val isLike: LiveData<Boolean> get() = _isLike
@@ -63,11 +47,11 @@ class DetailRecipeViewModel(
     }
 
     fun onNavigateToMakingStep() {
-        _navigateToStepEvent.value = Event(true)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateToStep)
     }
 
     fun onNavigateToComment() {
-        _navigateToCommentEvent.value = Event(true)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateToComment)
     }
 
     private fun loadLikeData() {
@@ -97,7 +81,7 @@ class DetailRecipeViewModel(
             feedRepository
                 .deleteRecipe(recipe.recipeId)
                 .onSuccess {
-                    _navigateBackWithDeleteEvent.value = Event("delete")
+                    _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithDelete("delete"))
                 }.onFailure { throwable ->
                     _error.value = Event(Unit)
                 }
@@ -108,10 +92,10 @@ class DetailRecipeViewModel(
         viewModelScope.launch {
             userControlRepository.blockUser(recipe.user.id)
         }
-        _navigateBackWithBlockEvent.value = Event(recipe.user.username)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithBlock(recipe.user.username))
     }
 
     override fun onNavigateBack() {
-        _navigateBackEvent.value = Event(Unit)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateBack)
     }
 }
