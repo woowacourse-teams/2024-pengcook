@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.like.LikeRepository
+import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
@@ -13,18 +15,13 @@ import net.pengcook.android.presentation.core.util.Event
 class DetailRecipeViewModel(
     private val recipe: Recipe,
     private val likeRepository: LikeRepository,
-) : ViewModel(), AppbarSingleActionEventListener {
-    private val _navigateToStepEvent = MutableLiveData<Event<Boolean>>()
-    val navigateToStepEvent: LiveData<Event<Boolean>>
-        get() = _navigateToStepEvent
-
-    private val _navigateToCommentEvent = MutableLiveData<Event<Boolean>>()
-    val navigateToCommentEvent: LiveData<Event<Boolean>>
-        get() = _navigateToCommentEvent
-
-    private val _navigateBackEvent: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val navigateBackEvent: LiveData<Event<Unit>>
-        get() = _navigateBackEvent
+    private val feedRepository: FeedRepository,
+    private val userControlRepository: UserControlRepository,
+) : ViewModel(),
+    AppbarSingleActionEventListener {
+    private val _uiState: MutableLiveData<Event<DetailRecipeUiEvent>> = MutableLiveData()
+    val uiState: LiveData<Event<DetailRecipeUiEvent>>
+        get() = _uiState
 
     private val _isLike = MutableLiveData<Boolean>()
     val isLike: LiveData<Boolean> get() = _isLike
@@ -50,11 +47,11 @@ class DetailRecipeViewModel(
     }
 
     fun onNavigateToMakingStep() {
-        _navigateToStepEvent.value = Event(true)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateToStep)
     }
 
     fun onNavigateToComment() {
-        _navigateToCommentEvent.value = Event(true)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateToComment)
     }
 
     private fun loadLikeData() {
@@ -79,7 +76,26 @@ class DetailRecipeViewModel(
         }
     }
 
+    fun deleteRecipe() {
+        viewModelScope.launch {
+            feedRepository
+                .deleteRecipe(recipe.recipeId)
+                .onSuccess {
+                    _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithDelete("delete"))
+                }.onFailure { throwable ->
+                    _error.value = Event(Unit)
+                }
+        }
+    }
+
+    fun blockUser() {
+        viewModelScope.launch {
+            userControlRepository.blockUser(recipe.user.id)
+        }
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithBlock(recipe.user.username))
+    }
+
     override fun onNavigateBack() {
-        _navigateBackEvent.value = Event(Unit)
+        _uiState.value = Event(DetailRecipeUiEvent.NavigateBack)
     }
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,8 @@ import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSignUpBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
+import net.pengcook.android.presentation.core.util.FileUtils
+import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -38,13 +41,30 @@ class SignUpFragment : Fragment() {
             args.platform,
             module.authorizationRepository,
             module.sessionRepository,
+            module.imageRepository,
         )
     }
-    // TODO 사진 받아오는 기능 구현하기
-//    private val launcher =
-//        registerForActivityResult<String, Uri>(ActivityResultContracts.GetContent()) { uri ->
-//            changeProfileImage(uri)
-//        }
+    private val imageUtils: ImageUtils by lazy { ImageUtils(requireContext()) }
+    private lateinit var photoUri: Uri
+    private var currentPhotoPath: String? = null
+
+    private val launcher =
+        registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+        ) { uri: Uri? ->
+            uri?.let {
+                photoUri = it
+                viewModel.changeCurrentImage(photoUri)
+                currentPhotoPath = FileUtils.getPathFromUri(requireContext(), it)
+                if (currentPhotoPath != null) {
+                    viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+                } else {
+                    processImageUri(photoUri)
+                }
+            } ?: run {
+                showSnackBar(getString(R.string.image_selection_failed))
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +93,24 @@ class SignUpFragment : Fragment() {
         _binding = null
     }
 
+    private fun selectImageFromAlbum() {
+        launcher.launch(MIMETYPE_IMAGE)
+    }
+
+    private fun uploadImageToS3(presignedUrl: String) {
+        val file = File(currentPhotoPath!!)
+        viewModel.uploadImageToS3(presignedUrl, file)
+    }
+
+    private fun processImageUri(uri: Uri) {
+        currentPhotoPath = imageUtils.processImageUri(uri)
+        if (currentPhotoPath != null) {
+            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+        } else {
+            showSnackBar(getString(R.string.image_selection_failed))
+        }
+    }
+
     private fun observeLoadingStatus() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -86,13 +124,6 @@ class SignUpFragment : Fragment() {
         binding.lifecycleOwner = this
     }
 
-    // TODO 사진 받아오는 기능 구현
-//    private fun setUpClickListener() {
-//        binding.ivProfileImage.setOnClickListener {
-//            launcher.launch(MIMETYPE_IMAGE)
-//        }
-//    }
-
     private fun setUpCountrySpinner() {
         val countryAdapter =
             ArrayAdapter(
@@ -104,14 +135,6 @@ class SignUpFragment : Fragment() {
         binding.formCountry.spFormContent.spDefault.adapter = countryAdapter
     }
 
-    private fun changeProfileImage(uri: Uri) {
-        try {
-            viewModel.changeProfileImage(uri)
-        } catch (e: RuntimeException) {
-            showSnackBar(getString(R.string.signup_message_error))
-        }
-    }
-
     private fun observeViewModel() {
         viewModel.signUpEvent.observe(viewLifecycleOwner) { event ->
             val signUpEvent = event.getContentIfNotHandled() ?: return@observe
@@ -119,30 +142,22 @@ class SignUpFragment : Fragment() {
                 is SignUpEvent.SignInSuccessful -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
                 }
-
                 is SignUpEvent.Error -> {
                     showSnackBar(getString(R.string.signup_message_error))
                 }
-
                 is SignUpEvent.BackPressed -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_onboardingFragment)
                 }
-
                 is SignUpEvent.NicknameLengthInvalid -> {
                     showSnackBar(getString(R.string.signup_message_invalid_nickname))
                 }
-
-                is SignUpEvent.UsernameInvalid -> {
-                    showSnackBar(getString(R.string.signup_message_invalid_username))
-                }
-
-                is SignUpEvent.NicknameDuplicated -> {
-                    showSnackBar(getString(R.string.signup_message_duplicated_username))
-                }
-
-                is SignUpEvent.SignUpFormNotCompleted -> {
-                    showSnackBar(getString(R.string.signup_message_form_not_completed))
-                }
+                is SignUpEvent.UsernameInvalid -> showSnackBar(getString(R.string.signup_message_invalid_username))
+                is SignUpEvent.NicknameDuplicated -> showSnackBar(getString(R.string.signup_message_duplicated_username))
+                is SignUpEvent.SignUpFormNotCompleted -> showSnackBar(getString(R.string.signup_message_form_not_completed))
+                is SignUpEvent.AddImage -> selectImageFromAlbum()
+                is SignUpEvent.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
+                is SignUpEvent.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
+                is SignUpEvent.PresignedUrlRequestSuccessful -> uploadImageToS3(signUpEvent.presignedUrl)
             }
         }
     }

@@ -11,10 +11,13 @@
     <string name="onboarding_app_title">PengCook</string>
     <string name="onboarding_introduction">Easy Cook! Your Recipe!</string>
     <string name="onboarding_google_sign_in">Sign In with Google</string>
-    <string name="onboarding_terms">By creating an account, you agree to our\nTerms &amp; Conditions and Privacy Policy.</string>
+    <string name="onboarding_terms">
+        By creating an account, you agree to our&lt;br/>
+        &lt;a href="https://pengcook.net/terms-of-service">&lt;u>Terms&lt;/u>&lt;/a> and &lt;a href="https://pengcook.net/privacy-policy">&lt;u>Privacy Policy&lt;/u>&lt;/a>.
+    </string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">An unexpected error occurred.</string>
-    <string name="detail_like_error">Failed to like the recipe</string>
+    <string name="detail_error">Failed action</string>
     <string name="signup_appbar">Sign Up</string>
     <string name="signup_username_title">Username</string>
     <string name="signup_username_hint">Enter Your Username</string>
@@ -96,6 +99,8 @@
     <string name="setting_menu_privacy_terms">Terms of Use</string>
     <string name="setting_menu_account">Account</string>
     <string name="setting_account_appbar_title">Account</string>
+    <string name="setting_edit_profile_appbar_title">Edit Profile</string>
+    <string name="setting_edit_profile_save_button">Save</string>
     <string name="making_warning_form_not_completed">Fill in the forms completely.</string>
     <string name="making_warning_post_failure">Recipe Post Failed.</string>
     <string name="following">Following</string>
@@ -116,5 +121,10 @@
 
     <string name="comment_reported">User %s Reported</string>
     <string name="comment_deleted">Comment Deleted</string>
+
+    <string name="report_title_bottom">Please choose the reason of report</string>
+    <string name="report_title_dialog">Choose reason of report</string>
+    <string name="recipe_report_success">Recipe Report Success</string>
+
 
 </resources>

@@ -15,4 +15,9 @@ interface FeedRemoteDataSource {
     ): Response<List<FeedItemResponse>>
 
     suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>>
+
+    suspend fun deleteRecipe(
+        accessToken: String,
+        recipeId: Long,
+    ): Response<Unit>
 }

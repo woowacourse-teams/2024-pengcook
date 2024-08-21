@@ -11,13 +11,13 @@
 
         <variable
             name="viewModel"
-            type="net.pengcook.android.presentation.setting.AccountSettingViewModel" />
+            type="net.pengcook.android.presentation.setting.account.AccountSettingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.setting.AccountSettingFragment">
+        tools:context=".presentation.setting.account.AccountSettingFragment">
 
         <include
             android:id="@+id/abl_account_setting"

@@ -70,6 +70,7 @@ class ProfileFragment : Fragment() {
             val newEvent = event?.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
                 is ProfileUiEvent.NavigateToEditProfile -> {
+                    findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
                 }
 
                 is ProfileUiEvent.NavigateToRecipeDetail -> {

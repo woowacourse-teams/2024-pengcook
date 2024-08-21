@@ -12,28 +12,23 @@ class DefaultProfileRemoteDataSource(
     private val profileService: ProfileService,
     private val feedService: FeedService,
 ) : ProfileRemoteDataSource {
-    override suspend fun fetchUserInformation(userId: Long): Response<UserProfileResponse> {
-        return profileService.fetchUserInformation(userId)
-    }
+    override suspend fun fetchUserInformation(userId: Long): Response<UserProfileResponse> = profileService.fetchUserInformation(userId)
 
-    override suspend fun fetchMyUserInformation(accessToken: String): Response<UserProfileResponse> {
-        return profileService.fetchMyUserInformation(accessToken)
-    }
+    override suspend fun fetchMyUserInformation(accessToken: String): Response<UserProfileResponse> =
+        profileService.fetchMyUserInformation(accessToken)
 
     override suspend fun patchMyUserInformation(
         accessToken: String,
         userProfile: UpdateProfileRequest,
-    ): Response<UpdateProfileResponse> {
-        return profileService.patchMyUserInformation(accessToken, userProfile)
-    }
+    ): Response<UpdateProfileResponse> = profileService.patchMyUserInformation(accessToken, userProfile)
 
     override suspend fun fetchUserFeeds(
         accessToken: String,
         userId: Long,
         pageNumber: Int,
         pageSize: Int,
-    ): Response<List<FeedItemResponse>> {
-        return feedService.fetchRecipes(
+    ): Response<List<FeedItemResponse>> =
+        feedService.fetchRecipes(
             accessToken = accessToken,
             pageNumber = pageNumber,
             pageSize = pageSize,
@@ -41,5 +36,4 @@ class DefaultProfileRemoteDataSource(
             keyword = null,
             userId = userId,
         )
-    }
 }

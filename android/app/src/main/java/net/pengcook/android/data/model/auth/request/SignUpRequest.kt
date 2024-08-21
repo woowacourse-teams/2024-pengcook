@@ -5,4 +5,5 @@ data class SignUpRequest(
     val idToken: String,
     val nickname: String,
     val username: String,
+    val image: String?,
 )

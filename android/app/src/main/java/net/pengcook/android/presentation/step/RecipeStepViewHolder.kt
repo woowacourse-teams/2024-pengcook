@@ -10,7 +10,7 @@ class RecipeStepViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(recipeStep: RecipeStep) {
         binding.recipeStep = recipeStep
-        binding.chronometer.format = "%MM:ss"
-        binding.chronometer.base = SystemClock.elapsedRealtime() + recipeStep.sequence * 1000
+        binding.timer.chronometer.format = "%MM:ss"
+        binding.timer.chronometer.base = SystemClock.elapsedRealtime() + recipeStep.sequence * 1000
     }
 }
