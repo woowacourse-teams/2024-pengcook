@@ -8,12 +8,14 @@ import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
+import net.pengcook.android.data.util.mapper.toRenewedTokens
 import net.pengcook.android.data.util.mapper.toSignIn
 import net.pengcook.android.data.util.mapper.toSignUp
 import net.pengcook.android.data.util.mapper.toSignUpRequest
 import net.pengcook.android.data.util.mapper.toUserInformation
 import net.pengcook.android.data.util.mapper.toUsernameAvailable
 import net.pengcook.android.data.util.network.NetworkResponseHandler
+import net.pengcook.android.domain.model.auth.RenewedTokens
 import net.pengcook.android.domain.model.auth.SignIn
 import net.pengcook.android.domain.model.auth.SignInResult
 import net.pengcook.android.domain.model.auth.SignUp
@@ -67,7 +69,7 @@ class DefaultAuthorizationRepository(
         return runCatching {
             val response =
                 authorizationRemoteDataSource.fetchAccessToken(RefreshTokenRequest(refreshToken()))
-            body(response, RESPONSE_CODE_SUCCESS).toRefreshedTokens()
+            body(response, RESPONSE_CODE_SUCCESS).toRenewedTokens()
         }
     }
 

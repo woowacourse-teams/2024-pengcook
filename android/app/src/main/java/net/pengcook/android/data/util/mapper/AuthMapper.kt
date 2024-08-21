@@ -1,12 +1,12 @@
 package net.pengcook.android.data.util.mapper
 
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.RenewedTokensResponse
 import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
-import net.pengcook.android.domain.model.auth.RefreshedTokens
+import net.pengcook.android.domain.model.auth.RenewedTokens
 import net.pengcook.android.domain.model.auth.SignIn
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserInformation
@@ -42,8 +42,8 @@ fun UserSignUpForm.toSignUpRequest(): SignUpRequest =
 
 fun UsernameDuplicationResponse.toUsernameAvailable(): Boolean = available
 
-fun RefreshedTokensResponse.toRefreshedTokens(): RefreshedTokens =
-    RefreshedTokens(
+fun RenewedTokensResponse.toRenewedTokens(): RenewedTokens =
+    RenewedTokens(
         accessToken = accessToken,
         refreshToken = refreshToken,
     )

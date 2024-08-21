@@ -10,7 +10,7 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
-import net.pengcook.android.domain.model.auth.RefreshedTokens
+import net.pengcook.android.domain.model.auth.RenewedTokens
 import net.pengcook.android.domain.model.auth.SignInResult
 
 class MainViewModel(
@@ -54,7 +54,7 @@ class MainViewModel(
             }
     }
 
-    private suspend fun onTokenRenewalSuccessful(renewedTokens: RefreshedTokens) {
+    private suspend fun onTokenRenewalSuccessful(renewedTokens: RenewedTokens) {
         coroutineScope {
             val updateAccessToken =
                 launch {

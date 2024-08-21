@@ -10,6 +10,7 @@ import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
+import net.pengcook.android.domain.model.profile.UserProfile
 import net.pengcook.android.domain.usecase.ValidateNicknameUseCase
 import net.pengcook.android.domain.usecase.ValidateUsernameUseCase
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
@@ -57,19 +58,7 @@ class EditProfileViewModel(
     private var imageTitle: String? = null
 
     init {
-        viewModelScope.launch {
-            profileRepository.fetchMyUserInformation()
-                .onSuccess { userProfile ->
-                    existingUsername = userProfile.username
-                    usernameContent.value = userProfile.username
-                    nicknameContent.value = userProfile.nickname
-                    country.value = userProfile.region
-                    imageTitle = userProfile.image
-                    _imageUri.value = Uri.parse(userProfile.image)
-                }.onFailure {
-                    _signUpEvent.value = Event(EditProfileEvent.Error)
-                }
-        }
+        fetchUserInformation()
     }
 
     fun fetchImageUri(keyName: String) {
@@ -118,7 +107,7 @@ class EditProfileViewModel(
                 _signUpEvent.value = Event(EditProfileEvent.FormNotCompleted)
                 return@launch
             }
-            if (!formValid(username, nickname)) return@launch
+            if (!validation(username, nickname)) return@launch
             if (!usernameAvailable(username)) return@launch
 
             _isLoading.value = true
@@ -134,12 +123,32 @@ class EditProfileViewModel(
         _signUpEvent.value = Event(EditProfileEvent.BackPressed)
     }
 
+    private fun fetchUserInformation() {
+        viewModelScope.launch {
+            profileRepository.fetchMyUserInformation()
+                .onSuccess { userProfile ->
+                    setupUserInformation(userProfile)
+                }.onFailure {
+                    _signUpEvent.value = Event(EditProfileEvent.Error)
+                }
+        }
+    }
+
+    private fun setupUserInformation(userProfile: UserProfile) {
+        existingUsername = userProfile.username
+        usernameContent.value = userProfile.username
+        nicknameContent.value = userProfile.nickname
+        country.value = userProfile.region
+        imageTitle = userProfile.image
+        _imageUri.value = Uri.parse(userProfile.image)
+    }
+
     private fun onEditProfileFailure() {
         _isLoading.value = false
         _signUpEvent.value = Event(EditProfileEvent.Error)
     }
 
-    private fun formValid(
+    private fun validation(
         username: String,
         nickname: String,
     ): Boolean {
