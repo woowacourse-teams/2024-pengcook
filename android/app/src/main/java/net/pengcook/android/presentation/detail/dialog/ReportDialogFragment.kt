@@ -59,9 +59,11 @@ class ReportDialogFragment : DialogFragment() {
 
         viewModel.reportState.observe(viewLifecycleOwner) { state ->
             if (state) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     getString(R.string.recipe_report_success),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT,
+                ).show()
                 dismiss()
             }
         }
