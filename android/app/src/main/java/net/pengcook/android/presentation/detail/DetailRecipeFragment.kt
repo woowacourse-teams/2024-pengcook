@@ -104,54 +104,38 @@ class DetailRecipeFragment : Fragment() {
     }
 
     private fun observeNavigationEvent() {
-        observeNavigateToStepEvent()
-        observeNavigateBackEvent()
-        observeNavigateToCommentEvent()
-        observeNavigateBackWithDeleteEvent()
-        observeNavigateBackWithBlockEvent()
-    }
-
-    private fun observeNavigateToStepEvent() {
-        viewModel.navigateToStepEvent.observe(viewLifecycleOwner) { navigationEvent ->
-            val navigationAvailable = navigationEvent.getContentIfNotHandled() ?: return@observe
-            if (navigationAvailable) {
-                navigateToStep()
+        viewModel.uiState.observe(viewLifecycleOwner) { event ->
+            val newEvent = event?.getContentIfNotHandled() ?: return@observe
+            when (newEvent) {
+                is DetailRecipeUiEvent.NavigateToStep -> {
+                    navigateToStep()
+                }
+                is DetailRecipeUiEvent.NavigateToComment -> {
+                    navigateToComment()
+                }
+                is DetailRecipeUiEvent.NavigateBackWithDelete -> {
+                    navigateBackWithDelete()
+                }
+                is DetailRecipeUiEvent.NavigateBackWithBlock -> {
+                    navigateBackWithBlock()
+                }
+                is DetailRecipeUiEvent.NavigateBack -> {
+                    findNavController().navigateUp()
+                }
             }
         }
     }
 
-    private fun observeNavigateBackEvent() {
-        viewModel.navigateBackEvent.observe(viewLifecycleOwner) { navigationEvent ->
-            navigationEvent.getContentIfNotHandled() ?: return@observe
-            findNavController().navigateUp()
-        }
+    private fun navigateBackWithBlock() {
+        Toast.makeText(requireContext(), "Recipe deleted", Toast.LENGTH_SHORT).show()
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
+        findNavController().navigate(action)
     }
 
-    private fun observeNavigateToCommentEvent() {
-        viewModel.navigateToCommentEvent.observe(viewLifecycleOwner) { navigationEvent ->
-            val navigationAvailable = navigationEvent.getContentIfNotHandled() ?: return@observe
-            if (navigationAvailable) {
-                navigateToComment()
-            }
-        }
-    }
-
-    private fun observeNavigateBackWithDeleteEvent() {
-        viewModel.navigateBackWithDeleteEvent.observe(viewLifecycleOwner) { navigationEvent ->
-            navigationEvent.getContentIfNotHandled() ?: return@observe
-            Toast.makeText(requireContext(), "Recipe deleted", Toast.LENGTH_SHORT).show()
-            val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
-            findNavController().navigate(action)
-        }
-    }
-
-    private fun observeNavigateBackWithBlockEvent() {
-        viewModel.navigateBackWithBlockEvent.observe(viewLifecycleOwner) { navigationEvent ->
-            navigationEvent.getContentIfNotHandled() ?: return@observe
-            Toast.makeText(requireContext(), "User blocked", Toast.LENGTH_SHORT).show()
-            val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
-            findNavController().navigate(action)
-        }
+    private fun navigateBackWithDelete() {
+        Toast.makeText(requireContext(), "Recipe deleted", Toast.LENGTH_SHORT).show()
+        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToHomeFragment()
+        findNavController().navigate(action)
     }
 
     private fun fetchRecipe() {
@@ -168,9 +152,5 @@ class DetailRecipeFragment : Fragment() {
     private fun navigateToComment() {
         val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = recipe.recipeId)
         findNavController().navigate(action)
-    }
-
-    companion object {
-        private const val RECIPE_KEY = "recipe_key"
     }
 }
