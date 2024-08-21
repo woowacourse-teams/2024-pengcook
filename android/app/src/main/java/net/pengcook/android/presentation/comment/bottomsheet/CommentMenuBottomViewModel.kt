@@ -17,7 +17,7 @@ class CommentMenuBottomViewModel(
         get() = _reportReasons
 
     private var _reportState = MutableLiveData<Boolean>(false)
-    val reprtState: LiveData<Boolean>
+    val reportState: LiveData<Boolean>
         get() = _reportState
 
     private var _selectedReportReason = MutableLiveData<ReportReason>()
