@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentReportDialogBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
@@ -58,18 +59,22 @@ class ReportDialogFragment : DialogFragment() {
 
         viewModel.reportState.observe(viewLifecycleOwner) { state ->
             if (state) {
-                Toast.makeText(requireContext(), "Recipe Report Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.recipe_report_success),
+                    Toast.LENGTH_SHORT).show()
                 dismiss()
             }
         }
     }
 
     companion object {
+        private const val ARGS_KEY = "recipe"
+
         fun newInstance(recipe: Recipe): ReportDialogFragment {
             val fragment = ReportDialogFragment()
             val args =
                 Bundle().apply {
-                    putParcelable("recipe", recipe)
+                    putParcelable(ARGS_KEY, recipe)
                 }
             fragment.arguments = args
             return fragment
