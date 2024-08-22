@@ -33,6 +33,7 @@ fun RecipeStepResponse.toRecipeStep(): RecipeStep =
         description = description,
         image = image,
         sequence = sequence,
+        cookingTime = cookingTime,
     )
 
 private fun CategoryResponse.toCategoryText(): String = categoryName
