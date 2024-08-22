@@ -21,7 +21,15 @@ class FeedPagingSourceTest {
             pagingSource = FeedPagingSource(feedRepository)
             val recipes = recipes()
 
-            coEvery { feedRepository.fetchRecipes(any(), any(), any(), any(), any()) } returns Result.success(recipes)
+            coEvery {
+                feedRepository.fetchRecipes(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns Result.success(recipes)
 
             val params =
                 PagingSource.LoadParams.Refresh<Int>(
@@ -52,6 +60,7 @@ class FeedPagingSourceTest {
                 difficulty = 1,
                 introduction = "Delicious fish cake",
                 commentCount = 10,
+                mine = false,
             ),
             Recipe(
                 recipeId = 2,
@@ -65,6 +74,7 @@ class FeedPagingSourceTest {
                 difficulty = 2,
                 introduction = "Healthy chicken soup",
                 commentCount = 20,
+                mine = false,
             ),
         )
 }

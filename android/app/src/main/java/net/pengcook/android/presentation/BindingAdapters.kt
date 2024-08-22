@@ -122,6 +122,15 @@ fun visibility(
     view.visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("bind:isVisible", "bind:isSecondVisible")
+fun visibilityWithTwoConditions(
+    view: View,
+    isVisible: Boolean,
+    isSecondVisible: Boolean,
+) {
+    view.visibility = if (isVisible && isSecondVisible) View.VISIBLE else View.GONE
+}
+
 @BindingAdapter("bind:selectedValue")
 fun Spinner.bindSpinnerValue(value: Any?) {
     if (adapter == null) return
@@ -178,10 +187,9 @@ fun setFormattedLikeCount(
     textView.text = formatCount(count)
 }
 
-private fun formatCount(count: Long): String {
-    return when {
+private fun formatCount(count: Long): String =
+    when {
         count >= 1_000_000 -> String.format("%.1fM", count / 1_000_000.0)
         count >= 1_000 -> String.format("%.1fk", count / 1_000.0)
         else -> count.toString()
     }
-}

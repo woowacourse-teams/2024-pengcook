@@ -1,8 +1,9 @@
 package net.pengcook.android.data.repository.auth
 
 import net.pengcook.android.data.datasource.auth.FakeSessionLocalDataSource
-import net.pengcook.android.domain.model.auth.RefreshedTokens
+import net.pengcook.android.domain.model.auth.RenewedTokens
 import net.pengcook.android.domain.model.auth.SignIn
+import net.pengcook.android.domain.model.auth.SignInResult
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserInformation
 import net.pengcook.android.domain.model.auth.UserSignUpForm
@@ -68,17 +69,27 @@ class FakeAuthorizationRepository(
         return runCatching { username !in usernames }
     }
 
-    override suspend fun fetchAccessToken(refreshToken: String): Result<RefreshedTokens> {
+    override suspend fun fetchRenewedTokens(): Result<RenewedTokens> {
         return runCatching {
             refreshTrial++
-            RefreshedTokens(
-                accessToken = "accessToken$refreshTrial",
-                refreshToken = "refreshToken$refreshTrial",
-            )
+            RenewedTokens("renewedAccessToken", "renewedRefreshToken")
         }
     }
 
-    override suspend fun fetchUserInformation(accessToken: String): Result<UserInformation> {
+    override suspend fun fetchUserInformation(): Result<UserInformation> {
         return runCatching { userInformation ?: throw IllegalStateException() }
+    }
+
+    override suspend fun checkSignInStatus(): Result<SignInResult> {
+        return runCatching {
+            SignInResult.SUCCESSFUL
+        }
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        return runCatching {
+            fakeTokenLocalDataSource.clearAll()
+            userInformation = null
+        }
     }
 }

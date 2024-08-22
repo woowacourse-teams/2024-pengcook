@@ -23,6 +23,7 @@ fun FeedItemResponse.toRecipe(): Recipe =
         difficulty = difficulty,
         introduction = description,
         commentCount = commentCount,
+        mine = mine,
     )
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =

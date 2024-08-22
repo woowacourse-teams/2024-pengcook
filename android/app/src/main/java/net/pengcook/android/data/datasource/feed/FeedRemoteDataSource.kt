@@ -6,6 +6,7 @@ import retrofit2.Response
 
 interface FeedRemoteDataSource {
     suspend fun fetchRecipes(
+        accessToken: String,
         pageNumber: Int,
         pageSize: Int,
         category: String?,
@@ -14,4 +15,9 @@ interface FeedRemoteDataSource {
     ): Response<List<FeedItemResponse>>
 
     suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>>
+
+    suspend fun deleteRecipe(
+        accessToken: String,
+        recipeId: Long,
+    ): Response<Unit>
 }

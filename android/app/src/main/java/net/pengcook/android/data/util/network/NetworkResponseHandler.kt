@@ -10,7 +10,7 @@ abstract class NetworkResponseHandler {
         val code = response.code()
         val body = response.body()
         if (code !in validHttpCode) throw RuntimeException(EXCEPTION_HTTP_CODE.format(code))
-        if (body == null) throw RuntimeException(EXCEPTION_NULL_BODY)
+        if (body == null) return Unit as T
         return body
     }
 

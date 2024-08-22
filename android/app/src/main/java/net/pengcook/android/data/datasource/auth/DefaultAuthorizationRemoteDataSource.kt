@@ -3,7 +3,7 @@ package net.pengcook.android.data.datasource.auth
 import net.pengcook.android.data.model.auth.request.IdTokenRequest
 import net.pengcook.android.data.model.auth.request.RefreshTokenRequest
 import net.pengcook.android.data.model.auth.request.SignUpRequest
-import net.pengcook.android.data.model.auth.response.RefreshedTokensResponse
+import net.pengcook.android.data.model.auth.response.RenewedTokensResponse
 import net.pengcook.android.data.model.auth.response.SignInResponse
 import net.pengcook.android.data.model.auth.response.SignUpResponse
 import net.pengcook.android.data.model.auth.response.UserInformationResponse
@@ -32,11 +32,19 @@ class DefaultAuthorizationRemoteDataSource(
         return authorizationService.checkUsernameDuplication(username)
     }
 
-    override suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RefreshedTokensResponse> {
+    override suspend fun fetchAccessToken(refreshToken: RefreshTokenRequest): Response<RenewedTokensResponse> {
         return authorizationService.fetchAccessToken(refreshToken)
     }
 
     override suspend fun fetchUserInformation(accessToken: String): Response<UserInformationResponse> {
         return authorizationService.fetchUserInformation(accessToken)
+    }
+
+    override suspend fun checkSignInStatus(accessToken: String): Response<Unit> {
+        return authorizationService.checkSignInStatus(accessToken)
+    }
+
+    override suspend fun deleteAccount(accessToken: String): Response<Unit> {
+        return authorizationService.deleteAccount(accessToken)
     }
 }

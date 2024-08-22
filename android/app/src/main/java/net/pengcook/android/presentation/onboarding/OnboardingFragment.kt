@@ -2,6 +2,8 @@ package net.pengcook.android.presentation.onboarding
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,6 +83,10 @@ class OnboardingFragment : Fragment() {
         initializeBindingVariables()
         observeUiEvents()
         observeLoadingStatus()
+
+        val textView = binding.tvTerms
+        textView.text = Html.fromHtml(getString(R.string.onboarding_terms), Html.FROM_HTML_MODE_LEGACY)
+        textView.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun initializeBindingVariables() {

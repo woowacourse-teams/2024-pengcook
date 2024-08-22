@@ -14,4 +14,6 @@ sealed interface RecipeMakingEvent {
     data object DescriptionFormNotCompleted : RecipeMakingEvent
 
     data object PostRecipeFailure : RecipeMakingEvent
+
+    data object MakingCancellation : RecipeMakingEvent
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
+import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserSignUpForm
@@ -17,11 +18,13 @@ import net.pengcook.android.domain.usecase.ValidateUsernameUseCase
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
+import java.io.File
 
 class SignUpViewModel(
     private val platformName: String,
     private val authorizationRepository: AuthorizationRepository,
     private val sessionRepository: SessionRepository,
+    private val imageRepository: ImageRepository,
     private val validateUsernameUseCase: ValidateUsernameUseCase = ValidateUsernameUseCase(),
     private val validateNicknameUseCase: ValidateNicknameUseCase = ValidateNicknameUseCase(),
 ) : ViewModel(),
@@ -36,6 +39,14 @@ class SignUpViewModel(
     val imageUri: LiveData<Uri>
         get() = _imageUri
 
+    private val _imageUploaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageUploaded: LiveData<Boolean>
+        get() = _imageUploaded
+
+    private val _imageSelected: MutableLiveData<Boolean> = MutableLiveData(false)
+    val imageSelected: LiveData<Boolean>
+        get() = _imageSelected
+
     private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
@@ -44,8 +55,42 @@ class SignUpViewModel(
     val signUpEvent: LiveData<Event<SignUpEvent>>
         get() = _signUpEvent
 
-    fun changeProfileImage(uri: Uri) {
+    private var imageTitle: String? = null
+
+    fun fetchImageUri(keyName: String) {
+        viewModelScope.launch {
+            _imageSelected.value = true
+            imageRepository.fetchImageUri(keyName)
+                .onSuccess { uri ->
+                    _signUpEvent.value = Event(SignUpEvent.PresignedUrlRequestSuccessful(uri))
+                }.onFailure {
+                    _signUpEvent.value = Event(SignUpEvent.PostImageFailure)
+                }
+        }
+    }
+
+    fun uploadImageToS3(
+        presignedUrl: String,
+        file: File,
+    ) {
+        viewModelScope.launch {
+            imageRepository.uploadImage(presignedUrl, file)
+                .onSuccess {
+                    imageTitle = file.name
+                    _signUpEvent.value = Event(SignUpEvent.PostImageSuccessful)
+                    _imageUploaded.value = true
+                }.onFailure {
+                    _signUpEvent.value = Event(SignUpEvent.PostImageFailure)
+                }
+        }
+    }
+
+    fun changeCurrentImage(uri: Uri) {
         _imageUri.value = uri
+    }
+
+    fun addImage() {
+        _signUpEvent.value = Event(SignUpEvent.AddImage)
     }
 
     override fun onConfirm() {
@@ -77,6 +122,28 @@ class SignUpViewModel(
         _signUpEvent.value = Event(SignUpEvent.BackPressed)
     }
 
+    private fun onSignUpFailure() {
+        _isLoading.value = false
+        _signUpEvent.value = Event(SignUpEvent.Error)
+    }
+
+    private fun signUpFormValid(
+        username: String,
+        nickname: String,
+    ): Boolean {
+        if (!validateUsernameUseCase(username)) {
+            _signUpEvent.value = Event(SignUpEvent.UsernameInvalid)
+            return false
+        }
+
+        if (!validateNicknameUseCase(nickname)) {
+            _signUpEvent.value = Event(SignUpEvent.NicknameLengthInvalid)
+            return false
+        }
+
+        return true
+    }
+
     private suspend fun signUp(
         platformToken: String,
         country: String,
@@ -86,7 +153,7 @@ class SignUpViewModel(
         authorizationRepository
             .signUp(
                 platformName,
-                UserSignUpForm(platformToken, country, nickname, username),
+                UserSignUpForm(platformToken, country, nickname, username, imageTitle),
             ).onSuccess { signUpResult ->
                 onSignUpSuccessful(signUpResult)
             }.onFailure {
@@ -116,27 +183,5 @@ class SignUpViewModel(
         sessionRepository.updateRefreshToken(signUpResult.refreshToken)
         sessionRepository.updateCurrentPlatform(Platform.find(platformName))
         _signUpEvent.value = Event(SignUpEvent.SignInSuccessful)
-    }
-
-    private fun onSignUpFailure() {
-        _isLoading.value = false
-        _signUpEvent.value = Event(SignUpEvent.Error)
-    }
-
-    private fun signUpFormValid(
-        username: String,
-        nickname: String,
-    ): Boolean {
-        if (!validateUsernameUseCase(username)) {
-            _signUpEvent.value = Event(SignUpEvent.UsernameInvalid)
-            return false
-        }
-
-        if (!validateNicknameUseCase(nickname)) {
-            _signUpEvent.value = Event(SignUpEvent.NicknameLengthInvalid)
-            return false
-        }
-
-        return true
     }
 }

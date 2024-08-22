@@ -11,20 +11,30 @@ import net.pengcook.android.data.datasource.comment.DefaultCommentDataSource
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.datasource.like.DefaultLikeRemoteDataSource
-import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingDataSource
-import net.pengcook.android.data.datasource.making.RecipeStepMakingDataSource
+import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingCacheDataSource
+import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingLocalDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingCacheDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingLocalDataSource
+import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
+import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
+import net.pengcook.android.data.datasource.photo.DefaultImageRemoteDataSource
+import net.pengcook.android.data.datasource.photo.ImageRemoteDataSource
 import net.pengcook.android.data.datasource.profile.DefaultProfileRemoteDataSource
 import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
+import net.pengcook.android.data.datasource.usercontrol.DefaultUserControlDataSource
+import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
+import net.pengcook.android.data.local.database.RecipeDatabase
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.CommentService
 import net.pengcook.android.data.remote.api.FeedService
+import net.pengcook.android.data.remote.api.ImageService
 import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.ProfileService
-import net.pengcook.android.data.remote.api.StepMakingService
+import net.pengcook.android.data.remote.api.UserControlService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultSessionRepository
@@ -39,8 +49,12 @@ import net.pengcook.android.data.repository.making.step.DefaultRecipeStepMakingR
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
 import net.pengcook.android.data.repository.makingrecipe.DefaultMakingRecipeRepository
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
+import net.pengcook.android.data.repository.photo.DefaultImageRepository
+import net.pengcook.android.data.repository.photo.ImageRepository
 import net.pengcook.android.data.repository.profile.DefaultProfileRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
+import net.pengcook.android.data.repository.usercontrol.DefaultUserControlRepository
+import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -56,12 +70,14 @@ class DefaultAppModule(
         }
 
     private val client =
-        OkHttpClient.Builder().apply {
-            addInterceptor(interceptor)
-            connectTimeout(30, TimeUnit.SECONDS)
-            readTimeout(20, TimeUnit.SECONDS)
-            writeTimeout(25, TimeUnit.SECONDS)
-        }.build()
+        OkHttpClient
+            .Builder()
+            .apply {
+                addInterceptor(interceptor)
+                connectTimeout(30, TimeUnit.SECONDS)
+                readTimeout(20, TimeUnit.SECONDS)
+                writeTimeout(25, TimeUnit.SECONDS)
+            }.build()
 
     private val retrofit =
         Retrofit
@@ -71,13 +87,12 @@ class DefaultAppModule(
             .client(client)
             .build()
 
+    private val database = RecipeDatabase.getInstance(appContext)
+
     override fun <T> service(apiService: Class<T>): T = retrofit.create(apiService)
 
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource =
         DefaultAuthorizationRemoteDataSource(service(AuthorizationService::class.java))
-
-    override val authorizationRepository: AuthorizationRepository =
-        DefaultAuthorizationRepository(authorizationRemoteDataSource)
 
     private val sessionLocalDataSource: SessionLocalDataSource =
         DefaultSessionLocalDataSource(appContext.dataStore)
@@ -85,23 +100,44 @@ class DefaultAppModule(
     override val sessionRepository: SessionRepository =
         DefaultSessionRepository(sessionLocalDataSource)
 
+    override val authorizationRepository: AuthorizationRepository =
+        DefaultAuthorizationRepository(authorizationRemoteDataSource, sessionLocalDataSource)
+
     private val feedRemoteDataSource: FeedRemoteDataSource =
         DefaultFeedRemoteDataSource(service(FeedService::class.java))
 
     override val feedRepository: FeedRepository =
-        DefaultFeedRepository(feedRemoteDataSource)
+        DefaultFeedRepository(
+            sessionLocalDataSource = sessionLocalDataSource,
+            feedRemoteDataSource = feedRemoteDataSource,
+        )
 
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource =
-        DefaultMakingRecipeRemoteDataSource(service(MakingRecipeService::class.java))
+        DefaultMakingRecipeRemoteDataSource(
+            service(MakingRecipeService::class.java),
+        )
+
+    private val makingRecipeLocalDataSource: MakingRecipeLocalDataSource =
+        DefaultMakingRecipeLocalDataSource(database)
 
     override val makingRecipeRepository: MakingRecipeRepository =
-        DefaultMakingRecipeRepository(sessionLocalDataSource, makingRecipeRemoteDataSource)
+        DefaultMakingRecipeRepository(
+            sessionLocalDataSource = sessionLocalDataSource,
+            makingRecipeRemoteDataSource = makingRecipeRemoteDataSource,
+            makingRecipeLocalDataSource = makingRecipeLocalDataSource,
+        )
 
-    private val recipeStepMakingDatasource: RecipeStepMakingDataSource =
-        DefaultRecipeStepMakingDataSource(service(StepMakingService::class.java))
+    private val recipeStepMakingLocalDatasource: RecipeStepMakingLocalDataSource =
+        DefaultRecipeStepMakingLocalDataSource(database.recipeStepDao())
+
+    private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource =
+        DefaultRecipeStepMakingCacheDataSource()
 
     override val recipeStepMakingRepository: RecipeStepMakingRepository =
-        DefaultRecipeStepMakingRepository(recipeStepMakingDatasource)
+        DefaultRecipeStepMakingRepository(
+            recipeStepMakingLocalDataSource = recipeStepMakingLocalDatasource,
+            recipeStepMakingCacheDataSource = recipeStepMakingCacheDataSource,
+        )
 
     private val commentDataSource: CommentDataSource =
         DefaultCommentDataSource(service(CommentService::class.java))
@@ -122,4 +158,16 @@ class DefaultAppModule(
 
     override val profileRepository: ProfileRepository =
         DefaultProfileRepository(sessionLocalDataSource, profileRemoteDataSource)
+
+    private val userControlRemoteDataSource: UserControlDataSource =
+        DefaultUserControlDataSource(service(UserControlService::class.java))
+
+    override val userControlRepository: UserControlRepository =
+        DefaultUserControlRepository(sessionLocalDataSource, userControlRemoteDataSource)
+
+    private val imageRemoteDataSource: ImageRemoteDataSource =
+        DefaultImageRemoteDataSource(service(ImageService::class.java))
+
+    override val imageRepository: ImageRepository =
+        DefaultImageRepository(imageRemoteDataSource)
 }

@@ -70,12 +70,13 @@
             android:layout_height="wrap_content" />
 
         <ImageView
+            android:id="@+id/iv_comment_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_user_name"
             app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
             android:src="@drawable/ic_menu_dots"
             android:layout_marginEnd="12dp"
-            android:onClick="@{() -> eventHandler.onMenuButtonClicked()}"
+            android:onClick="@{() -> eventHandler.onMenuButtonClicked(comment)}"
             android:padding="4dp"
             android:layout_width="24dp"
             android:layout_height="24dp"/>

@@ -37,74 +37,29 @@
                 app:layout_constraintVertical_bias="0.0"
                 tools:src="@drawable/img_kimchi_soup" />
 
+            <include
+                android:id="@+id/timer"
+                layout="@layout/item_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:text="@{recipeStep.description}"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_image_container">
+            app:layout_constraintTop_toBottomOf="@id/cl_image_container" />
 
-            <Chronometer
-                android:id="@+id/chronometer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:countDown="true"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:base="1000" />
-
-            <TextView
-                android:id="@+id/tv_btn_first"
-                android:layout_width="72dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_radius_filled"
-                android:backgroundTint="@color/black_100"
-                android:text="Start"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                app:layout_constraintEnd_toStartOf="@id/tv_btn_second"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chronometer" />
-
-            <TextView
-                android:layout_marginStart="12dp"
-                android:id="@+id/tv_btn_second"
-                android:layout_width="72dp"
-                android:layout_height="32dp"
-                android:background="@drawable/bg_radius_outlined"
-                android:text="Reset"
-                android:textColor="@color/black_100"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tv_btn_first"
-                app:layout_constraintTop_toTopOf="@id/tv_btn_first" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="20dp"
-                android:text="@{recipeStep.description}"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_btn_first" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

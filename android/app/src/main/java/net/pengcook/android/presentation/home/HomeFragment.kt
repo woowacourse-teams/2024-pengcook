@@ -52,22 +52,22 @@ class HomeFragment : Fragment() {
         observeUiEvent()
     }
 
+    private fun observeFeedData() {
+        viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    adapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
     private fun observeUiEvent() {
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
                 is HomeEvent.NavigateToDetail -> {
                     onSingleMovieClicked(newEvent.recipe)
-                }
-            }
-        }
-    }
-
-    private fun observeFeedData() {
-        viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
-            lifecycleScope.launch {
-                withContext(Dispatchers.Main) {
-                    adapter.submitData(pagingData)
                 }
             }
         }

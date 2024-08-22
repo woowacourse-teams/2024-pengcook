@@ -17,6 +17,7 @@ interface ProfileRemoteDataSource {
     ): Response<UpdateProfileResponse>
 
     suspend fun fetchUserFeeds(
+        accessToken: String,
         userId: Long,
         pageNumber: Int,
         pageSize: Int,
