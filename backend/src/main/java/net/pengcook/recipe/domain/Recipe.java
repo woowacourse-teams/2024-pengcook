@@ -71,4 +71,12 @@ public class Recipe {
     public void decreaseLikeCount() {
         likeCount--;
     }
+
+    public void increaseCommentCount() {
+        commentCount++;
+    }
+
+    public void decreaseCommentCount() {
+        commentCount--;
+    }
 }
