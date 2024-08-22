@@ -44,7 +44,6 @@ public class CommentService {
         commentRepository.save(comment);
 
         recipe.increaseCommentCount();
-        recipeRepository.save(recipe);
     }
 
     @Transactional
@@ -60,7 +59,6 @@ public class CommentService {
 
         Recipe recipe = comment.getRecipe();
         recipe.decreaseCommentCount();
-        recipeRepository.save(recipe);
     }
 
     public void deleteCommentsByRecipe(long recipeId) {
