@@ -1,0 +1,9 @@
+services:
+  app:
+    image: pengcook/pengcook:prod
+    restart: unless-stopped
+    environment:
+      JASYPT_PASSWORD: ${JASYPT_PASSWORD}
+      TZ: Asia/Seoul
+    ports:
+      - 8080:8080
