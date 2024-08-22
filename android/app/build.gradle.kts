@@ -50,7 +50,6 @@ android {
                 "BASE_URL",
                 properties.getProperty("base_url_release"),
             )
-            signingConfig = signingConfigs.getByName("debug")
         }
 
         debug {
