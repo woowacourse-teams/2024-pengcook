@@ -6,7 +6,6 @@ spring:
     password: ENC(Xljdaq5zSKNLXbvnubUmz/nwBDWvx9P0AOj6Co1OiywEbasCulkNi98VI4uapwYA)
 
   jpa:
-    generate-ddl: true
     hibernate:
       ddl-auto: validate
 
