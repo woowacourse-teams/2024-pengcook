@@ -43,7 +43,7 @@ jobs:
 
   distribute:
     name: Deploy aab file to Google Play Console
-    needs: build_test
+#    needs: build_test
     runs-on: ubuntu-latest
 
     steps:
