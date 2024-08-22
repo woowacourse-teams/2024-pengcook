@@ -1,5 +1,6 @@
 package net.pengcook.comment.service;
 
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,16 +33,21 @@ public class CommentService {
                 .toList();
     }
 
+    @Transactional
     public void createComment(CreateCommentRequest request, UserInfo userInfo) {
         User user = userRepository.findByEmail(userInfo.getEmail())
                 .orElseThrow(() -> new NotFoundException("해당되는 유저가 없습니다."));
         Recipe recipe = recipeRepository.findById(request.recipeId())
                 .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
-        Comment comment = new Comment(user, recipe, request.message(), LocalDateTime.now());
 
+        Comment comment = new Comment(user, recipe, request.message(), LocalDateTime.now());
         commentRepository.save(comment);
+
+        recipe.increaseCommentCount();
+        recipeRepository.save(recipe);
     }
 
+    @Transactional
     public void deleteComment(long commentId, UserInfo userInfo) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("해당되는 댓글이 없습니다."));
@@ -51,6 +57,10 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+
+        Recipe recipe = comment.getRecipe();
+        recipe.decreaseCommentCount();
+        recipeRepository.save(recipe);
     }
 
     public void deleteCommentsByRecipe(long recipeId) {
