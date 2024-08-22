@@ -8,7 +8,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
 jwt:
   secret: ENC(D+LidASEUNdtQfNTJ5u/1KEFLFgsfWdLtG1ED4+pIdAbZX1xdQSlkIpJT2S+9LmGTjgZiOZZfLSu8dcj18dWMzudDfob28iSGOZdpPexoqeE5ZxbQgsUDm/AEaEAGJ1AwVmZWWo8sfvg2sidGk/aOd6yr1krrnSOfr088kd8MCpuhu5my/fT5CfgboBB/feJoC+rbM15apC+qGKP8ju+pE1zE/iwvuJwd0bHHWqs0FA=)
@@ -26,6 +26,10 @@ cloud:
       cloudfront-cname: ENC(eG3jV3fA2iMks/OfVdEoOC1yuP00D/sTquppxx27pJl6YdMcNfFcX1PUwingvuNsNzoUdGO3Oie+upv/OFGcCA==)
     region:
       static: ENC(QHjkS/cQk6BtfKT6UkdHZrnxZKGCvSsc15GvFz/KKBf25F5XBWhLAjEtHjk+up3V)
+
+springdoc:
+  swagger-ui:
+    enabled: false
 
 management:
   endpoints:
