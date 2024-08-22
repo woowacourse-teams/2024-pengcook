@@ -1,0 +1,116 @@
+name: Backend CD Production
+
+on:
+  workflow_dispatch
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: gradle
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Add execute permissions
+        working-directory: ./backend
+        run: chmod +x ./gradlew
+
+      - name: Build
+        working-directory: ./backend
+        run: ./gradlew build -x test -x bootJar
+
+      - name: Test
+        env:
+          JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
+        working-directory: ./backend
+        run: ./gradlew test
+
+      - name: Create bootJar
+        working-directory: ./backend
+        run: ./gradlew bootJar
+
+      - name: Build Docker image
+        working-directory: ./backend
+        run: |
+          docker build \
+          -f Dockerfile-prod \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod \
+          .
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod
+
+      - name: Upload docker compose
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose
+          path: ./backend/src/main/resources/docker-compose-prod.yaml
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: [self-hosted, prod]
+    environment: prod
+
+    steps:
+      - name: Set up environment variables
+        run: |
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
+
+      - name: Download docker compose
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-compose
+          path: ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+
+      - name: Rename downloaded file
+        run: |
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          mv docker-compose-prod.yaml docker-compose.yaml
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull latest Docker images
+        run: docker compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yaml pull
+
+      - name: Restart docker compose
+        run: |
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          docker compose down
+          docker compose up -d
+
+      - name: Clean up unused Docker images
+        run: docker image prune -af
