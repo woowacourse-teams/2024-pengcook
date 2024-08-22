@@ -6,4 +6,5 @@ data class RecipeStepResponse(
     val image: String,
     val recipeId: Long,
     val sequence: Int,
+    val cookingTime: String,
 )

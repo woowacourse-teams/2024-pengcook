@@ -6,4 +6,5 @@ data class RecipeStep(
     val description: String,
     val image: String,
     val sequence: Int,
+    val cookingTime: String,
 )
