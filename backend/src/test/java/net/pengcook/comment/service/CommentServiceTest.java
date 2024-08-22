@@ -58,14 +58,14 @@ class CommentServiceTest {
     void createComment() {
         CreateCommentRequest request = new CreateCommentRequest(2L, "thank you!");
         UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
-        Recipe recipe = recipeRepository.findById(2L).get();
+        Recipe recipe = recipeRepository.findById(2L).orElseThrow();
         int before = recipe.getCommentCount();
 
         commentService.createComment(request, userInfo);
 
         assertAll(
                 () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1),
-                () -> assertThat(recipe.getCommentCount()).isEqualTo(before + 1)
+                () -> assertThat(recipeRepository.findById(2L).orElseThrow().getCommentCount()).isEqualTo(before + 1)
         );
     }
 
@@ -73,14 +73,15 @@ class CommentServiceTest {
     @DisplayName("댓글을 삭제한다.")
     void deleteComment() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
-        Recipe recipe = commentRepository.findById(2L).get().getRecipe();
+        Recipe recipe = commentRepository.findById(2L).orElseThrow().getRecipe();
+        Long recipeId = recipe.getId();
         int before = recipe.getCommentCount();
 
         commentService.deleteComment(2L, userInfo);
 
         assertAll(
                 () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1),
-                () -> assertThat(recipe.getCommentCount()).isEqualTo(before - 1)
+                () -> assertThat(recipeRepository.findById(recipeId).orElseThrow().getCommentCount()).isEqualTo(before - 1)
         );
     }
 
