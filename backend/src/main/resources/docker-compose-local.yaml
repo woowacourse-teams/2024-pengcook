@@ -62,7 +62,7 @@ services:
           - job_name: 'node'
             scrape_interval: 15s
             static_configs:
-              - targets: ['node_exporter:9100']
+              - targets: ['node:9100']
         EOF
         /bin/prometheus
 
