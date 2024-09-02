@@ -11,6 +11,7 @@
     <springProfile name="dev">
         <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
     </springProfile>
+    ww
     <springProfile name="prod">
         <property name="LOKI_URL" value="http://10.0.100.118/loki/api/v1/push"/>
     </springProfile>
@@ -24,16 +25,7 @@
                 <pattern>app=Pengcook,host=${HOSTNAME},level=%level</pattern>
                 <readMarkers>true</readMarkers>
             </label>
-            <message>
-                <pattern>
-                    {
-                    "level":"%level",
-                    "class":"%logger{36}",
-                    "thread":"%thread",
-                    "message": "%replace(%replace(%message){"\\","\\\\"}){"\"","\\\""}"
-                    }
-                </pattern>
-            </message>
+            <message class="com.github.loki4j.logback.JsonLayout"/>
         </format>
     </appender>
 
@@ -44,9 +36,7 @@
     </appender>
 
     <root level="INFO">
-        <springProfile name="!test">
-            <appender-ref ref="LOKI"/>
-        </springProfile>
+        <appender-ref ref="LOKI"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
