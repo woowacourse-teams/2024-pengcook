@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="Recipe"
+            name="recipe"
             type="net.pengcook.android.presentation.core.model.Recipe" />
 
         <variable
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@{Recipe.title}"
+            app:title="@{@string/detail_appbar_title}"
             app:icon="@{@drawable/ic_back_24}"
             app:appbarEventListener="@{vm}" />
 
@@ -75,7 +75,7 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/penguin"
                         android:translationZ="2dp"
-                        app:imageUrl="@{Recipe.user.profile}"
+                        app:imageUrl="@{recipe.user.profile}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:text="@{Recipe.user.username}"
+                        android:text="@{recipe.user.username}"
                         android:textSize="16sp"
                         android:translationZ="1dp"
                         app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"
@@ -97,13 +97,13 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:scaleType="fitXY"
-                        app:imageUrl="@{Recipe.thumbnail}"
+                        app:imageUrl="@{recipe.thumbnail}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <ImageView
                         android:id="@+id/iv_menu"
@@ -131,62 +131,67 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="12dp">
 
                         <TextView
                             android:id="@+id/tv_category_recipe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="12dp"
-                            app:category="@{Recipe.category}"
+                            app:category="@{recipe.category}"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="Category : Korean" />
 
+                        <!--                        <TextView-->
+<!--                            android:id="@+id/tv_comment_count"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:layout_marginBottom="14dp"-->
+<!--                            android:onClick="@{() -> vm.onNavigateToComment()}"-->
+<!--                            android:padding="4dp"-->
+<!--                            android:textSize="13sp"-->
+<!--                            app:favoriteCount="@{recipe.commentCount}"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="@id/tv_category_recipe"-->
+<!--                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"-->
+<!--                            app:layout_constraintVertical_bias="0.0"-->
+<!--                            tools:text="12 Comments" />-->
+
                         <TextView
                             android:id="@+id/tv_title_recipe"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="@{Recipe.title}"
+                            android:layout_marginEnd="12dp"
+                            android:maxLines="3"
+                            android:text="@{recipe.title}"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
+                            android:paddingVertical="6dp"
+                            app:layout_constraintEnd_toStartOf="@id/iv_comment"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
                             app:layout_constraintTop_toBottomOf="@id/tv_category_recipe"
-                            tools:text="Kimchi Soup" />
-
-                        <TextView
-                            android:id="@+id/tv_likes_recipe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="14dp"
-                            android:onClick="@{() -> vm.onNavigateToComment()}"
-                            android:textSize="13sp"
-                            android:padding="4dp"
-                            app:favoriteCount="@{Recipe.likeCount}"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
-                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
-                            tools:text="12 Comments" />
+                            tools:text="Kimchi Soup with Rice Cake" />
 
                         <ImageView
                             android:id="@+id/iv_favorite"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginEnd="20dp"
                             android:background="@drawable/ic_circle"
                             android:onClick="@{() -> vm.toggleLike()}"
                             android:padding="7dp"
                             android:src="@drawable/selector_favorite"
                             app:isFavorite="@{vm.isLike}"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_title_recipe"
+                            app:layout_constraintTop_toTopOf="@id/iv_comment"
                             app:layout_constraintEnd_toEndOf="parent" />
 
                         <TextView
+                            android:id="@+id/tv_like_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{vm.likeCount.toString()}"
@@ -196,11 +201,34 @@
                             app:layout_constraintTop_toBottomOf="@id/iv_favorite"
                             tools:text="count" />
 
+                        <ImageView
+                            android:id="@+id/iv_comment"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/ic_circle"
+                            android:onClick="@{() -> vm.onNavigateToComment()}"
+                            android:padding="7dp"
+                            android:src="@drawable/ic_comment"
+                            app:layout_constraintEnd_toStartOf="@id/iv_favorite"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(recipe.commentCount)}"
+                            android:textSize="15sp"
+                            app:layout_constraintEnd_toEndOf="@id/iv_comment"
+                            app:layout_constraintStart_toStartOf="@id/iv_comment"
+                            app:layout_constraintTop_toBottomOf="@id/iv_comment"
+                            tools:text="count" />
+
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginHorizontal="12dp"
-                            app:layout_constraintBottom_toBottomOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
+                            android:layout_marginTop="12dp"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -229,7 +257,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:textColor="@color/black"
-                            app:ingredients="@{Recipe.ingredients}"
+                            app:ingredients="@{recipe.ingredients}"
                             app:layout_constraintStart_toStartOf="@id/tv_ingredients_title"
                             app:layout_constraintTop_toBottomOf="@id/tv_ingredients_title"
                             tools:text="Ingredient1, Ingredient2, Ingredient3" />
@@ -251,7 +279,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{Recipe.cookingTime}"
+                            android:text="@{recipe.cookingTime}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_required_time_title"
@@ -274,7 +302,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{String.valueOf(Recipe.difficulty)}"
+                            android:text="@{String.valueOf(recipe.difficulty)}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_difficulty_title"
@@ -297,7 +325,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="@{Recipe.introduction}"
+                            android:text="@{recipe.introduction}"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_introduction_title"
