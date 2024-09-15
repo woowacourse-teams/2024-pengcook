@@ -102,5 +102,5 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.ANDROID_PLAY_AUTH }}
           packageName: net.pengcook.android
           releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
-          track: alpha
+          track: production
           status: draft
