@@ -8,7 +8,10 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.auth.FirebaseAuth
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentAccountSettingBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
@@ -65,8 +68,22 @@ class AccountSettingFragment : Fragment() {
                 is AccountSettingUiEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
+                is AccountSettingUiEvent.SignOut -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val gso =
+                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.default_web_client_id))
+                            .requestEmail()
+                            .build()
 
-                else -> navController.navigate(R.id.action_accountSettingFragment_to_onboardingFragment)
+                    val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+                    googleSignInClient.signOut()
+                    navController.navigate(R.id.action_accountSettingFragment_to_onboardingFragment)
+                }
+                is AccountSettingUiEvent.DeleteAccount -> {
+                    FirebaseAuth.getInstance().currentUser?.delete()
+                    navController.navigate(R.id.action_accountSettingFragment_to_onboardingFragment)
+                }
             }
         }
     }
