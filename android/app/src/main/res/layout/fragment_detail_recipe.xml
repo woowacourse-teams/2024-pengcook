@@ -100,10 +100,8 @@
                         app:imageUrl="@{recipe.thumbnail}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/iv_menu"
@@ -144,22 +142,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="Category : Korean" />
-
-                        <!--                        <TextView-->
-<!--                            android:id="@+id/tv_comment_count"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginTop="8dp"-->
-<!--                            android:layout_marginBottom="14dp"-->
-<!--                            android:onClick="@{() -> vm.onNavigateToComment()}"-->
-<!--                            android:padding="4dp"-->
-<!--                            android:textSize="13sp"-->
-<!--                            app:favoriteCount="@{recipe.commentCount}"-->
-<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                            app:layout_constraintStart_toStartOf="@id/tv_category_recipe"-->
-<!--                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"-->
-<!--                            app:layout_constraintVertical_bias="0.0"-->
-<!--                            tools:text="12 Comments" />-->
 
                         <TextView
                             android:id="@+id/tv_title_recipe"
