@@ -1,6 +1,5 @@
 package net.pengcook.user.service;
 
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -28,6 +27,7 @@ import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -43,6 +43,7 @@ public class UserService {
     private final UserReportRepository userReportRepository;
     private final S3ClientService s3ClientService;
 
+    @Transactional(readOnly = true)
     public ProfileResponse getUserById(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -50,6 +51,7 @@ public class UserService {
         return new ProfileResponse(user, recipeCount);
     }
 
+    @Transactional(readOnly = true)
     public UsernameCheckResponse checkUsername(String username) {
         boolean userExists = userRepository.existsByUsername(username);
         return new UsernameCheckResponse(!userExists);
@@ -104,6 +106,7 @@ public class UserService {
         return new ReportResponse(savedUserReport);
     }
 
+    @Transactional(readOnly = true)
     public BlockedUserGroup getBlockedUserGroup(long blockerId) {
 
         return userBlockRepository.findAllByBlockerId(blockerId).stream()

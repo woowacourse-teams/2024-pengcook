@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class RecipeStepService {
 
@@ -26,11 +25,13 @@ public class RecipeStepService {
     private final RecipeRepository recipeRepository;
     private final S3ClientService s3ClientService;
 
+    @Transactional(readOnly = true)
     public List<RecipeStepResponse> readRecipeSteps(long recipeId) {
         List<RecipeStep> recipeSteps = recipeStepRepository.findAllByRecipeIdOrderBySequence(recipeId);
         return convertToRecipeStepResponses(recipeSteps);
     }
 
+    @Transactional
     public void saveRecipeSteps(Long savedRecipeId, List<RecipeStepRequest> recipeStepRequests) {
         Recipe savedRecipe = recipeRepository.findById(savedRecipeId)
                 .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));

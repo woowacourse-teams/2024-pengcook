@@ -19,6 +19,7 @@ import net.pengcook.image.service.S3ClientService;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class LoginService {
     private final JwtTokenManager jwtTokenManager;
     private final S3ClientService s3ClientService;
 
+    @Transactional(readOnly = true)
     public GoogleLoginResponse loginWithGoogle(GoogleLoginRequest googleLoginRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleLoginRequest.idToken());
         String email = decodedToken.getEmail();
@@ -46,6 +48,7 @@ public class LoginService {
         return new GoogleLoginResponse(true, accessToken, refreshToken);
     }
 
+    @Transactional
     public GoogleSignUpResponse signUpWithGoogle(GoogleSignUpRequest googleSignUpRequest) {
         User user = createUser(googleSignUpRequest);
 
@@ -101,6 +104,7 @@ public class LoginService {
         }
     }
 
+    @Transactional(readOnly = true)
     public void checkToken(long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
