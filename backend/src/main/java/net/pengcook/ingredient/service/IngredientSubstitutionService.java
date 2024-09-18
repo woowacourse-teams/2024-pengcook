@@ -8,6 +8,7 @@ import net.pengcook.ingredient.domain.IngredientSubstitution;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.repository.IngredientSubstitutionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class IngredientSubstitutionService {
         ingredientSubstitutionRepository.save(ingredientSubstitution);
     }
 
+    @Transactional
     public void delete(IngredientRecipe ingredientRecipe) {
         if (ingredientRecipe.getRequirement() == Requirement.ALTERNATIVE) {
             List<IngredientSubstitution> substitutions =

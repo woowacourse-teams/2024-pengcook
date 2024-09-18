@@ -1,6 +1,5 @@
 package net.pengcook.comment.service;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class CommentService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public List<CommentOfRecipeResponse> readComments(Long recipeId, UserInfo userInfo) {
         List<Comment> comments = commentRepository.findByRecipeId(recipeId);
 

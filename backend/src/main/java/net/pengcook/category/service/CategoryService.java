@@ -8,6 +8,7 @@ import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.repository.CategoryRepository;
 import net.pengcook.recipe.domain.Recipe;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryRecipeRepository categoryRecipeRepository;
 
+    @Transactional
     public void saveCategories(Recipe recipe, List<String> categories) {
         categories.forEach(category -> saveCategoryRecipe(recipe, category));
     }

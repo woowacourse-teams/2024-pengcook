@@ -1,7 +1,6 @@
 package net.pengcook.ingredient.service;
 
 
-import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
@@ -14,9 +13,9 @@ import net.pengcook.ingredient.exception.InvalidNameException;
 import net.pengcook.ingredient.repository.IngredientRepository;
 import net.pengcook.recipe.domain.Recipe;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Getter
 public class IngredientService {
@@ -25,6 +24,7 @@ public class IngredientService {
     private final IngredientRecipeService ingredientRecipeService;
     private final IngredientSubstitutionService ingredientSubstitutionService;
 
+    @Transactional
     public void register(List<IngredientCreateRequest> requests, Recipe recipe) {
         validateDuplicateNames(getIngredientNames(requests));
         for (IngredientCreateRequest request : requests) {

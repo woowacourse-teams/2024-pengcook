@@ -1,6 +1,5 @@
 package net.pengcook.like.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.like.domain.RecipeLike;
@@ -13,6 +12,7 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +22,7 @@ public class RecipeLikeService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
 
+    @Transactional(readOnly = true)
     public RecipeLikeResponse readLike(UserInfo userInfo, long recipeId) {
         boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
