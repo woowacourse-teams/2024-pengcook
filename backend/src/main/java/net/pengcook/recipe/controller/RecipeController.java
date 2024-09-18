@@ -7,6 +7,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
+import net.pengcook.recipe.dto.RecipeDescriptionResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
@@ -48,6 +49,11 @@ public class RecipeController {
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody @Valid RecipeRequest recipeRequest) {
         return recipeService.createRecipe(userInfo, recipeRequest);
+    }
+
+    @GetMapping("/{recipeId}")
+    public RecipeDescriptionResponse readRecipeDescription(@LoginUser UserInfo userInfo, @PathVariable long recipeId) {
+        return recipeService.readRecipeDescription(userInfo, recipeId);
     }
 
     @DeleteMapping("/{recipeId}")
