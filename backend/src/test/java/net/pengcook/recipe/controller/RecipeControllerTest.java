@@ -1,6 +1,7 @@
 package net.pengcook.recipe.controller;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -11,12 +12,18 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.recipe.dto.AuthorResponse;
+import net.pengcook.recipe.dto.CategoryResponse;
+import net.pengcook.recipe.dto.IngredientResponse;
+import net.pengcook.recipe.dto.RecipeDescriptionResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -56,20 +63,10 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].author.authorId").description("작성자 아이디"),
                                 fieldWithPath("[].author.authorName").description("작성자 이름"),
                                 fieldWithPath("[].author.authorImage").description("작성자 이미지"),
-                                fieldWithPath("[].cookingTime").description("조리 시간"),
                                 fieldWithPath("[].thumbnail").description("썸네일 이미지"),
-                                fieldWithPath("[].difficulty").description("난이도"),
                                 fieldWithPath("[].likeCount").description("좋아요 수"),
                                 fieldWithPath("[].commentCount").description("댓글 수"),
-                                fieldWithPath("[].description").description("레시피 설명"),
                                 fieldWithPath("[].createdAt").description("레시피 생성일시"),
-                                fieldWithPath("[].category").description("카테고리 목록"),
-                                fieldWithPath("[].category[].categoryId").description("카테고리 아이디"),
-                                fieldWithPath("[].category[].categoryName").description("카테고리 이름"),
-                                fieldWithPath("[].ingredient").description("재료 목록"),
-                                fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
-                                fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
-                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부"),
                                 fieldWithPath("[].mine").description("조회자 작성여부")
                         )))
                 .queryParam("pageNumber", 0)
@@ -137,20 +134,10 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].author.authorId").description("작성자 아이디"),
                                 fieldWithPath("[].author.authorName").description("작성자 이름"),
                                 fieldWithPath("[].author.authorImage").description("작성자 이미지"),
-                                fieldWithPath("[].cookingTime").description("조리 시간"),
                                 fieldWithPath("[].thumbnail").description("썸네일 이미지"),
-                                fieldWithPath("[].difficulty").description("난이도"),
                                 fieldWithPath("[].likeCount").description("좋아요 수"),
                                 fieldWithPath("[].commentCount").description("댓글 수"),
-                                fieldWithPath("[].description").description("레시피 설명"),
                                 fieldWithPath("[].createdAt").description("레시피 생성일시"),
-                                fieldWithPath("[].category").description("카테고리 목록"),
-                                fieldWithPath("[].category[].categoryId").description("카테고리 아이디"),
-                                fieldWithPath("[].category[].categoryName").description("카테고리 이름"),
-                                fieldWithPath("[].ingredient").description("재료 목록"),
-                                fieldWithPath("[].ingredient[].ingredientId").description("재료 아이디"),
-                                fieldWithPath("[].ingredient[].ingredientName").description("재료 이름"),
-                                fieldWithPath("[].ingredient[].requirement").description("재료 필수 여부"),
                                 fieldWithPath("[].mine").description("조회자 작성여부")
                         )))
                 .when()
@@ -301,9 +288,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .queryParam("category", "한식")
                 .when().get("/recipes")
                 .then().log().all()
-                .body("size()", is(3))
-                .body("[0].category[1].categoryName", is("한식"))
-                .body("[1].category[0].categoryName", is("한식"));
+                .body("size()", is(3));
     }
 
     @Test
@@ -337,6 +322,57 @@ class RecipeControllerTest extends RestDocsSetting {
                 .body("[0].author.authorId", is(1))
                 .body("[1].author.authorId", is(1))
                 .body("[2].author.authorId", is(1));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("레시피 설명을 조회한다.")
+    void readRecipeDescription() {
+        RecipeDescriptionResponse expected = new RecipeDescriptionResponse(2L, "김밥",
+                new AuthorResponse(1L, "loki", "loki.jpg"), LocalTime.of(1, 0, 0),
+                "김밥이미지.jpg", 8, 1, 0, "김밥 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0),
+                List.of(new CategoryResponse(1, "한식"), new CategoryResponse(3, "채식")),
+                List.of(new IngredientResponse(2, "쌀", Requirement.REQUIRED),
+                        new IngredientResponse(3, "계란", Requirement.OPTIONAL),
+                        new IngredientResponse(4, "김치", Requirement.REQUIRED)),
+                true);
+
+        RecipeDescriptionResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 아이디의 레시피 설명을 조회합니다.",
+                        "레시피 설명 조회 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("recipeId").description("레시피 아이디"),
+                                fieldWithPath("title").description("레시피 제목"),
+                                fieldWithPath("author").description("작성자 정보"),
+                                fieldWithPath("author.authorId").description("작성자 아이디"),
+                                fieldWithPath("author.authorName").description("작성자 이름"),
+                                fieldWithPath("author.authorImage").description("작성자 이미지"),
+                                fieldWithPath("cookingTime").description("조리 시간"),
+                                fieldWithPath("thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("difficulty").description("난이도"),
+                                fieldWithPath("likeCount").description("좋아요 수"),
+                                fieldWithPath("commentCount").description("댓글 수"),
+                                fieldWithPath("description").description("레시피 설명"),
+                                fieldWithPath("createdAt").description("레시피 생성일시"),
+                                fieldWithPath("category").description("카테고리 목록"),
+                                fieldWithPath("category[].categoryId").description("카테고리 아이디"),
+                                fieldWithPath("category[].categoryName").description("카테고리 이름"),
+                                fieldWithPath("ingredient").description("재료 목록"),
+                                fieldWithPath("ingredient[].ingredientId").description("재료 아이디"),
+                                fieldWithPath("ingredient[].ingredientName").description("재료 이름"),
+                                fieldWithPath("ingredient[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("mine").description("조회자 작성여부")
+                        )))
+                .when()
+                .get("/recipes/{recipeId}", 2L)
+                .then().log().all()
+                .extract().as(RecipeDescriptionResponse.class);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

@@ -21,6 +21,7 @@ import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeDescriptionResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
@@ -89,6 +90,17 @@ public class RecipeService {
         return new RecipeResponse(savedRecipe);
     }
 
+    public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
+
+        return new RecipeDescriptionResponse(
+                userInfo,
+                recipeDataResponses.getFirst(),
+                getCategoryResponses(recipeDataResponses),
+                getIngredientResponses(recipeDataResponses)
+        );
+    }
+
     public void deleteRecipe(UserInfo userInfo, long recipeId) {
         Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
 
@@ -122,9 +134,7 @@ public class RecipeService {
 
         return new MainRecipeResponse(
                 userInfo,
-                firstResponse,
-                getCategoryResponses(groupedResponses),
-                getIngredientResponses(groupedResponses)
+                firstResponse
         );
     }
 
