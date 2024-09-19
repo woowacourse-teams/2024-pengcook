@@ -55,9 +55,9 @@
     <string name="search_message_failure">Search Error Occurred.</string>
 
     <string name="step_making_hint">Write Recipe Introduction</string>
-    <string name="making_step_title">Recipe title</string>
+    <string name="making_step_title">Steps</string>
     <string name="step_format">step %s</string>
-    <string name="making_appbar_title">New Recipe</string>
+    <string name="making_appbar_title">Recipe Summary</string>
     <string name="making_form_recipe_title">Recipe Title</string>
     <string name="making_form_category">Category</string>
     <string name="making_form_ingredient">Ingredient</string>
@@ -69,7 +69,9 @@
     <string name="making_write_ingredient">Write Ingredient</string>
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
+    <string name="making_step">Make Recipe Step</string>
     <string name="making_next_step">Next Step</string>
+
     <string name="making_uploading_image">Uploading Image...</string>
     <string name="back_making_step">Back</string>
     <string name="camera_permission_granted">Camera permission is allowed.</string>
