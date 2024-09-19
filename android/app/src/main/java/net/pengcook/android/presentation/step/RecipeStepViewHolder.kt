@@ -11,7 +11,6 @@ class RecipeStepViewHolder(
     private val binding: ItemStepRecipeBinding,
     private val fragmentManager: FragmentManager,
 ) : RecyclerView.ViewHolder(binding.root), TimerSettingDialogFragment.TimerSettingListener {
-
     private var isTimerRunning = false
 
     private var countDownTimer: CountDownTimer? = null
@@ -26,26 +25,36 @@ class RecipeStepViewHolder(
         this.moveToNextStep = moveToNextStep
         binding.recipeStep = recipeStep
 
+        initTimer(recipeStep)
+
+        contentClickListner(moveToNextStep)
+
+        binding.executePendingBindings()
+    }
+
+    private fun contentClickListner(moveToNextStep: () -> Unit) {
+        val contentClickListener =
+            View.OnClickListener {
+                if (!isTimerRunning) {
+                    startTimer(cookingTimeInMillis)
+                    isTimerRunning = true
+                } else {
+                    stopTimer()
+                    moveToNextStep()
+                }
+            }
+        binding.contentClickListener = contentClickListener
+    }
+
+    private fun initTimer(recipeStep: RecipeStep) {
         cookingTimeInMillis = convertToMillis(recipeStep.cookingTime)
         binding.timer.tvTimer.text = formatTime(cookingTimeInMillis)
 
-        val timerClickListener = View.OnClickListener {
-            showTimerSettingDialog()
-        }
-        binding.clickListener = timerClickListener
-
-        val contentClickListener = View.OnClickListener {
-            if (!isTimerRunning) {
-                startTimer(cookingTimeInMillis)
-                isTimerRunning = true
-            } else {
-                stopTimer()
-                moveToNextStep()
+        val timerClickListener =
+            View.OnClickListener {
+                showTimerSettingDialog()
             }
-        }
-        binding.contentClickListener = contentClickListener
-
-        binding.executePendingBindings()
+        binding.clickListener = timerClickListener
     }
 
     private fun showTimerSettingDialog() {
@@ -68,17 +77,18 @@ class RecipeStepViewHolder(
     }
 
     private fun startTimer(durationInMillis: Long) {
-        countDownTimer = object : CountDownTimer(durationInMillis, TIMER_INTERVAL_MILLIS) {
-            override fun onTick(millisUntilFinished: Long) {
-                binding.timer.tvTimer.text = formatTime(millisUntilFinished)
-            }
+        countDownTimer =
+            object : CountDownTimer(durationInMillis, TIMER_INTERVAL_MILLIS) {
+                override fun onTick(millisUntilFinished: Long) {
+                    binding.timer.tvTimer.text = formatTime(millisUntilFinished)
+                }
 
-            override fun onFinish() {
-                binding.timer.tvTimer.text = INITIAL_TIME_TEXT
-                isTimerRunning = false
-                moveToNextStep?.invoke()
-            }
-        }.start()
+                override fun onFinish() {
+                    binding.timer.tvTimer.text = INITIAL_TIME_TEXT
+                    isTimerRunning = false
+                    moveToNextStep?.invoke()
+                }
+            }.start()
     }
 
     private fun stopTimer() {
