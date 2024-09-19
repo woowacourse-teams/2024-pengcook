@@ -20,4 +20,14 @@
         <item name="cornerSizeTopRight">16dp</item>
         <item name="cornerSizeTopLeft">16dp</item>
     </style>
+
+    <style name="AlertMessageUnfilledForm" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/red_500</item>
+        <item name="android:text">@string/alert_message_fill_form</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>
