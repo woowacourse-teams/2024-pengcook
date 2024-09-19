@@ -38,6 +38,7 @@ public class RecipeStepService {
         recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(savedRecipe, recipeStepRequest));
     }
 
+    @Transactional
     public void deleteRecipeStepsByRecipe(long recipeId) {
         recipeStepRepository.deleteByRecipeId(recipeId);
     }
