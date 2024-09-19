@@ -30,7 +30,10 @@ class RecipeStepFragment : Fragment() {
         get() = _binding!!
 
     private val recipeStepPagerRecyclerAdapter: RecipeStepPagerRecyclerAdapter by lazy {
-        RecipeStepPagerRecyclerAdapter(viewPager2 = binding.vpStepRecipe)
+        RecipeStepPagerRecyclerAdapter(
+            viewPager2 = binding.vpStepRecipe,
+            fragmentManager = childFragmentManager
+        )
     }
 
 

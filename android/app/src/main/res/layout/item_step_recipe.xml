@@ -10,19 +10,23 @@
             type="net.pengcook.android.presentation.core.model.RecipeStep" />
 
         <variable
+            name="contentClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:onClick="@{contentClickListener}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_image_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:onClick="@{clickListener}"
             app:layout_constraintDimensionRatio="8:7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +62,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            android:onClick="@{clickListener}"
             android:text="@{recipeStep.description}"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
