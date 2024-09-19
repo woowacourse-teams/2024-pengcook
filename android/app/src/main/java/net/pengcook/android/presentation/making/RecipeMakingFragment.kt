@@ -144,6 +144,11 @@ class RecipeMakingFragment : Fragment() {
                 is RecipeMakingEvent.MakingCancellation -> findNavController().navigateUp()
             }
         }
+        viewModel.isButtonClicked.observe(viewLifecycleOwner) { isClicked ->
+            if (isClicked) {
+                println("Button Clicked")
+            }
+        }
     }
 
     private fun addImage() {

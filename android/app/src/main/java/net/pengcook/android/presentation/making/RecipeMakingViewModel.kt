@@ -15,8 +15,9 @@ import net.pengcook.android.presentation.making.listener.RecipeMakingEventListen
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 
-class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepository) :
-    ViewModel(),
+class RecipeMakingViewModel(
+    private val makingRecipeRepository: MakingRecipeRepository,
+) : ViewModel(),
     RecipeMakingEventListener,
     SpinnerItemChangeListener,
     AppbarSingleActionEventListener {
@@ -47,6 +48,10 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
     private val _imageSelected: MutableLiveData<Boolean> = MutableLiveData(false)
     val imageSelected: LiveData<Boolean>
         get() = _imageSelected
+
+    private val _isButtonClicked: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isButtonClicked: LiveData<Boolean>
+        get() = _isButtonClicked
 
     private var thumbnailTitle: String? = null
 
@@ -116,6 +121,7 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
                 second == null
             ) {
                 _uiEvent.value = Event(RecipeMakingEvent.DescriptionFormNotCompleted)
+                _isButtonClicked.value = true
                 return@launch
             }
 
@@ -145,7 +151,8 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
 
     private fun initRecipeDescription() {
         viewModelScope.launch {
-            makingRecipeRepository.fetchRecipeDescription()
+            makingRecipeRepository
+                .fetchRecipeDescription()
                 .onSuccess { existingRecipe ->
                     if (existingRecipe != null) {
                         recipeId = existingRecipe.recipeDescriptionId
@@ -195,7 +202,8 @@ class RecipeMakingViewModel(private val makingRecipeRepository: MakingRecipeRepo
                 imageUri = currentImage.value.toString(),
             )
 
-        makingRecipeRepository.saveRecipeDescription(recipeDescription)
+        makingRecipeRepository
+            .saveRecipeDescription(recipeDescription)
             .onSuccess { recipeId ->
                 _uiEvent.value = Event(RecipeMakingEvent.NavigateToMakingStep(recipeId))
             }.onFailure {

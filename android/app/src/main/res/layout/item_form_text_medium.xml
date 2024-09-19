@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -16,6 +17,10 @@
         <variable
             name="content"
             type="String" />
+
+        <variable
+            name="visibleCondition"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,6 +45,14 @@
             app:layout_constraintTop_toBottomOf="@id/tv_form_text_title"
             app:hintContent="@{hintContent}"
             app:content="@={content}"/>
+
+        <TextView
+            android:id="@+id/tv_alert_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_form_text_content"
+            style="@style/AlertMessageUnfilledForm"
+            bind:content="@{content}"
+            bind:visibleCondition="@{visibleCondition}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
