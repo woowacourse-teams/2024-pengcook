@@ -112,6 +112,7 @@
     <string name="comment_format_singular">Comment %d</string>
     <string name="comment_format_plural">Comments %,d</string>
 
+    <string name="detail_appbar_title">Description</string>
     <string name="detail_comment_format_singular">%d Comment</string>
     <string name="detail_comment_format_plural">%,d Comments</string>
     <string name="setting_account_sign_out">Sign out</string>

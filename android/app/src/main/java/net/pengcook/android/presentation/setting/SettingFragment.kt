@@ -23,12 +23,6 @@ class SettingFragment :
     private val settings: List<Setting> =
         listOf(
             Setting(
-                listOf(MenuItem.LIKES, MenuItem.COMMENTS),
-            ),
-            Setting(
-                listOf(MenuItem.BLOCKED, MenuItem.LANGUAGE),
-            ),
-            Setting(
                 listOf(MenuItem.PRIVACY_POLICY, MenuItem.TERMS_OF_USE, MenuItem.ACCOUNT),
             ),
         )
