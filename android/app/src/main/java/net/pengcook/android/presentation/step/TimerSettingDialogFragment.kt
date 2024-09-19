@@ -8,12 +8,14 @@ import androidx.fragment.app.DialogFragment
 import net.pengcook.android.databinding.DialogTimerSettingBinding
 
 class TimerSettingDialogFragment : DialogFragment() {
-
     private var _binding: DialogTimerSettingBinding? = null
     private val binding get() = _binding!!
 
     interface TimerSettingListener {
-        fun onTimeSet(minutes: Int, seconds: Int)
+        fun onTimeSet(
+            minutes: Int,
+            seconds: Int,
+        )
     }
 
     var listener: TimerSettingListener? = null
@@ -27,7 +29,10 @@ class TimerSettingDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupNumberPickers()
