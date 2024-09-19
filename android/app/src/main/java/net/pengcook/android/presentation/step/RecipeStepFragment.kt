@@ -32,10 +32,9 @@ class RecipeStepFragment : Fragment() {
     private val recipeStepPagerRecyclerAdapter: RecipeStepPagerRecyclerAdapter by lazy {
         RecipeStepPagerRecyclerAdapter(
             viewPager2 = binding.vpStepRecipe,
-            fragmentManager = childFragmentManager
+            fragmentManager = childFragmentManager,
         )
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

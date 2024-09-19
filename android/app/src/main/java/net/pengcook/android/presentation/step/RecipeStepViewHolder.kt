@@ -11,7 +11,6 @@ class RecipeStepViewHolder(
     private val binding: ItemStepRecipeBinding,
     private val fragmentManager: FragmentManager,
 ) : RecyclerView.ViewHolder(binding.root), TimerSettingDialogFragment.TimerSettingListener {
-
     private var isTimerRunning = false
     private var countDownTimer: CountDownTimer? = null
 
@@ -19,27 +18,32 @@ class RecipeStepViewHolder(
 
     private var cookingTimeInMillis: Long = 0L
 
-    fun bind(recipeStep: RecipeStep, moveToNextStep: () -> Unit) {
+    fun bind(
+        recipeStep: RecipeStep,
+        moveToNextStep: () -> Unit,
+    ) {
         this.moveToNextStep = moveToNextStep
         binding.recipeStep = recipeStep
 
         cookingTimeInMillis = convertToMillis(recipeStep.cookingTime)
         binding.timer.tvTimer.text = formatTime(cookingTimeInMillis)
 
-        val timerClickListener = View.OnClickListener {
-            showTimerSettingDialog()
-        }
+        val timerClickListener =
+            View.OnClickListener {
+                showTimerSettingDialog()
+            }
         binding.clickListener = timerClickListener
 
-        val contentClickListener = View.OnClickListener {
-            if (!isTimerRunning) {
-                startTimer(cookingTimeInMillis)
-                isTimerRunning = true
-            } else {
-                stopTimer()
-                moveToNextStep()
+        val contentClickListener =
+            View.OnClickListener {
+                if (!isTimerRunning) {
+                    startTimer(cookingTimeInMillis)
+                    isTimerRunning = true
+                } else {
+                    stopTimer()
+                    moveToNextStep()
+                }
             }
-        }
         binding.contentClickListener = contentClickListener
 
         binding.executePendingBindings()
@@ -51,7 +55,10 @@ class RecipeStepViewHolder(
         dialog.show(fragmentManager, "TimerSettingDialog")
     }
 
-    override fun onTimeSet(minutes: Int, seconds: Int) {
+    override fun onTimeSet(
+        minutes: Int,
+        seconds: Int,
+    ) {
         val totalMillis = (minutes * 60 + seconds) * 1000L
         cookingTimeInMillis = totalMillis
 
@@ -62,17 +69,18 @@ class RecipeStepViewHolder(
     }
 
     private fun startTimer(durationInMillis: Long) {
-        countDownTimer = object : CountDownTimer(durationInMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                binding.timer.tvTimer.text = formatTime(millisUntilFinished)
-            }
+        countDownTimer =
+            object : CountDownTimer(durationInMillis, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    binding.timer.tvTimer.text = formatTime(millisUntilFinished)
+                }
 
-            override fun onFinish() {
-                binding.timer.tvTimer.text = "00:00"
-                isTimerRunning = false
-                moveToNextStep?.invoke()
-            }
-        }.start()
+                override fun onFinish() {
+                    binding.timer.tvTimer.text = "00:00"
+                    isTimerRunning = false
+                    moveToNextStep?.invoke()
+                }
+            }.start()
     }
 
     private fun stopTimer() {

@@ -13,14 +13,16 @@ class RecipeStepPagerRecyclerAdapter(
     private val viewPager2: ViewPager2,
     private val fragmentManager: FragmentManager,
 ) : RecyclerView.Adapter<RecipeStepViewHolder>() {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): RecipeStepViewHolder {
-        val binding = ItemStepRecipeBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+        val binding =
+            ItemStepRecipeBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false,
+            )
         return RecipeStepViewHolder(binding, fragmentManager = fragmentManager)
     }
 
