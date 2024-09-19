@@ -9,7 +9,8 @@ import net.pengcook.android.databinding.DialogTimerSettingBinding
 
 class TimerSettingDialogFragment : DialogFragment() {
     private var _binding: DialogTimerSettingBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     interface TimerSettingListener {
         fun onTimeSet(
@@ -50,17 +51,23 @@ class TimerSettingDialogFragment : DialogFragment() {
     }
 
     private fun setupNumberPickers() {
-        binding.npMinutes.minValue = 0
-        binding.npMinutes.maxValue = 59
+        binding.npMinutes.minValue = MIN_VALUE
+        binding.npMinutes.maxValue = MAX_VALUE
         binding.npMinutes.wrapSelectorWheel = true
 
-        binding.npSeconds.minValue = 0
-        binding.npSeconds.maxValue = 59
+        binding.npSeconds.minValue = MIN_VALUE
+        binding.npSeconds.maxValue = MAX_VALUE
         binding.npSeconds.wrapSelectorWheel = true
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val MIN_VALUE = 0
+        private const val MAX_VALUE = 59
+
     }
 }
