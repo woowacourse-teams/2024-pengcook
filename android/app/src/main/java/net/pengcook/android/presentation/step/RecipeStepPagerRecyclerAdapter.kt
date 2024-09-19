@@ -2,6 +2,7 @@ package net.pengcook.android.presentation.step
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import net.pengcook.android.databinding.ItemStepRecipeBinding
@@ -10,6 +11,7 @@ import net.pengcook.android.presentation.core.model.RecipeStep
 class RecipeStepPagerRecyclerAdapter(
     private var pageList: List<RecipeStep> = emptyList(),
     private val viewPager2: ViewPager2,
+    private val fragmentManager: FragmentManager,
 ) : RecyclerView.Adapter<RecipeStepViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -19,7 +21,7 @@ class RecipeStepPagerRecyclerAdapter(
         val binding = ItemStepRecipeBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return RecipeStepViewHolder(binding)
+        return RecipeStepViewHolder(binding, fragmentManager = fragmentManager)
     }
 
     override fun getItemCount(): Int = pageList.size

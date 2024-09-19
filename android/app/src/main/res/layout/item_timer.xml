@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_timer_round_corner"
+        android:onClick="@{clickListener}"
         android:paddingHorizontal="30dp"
         android:paddingVertical="5dp">
 
