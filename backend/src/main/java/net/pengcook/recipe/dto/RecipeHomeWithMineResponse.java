@@ -3,7 +3,7 @@ package net.pengcook.recipe.dto;
 import java.time.LocalDateTime;
 import net.pengcook.authentication.domain.UserInfo;
 
-public record MainRecipeResponse(
+public record RecipeHomeWithMineResponse(
         long recipeId,
         String title,
         AuthorResponse author,
@@ -14,9 +14,9 @@ public record MainRecipeResponse(
         boolean mine
 ) {
 
-    public MainRecipeResponse(
+    public RecipeHomeWithMineResponse(
             UserInfo userInfo,
-            RecipeDataResponse firstResponse
+            RecipeHomeResponse firstResponse
     ) {
         this(
                 firstResponse.recipeId(),

@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.RecipeDataResponse;
+import net.pengcook.recipe.dto.RecipeHomeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,33 +30,21 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     );
 
     @Query("""
-            SELECT new net.pengcook.recipe.dto.RecipeDataResponse(
+            SELECT new net.pengcook.recipe.dto.RecipeHomeResponse(
                 r.id,
                 r.title,
                 r.author.id,
                 r.author.username,
                 r.author.image,
-                r.cookingTime,
                 r.thumbnail,
-                r.difficulty,
                 r.likeCount,
                 r.commentCount,
-                r.description,
-                r.createdAt,
-                c.id,
-                c.name,
-                i.id,
-                i.name,
-                ir.requirement
+                r.createdAt
             )
             FROM Recipe r
-            JOIN FETCH CategoryRecipe cr ON cr.recipe = r
-            JOIN FETCH Category c ON cr.category = c
-            JOIN FETCH IngredientRecipe ir ON ir.recipe = r
-            JOIN FETCH Ingredient i ON ir.ingredient = i
             WHERE r.id IN :recipeIds
             """)
-    List<RecipeDataResponse> findRecipeData(List<Long> recipeIds);
+    List<RecipeHomeResponse> findRecipeData(List<Long> recipeIds);
 
     @Query("""
             SELECT new net.pengcook.recipe.dto.RecipeDataResponse(
