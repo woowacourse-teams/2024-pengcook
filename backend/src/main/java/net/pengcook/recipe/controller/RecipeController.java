@@ -5,9 +5,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
-import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepResponse;
@@ -33,7 +33,7 @@ public class RecipeController {
     private final RecipeStepService recipeStepService;
 
     @GetMapping
-    public List<MainRecipeResponse> readRecipes(
+    public List<RecipeHomeWithMineResponse> readRecipes(
             @LoginUser UserInfo userInfo,
             @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
     ) {
@@ -41,7 +41,7 @@ public class RecipeController {
     }
 
     @GetMapping("/likes")
-    public List<MainRecipeResponse> readLikeRecipes(@LoginUser UserInfo userInfo) {
+    public List<RecipeHomeWithMineResponse> readLikeRecipes(@LoginUser UserInfo userInfo) {
         return recipeService.readLikeRecipes(userInfo);
     }
 

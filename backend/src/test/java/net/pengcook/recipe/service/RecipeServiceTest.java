@@ -8,7 +8,7 @@ import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
-import net.pengcook.recipe.dto.MainRecipeResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
@@ -41,9 +41,9 @@ class RecipeServiceTest {
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
-        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
+        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
 
-        assertThat(mainRecipeResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
+        assertThat(recipeHomeWithMineResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
     }
 
     @Test
@@ -51,11 +51,11 @@ class RecipeServiceTest {
     void readRecipesWithUserInfo() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 2, null, null, null);
-        List<MainRecipeResponse> mainRecipeResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
+        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
 
         assertAll(
-                () -> assertThat(mainRecipeResponses.getFirst().mine()).isFalse(),
-                () -> assertThat(mainRecipeResponses.getLast().mine()).isTrue()
+                () -> assertThat(recipeHomeWithMineResponses.getFirst().mine()).isFalse(),
+                () -> assertThat(recipeHomeWithMineResponses.getLast().mine()).isTrue()
         );
     }
 
@@ -77,7 +77,7 @@ class RecipeServiceTest {
     void readLikeRecipes() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
 
-        List<MainRecipeResponse> actual = recipeService.readLikeRecipes(userInfo);
+        List<RecipeHomeWithMineResponse> actual = recipeService.readLikeRecipes(userInfo);
 
         assertAll(
                 () -> assertThat(actual.size()).isOne(),
