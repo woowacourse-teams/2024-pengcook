@@ -144,11 +144,6 @@ class RecipeMakingFragment : Fragment() {
                 is RecipeMakingEvent.MakingCancellation -> findNavController().navigateUp()
             }
         }
-        viewModel.isButtonClicked.observe(viewLifecycleOwner) { isClicked ->
-            if (isClicked) {
-                println("Button Clicked")
-            }
-        }
     }
 
     private fun addImage() {
@@ -194,9 +189,9 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun initTimeFormatInput() {
-        val etHour = binding.itemTimeRequired.etHour
-        val etMinute = binding.itemTimeRequired.etMinute
-        val etSecond = binding.itemTimeRequired.etSecond
+        val etHour = binding.itemTimeRequired.etTimeAmountPicker.etHour
+        val etMinute = binding.itemTimeRequired.etTimeAmountPicker.etMinute
+        val etSecond = binding.itemTimeRequired.etTimeAmountPicker.etSecond
         arrayOf(MinMaxInputFilter(0, 59)).also { filters ->
             etHour.filters = filters
             etMinute.filters = filters
