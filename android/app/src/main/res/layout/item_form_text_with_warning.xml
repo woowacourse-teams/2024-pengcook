@@ -40,8 +40,7 @@
             android:id="@+id/tv_alert_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_form_text"
-            bind:content="@{content}"
-            bind:visibleCondition="@{visibleCondition}"
+            bind:visibility="@{visibleCondition &amp;&amp; (content == null || content.isEmpty())}"
             style="@style/WarningMessageUnfilledForm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
