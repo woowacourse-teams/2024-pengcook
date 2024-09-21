@@ -21,7 +21,7 @@
         <item name="cornerSizeTopLeft">16dp</item>
     </style>
 
-    <style name="AlertMessageUnfilledForm" parent="Widget.AppCompat.TextView">
+    <style name="WarningMessageUnfilledForm" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/red_500</item>
         <item name="android:text">@string/alert_message_fill_form</item>

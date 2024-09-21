@@ -21,10 +21,6 @@
         <variable
             name="second"
             type="String" />
-
-        <variable
-            name="visibleCondition"
-            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -99,15 +95,6 @@
             app:layout_constraintTop_toTopOf="@id/et_hour"
             tools:hint="Second" />
 
-        <TextView
-            android:id="@+id/tv_alert_message"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_hour"
-            style="@style/AlertMessageUnfilledForm"
-            bind:hour="@{hour}"
-            bind:minute="@{minute}"
-            bind:second="@{second}"
-            bind:visibleCondition="@{visibleCondition}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

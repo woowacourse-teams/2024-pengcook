@@ -53,7 +53,7 @@
 
                 <include
                     android:id="@+id/makingRecipeEditTitle"
-                    layout="@layout/item_form_text"
+                    layout="@layout/item_form_text_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
@@ -80,7 +80,7 @@
 
                 <include
                     android:id="@+id/makingRecipeIngredient"
-                    layout="@layout/item_form_text"
+                    layout="@layout/item_form_text_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:visibleCondition="@{vm.isButtonClicked}"
@@ -94,7 +94,7 @@
 
                 <include
                     android:id="@+id/item_time_required"
-                    layout="@layout/item_time_amount_picker"
+                    layout="@layout/item_time_amount_picker_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:title="@{@string/making_form_time_required}"
@@ -109,7 +109,7 @@
 
                 <include
                     android:id="@+id/makingRecipeDifficulty"
-                    layout="@layout/item_form_rating"
+                    layout="@layout/item_form_rating_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
@@ -122,7 +122,7 @@
 
                 <include
                     android:id="@+id/makingRecipeIntroduction"
-                    layout="@layout/item_form_text_medium"
+                    layout="@layout/item_form_text_medium_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
