@@ -179,36 +179,6 @@ fun TextView.setCommentCount(count: Int) {
     text = context.getString(R.string.comment_format_plural).format(count)
 }
 
-@BindingAdapter("bind:content", "bind:visibleCondition")
-fun setVisibility(
-    view: View,
-    content: String?,
-    visibleCondition: Boolean,
-) {
-    view.visibility =
-        if (content.isNullOrEmpty() && visibleCondition) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-}
-
-@BindingAdapter("bind:hour", "bind:minute", "bind:second", "bind:visibleCondition")
-fun setTimeVisibility(
-    view: View,
-    hour: String?,
-    minute: String?,
-    second: String?,
-    visibleCondition: Boolean,
-) {
-    view.visibility =
-        if ((hour.isNullOrEmpty() || minute.isNullOrEmpty() || second.isNullOrEmpty()) && visibleCondition) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-}
-
 @BindingAdapter("count")
 fun setFormattedLikeCount(
     textView: TextView,

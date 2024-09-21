@@ -49,9 +49,9 @@ class RecipeMakingViewModel(
     val imageSelected: LiveData<Boolean>
         get() = _imageSelected
 
-    private val _isButtonClicked: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isButtonClicked: LiveData<Boolean>
-        get() = _isButtonClicked
+    private val _isMakingStepButtonClicked: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isMakingStepButtonClicked: LiveData<Boolean>
+        get() = _isMakingStepButtonClicked
 
     private var thumbnailTitle: String? = null
 
@@ -121,7 +121,7 @@ class RecipeMakingViewModel(
                 second == null
             ) {
                 _uiEvent.value = Event(RecipeMakingEvent.DescriptionFormNotCompleted)
-                _isButtonClicked.value = true
+                _isMakingStepButtonClicked.value = true
                 return@launch
             }
 
