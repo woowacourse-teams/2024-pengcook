@@ -62,13 +62,21 @@ public class RecipeService {
         );
 
         List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToRecipeHomeResponses(userInfo, recipeHomeResponses);
+
+        return recipeHomeResponses.stream()
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponse(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
+                .toList();
     }
 
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
         List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeData(likeRecipeIds);
-        return convertToRecipeHomeResponses(userInfo, recipeHomeResponses);
+
+        return recipeHomeResponses.stream()
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponse(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
+                .toList();
     }
 
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
@@ -114,29 +122,6 @@ public class RecipeService {
             recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
             recipeRepository.delete(recipe);
         });
-    }
-
-    private List<RecipeHomeWithMineResponse> convertToRecipeHomeResponses(
-            UserInfo userInfo,
-            List<RecipeHomeResponse> recipeHomeResponses
-    ) {
-        Collection<List<RecipeHomeResponse>> groupedRecipeData = recipeHomeResponses.stream()
-                .collect(Collectors.groupingBy(RecipeHomeResponse::recipeId))
-                .values();
-
-        return groupedRecipeData.stream()
-                .map(data -> getMainRecipeResponse(userInfo, data))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
-                .collect(Collectors.toList());
-    }
-
-    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo, List<RecipeHomeResponse> groupedResponses) {
-        RecipeHomeResponse firstResponse = groupedResponses.getFirst();
-
-        return new RecipeHomeWithMineResponse(
-                userInfo,
-                firstResponse
-        );
     }
 
     private List<IngredientResponse> getIngredientResponses(List<RecipeDataResponse> groupedResponses) {
