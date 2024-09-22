@@ -1,7 +1,6 @@
 package net.pengcook.recipe.service;
 
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -18,19 +17,17 @@ import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
-import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
+import net.pengcook.recipe.dto.RecipeHomeResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
-import net.pengcook.recipe.exception.InvalidParameterException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +50,7 @@ public class RecipeService {
     private final RecipeLikeService recipeLikeService;
 
     public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
-        Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
+        Pageable pageable = pageRecipeRequest.getPageable();
         List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
                 pageable,
                 pageRecipeRequest.category(),
@@ -136,14 +133,6 @@ public class RecipeService {
                 .map(r -> new CategoryResponse(r.categoryId(), r.categoryName()))
                 .distinct()
                 .collect(Collectors.toList());
-    }
-
-    private Pageable getValidatedPageable(int pageNumber, int pageSize) {
-        long offset = (long) pageNumber * pageSize;
-        if (offset > Integer.MAX_VALUE) {
-            throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
-        }
-        return PageRequest.of(pageNumber, pageSize);
     }
 
     private void verifyUserCanDeleteRecipe(UserInfo userInfo, Recipe recipe) {

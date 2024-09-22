@@ -8,12 +8,11 @@ import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
-import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
-import net.pengcook.recipe.exception.InvalidParameterException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +40,8 @@ class RecipeServiceTest {
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
-        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
+        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo,
+                pageRecipeRequest);
 
         assertThat(recipeHomeWithMineResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
     }
@@ -51,24 +51,13 @@ class RecipeServiceTest {
     void readRecipesWithUserInfo() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 2, null, null, null);
-        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo, pageRecipeRequest);
+        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo,
+                pageRecipeRequest);
 
         assertAll(
                 () -> assertThat(recipeHomeWithMineResponses.getFirst().mine()).isFalse(),
                 () -> assertThat(recipeHomeWithMineResponses.getLast().mine()).isTrue()
         );
-    }
-
-    @Test
-    @DisplayName("요청받은 페이지 offset 값이 int 타입의 최댓값을 초과하면 예외가 발생한다.")
-    void readRecipesWhenPageOffsetIsGreaterThanIntMaxValue() {
-        int pageNumber = 1073741824;
-        int pageSize = 2;
-        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
-        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
-
-        assertThatThrownBy(() -> recipeService.readRecipes(userInfo, pageRecipeRequest))
-                .isInstanceOf(InvalidParameterException.class);
     }
 
     @Test
