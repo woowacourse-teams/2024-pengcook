@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class RecipeService {
 
@@ -49,6 +48,7 @@ public class RecipeService {
     private final CommentService commentService;
     private final RecipeLikeService recipeLikeService;
 
+    @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = pageRecipeRequest.getPageable();
         List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
@@ -66,6 +66,7 @@ public class RecipeService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
         List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeData(likeRecipeIds);
@@ -76,6 +77,7 @@ public class RecipeService {
                 .toList();
     }
 
+    @Transactional
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
         String thumbnailUrl = s3ClientService.getImageUrl(recipeRequest.thumbnail()).url();
@@ -96,6 +98,7 @@ public class RecipeService {
         return new RecipeResponse(savedRecipe);
     }
 
+    @Transactional(readOnly = true)
     public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
 
@@ -107,6 +110,7 @@ public class RecipeService {
         );
     }
 
+    @Transactional
     public void deleteRecipe(UserInfo userInfo, long recipeId) {
         Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
 
