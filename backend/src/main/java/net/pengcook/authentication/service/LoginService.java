@@ -76,6 +76,12 @@ public class LoginService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public void checkToken(long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
+    }
+
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleSignUpRequest.idToken());
 
@@ -102,11 +108,5 @@ public class LoginService {
         } catch (FirebaseAuthException e) {
             throw new FirebaseTokenException("구글 인증에 실패했습니다.");
         }
-    }
-
-    @Transactional(readOnly = true)
-    public void checkToken(long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
     }
 }

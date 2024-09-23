@@ -61,10 +61,12 @@ public class RecipeLikeService {
         recipeRepository.save(recipe);
     }
 
+    @Transactional
     public void deleteLikesByRecipe(long recipeId) {
         likeRepository.deleteByRecipeId(recipeId);
     }
 
+    @Transactional
     public void deleteLikesByUser(long userId) {
         likeRepository.deleteByUserId(userId);
     }

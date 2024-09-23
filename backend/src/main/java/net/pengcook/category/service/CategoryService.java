@@ -22,6 +22,7 @@ public class CategoryService {
         categories.forEach(category -> saveCategoryRecipe(recipe, category));
     }
 
+    @Transactional
     public void deleteCategoryRecipe(Recipe recipe) {
         categoryRecipeRepository.deleteByRecipe(recipe);
     }
