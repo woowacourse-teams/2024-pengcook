@@ -76,6 +76,7 @@ public class UserService {
         return new UpdateProfileResponse(user);
     }
 
+    @Transactional
     public UserBlockResponse blockUser(long blockerId, long blockeeId) {
         User blocker = userRepository.findById(blockerId)
                 .orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
@@ -88,6 +89,7 @@ public class UserService {
                 new UserResponse(userBlock.getBlockee()));
     }
 
+    @Transactional
     public ReportResponse report(long reporterId, ReportRequest reportRequest) {
         User reporter = userRepository.findById(reporterId)
                 .orElseThrow(() -> new NotFoundException("신고자 정보를 조회할 수 없습니다."));

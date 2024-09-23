@@ -62,10 +62,12 @@ public class CommentService {
         recipe.decreaseCommentCount();
     }
 
+    @Transactional
     public void deleteCommentsByRecipe(long recipeId) {
         commentRepository.deleteByRecipeId(recipeId);
     }
 
+    @Transactional
     public void deleteCommentsByUser(long userId) {
         commentRepository.deleteByUserId(userId);
     }

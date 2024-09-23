@@ -16,6 +16,7 @@ public class IngredientSubstitutionService {
 
     private final IngredientSubstitutionRepository ingredientSubstitutionRepository;
 
+    @Transactional
     public void save(IngredientRecipe ingredientRecipe, Ingredient substitution) {
         IngredientSubstitution ingredientSubstitution = new IngredientSubstitution(ingredientRecipe, substitution);
         ingredientSubstitutionRepository.save(ingredientSubstitution);
