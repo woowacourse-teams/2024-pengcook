@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCategoryBinding
 import net.pengcook.android.presentation.core.style.GridSpacingItemDecoration
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
+@AndroidEntryPoint
 class CategoryFragment : Fragment() {
     private var _binding: FragmentCategoryBinding? = null
     private val binding: FragmentCategoryBinding

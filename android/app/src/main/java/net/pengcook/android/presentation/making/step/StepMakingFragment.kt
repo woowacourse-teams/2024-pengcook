@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.navigateUp
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentMakingStepBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
@@ -22,6 +23,7 @@ import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.File
 
+@AndroidEntryPoint
 class StepMakingFragment : Fragment() {
     private var _binding: FragmentMakingStepBinding? = null
     private val binding: FragmentMakingStepBinding

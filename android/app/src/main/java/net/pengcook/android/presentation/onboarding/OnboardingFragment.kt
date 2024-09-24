@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.BuildConfig
@@ -33,6 +34,7 @@ import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
+@AndroidEntryPoint
 class OnboardingFragment : Fragment() {
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val googleSignInLauncher =

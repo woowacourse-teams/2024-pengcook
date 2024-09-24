@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.databinding.FragmentRecipeStepBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
+@AndroidEntryPoint
 class RecipeStepFragment : Fragment() {
     private val args by navArgs<RecipeStepFragmentArgs>()
     private val recipeId: Long by lazy { args.recipeId }

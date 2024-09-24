@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
@@ -22,6 +23,7 @@ import net.pengcook.android.presentation.core.util.ImageUtils
 import net.pengcook.android.presentation.core.util.MinMaxInputFilter
 import java.io.File
 
+@AndroidEntryPoint
 class RecipeMakingFragment : Fragment() {
     private var _binding: FragmentRecipeMakingBinding? = null
     private val binding: FragmentRecipeMakingBinding

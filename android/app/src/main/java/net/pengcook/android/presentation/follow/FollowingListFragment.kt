@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.databinding.FragmentFollowingListBinding
 
+@AndroidEntryPoint
 class FollowingListFragment : Fragment() {
     private var _binding: FragmentFollowingListBinding? = null
     private val binding: FragmentFollowingListBinding

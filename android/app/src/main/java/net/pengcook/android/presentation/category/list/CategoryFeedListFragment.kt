@@ -9,12 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentCategoryFeedListBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 
+@AndroidEntryPoint
 class CategoryFeedListFragment : Fragment() {
     private var _binding: FragmentCategoryFeedListBinding? = null
     private val binding: FragmentCategoryFeedListBinding
