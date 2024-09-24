@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemStepRecipeBinding
 import net.pengcook.android.presentation.core.model.RecipeStep
 
+
 class RecipeStepViewHolder(
     private val binding: ItemStepRecipeBinding,
     private val fragmentManager: FragmentManager,
@@ -16,7 +17,7 @@ class RecipeStepViewHolder(
     private var countDownTimer: CountDownTimer? = null
     private var moveToNextStep: (() -> Unit)? = null
 
-    private var cookingTimeInMillis: Long = 0L
+    private var cookingTimeInMillis: Long = INITIAL_COOKING_TIME
 
     fun bind(
         recipeStep: RecipeStep,
@@ -105,9 +106,9 @@ class RecipeStepViewHolder(
 
     private fun convertToMillis(time: String): Long {
         val timeParts = time.split(":")
-        val hours = timeParts.getOrNull(0)?.toLongOrNull() ?: 0L
-        val minutes = timeParts.getOrNull(1)?.toLongOrNull() ?: 0L
-        val seconds = timeParts.getOrNull(2)?.toLongOrNull() ?: 0L
+        val hours = timeParts.getOrNull(INITIAL_HOUR)?.toLongOrNull() ?: INITIAL_COOKING_TIME
+        val minutes = timeParts.getOrNull(INITIAL_MINUTE)?.toLongOrNull() ?: INITIAL_COOKING_TIME
+        val seconds = timeParts.getOrNull(INITIAL_SECOND)?.toLongOrNull() ?: INITIAL_COOKING_TIME
         return (hours * SECONDS_IN_HOUR + minutes * SECONDS_IN_MINUTE + seconds) * MILLIS_IN_SECOND
     }
 
@@ -116,6 +117,10 @@ class RecipeStepViewHolder(
         private const val MILLIS_IN_SECOND = 1000L
         private const val SECONDS_IN_MINUTE = 60L
         private const val SECONDS_IN_HOUR = 3600L
+        private const val INITIAL_COOKING_TIME = 0L
+        private const val INITIAL_HOUR = 0
+        private const val INITIAL_MINUTE = 1
+        private const val INITIAL_SECOND = 2
         private const val INITIAL_TIME_TEXT = "00:00"
         private const val TIME_FORMAT = "%02d:%02d"
         private const val DIALOG_TAG = "TimerSettingDialog"
