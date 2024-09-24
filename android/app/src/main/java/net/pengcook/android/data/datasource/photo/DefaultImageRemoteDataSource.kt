@@ -10,8 +10,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class
-DefaultImageRemoteDataSource@Inject
+class DefaultImageRemoteDataSource
+    @Inject
     constructor(
         private val imageService: ImageService,
     ) : ImageRemoteDataSource {
