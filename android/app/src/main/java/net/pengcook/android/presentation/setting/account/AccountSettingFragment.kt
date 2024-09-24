@@ -12,12 +12,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentAccountSettingBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.setting.MenuItem
 import net.pengcook.android.presentation.setting.SettingItemRecyclerViewAdapter
 
+@AndroidEntryPoint
 class AccountSettingFragment : Fragment() {
     private var _binding: FragmentAccountSettingBinding? = null
     private val binding: FragmentAccountSettingBinding

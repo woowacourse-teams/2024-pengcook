@@ -1,3 +1,5 @@
+package net.pengcook.android.presentation.detail.dialog
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -5,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentReportDialogBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
-import net.pengcook.android.presentation.detail.dialog.ReportDialogViewModel
-import net.pengcook.android.presentation.detail.dialog.ReportDialogViewModelFactory
-import net.pengcook.android.presentation.detail.dialog.ReportReasonAdapter
 
+@AndroidEntryPoint
 class ReportDialogFragment : DialogFragment() {
     private var _binding: FragmentReportDialogBinding? = null
     private val binding

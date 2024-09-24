@@ -10,12 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentBinding
 import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuBottomFragment
 import net.pengcook.android.presentation.core.model.Comment
 
+@AndroidEntryPoint
 class CommentFragment : Fragment() {
     private var _binding: FragmentCommentBinding? = null
     private val binding: FragmentCommentBinding
