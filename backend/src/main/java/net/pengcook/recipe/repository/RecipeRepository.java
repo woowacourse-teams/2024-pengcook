@@ -30,6 +30,35 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     );
 
     @Query("""
+            SELECT new net.pengcook.recipe.dto.RecipeDataResponse(
+                r.id,
+                r.title,
+                r.author.id,
+                r.author.username,
+                r.author.image,
+                r.cookingTime,
+                r.thumbnail,
+                r.difficulty,
+                r.likeCount,
+                r.commentCount,
+                r.description,
+                r.createdAt,
+                c.id,
+                c.name,
+                i.id,
+                i.name,
+                ir.requirement
+            )
+            FROM Recipe r
+            JOIN FETCH CategoryRecipe cr ON cr.recipe = r
+            JOIN FETCH Category c ON cr.category = c
+            JOIN FETCH IngredientRecipe ir ON ir.recipe = r
+            JOIN FETCH Ingredient i ON ir.ingredient = i
+            WHERE r.id IN :recipeIds
+            """)
+    List<RecipeDataResponse> findRecipeData(List<Long> recipeIds);
+
+    @Query("""
             SELECT new net.pengcook.recipe.dto.RecipeHomeResponse(
                 r.id,
                 r.title,
@@ -44,7 +73,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             FROM Recipe r
             WHERE r.id IN :recipeIds
             """)
-    List<RecipeHomeResponse> findRecipeData(List<Long> recipeIds);
+    List<RecipeHomeResponse> findRecipeDataV1(List<Long> recipeIds);
 
     @Query("""
             SELECT new net.pengcook.recipe.dto.RecipeDataResponse(
