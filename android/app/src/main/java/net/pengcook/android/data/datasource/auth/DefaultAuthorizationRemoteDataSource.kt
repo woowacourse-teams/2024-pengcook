@@ -10,8 +10,11 @@ import net.pengcook.android.data.model.auth.response.UserInformationResponse
 import net.pengcook.android.data.model.auth.response.UsernameDuplicationResponse
 import net.pengcook.android.data.remote.api.AuthorizationService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultAuthorizationRemoteDataSource(
+@Singleton
+class DefaultAuthorizationRemoteDataSource @Inject constructor(
     private val authorizationService: AuthorizationService,
 ) : AuthorizationRemoteDataSource {
     override suspend fun signIn(

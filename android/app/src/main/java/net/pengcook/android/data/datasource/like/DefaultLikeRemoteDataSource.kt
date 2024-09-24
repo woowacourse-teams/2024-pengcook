@@ -4,8 +4,11 @@ import net.pengcook.android.data.model.like.IsLikeRequest
 import net.pengcook.android.data.model.like.IsLikeResponse
 import net.pengcook.android.data.remote.api.LikeService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultLikeRemoteDataSource(
+@Singleton
+class DefaultLikeRemoteDataSource @Inject constructor(
     private val likeService: LikeService,
 ) : LikeRemoteDataSource {
     override suspend fun fetchIsLike(

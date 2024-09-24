@@ -17,8 +17,11 @@ import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.domain.model.recipemaking.RecipeCreation
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultMakingRecipeRepository(
+@Singleton
+class DefaultMakingRecipeRepository@Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource,
     private val makingRecipeLocalDataSource: MakingRecipeLocalDataSource,

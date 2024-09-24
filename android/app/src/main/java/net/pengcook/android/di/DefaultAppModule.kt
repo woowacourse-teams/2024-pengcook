@@ -1,6 +1,7 @@
 package net.pengcook.android.di
 
 import android.content.Context
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,10 +17,13 @@ import net.pengcook.android.data.datasource.comment.DefaultCommentDataSource
 import net.pengcook.android.data.datasource.feed.DefaultFeedRemoteDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.datasource.like.DefaultLikeRemoteDataSource
+import net.pengcook.android.data.datasource.like.LikeRemoteDataSource
 import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingCacheDataSource
 import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingLocalDataSource
+import net.pengcook.android.data.datasource.making.DefaultRecipeStepMakingRemoteDataSource
 import net.pengcook.android.data.datasource.making.RecipeStepMakingCacheDataSource
 import net.pengcook.android.data.datasource.making.RecipeStepMakingLocalDataSource
+import net.pengcook.android.data.datasource.making.RecipeStepMakingRemoteDataSource
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.DefaultMakingRecipeRemoteDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeLocalDataSource
@@ -194,23 +198,27 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRecipeStepDao(recipeDatabase: RecipeDatabase): RecipeStepDao = recipeDatabase.recipeStepDao()
+    fun provideRecipeStepDao(recipeDatabase: RecipeDatabase): RecipeStepDao =
+        recipeDatabase.recipeStepDao()
 
     @Provides
     @Singleton
-    fun provideRecipeDescriptionDao(recipeDatabase: RecipeDatabase): RecipeDescriptionDao = recipeDatabase.recipeDescriptionDao()
+    fun provideRecipeDescriptionDao(recipeDatabase: RecipeDatabase): RecipeDescriptionDao =
+        recipeDatabase.recipeDescriptionDao()
 
     @Provides
     @Singleton
-    fun provideCategoryDao(recipeDatabase: RecipeDatabase): CategoryDao = recipeDatabase.categoryDao()
+    fun provideCategoryDao(recipeDatabase: RecipeDatabase): CategoryDao =
+        recipeDatabase.categoryDao()
 
     @Provides
     @Singleton
-    fun provideIngredientDao(recipeDatabase: RecipeDatabase): IngredientDao = recipeDatabase.ingredientDao()
+    fun provideIngredientDao(recipeDatabase: RecipeDatabase): IngredientDao =
+        recipeDatabase.ingredientDao()
 }
 
-@Module
 @InstallIn(SingletonComponent::class)
+@Module
 object NetworkModule {
     @Provides
     @Singleton
@@ -240,37 +248,141 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService = retrofit.create(AuthorizationService::class.java)
+    fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService =
+        retrofit.create(AuthorizationService::class.java)
 
     @Provides
     @Singleton
-    fun provideCommentService(retrofit: Retrofit): CommentService = retrofit.create(CommentService::class.java)
+    fun provideCommentService(retrofit: Retrofit): CommentService =
+        retrofit.create(CommentService::class.java)
 
     @Provides
     @Singleton
-    fun provideFeedService(retrofit: Retrofit): FeedService = retrofit.create(FeedService::class.java)
+    fun provideFeedService(retrofit: Retrofit): FeedService =
+        retrofit.create(FeedService::class.java)
 
     @Provides
     @Singleton
-    fun provideImageService(retrofit: Retrofit): ImageService = retrofit.create(ImageService::class.java)
+    fun provideImageService(retrofit: Retrofit): ImageService =
+        retrofit.create(ImageService::class.java)
 
     @Provides
     @Singleton
-    fun provideLikeService(retrofit: Retrofit): LikeService = retrofit.create(LikeService::class.java)
+    fun provideLikeService(retrofit: Retrofit): LikeService =
+        retrofit.create(LikeService::class.java)
 
     @Provides
     @Singleton
-    fun provideMakingRecipeService(retrofit: Retrofit): MakingRecipeService = retrofit.create(MakingRecipeService::class.java)
+    fun provideMakingRecipeService(retrofit: Retrofit): MakingRecipeService =
+        retrofit.create(MakingRecipeService::class.java)
 
     @Provides
     @Singleton
-    fun provideProfileService(retrofit: Retrofit): ProfileService = retrofit.create(ProfileService::class.java)
+    fun provideProfileService(retrofit: Retrofit): ProfileService =
+        retrofit.create(ProfileService::class.java)
 
     @Provides
     @Singleton
-    fun provideStepMakingService(retrofit: Retrofit): StepMakingService = retrofit.create(StepMakingService::class.java)
+    fun provideStepMakingService(retrofit: Retrofit): StepMakingService =
+        retrofit.create(StepMakingService::class.java)
 
     @Provides
     @Singleton
-    fun provideUserControlService(retrofit: Retrofit): UserControlService = retrofit.create(UserControlService::class.java)
+    fun provideUserControlService(retrofit: Retrofit): UserControlService =
+        retrofit.create(UserControlService::class.java)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface DataSourceModule {
+    @Binds
+    fun bindAuthorizationRemoteDataSource(
+        defaultAuthorizationRemoteDataSource: DefaultAuthorizationRemoteDataSource,
+    ): AuthorizationRemoteDataSource
+
+    @Binds
+    fun bindSessionLocalDataSource(defaultSessionLocalDataSource: DefaultSessionLocalDataSource): SessionLocalDataSource
+
+    @Binds
+    fun bindFeedRemoteDataSource(defaultFeedRemoteDataSource: DefaultFeedRemoteDataSource): FeedRemoteDataSource
+
+    @Binds
+    fun bindMakingRecipeRemoteDataSource(
+        defaultMakingRecipeRemoteDataSource: DefaultMakingRecipeRemoteDataSource,
+    ): MakingRecipeRemoteDataSource
+
+    @Binds
+    fun bindMakingRecipeLocalDataSource(defaultMakingRecipeLocalDataSource: DefaultMakingRecipeLocalDataSource): MakingRecipeLocalDataSource
+
+    @Binds
+    fun bindRecipeStepMakingRemoteDataSource(
+        defaultRecipeStepMakingRemoteDataSource: DefaultRecipeStepMakingRemoteDataSource,
+    ): RecipeStepMakingRemoteDataSource
+
+    @Binds
+    fun bindRecipeStepMakingLocalDatasource(
+        defaultRecipeStepMakingLocalDataSource: DefaultRecipeStepMakingLocalDataSource,
+    ): RecipeStepMakingLocalDataSource
+
+    @Binds
+    fun bindRecipeStepMakingCacheDataSource(
+        defaultRecipeStepMakingCacheDataSource: DefaultRecipeStepMakingCacheDataSource,
+    ): RecipeStepMakingCacheDataSource
+
+    @Binds
+    fun bindCommentDataSource(defaultCommentDataSource: DefaultCommentDataSource): CommentDataSource
+
+    @Binds
+    fun bindLikeRemoteDataSource(defaultLikeRemoteDataSource: DefaultLikeRemoteDataSource): LikeRemoteDataSource
+
+    @Binds
+    fun bindProfileRemoteDataSource(defaultProfileRemoteDataSource: DefaultProfileRemoteDataSource): ProfileRemoteDataSource
+
+    @Binds
+    fun bindUserControlRemoteDataSource(defaultUserControlDataSource: DefaultUserControlDataSource): UserControlDataSource
+
+    @Binds
+    fun bindImageRemoteDataSource(defaultImageRemoteDataSource: DefaultImageRemoteDataSource): ImageRemoteDataSource
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface RepositoryModule {
+    @Binds
+    fun bindSessionRepository(defaultSessionRepository: DefaultSessionRepository): SessionRepository
+
+    @Binds
+    fun bindAuthorizationRepository(defaultAuthorizationRepository: DefaultAuthorizationRepository): AuthorizationRepository
+
+    @Binds
+    fun bindFeedRepository(defaultFeedRepository: DefaultFeedRepository): FeedRepository
+
+    @Binds
+    fun bindMakingRecipeRepository(defaultMakingRecipeRepository: DefaultMakingRecipeRepository): MakingRecipeRepository
+
+    @Binds
+    fun bindRecipeStepMakingRepository(defaultRecipeStepMakingRepository: DefaultRecipeStepMakingRepository): RecipeStepMakingRepository
+
+    @Binds
+    fun bindCommentRepository(defaultCommentRepository: DefaultCommentRepository): CommentRepository
+
+    @Binds
+    fun bindLikeRepository(defaultLikeRepository: DefaultLikeRepository): LikeRepository
+
+    @Binds
+    fun bindProfileRepository(defaultProfileRepository: DefaultProfileRepository): ProfileRepository
+
+    @Binds
+    fun bindUserControlRepository(defaultUserControlRepository: DefaultUserControlRepository): UserControlRepository
+
+    @Binds
+    fun bindImageRepository(defaultImageRepository: DefaultImageRepository): ImageRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DataStoreModule {
+    @Provides
+    @Singleton
+    fun provideDataStore(@ApplicationContext context: Context) = context.dataStore
 }

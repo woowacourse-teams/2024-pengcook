@@ -7,8 +7,11 @@ import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.Comment
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultCommentRepository(
+@Singleton
+class DefaultCommentRepository@Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val commentDataSource: CommentDataSource,
 ) : NetworkResponseHandler(),

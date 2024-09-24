@@ -6,8 +6,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultImageRemoteDataSource(
+@Singleton
+class DefaultImageRemoteDataSource@Inject constructor(
     private val imageService: ImageService,
 ) : ImageRemoteDataSource {
     override suspend fun fetchImageUri(keyName: String): Response<PresignedUrlResponse> {

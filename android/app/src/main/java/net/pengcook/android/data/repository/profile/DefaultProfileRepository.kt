@@ -9,8 +9,11 @@ import net.pengcook.android.data.util.mapper.toUserProfile
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.domain.model.profile.UserProfile
 import net.pengcook.android.presentation.core.model.Recipe
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultProfileRepository(
+@Singleton
+class DefaultProfileRepository@Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val profileRemoteDataSource: ProfileRemoteDataSource,
 ) : ProfileRepository, NetworkResponseHandler() {

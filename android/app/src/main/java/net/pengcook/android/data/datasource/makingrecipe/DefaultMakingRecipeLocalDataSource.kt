@@ -10,8 +10,11 @@ import net.pengcook.android.data.model.makingrecipe.entity.CreatedRecipe
 import net.pengcook.android.data.model.makingrecipe.entity.CreatedRecipeDescription
 import net.pengcook.android.data.model.makingrecipe.entity.IngredientEntity
 import net.pengcook.android.data.model.makingrecipe.entity.RecipeDescriptionEntity
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultMakingRecipeLocalDataSource(
+@Singleton
+class DefaultMakingRecipeLocalDataSource @Inject constructor(
     private val database: RecipeDatabase,
 ) : MakingRecipeLocalDataSource {
     private val recipeDescriptionDao: RecipeDescriptionDao = database.recipeDescriptionDao()

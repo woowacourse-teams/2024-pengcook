@@ -2,8 +2,11 @@ package net.pengcook.android.data.repository.photo
 
 import net.pengcook.android.data.datasource.photo.ImageRemoteDataSource
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultImageRepository(
+@Singleton
+class DefaultImageRepository @Inject constructor(
     private val imageRemoteDataSource: ImageRemoteDataSource,
 ) : ImageRepository {
     override suspend fun uploadImage(

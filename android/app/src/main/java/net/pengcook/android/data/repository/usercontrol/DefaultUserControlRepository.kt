@@ -9,8 +9,11 @@ import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.ReportReason
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultUserControlRepository(
+@Singleton
+class DefaultUserControlRepository@Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val userControlDataSource: UserControlDataSource,
 ) : NetworkResponseHandler(),

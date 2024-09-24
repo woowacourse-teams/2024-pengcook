@@ -10,8 +10,11 @@ import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.model.RecipeStep
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultFeedRepository(
+@Singleton
+class DefaultFeedRepository@Inject constructor(
     private val sessionLocalDataSource: SessionLocalDataSource,
     private val feedRemoteDataSource: FeedRemoteDataSource,
 ) : NetworkResponseHandler(),

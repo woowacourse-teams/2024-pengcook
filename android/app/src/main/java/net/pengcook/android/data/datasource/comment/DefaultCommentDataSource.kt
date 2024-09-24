@@ -4,8 +4,11 @@ import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
 import net.pengcook.android.data.remote.api.CommentService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultCommentDataSource(
+@Singleton
+class DefaultCommentDataSource @Inject constructor(
     private val commentService: CommentService,
 ) : CommentDataSource {
     override suspend fun fetchComment(

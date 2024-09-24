@@ -8,8 +8,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultMakingRecipeRemoteDataSource(
+@Singleton
+class DefaultMakingRecipeRemoteDataSource @Inject constructor(
     private val makingRecipeService: MakingRecipeService,
 ) : MakingRecipeRemoteDataSource, NetworkResponseHandler() {
     override suspend fun fetchImageUri(keyName: String): String {
