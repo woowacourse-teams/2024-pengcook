@@ -16,6 +16,8 @@ import net.pengcook.android.data.repository.auth.FakeSessionRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.data.repository.image.FakeImageRepository
 import net.pengcook.android.data.repository.photo.ImageRepository
+import net.pengcook.android.domain.usecase.ValidateNicknameUseCase
+import net.pengcook.android.domain.usecase.ValidateUsernameUseCase
 import net.pengcook.android.presentation.util.getOrAwaitValue
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -66,6 +68,8 @@ class SignUpViewModelTest {
                     authorizationRepository = authorizationRepository,
                     sessionRepository = sessionRepository,
                     imageRepository = imageRepository,
+                    validateNicknameUseCase = ValidateNicknameUseCase(),
+                    validateUsernameUseCase = ValidateUsernameUseCase(),
                 )
 
             // when
@@ -94,6 +98,8 @@ class SignUpViewModelTest {
                     authorizationRepository = authorizationRepository,
                     sessionRepository = sessionRepository,
                     imageRepository = imageRepository,
+                    validateNicknameUseCase = ValidateNicknameUseCase(),
+                    validateUsernameUseCase = ValidateUsernameUseCase(),
                 )
 
             // when
