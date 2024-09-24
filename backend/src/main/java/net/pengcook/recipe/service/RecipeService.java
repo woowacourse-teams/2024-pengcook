@@ -1,6 +1,7 @@
 package net.pengcook.recipe.service;
 
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
 import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.exception.UnauthorizedException;
@@ -58,22 +60,44 @@ public class RecipeService {
                 pageRecipeRequest.userId()
         );
 
-        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeData(recipeIds);
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponseV1> readRecipesV1(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
+        List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
+                pageable,
+                pageRecipeRequest.category(),
+                pageRecipeRequest.keyword(),
+                pageRecipeRequest.userId()
+        );
+
+        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(recipeIds);
 
         return recipeHomeResponses.stream()
-                .map(recipeHomeResponse -> new RecipeHomeWithMineResponse(userInfo, recipeHomeResponse))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
-        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeData(likeRecipeIds);
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
+
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(UserInfo userInfo) {
+        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(likeRecipeIds);
 
         return recipeHomeResponses.stream()
-                .map(recipeHomeResponse -> new RecipeHomeWithMineResponse(userInfo, recipeHomeResponse))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
@@ -123,6 +147,31 @@ public class RecipeService {
             recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
             recipeRepository.delete(recipe);
         });
+    }
+
+    private List<RecipeHomeWithMineResponse> convertToMainRecipeResponses(
+            UserInfo userInfo,
+            List<RecipeDataResponse> recipeDataResponses
+    ) {
+        Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
+                .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
+                .values();
+
+        return groupedRecipeData.stream()
+                .map(data -> getMainRecipeResponse(userInfo, data))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
+                .collect(Collectors.toList());
+    }
+
+    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo, List<RecipeDataResponse> groupedResponses) {
+        RecipeDataResponse firstResponse = groupedResponses.getFirst();
+
+        return new RecipeHomeWithMineResponse(
+                userInfo,
+                firstResponse,
+                getCategoryResponses(groupedResponses),
+                getIngredientResponses(groupedResponses)
+        );
     }
 
     private List<IngredientResponse> getIngredientResponses(List<RecipeDataResponse> groupedResponses) {

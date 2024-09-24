@@ -38,7 +38,7 @@ class RecipeRepositoryTest {
         RecipeHomeResponse expectedData = new RecipeHomeResponse(4, "토마토스파게티", 1, "loki", "loki.jpg",
                 "토마토스파게티이미지.jpg", 2, 0, LocalDateTime.of(2024, 7, 2, 13, 0, 0));
 
-        List<RecipeHomeResponse> recipeData = repository.findRecipeData(recipeIds);
+        List<RecipeHomeResponse> recipeData = repository.findRecipeDataV1(recipeIds);
 
         assertAll(
                 () -> assertThat(recipeData).hasSize(2),

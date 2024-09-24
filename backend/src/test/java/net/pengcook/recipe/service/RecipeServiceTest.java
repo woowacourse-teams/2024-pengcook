@@ -9,7 +9,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.dto.PageRecipeRequest;
-import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -40,7 +40,7 @@ class RecipeServiceTest {
     void readRecipes(int pageNumber, int pageSize, int expectedFirstRecipeId) {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(pageNumber, pageSize, null, null, null);
-        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo,
+        List<RecipeHomeWithMineResponseV1> recipeHomeWithMineResponses = recipeService.readRecipesV1(userInfo,
                 pageRecipeRequest);
 
         assertThat(recipeHomeWithMineResponses.getFirst().recipeId()).isEqualTo(expectedFirstRecipeId);
@@ -51,7 +51,7 @@ class RecipeServiceTest {
     void readRecipesWithUserInfo() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 2, null, null, null);
-        List<RecipeHomeWithMineResponse> recipeHomeWithMineResponses = recipeService.readRecipes(userInfo,
+        List<RecipeHomeWithMineResponseV1> recipeHomeWithMineResponses = recipeService.readRecipesV1(userInfo,
                 pageRecipeRequest);
 
         assertAll(
@@ -66,7 +66,7 @@ class RecipeServiceTest {
     void readLikeRecipes() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
 
-        List<RecipeHomeWithMineResponse> actual = recipeService.readLikeRecipes(userInfo);
+        List<RecipeHomeWithMineResponseV1> actual = recipeService.readLikeRecipesV1(userInfo);
 
         assertAll(
                 () -> assertThat(actual.size()).isOne(),
