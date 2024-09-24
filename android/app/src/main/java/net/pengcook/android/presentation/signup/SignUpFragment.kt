@@ -41,7 +41,6 @@ class SignUpFragment : Fragment() {
     lateinit var viewModelFactory: SignUpViewModelFactory
     private val viewModel: SignUpViewModel by viewModels {
         SignUpViewModel.provideFactory(viewModelFactory, args.platform)
-
     }
     private val imageUtils: ImageUtils by lazy { ImageUtils(requireContext()) }
     private lateinit var photoUri: Uri

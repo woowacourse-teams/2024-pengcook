@@ -8,24 +8,24 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultFeedRemoteDataSource @Inject constructor(
-    private val feedService: FeedService,
-) : FeedRemoteDataSource {
-    override suspend fun fetchRecipes(
-        accessToken: String,
-        pageNumber: Int,
-        pageSize: Int,
-        category: String?,
-        keyword: String?,
-        userId: Long?,
-    ): Response<List<FeedItemResponse>> =
-        feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
+class DefaultFeedRemoteDataSource
+    @Inject
+    constructor(
+        private val feedService: FeedService,
+    ) : FeedRemoteDataSource {
+        override suspend fun fetchRecipes(
+            accessToken: String,
+            pageNumber: Int,
+            pageSize: Int,
+            category: String?,
+            keyword: String?,
+            userId: Long?,
+        ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
 
-    override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> =
-        feedService.fetchRecipeSteps(recipeId)
+        override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
 
-    override suspend fun deleteRecipe(
-        accessToken: String,
-        recipeId: Long,
-    ): Response<Unit> = feedService.deleteRecipe(accessToken, recipeId)
-}
+        override suspend fun deleteRecipe(
+            accessToken: String,
+            recipeId: Long,
+        ): Response<Unit> = feedService.deleteRecipe(accessToken, recipeId)
+    }

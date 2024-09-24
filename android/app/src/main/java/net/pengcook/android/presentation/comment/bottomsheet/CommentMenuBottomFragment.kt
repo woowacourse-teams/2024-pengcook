@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentMenuBottomBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Comment
 
 class CommentMenuBottomFragment : BottomSheetDialogFragment() {

@@ -25,90 +25,92 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultAuthorizationRepository@Inject constructor(
-    private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
-    private val sessionLocalDataSource: SessionLocalDataSource,
-) : AuthorizationRepository, NetworkResponseHandler() {
-    private val sessionData: Flow<Session?>
-        get() = sessionLocalDataSource.sessionData
+class
+DefaultAuthorizationRepository@Inject
+    constructor(
+        private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
+        private val sessionLocalDataSource: SessionLocalDataSource,
+    ) : AuthorizationRepository, NetworkResponseHandler() {
+        private val sessionData: Flow<Session?>
+            get() = sessionLocalDataSource.sessionData
 
-    private suspend fun accessToken(): String = sessionData.firstOrNull()?.accessToken ?: throw RuntimeException()
+        private suspend fun accessToken(): String = sessionData.firstOrNull()?.accessToken ?: throw RuntimeException()
 
-    private suspend fun refreshToken(): String = sessionData.firstOrNull()?.refreshToken ?: throw RuntimeException()
+        private suspend fun refreshToken(): String = sessionData.firstOrNull()?.refreshToken ?: throw RuntimeException()
 
-    override suspend fun signIn(
-        platformName: String,
-        idToken: String,
-    ): Result<SignIn> {
-        return runCatching {
-            val response =
-                authorizationRemoteDataSource.signIn(platformName, IdTokenRequest(idToken))
-            body(response, RESPONSE_CODE_SUCCESS).toSignIn()
-        }
-    }
-
-    override suspend fun signUp(
-        platformName: String,
-        userSignUpForm: UserSignUpForm,
-    ): Result<SignUp> {
-        return runCatching {
-            val response =
-                authorizationRemoteDataSource.signUp(
-                    platformName = platformName,
-                    signUpData = userSignUpForm.toSignUpRequest(),
-                )
-            body(response, RESPONSE_CODE_SIGN_IN_SUCCESS).toSignUp()
-        }
-    }
-
-    override suspend fun checkUsernameDuplication(username: String): Result<Boolean> {
-        return runCatching {
-            val response = authorizationRemoteDataSource.checkUsernameDuplication(username)
-            body(response, RESPONSE_CODE_SUCCESS).toUsernameAvailable()
-        }
-    }
-
-    override suspend fun fetchRenewedTokens(): Result<RenewedTokens> {
-        return runCatching {
-            val response =
-                authorizationRemoteDataSource.fetchAccessToken(RefreshTokenRequest(refreshToken()))
-            body(response, RESPONSE_CODE_SUCCESS).toRenewedTokens()
-        }
-    }
-
-    override suspend fun fetchUserInformation(): Result<UserInformation> {
-        return runCatching {
-            val response = authorizationRemoteDataSource.fetchUserInformation(accessToken())
-            body(response, RESPONSE_CODE_SUCCESS).toUserInformation()
-        }
-    }
-
-    override suspend fun checkSignInStatus(): Result<SignInResult> {
-        return runCatching {
-            val response = authorizationRemoteDataSource.checkSignInStatus(accessToken())
-            when (response.code()) {
-                RESPONSE_CODE_SUCCESS -> SignInResult.SUCCESSFUL
-                RESPONSE_CODE_TOKEN_EXPIRED -> SignInResult.ACCESS_TOKEN_EXPIRED
-                RESPONSE_CODE_USER_NOT_FOUND -> SignInResult.USER_NOT_FOUND
-                else -> SignInResult.SERVER_ERROR
+        override suspend fun signIn(
+            platformName: String,
+            idToken: String,
+        ): Result<SignIn> {
+            return runCatching {
+                val response =
+                    authorizationRemoteDataSource.signIn(platformName, IdTokenRequest(idToken))
+                body(response, RESPONSE_CODE_SUCCESS).toSignIn()
             }
         }
-    }
 
-    override suspend fun deleteAccount(): Result<Unit> {
-        return runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
-            val response = authorizationRemoteDataSource.deleteAccount(accessToken)
-            body(response, RESPONSE_CODE_DELETE_SUCCESS)
+        override suspend fun signUp(
+            platformName: String,
+            userSignUpForm: UserSignUpForm,
+        ): Result<SignUp> {
+            return runCatching {
+                val response =
+                    authorizationRemoteDataSource.signUp(
+                        platformName = platformName,
+                        signUpData = userSignUpForm.toSignUpRequest(),
+                    )
+                body(response, RESPONSE_CODE_SIGN_IN_SUCCESS).toSignUp()
+            }
+        }
+
+        override suspend fun checkUsernameDuplication(username: String): Result<Boolean> {
+            return runCatching {
+                val response = authorizationRemoteDataSource.checkUsernameDuplication(username)
+                body(response, RESPONSE_CODE_SUCCESS).toUsernameAvailable()
+            }
+        }
+
+        override suspend fun fetchRenewedTokens(): Result<RenewedTokens> {
+            return runCatching {
+                val response =
+                    authorizationRemoteDataSource.fetchAccessToken(RefreshTokenRequest(refreshToken()))
+                body(response, RESPONSE_CODE_SUCCESS).toRenewedTokens()
+            }
+        }
+
+        override suspend fun fetchUserInformation(): Result<UserInformation> {
+            return runCatching {
+                val response = authorizationRemoteDataSource.fetchUserInformation(accessToken())
+                body(response, RESPONSE_CODE_SUCCESS).toUserInformation()
+            }
+        }
+
+        override suspend fun checkSignInStatus(): Result<SignInResult> {
+            return runCatching {
+                val response = authorizationRemoteDataSource.checkSignInStatus(accessToken())
+                when (response.code()) {
+                    RESPONSE_CODE_SUCCESS -> SignInResult.SUCCESSFUL
+                    RESPONSE_CODE_TOKEN_EXPIRED -> SignInResult.ACCESS_TOKEN_EXPIRED
+                    RESPONSE_CODE_USER_NOT_FOUND -> SignInResult.USER_NOT_FOUND
+                    else -> SignInResult.SERVER_ERROR
+                }
+            }
+        }
+
+        override suspend fun deleteAccount(): Result<Unit> {
+            return runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = authorizationRemoteDataSource.deleteAccount(accessToken)
+                body(response, RESPONSE_CODE_DELETE_SUCCESS)
+            }
+        }
+
+        companion object {
+            private const val RESPONSE_CODE_SUCCESS = 200
+            private const val RESPONSE_CODE_SIGN_IN_SUCCESS = 201
+            private const val RESPONSE_CODE_TOKEN_EXPIRED = 401
+            private const val RESPONSE_CODE_USER_NOT_FOUND = 404
+            private const val RESPONSE_CODE_DELETE_SUCCESS = 204
         }
     }
-
-    companion object {
-        private const val RESPONSE_CODE_SUCCESS = 200
-        private const val RESPONSE_CODE_SIGN_IN_SUCCESS = 201
-        private const val RESPONSE_CODE_TOKEN_EXPIRED = 401
-        private const val RESPONSE_CODE_USER_NOT_FOUND = 404
-        private const val RESPONSE_CODE_DELETE_SUCCESS = 204
-    }
-}

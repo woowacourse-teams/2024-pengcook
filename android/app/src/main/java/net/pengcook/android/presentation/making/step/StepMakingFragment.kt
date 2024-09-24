@@ -35,7 +35,7 @@ class StepMakingFragment : Fragment() {
     private val viewModel: StepMakingViewModel by viewModels {
         StepMakingViewModel.provideFactory(
             assistedFactory = viewModelFactory,
-            recipeId = args.recipeId
+            recipeId = args.recipeId,
         )
     }
 

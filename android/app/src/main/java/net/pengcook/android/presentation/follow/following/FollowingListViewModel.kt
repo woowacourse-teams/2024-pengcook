@@ -8,15 +8,17 @@ import net.pengcook.android.presentation.follow.UserItemClickListener
 import javax.inject.Inject
 
 @HiltViewModel
-class FollowingListViewModel @Inject constructor() :
+class FollowingListViewModel
+    @Inject
+    constructor() :
     ViewModel(),
-    UserManipulationButtonClickListener,
-    UserItemClickListener {
-    val keyword: MutableLiveData<String> = MutableLiveData("")
+        UserManipulationButtonClickListener,
+        UserItemClickListener {
+        val keyword: MutableLiveData<String> = MutableLiveData("")
 
-    override fun onUserItemSelect(userId: Long) {
-    }
+        override fun onUserItemSelect(userId: Long) {
+        }
 
-    override fun onUserManipulation(userId: Long) {
+        override fun onUserManipulation(userId: Long) {
+        }
     }
-}

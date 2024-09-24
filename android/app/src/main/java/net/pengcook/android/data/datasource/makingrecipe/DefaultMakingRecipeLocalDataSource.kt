@@ -14,39 +14,41 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultMakingRecipeLocalDataSource @Inject constructor(
-    private val database: RecipeDatabase,
-) : MakingRecipeLocalDataSource {
-    private val recipeDescriptionDao: RecipeDescriptionDao = database.recipeDescriptionDao()
-    private val ingredientDao: IngredientDao = database.ingredientDao()
-    private val categoryDao: CategoryDao = database.categoryDao()
+class DefaultMakingRecipeLocalDataSource
+    @Inject
+    constructor(
+        private val database: RecipeDatabase,
+    ) : MakingRecipeLocalDataSource {
+        private val recipeDescriptionDao: RecipeDescriptionDao = database.recipeDescriptionDao()
+        private val ingredientDao: IngredientDao = database.ingredientDao()
+        private val categoryDao: CategoryDao = database.categoryDao()
 
-    override suspend fun saveRecipeDescription(
-        recipeDescription: RecipeDescriptionEntity,
-        ingredients: List<IngredientEntity>,
-        categories: List<CategoryEntity>,
-    ): Long {
-        return database.withTransaction {
-            recipeDescriptionDao.insertCreatedRecipeDescription(recipeDescription)
-            ingredientDao.saveIngredients(ingredients)
-            categoryDao.saveCategories(categories)
-            recipeDescription.id
+        override suspend fun saveRecipeDescription(
+            recipeDescription: RecipeDescriptionEntity,
+            ingredients: List<IngredientEntity>,
+            categories: List<CategoryEntity>,
+        ): Long {
+            return database.withTransaction {
+                recipeDescriptionDao.insertCreatedRecipeDescription(recipeDescription)
+                ingredientDao.saveIngredients(ingredients)
+                categoryDao.saveCategories(categories)
+                recipeDescription.id
+            }
+        }
+
+        override suspend fun fetchTotalRecipeData(): CreatedRecipe? {
+            return recipeDescriptionDao.fetchRecentlyCreatedRecipe()
+        }
+
+        override suspend fun fetchRecipeDescription(): CreatedRecipeDescription? {
+            return recipeDescriptionDao.fetchLatestRecipeDescription()
+        }
+
+        override suspend fun deleteCreatedRecipeById(recipeId: Long) {
+            recipeDescriptionDao.deleteCreatedRecipeById(recipeId)
+        }
+
+        override suspend fun deleteAllCreatedRecipes() {
+            recipeDescriptionDao.deleteAllCreatedRecipes()
         }
     }
-
-    override suspend fun fetchTotalRecipeData(): CreatedRecipe? {
-        return recipeDescriptionDao.fetchRecentlyCreatedRecipe()
-    }
-
-    override suspend fun fetchRecipeDescription(): CreatedRecipeDescription? {
-        return recipeDescriptionDao.fetchLatestRecipeDescription()
-    }
-
-    override suspend fun deleteCreatedRecipeById(recipeId: Long) {
-        recipeDescriptionDao.deleteCreatedRecipeById(recipeId)
-    }
-
-    override suspend fun deleteAllCreatedRecipes() {
-        recipeDescriptionDao.deleteAllCreatedRecipes()
-    }
-}
