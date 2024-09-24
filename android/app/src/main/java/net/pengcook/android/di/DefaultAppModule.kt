@@ -1,6 +1,11 @@
 package net.pengcook.android.di
 
 import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import net.pengcook.android.BuildConfig
 import net.pengcook.android.data.datasource.auth.AuthorizationRemoteDataSource
 import net.pengcook.android.data.datasource.auth.DefaultAuthorizationRemoteDataSource
@@ -26,6 +31,10 @@ import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
 import net.pengcook.android.data.datasource.usercontrol.DefaultUserControlDataSource
 import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
 import net.pengcook.android.data.local.database.RecipeDatabase
+import net.pengcook.android.data.local.database.dao.CategoryDao
+import net.pengcook.android.data.local.database.dao.IngredientDao
+import net.pengcook.android.data.local.database.dao.RecipeDescriptionDao
+import net.pengcook.android.data.local.database.dao.RecipeStepDao
 import net.pengcook.android.data.local.preferences.dataStore
 import net.pengcook.android.data.remote.api.AuthorizationService
 import net.pengcook.android.data.remote.api.CommentService
@@ -34,6 +43,7 @@ import net.pengcook.android.data.remote.api.ImageService
 import net.pengcook.android.data.remote.api.LikeService
 import net.pengcook.android.data.remote.api.MakingRecipeService
 import net.pengcook.android.data.remote.api.ProfileService
+import net.pengcook.android.data.remote.api.StepMakingService
 import net.pengcook.android.data.remote.api.UserControlService
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.DefaultAuthorizationRepository
@@ -60,6 +70,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 class DefaultAppModule(
     appContext: Context,
@@ -170,4 +181,96 @@ class DefaultAppModule(
 
     override val imageRepository: ImageRepository =
         DefaultImageRepository(imageRemoteDataSource)
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+    @Provides
+    @Singleton
+    fun provideRecipeDatabase(
+        @ApplicationContext context: Context,
+    ): RecipeDatabase = RecipeDatabase.getInstance(context)
+
+    @Provides
+    @Singleton
+    fun provideRecipeStepDao(recipeDatabase: RecipeDatabase): RecipeStepDao = recipeDatabase.recipeStepDao()
+
+    @Provides
+    @Singleton
+    fun provideRecipeDescriptionDao(recipeDatabase: RecipeDatabase): RecipeDescriptionDao = recipeDatabase.recipeDescriptionDao()
+
+    @Provides
+    @Singleton
+    fun provideCategoryDao(recipeDatabase: RecipeDatabase): CategoryDao = recipeDatabase.categoryDao()
+
+    @Provides
+    @Singleton
+    fun provideIngredientDao(recipeDatabase: RecipeDatabase): IngredientDao = recipeDatabase.ingredientDao()
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideRetrofitClient(): Retrofit {
+        val interceptor =
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+
+        val client =
+            OkHttpClient
+                .Builder()
+                .apply {
+                    addInterceptor(interceptor)
+                    connectTimeout(30, TimeUnit.SECONDS)
+                    readTimeout(20, TimeUnit.SECONDS)
+                    writeTimeout(25, TimeUnit.SECONDS)
+                }.build()
+
+        return Retrofit
+            .Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService = retrofit.create(AuthorizationService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCommentService(retrofit: Retrofit): CommentService = retrofit.create(CommentService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFeedService(retrofit: Retrofit): FeedService = retrofit.create(FeedService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideImageService(retrofit: Retrofit): ImageService = retrofit.create(ImageService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideLikeService(retrofit: Retrofit): LikeService = retrofit.create(LikeService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMakingRecipeService(retrofit: Retrofit): MakingRecipeService = retrofit.create(MakingRecipeService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProfileService(retrofit: Retrofit): ProfileService = retrofit.create(ProfileService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStepMakingService(retrofit: Retrofit): StepMakingService = retrofit.create(StepMakingService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserControlService(retrofit: Retrofit): UserControlService = retrofit.create(UserControlService::class.java)
 }
