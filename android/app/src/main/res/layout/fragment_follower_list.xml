@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="net.pengcook.android.presentation.follow.FollowerListViewModel" />
+            type="net.pengcook.android.presentation.follow.follower.FollowerListViewModel" />
 
         <variable
             name="adapter"

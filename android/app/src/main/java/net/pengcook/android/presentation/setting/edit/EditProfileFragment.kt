@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.setting
+package net.pengcook.android.presentation.setting.edit
 
 import android.net.Uri
 import android.os.Bundle
@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentEditProfileBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
@@ -28,15 +27,7 @@ class EditProfileFragment : Fragment() {
     private var _binding: FragmentEditProfileBinding? = null
     private val binding: FragmentEditProfileBinding
         get() = _binding!!
-    private val viewModel: EditProfileViewModel by viewModels {
-        val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        val module = application.appModule
-        EditProfileViewModelFactory(
-            module.authorizationRepository,
-            module.profileRepository,
-            module.imageRepository,
-        )
-    }
+    private val viewModel: EditProfileViewModel by viewModels()
     private val imageUtils: ImageUtils by lazy { ImageUtils(requireContext()) }
     private lateinit var photoUri: Uri
     private var currentPhotoPath: String? = null

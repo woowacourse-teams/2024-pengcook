@@ -1,6 +1,8 @@
 package net.pengcook.android.domain.usecase
 
-class ValidateUsernameUseCase {
+import javax.inject.Inject
+
+class ValidateUsernameUseCase @Inject constructor() {
     operator fun invoke(
         username: String,
         lengthRange: IntRange = RANGE_USERNAME,

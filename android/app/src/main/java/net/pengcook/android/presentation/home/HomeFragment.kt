@@ -13,17 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentHomeBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private val viewModel: HomeViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        HomeViewModelFactory(appModule.feedRepository)
-    }
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
         FeedRecyclerViewAdapter(viewModel)

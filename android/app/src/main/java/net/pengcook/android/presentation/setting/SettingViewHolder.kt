@@ -4,6 +4,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import net.pengcook.android.databinding.ItemSettingContainerBinding
+import net.pengcook.android.presentation.setting.model.Setting
 
 class SettingViewHolder(
     private val binding: ItemSettingContainerBinding,

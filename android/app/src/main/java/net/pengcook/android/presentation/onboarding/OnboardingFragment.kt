@@ -31,7 +31,6 @@ import net.pengcook.android.BuildConfig
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentOnboardingBinding
 import net.pengcook.android.domain.model.auth.Platform
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 @AndroidEntryPoint
@@ -57,14 +56,7 @@ class OnboardingFragment : Fragment() {
     private val binding: FragmentOnboardingBinding
         get() = _binding!!
 
-    private val viewModel: OnboardingViewModel by viewModels {
-        val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        val module = application.appModule
-        OnboardingViewModelFactory(
-            module.authorizationRepository,
-            module.sessionRepository,
-        )
-    }
+    private val viewModel: OnboardingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,7 +79,8 @@ class OnboardingFragment : Fragment() {
         observeLoadingStatus()
 
         val textView = binding.tvTerms
-        textView.text = Html.fromHtml(getString(R.string.onboarding_terms), Html.FROM_HTML_MODE_LEGACY)
+        textView.text =
+            Html.fromHtml(getString(R.string.onboarding_terms), Html.FROM_HTML_MODE_LEGACY)
         textView.movementMethod = LinkMovementMethod.getInstance()
     }
 

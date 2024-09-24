@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import net.pengcook.android.presentation.core.model.ReportReason
+import javax.inject.Inject
 
-class CommentMenuBottomViewModel(
+@HiltViewModel
+class CommentMenuBottomViewModel @Inject constructor(
     private val userControlRepository: UserControlRepository,
 ) : ViewModel(),
     ReportEventHandler {

@@ -3,7 +3,10 @@ package net.pengcook.android.presentation.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.like.LikeRepository
@@ -12,8 +15,8 @@ import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventLi
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
 
-class DetailRecipeViewModel(
-    private val recipe: Recipe,
+class DetailRecipeViewModel @AssistedInject constructor(
+    @Assisted private val recipe: Recipe,
     private val likeRepository: LikeRepository,
     private val feedRepository: FeedRepository,
     private val userControlRepository: UserControlRepository,
@@ -97,5 +100,17 @@ class DetailRecipeViewModel(
 
     override fun onNavigateBack() {
         _uiState.value = Event(DetailRecipeUiEvent.NavigateBack)
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: DetailRecipeViewModelFactory,
+            recipe: Recipe,
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(recipe) as T
+            }
+        }
     }
 }

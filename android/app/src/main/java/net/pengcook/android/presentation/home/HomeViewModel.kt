@@ -9,13 +9,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
 ) : ViewModel(), FeedItemEventListener {
     private val _uiEvent: MutableLiveData<Event<HomeEvent>> = MutableLiveData()

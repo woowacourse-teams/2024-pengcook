@@ -18,13 +18,7 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
     private val binding
         get() = _binding!!
 
-    private val viewModel: CommentMenuBottomViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        CommentMenuBottomViewModelFactory(
-            userControlRepository = appModule.userControlRepository,
-        )
-    }
+    private val viewModel: CommentMenuBottomViewModel by viewModels()
 
     private val selectedComment: Comment? by lazy { arguments?.getParcelable("selected_comment") }
 

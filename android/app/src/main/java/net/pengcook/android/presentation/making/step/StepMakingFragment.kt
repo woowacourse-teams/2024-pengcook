@@ -13,15 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.navigateUp
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentMakingStepBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StepMakingFragment : Fragment() {
@@ -29,14 +28,14 @@ class StepMakingFragment : Fragment() {
     private val binding: FragmentMakingStepBinding
         get() = _binding!!
     private val args: StepMakingFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var viewModelFactory: StepMakingViewModelFactory
+
     private val viewModel: StepMakingViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        StepMakingViewModelFactory(
-            recipeId = args.recipeId,
-            maximumStep = MAXIMUM_STEPS,
-            recipeStepMakingRepository = appModule.recipeStepMakingRepository,
-            makingRecipeRepository = appModule.makingRecipeRepository,
+        StepMakingViewModel.provideFactory(
+            assistedFactory = viewModelFactory,
+            recipeId = args.recipeId
         )
     }
 

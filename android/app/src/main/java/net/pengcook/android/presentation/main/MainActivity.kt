@@ -24,13 +24,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: MainViewModel by viewModels {
-        val application = application as DefaultPengcookApplication
-        MainViewModelFactory(
-            application.appModule.authorizationRepository,
-            application.appModule.sessionRepository,
-        )
-    }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

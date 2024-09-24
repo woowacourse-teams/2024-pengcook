@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.setting
+package net.pengcook.android.presentation.setting.edit
 
 sealed interface EditProfileEvent {
     data object EditProfileSuccessful : EditProfileEvent

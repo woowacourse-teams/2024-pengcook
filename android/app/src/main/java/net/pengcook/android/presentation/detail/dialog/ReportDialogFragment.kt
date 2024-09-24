@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentReportDialogBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReportDialogFragment : DialogFragment() {
@@ -21,13 +21,11 @@ class ReportDialogFragment : DialogFragment() {
 
     private val recipe: Recipe? by lazy { arguments?.getParcelable("recipe") }
 
+    @Inject
+    lateinit var viewModelFactory: ReportDialogViewModelFactory
+
     private val viewModel: ReportDialogViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        ReportDialogViewModelFactory(
-            userControlRepository = appModule.userControlRepository,
-            recipe = recipe!!,
-        )
+        ReportDialogViewModel.provideFactory(viewModelFactory, recipe!!) //TODO Add NullSafety
     }
     private val adapter: ReportReasonAdapter by lazy { ReportReasonAdapter(viewModel) }
 

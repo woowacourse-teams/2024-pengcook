@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
@@ -11,8 +12,10 @@ import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventLi
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.setting.MenuItem
 import net.pengcook.android.presentation.setting.SettingMenuItemClickListener
+import javax.inject.Inject
 
-class AccountSettingViewModel(
+@HiltViewModel
+class AccountSettingViewModel @Inject constructor(
     private val sessionRepository: SessionRepository,
     private val authorizationRepository: AuthorizationRepository,
 ) : ViewModel(),

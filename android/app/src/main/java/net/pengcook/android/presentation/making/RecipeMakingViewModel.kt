@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
@@ -13,9 +14,11 @@ import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
 import java.io.File
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class RecipeMakingViewModel(
+@HiltViewModel
+class RecipeMakingViewModel @Inject constructor(
     private val makingRecipeRepository: MakingRecipeRepository,
 ) : ViewModel(),
     RecipeMakingEventListener,
@@ -132,11 +135,11 @@ class RecipeMakingViewModel(
                 ingredients = ingredients,
                 title = title,
                 timeRequired =
-                    FORMAT_TIME_REQUIRED.format(
-                        hour.toIntOrNull() ?: 0,
-                        minute.toIntOrNull() ?: 0,
-                        second.toIntOrNull() ?: 0,
-                    ),
+                FORMAT_TIME_REQUIRED.format(
+                    hour.toIntOrNull() ?: 0,
+                    minute.toIntOrNull() ?: 0,
+                    second.toIntOrNull() ?: 0,
+                ),
             )
         }
     }

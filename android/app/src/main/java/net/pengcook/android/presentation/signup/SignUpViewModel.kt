@@ -4,7 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
@@ -20,13 +23,13 @@ import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import java.io.File
 
-class SignUpViewModel(
-    private val platformName: String,
+class SignUpViewModel @AssistedInject constructor(
+    @Assisted private val platformName: String,
     private val authorizationRepository: AuthorizationRepository,
     private val sessionRepository: SessionRepository,
     private val imageRepository: ImageRepository,
-    private val validateUsernameUseCase: ValidateUsernameUseCase = ValidateUsernameUseCase(),
-    private val validateNicknameUseCase: ValidateNicknameUseCase = ValidateNicknameUseCase(),
+    private val validateUsernameUseCase: ValidateUsernameUseCase,
+    private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel(),
     BottomButtonClickListener,
     SpinnerItemChangeListener,
@@ -183,5 +186,17 @@ class SignUpViewModel(
         sessionRepository.updateRefreshToken(signUpResult.refreshToken)
         sessionRepository.updateCurrentPlatform(Platform.find(platformName))
         _signUpEvent.value = Event(SignUpEvent.SignInSuccessful)
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: SignUpViewModelFactory,
+            platformName: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return assistedFactory.create(platformName) as T
+            }
+        }
     }
 }

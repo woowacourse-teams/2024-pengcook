@@ -13,6 +13,7 @@ import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
+import net.pengcook.android.presentation.setting.model.Setting
 
 @AndroidEntryPoint
 class SettingFragment :

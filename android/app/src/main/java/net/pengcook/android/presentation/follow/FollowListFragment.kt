@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.databinding.FragmentFollowListBinding
+import net.pengcook.android.presentation.follow.follower.FollowerListFragment
+import net.pengcook.android.presentation.follow.following.FollowingListFragment
 
 @AndroidEntryPoint
 class FollowListFragment : Fragment() {
