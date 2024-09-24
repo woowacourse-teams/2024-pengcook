@@ -24,21 +24,17 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRecipeStepDao(recipeDatabase: RecipeDatabase): RecipeStepDao =
-        recipeDatabase.recipeStepDao()
+    fun provideRecipeStepDao(recipeDatabase: RecipeDatabase): RecipeStepDao = recipeDatabase.recipeStepDao()
 
     @Provides
     @Singleton
-    fun provideRecipeDescriptionDao(recipeDatabase: RecipeDatabase): RecipeDescriptionDao =
-        recipeDatabase.recipeDescriptionDao()
+    fun provideRecipeDescriptionDao(recipeDatabase: RecipeDatabase): RecipeDescriptionDao = recipeDatabase.recipeDescriptionDao()
 
     @Provides
     @Singleton
-    fun provideCategoryDao(recipeDatabase: RecipeDatabase): CategoryDao =
-        recipeDatabase.categoryDao()
+    fun provideCategoryDao(recipeDatabase: RecipeDatabase): CategoryDao = recipeDatabase.categoryDao()
 
     @Provides
     @Singleton
-    fun provideIngredientDao(recipeDatabase: RecipeDatabase): IngredientDao =
-        recipeDatabase.ingredientDao()
+    fun provideIngredientDao(recipeDatabase: RecipeDatabase): IngredientDao = recipeDatabase.ingredientDao()
 }

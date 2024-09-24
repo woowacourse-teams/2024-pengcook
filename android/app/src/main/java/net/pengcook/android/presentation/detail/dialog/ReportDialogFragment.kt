@@ -25,7 +25,7 @@ class ReportDialogFragment : DialogFragment() {
     lateinit var viewModelFactory: ReportDialogViewModelFactory
 
     private val viewModel: ReportDialogViewModel by viewModels {
-        ReportDialogViewModel.provideFactory(viewModelFactory, recipe!!) //TODO Add NullSafety
+        ReportDialogViewModel.provideFactory(viewModelFactory, recipe!!) // TODO Add NullSafety
     }
     private val adapter: ReportReasonAdapter by lazy { ReportReasonAdapter(viewModel) }
 

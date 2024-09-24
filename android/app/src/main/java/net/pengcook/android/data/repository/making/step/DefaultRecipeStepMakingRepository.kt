@@ -12,60 +12,62 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultRecipeStepMakingRepository@Inject constructor(
-    private val recipeStepMakingLocalDataSource: RecipeStepMakingLocalDataSource,
-    private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
-) : NetworkResponseHandler(),
-    RecipeStepMakingRepository {
-    override suspend fun fetchRecipeStep(
-        recipeId: Long,
-        sequence: Int,
-    ): Result<RecipeStepMaking?> =
-        runCatching {
-            val stepFromDb =
-                recipeStepMakingLocalDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
-                    ?.toRecipeStepMaking()
-            if (stepFromDb != null) {
-                recipeStepMakingCacheDataSource.saveRecipeStep(
-                    recipeId = recipeId,
-                    recipeStep = stepFromDb,
-                )
+class
+DefaultRecipeStepMakingRepository@Inject
+    constructor(
+        private val recipeStepMakingLocalDataSource: RecipeStepMakingLocalDataSource,
+        private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
+    ) : NetworkResponseHandler(),
+        RecipeStepMakingRepository {
+        override suspend fun fetchRecipeStep(
+            recipeId: Long,
+            sequence: Int,
+        ): Result<RecipeStepMaking?> =
+            runCatching {
+                val stepFromDb =
+                    recipeStepMakingLocalDataSource.fetchRecipeStepByStepNumber(recipeId, sequence)
+                        ?.toRecipeStepMaking()
+                if (stepFromDb != null) {
+                    recipeStepMakingCacheDataSource.saveRecipeStep(
+                        recipeId = recipeId,
+                        recipeStep = stepFromDb,
+                    )
+                }
+                stepFromDb
             }
-            stepFromDb
+
+        override suspend fun saveRecipeStep(
+            recipeId: Long,
+            recipeStep: RecipeStepMaking,
+        ): Result<Unit> =
+            runCatching {
+                val recipeStepEntity = recipeStep.toRecipeStepEntity()
+                recipeStepMakingLocalDataSource.insertCreatedRecipeStep(recipeStepEntity)
+            }
+
+        override fun deleteRecipeSteps(recipeId: Long) {
+            CoroutineScope(Job()).launch {
+                recipeStepMakingLocalDataSource.deleteRecipeStepsByRecipeId(recipeId)
+            }
         }
 
-    override suspend fun saveRecipeStep(
-        recipeId: Long,
-        recipeStep: RecipeStepMaking,
-    ): Result<Unit> =
-        runCatching {
-            val recipeStepEntity = recipeStep.toRecipeStepEntity()
-            recipeStepMakingLocalDataSource.insertCreatedRecipeStep(recipeStepEntity)
-        }
+        private fun RecipeStepMaking.toRecipeStepEntity(): RecipeStepEntity =
+            RecipeStepEntity(
+                recipeDescriptionId = recipeId,
+                cookingTime = "00:00:00",
+                stepNumber = sequence,
+                description = description.ifEmpty { null },
+                imageUri = imageUri.ifEmpty { null },
+                imageTitle = image.ifEmpty { null },
+            )
 
-    override fun deleteRecipeSteps(recipeId: Long) {
-        CoroutineScope(Job()).launch {
-            recipeStepMakingLocalDataSource.deleteRecipeStepsByRecipeId(recipeId)
-        }
+        private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
+            RecipeStepMaking(
+                stepId = id,
+                recipeId = recipeDescriptionId,
+                sequence = stepNumber,
+                description = description ?: "",
+                imageUri = imageUri ?: "",
+                image = imageTitle ?: "",
+            )
     }
-
-    private fun RecipeStepMaking.toRecipeStepEntity(): RecipeStepEntity =
-        RecipeStepEntity(
-            recipeDescriptionId = recipeId,
-            cookingTime = "00:00:00",
-            stepNumber = sequence,
-            description = description.ifEmpty { null },
-            imageUri = imageUri.ifEmpty { null },
-            imageTitle = image.ifEmpty { null },
-        )
-
-    private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
-        RecipeStepMaking(
-            stepId = id,
-            recipeId = recipeDescriptionId,
-            sequence = stepNumber,
-            description = description ?: "",
-            imageUri = imageUri ?: "",
-            image = imageTitle ?: "",
-        )
-}

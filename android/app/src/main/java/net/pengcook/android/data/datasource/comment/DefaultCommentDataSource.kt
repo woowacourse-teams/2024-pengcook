@@ -8,21 +8,23 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultCommentDataSource @Inject constructor(
-    private val commentService: CommentService,
-) : CommentDataSource {
-    override suspend fun fetchComment(
-        accessToken: String,
-        recipeId: Long,
-    ): Response<List<CommentResponse>> = commentService.fetchComments(accessToken, recipeId)
+class DefaultCommentDataSource
+    @Inject
+    constructor(
+        private val commentService: CommentService,
+    ) : CommentDataSource {
+        override suspend fun fetchComment(
+            accessToken: String,
+            recipeId: Long,
+        ): Response<List<CommentResponse>> = commentService.fetchComments(accessToken, recipeId)
 
-    override suspend fun postComment(
-        accessToken: String,
-        commentRequest: CommentRequest,
-    ): Response<Unit> = commentService.postComment(accessToken, commentRequest)
+        override suspend fun postComment(
+            accessToken: String,
+            commentRequest: CommentRequest,
+        ): Response<Unit> = commentService.postComment(accessToken, commentRequest)
 
-    override suspend fun deleteComment(
-        accessToken: String,
-        commentId: Long,
-    ): Response<Unit> = commentService.deleteComment(accessToken, commentId)
-}
+        override suspend fun deleteComment(
+            accessToken: String,
+            commentId: Long,
+        ): Response<Unit> = commentService.deleteComment(accessToken, commentId)
+    }

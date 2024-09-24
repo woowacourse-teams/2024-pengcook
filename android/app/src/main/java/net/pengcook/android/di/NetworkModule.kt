@@ -50,46 +50,37 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService =
-        retrofit.create(AuthorizationService::class.java)
+    fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService = retrofit.create(AuthorizationService::class.java)
 
     @Provides
     @Singleton
-    fun provideCommentService(retrofit: Retrofit): CommentService =
-        retrofit.create(CommentService::class.java)
+    fun provideCommentService(retrofit: Retrofit): CommentService = retrofit.create(CommentService::class.java)
 
     @Provides
     @Singleton
-    fun provideFeedService(retrofit: Retrofit): FeedService =
-        retrofit.create(FeedService::class.java)
+    fun provideFeedService(retrofit: Retrofit): FeedService = retrofit.create(FeedService::class.java)
 
     @Provides
     @Singleton
-    fun provideImageService(retrofit: Retrofit): ImageService =
-        retrofit.create(ImageService::class.java)
+    fun provideImageService(retrofit: Retrofit): ImageService = retrofit.create(ImageService::class.java)
 
     @Provides
     @Singleton
-    fun provideLikeService(retrofit: Retrofit): LikeService =
-        retrofit.create(LikeService::class.java)
+    fun provideLikeService(retrofit: Retrofit): LikeService = retrofit.create(LikeService::class.java)
 
     @Provides
     @Singleton
-    fun provideMakingRecipeService(retrofit: Retrofit): MakingRecipeService =
-        retrofit.create(MakingRecipeService::class.java)
+    fun provideMakingRecipeService(retrofit: Retrofit): MakingRecipeService = retrofit.create(MakingRecipeService::class.java)
 
     @Provides
     @Singleton
-    fun provideProfileService(retrofit: Retrofit): ProfileService =
-        retrofit.create(ProfileService::class.java)
+    fun provideProfileService(retrofit: Retrofit): ProfileService = retrofit.create(ProfileService::class.java)
 
     @Provides
     @Singleton
-    fun provideStepMakingService(retrofit: Retrofit): StepMakingService =
-        retrofit.create(StepMakingService::class.java)
+    fun provideStepMakingService(retrofit: Retrofit): StepMakingService = retrofit.create(StepMakingService::class.java)
 
     @Provides
     @Singleton
-    fun provideUserControlService(retrofit: Retrofit): UserControlService =
-        retrofit.create(UserControlService::class.java)
+    fun provideUserControlService(retrofit: Retrofit): UserControlService = retrofit.create(UserControlService::class.java)
 }

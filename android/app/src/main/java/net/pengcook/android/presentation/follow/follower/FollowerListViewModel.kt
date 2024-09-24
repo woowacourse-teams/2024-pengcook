@@ -16,33 +16,35 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class FollowerListViewModel @Inject constructor() :
+class FollowerListViewModel
+    @Inject
+    constructor() :
     ViewModel(),
-    UserManipulationButtonClickListener,
-    UserItemClickListener {
-    val pagingDataFlow =
-        Pager(PagingConfig(pageSize = 20)) {
-            FollowPagingSource(
-                fetchUsers =
-                suspend {
-                    runCatching {
-                        List(10) {
-                            User(
-                                UUID.randomUUID().hashCode().toLong(),
-                                "user",
-                                "https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg",
-                            )
-                        }
-                    }
-                },
-            )
-        }.liveData.cachedIn(viewModelScope)
+        UserManipulationButtonClickListener,
+        UserItemClickListener {
+        val pagingDataFlow =
+            Pager(PagingConfig(pageSize = 20)) {
+                FollowPagingSource(
+                    fetchUsers =
+                        suspend {
+                            runCatching {
+                                List(10) {
+                                    User(
+                                        UUID.randomUUID().hashCode().toLong(),
+                                        "user",
+                                        "https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg",
+                                    )
+                                }
+                            }
+                        },
+                )
+            }.liveData.cachedIn(viewModelScope)
 
-    val keyword: MutableLiveData<String> = MutableLiveData("")
+        val keyword: MutableLiveData<String> = MutableLiveData("")
 
-    override fun onUserItemSelect(userId: Long) {
+        override fun onUserItemSelect(userId: Long) {
+        }
+
+        override fun onUserManipulation(userId: Long) {
+        }
     }
-
-    override fun onUserManipulation(userId: Long) {
-    }
-}

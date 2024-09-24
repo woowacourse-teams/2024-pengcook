@@ -16,64 +16,66 @@ import net.pengcook.android.domain.model.auth.SignInResult
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val authorizationRepository: AuthorizationRepository,
-    private val sessionRepository: SessionRepository,
-) : ViewModel() {
-    private val _uiState: MutableStateFlow<MainUiEvent?> = MutableStateFlow(null)
-    val uiState: StateFlow<MainUiEvent?> = _uiState.asStateFlow()
+class MainViewModel
+    @Inject
+    constructor(
+        private val authorizationRepository: AuthorizationRepository,
+        private val sessionRepository: SessionRepository,
+    ) : ViewModel() {
+        private val _uiState: MutableStateFlow<MainUiEvent?> = MutableStateFlow(null)
+        val uiState: StateFlow<MainUiEvent?> = _uiState.asStateFlow()
 
-    init {
-        checkSignInStatus()
-    }
+        init {
+            checkSignInStatus()
+        }
 
-    private fun checkSignInStatus() {
-        viewModelScope.launch {
-            authorizationRepository.checkSignInStatus()
-                .onSuccess { signInResult ->
-                    handleSignInResult(signInResult)
+        private fun checkSignInStatus() {
+            viewModelScope.launch {
+                authorizationRepository.checkSignInStatus()
+                    .onSuccess { signInResult ->
+                        handleSignInResult(signInResult)
+                    }.onFailure {
+                        onTokenValidationFailure()
+                    }
+            }
+        }
+
+        private suspend fun MainViewModel.handleSignInResult(signInResult: SignInResult) {
+            when (signInResult) {
+                SignInResult.SUCCESSFUL ->
+                    _uiState.value = MainUiEvent.NavigateToMain
+
+                SignInResult.ACCESS_TOKEN_EXPIRED -> fetchRenewedTokens()
+                else -> onTokenValidationFailure()
+            }
+        }
+
+        private suspend fun fetchRenewedTokens() {
+            authorizationRepository.fetchRenewedTokens()
+                .onSuccess { renewedTokens ->
+                    onTokenRenewalSuccessful(renewedTokens)
                 }.onFailure {
                     onTokenValidationFailure()
                 }
         }
-    }
 
-    private suspend fun MainViewModel.handleSignInResult(signInResult: SignInResult) {
-        when (signInResult) {
-            SignInResult.SUCCESSFUL ->
+        private suspend fun onTokenRenewalSuccessful(renewedTokens: RenewedTokens) {
+            coroutineScope {
+                val updateAccessToken =
+                    launch {
+                        sessionRepository.updateAccessToken(renewedTokens.accessToken)
+                    }
+                val updateRefreshToken =
+                    launch {
+                        sessionRepository.updateRefreshToken(renewedTokens.refreshToken)
+                    }
+                joinAll(updateAccessToken, updateRefreshToken)
                 _uiState.value = MainUiEvent.NavigateToMain
-
-            SignInResult.ACCESS_TOKEN_EXPIRED -> fetchRenewedTokens()
-            else -> onTokenValidationFailure()
-        }
-    }
-
-    private suspend fun fetchRenewedTokens() {
-        authorizationRepository.fetchRenewedTokens()
-            .onSuccess { renewedTokens ->
-                onTokenRenewalSuccessful(renewedTokens)
-            }.onFailure {
-                onTokenValidationFailure()
             }
-    }
+        }
 
-    private suspend fun onTokenRenewalSuccessful(renewedTokens: RenewedTokens) {
-        coroutineScope {
-            val updateAccessToken =
-                launch {
-                    sessionRepository.updateAccessToken(renewedTokens.accessToken)
-                }
-            val updateRefreshToken =
-                launch {
-                    sessionRepository.updateRefreshToken(renewedTokens.refreshToken)
-                }
-            joinAll(updateAccessToken, updateRefreshToken)
-            _uiState.value = MainUiEvent.NavigateToMain
+        private suspend fun onTokenValidationFailure() {
+            sessionRepository.clearAll()
+            _uiState.value = MainUiEvent.NavigateToOnboarding
         }
     }
-
-    private suspend fun onTokenValidationFailure() {
-        sessionRepository.clearAll()
-        _uiState.value = MainUiEvent.NavigateToOnboarding
-    }
-}

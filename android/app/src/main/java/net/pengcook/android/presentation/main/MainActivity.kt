@@ -16,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.ActivityMainBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

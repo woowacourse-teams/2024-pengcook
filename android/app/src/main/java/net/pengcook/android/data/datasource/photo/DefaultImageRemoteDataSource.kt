@@ -10,18 +10,20 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultImageRemoteDataSource@Inject constructor(
-    private val imageService: ImageService,
-) : ImageRemoteDataSource {
-    override suspend fun fetchImageUri(keyName: String): Response<PresignedUrlResponse> {
-        return imageService.fetchImageUri(keyName)
-    }
+class
+DefaultImageRemoteDataSource@Inject
+    constructor(
+        private val imageService: ImageService,
+    ) : ImageRemoteDataSource {
+        override suspend fun fetchImageUri(keyName: String): Response<PresignedUrlResponse> {
+            return imageService.fetchImageUri(keyName)
+        }
 
-    override suspend fun uploadImage(
-        presignedUrl: String,
-        file: File,
-    ): Response<Unit> {
-        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        return imageService.uploadImage(presignedUrl, requestFile)
+        override suspend fun uploadImage(
+            presignedUrl: String,
+            file: File,
+        ): Response<Unit> {
+            val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            return imageService.uploadImage(presignedUrl, requestFile)
+        }
     }
-}

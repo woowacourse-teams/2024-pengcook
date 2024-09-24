@@ -4,5 +4,8 @@ import dagger.assisted.AssistedFactory
 
 @AssistedFactory
 interface StepMakingViewModelFactory {
-    fun create(recipeId: Long, maximumStep: Int): StepMakingViewModel
+    fun create(
+        recipeId: Long,
+        maximumStep: Int,
+    ): StepMakingViewModel
 }

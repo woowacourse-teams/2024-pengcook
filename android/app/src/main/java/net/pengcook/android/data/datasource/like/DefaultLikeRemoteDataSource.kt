@@ -8,16 +8,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultLikeRemoteDataSource @Inject constructor(
-    private val likeService: LikeService,
-) : LikeRemoteDataSource {
-    override suspend fun fetchIsLike(
-        accessToken: String,
-        recipeId: Long,
-    ): Response<IsLikeResponse> = likeService.fetchLikeCount(accessToken, recipeId)
+class DefaultLikeRemoteDataSource
+    @Inject
+    constructor(
+        private val likeService: LikeService,
+    ) : LikeRemoteDataSource {
+        override suspend fun fetchIsLike(
+            accessToken: String,
+            recipeId: Long,
+        ): Response<IsLikeResponse> = likeService.fetchLikeCount(accessToken, recipeId)
 
-    override suspend fun postLike(
-        accessToken: String,
-        isLikeRequest: IsLikeRequest,
-    ): Response<Unit> = likeService.postLike(accessToken, isLikeRequest)
-}
+        override suspend fun postLike(
+            accessToken: String,
+            isLikeRequest: IsLikeRequest,
+        ): Response<Unit> = likeService.postLike(accessToken, isLikeRequest)
+    }

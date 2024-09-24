@@ -13,41 +13,44 @@ import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventLi
 import net.pengcook.android.presentation.core.model.RecipeStep
 import net.pengcook.android.presentation.core.util.Event
 
-class RecipeStepViewModel @AssistedInject constructor(
-    @Assisted private val recipeId: Long,
-    private val feedRepository: FeedRepository,
-) : ViewModel(),
-    AppbarSingleActionEventListener {
-    private var _recipeSteps: MutableLiveData<List<RecipeStep>> = MutableLiveData(emptyList())
-    val recipeSteps: LiveData<List<RecipeStep>>
-        get() = _recipeSteps
+class RecipeStepViewModel
+    @AssistedInject
+    constructor(
+        @Assisted private val recipeId: Long,
+        private val feedRepository: FeedRepository,
+    ) : ViewModel(),
+        AppbarSingleActionEventListener {
+        private var _recipeSteps: MutableLiveData<List<RecipeStep>> = MutableLiveData(emptyList())
+        val recipeSteps: LiveData<List<RecipeStep>>
+            get() = _recipeSteps
 
-    private val _quitEvent = MutableLiveData<Event<Boolean>>()
-    val quitEvent: LiveData<Event<Boolean>>
-        get() = _quitEvent
+        private val _quitEvent = MutableLiveData<Event<Boolean>>()
+        val quitEvent: LiveData<Event<Boolean>>
+            get() = _quitEvent
 
-    fun fetchRecipeSteps() {
-        viewModelScope.launch {
-            val response = feedRepository.fetchRecipeSteps(recipeId)
-            if (response.isSuccess) {
-                _recipeSteps.value = response.getOrNull() ?: emptyList()
+        fun fetchRecipeSteps() {
+            viewModelScope.launch {
+                val response = feedRepository.fetchRecipeSteps(recipeId)
+                if (response.isSuccess) {
+                    _recipeSteps.value = response.getOrNull() ?: emptyList()
+                }
             }
         }
-    }
 
-    override fun onNavigateBack() {
-        _quitEvent.value = Event(true)
-    }
+        override fun onNavigateBack() {
+            _quitEvent.value = Event(true)
+        }
 
-    companion object {
-        fun provideFactory(
-            assistedFactory: RecipeStepViewModelFactory,
-            recipeId: Long
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                @Suppress("UNCHECKED_CAST")
-                return assistedFactory.create(recipeId) as T
-            }
+        companion object {
+            fun provideFactory(
+                assistedFactory: RecipeStepViewModelFactory,
+                recipeId: Long,
+            ): ViewModelProvider.Factory =
+                object : ViewModelProvider.Factory {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        @Suppress("UNCHECKED_CAST")
+                        return assistedFactory.create(recipeId) as T
+                    }
+                }
         }
     }
-}
