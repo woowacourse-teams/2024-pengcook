@@ -14,49 +14,51 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultFeedRepository @Inject constructor(
-    private val sessionLocalDataSource: SessionLocalDataSource,
-    private val feedRemoteDataSource: FeedRemoteDataSource,
-) : NetworkResponseHandler(),
-    FeedRepository {
-    override suspend fun fetchRecipes(
-        pageNumber: Int,
-        pageSize: Int,
-        category: String?,
-        keyword: String?,
-        userId: Long?,
-    ): Result<List<Recipe>> =
-        runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
-            val response =
-                feedRemoteDataSource.fetchRecipes(
-                    accessToken,
-                    pageNumber,
-                    pageSize,
-                    category,
-                    keyword,
-                    userId
-                )
-            body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
-        }
+class DefaultFeedRepository
+    @Inject
+    constructor(
+        private val sessionLocalDataSource: SessionLocalDataSource,
+        private val feedRemoteDataSource: FeedRemoteDataSource,
+    ) : NetworkResponseHandler(),
+        FeedRepository {
+        override suspend fun fetchRecipes(
+            pageNumber: Int,
+            pageSize: Int,
+            category: String?,
+            keyword: String?,
+            userId: Long?,
+        ): Result<List<Recipe>> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response =
+                    feedRemoteDataSource.fetchRecipes(
+                        accessToken,
+                        pageNumber,
+                        pageSize,
+                        category,
+                        keyword,
+                        userId,
+                    )
+                body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponse::toRecipe)
+            }
 
-    override suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>> =
-        runCatching {
-            val response = feedRemoteDataSource.fetchRecipeSteps(recipeId)
-            body(response, RESPONSE_CODE_SUCCESS).map(RecipeStepResponse::toRecipeStep)
-        }
+        override suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>> =
+            runCatching {
+                val response = feedRemoteDataSource.fetchRecipeSteps(recipeId)
+                body(response, RESPONSE_CODE_SUCCESS).map(RecipeStepResponse::toRecipeStep)
+            }
 
-    override suspend fun deleteRecipe(recipeId: Long): Result<Unit> =
-        runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
-            val response = feedRemoteDataSource.deleteRecipe(accessToken, recipeId)
-            body(response, RESPONSE_CODE_DELETED)
-        }
+        override suspend fun deleteRecipe(recipeId: Long): Result<Unit> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = feedRemoteDataSource.deleteRecipe(accessToken, recipeId)
+                body(response, RESPONSE_CODE_DELETED)
+            }
 
-    companion object {
-        private const val RESPONSE_CODE_SUCCESS = 200
-        private const val RESPONSE_CODE_DELETED = 204
+        companion object {
+            private const val RESPONSE_CODE_SUCCESS = 200
+            private const val RESPONSE_CODE_DELETED = 204
+        }
     }
-}

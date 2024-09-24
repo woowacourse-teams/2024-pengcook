@@ -9,36 +9,38 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultLikeRepository @Inject constructor(
-    private val sessionLocalDataSource: SessionLocalDataSource,
-    private val likeRemoteDataSource: LikeRemoteDataSource,
-) : LikeRepository,
-    NetworkResponseHandler() {
-    override suspend fun loadIsLike(recipeId: Long): Result<Boolean> =
-        runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
-            val response =
-                likeRemoteDataSource.fetchIsLike(accessToken = accessToken, recipeId = recipeId)
-            body(response, RESPONSE_CODE_SUCCESS).isLike
-        }
+class DefaultLikeRepository
+    @Inject
+    constructor(
+        private val sessionLocalDataSource: SessionLocalDataSource,
+        private val likeRemoteDataSource: LikeRemoteDataSource,
+    ) : NetworkResponseHandler(),
+        LikeRepository {
+        override suspend fun loadIsLike(recipeId: Long): Result<Boolean> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response =
+                    likeRemoteDataSource.fetchIsLike(accessToken = accessToken, recipeId = recipeId)
+                body(response, RESPONSE_CODE_SUCCESS).isLike
+            }
 
-    override suspend fun postIsLike(
-        recipeId: Long,
-        isLike: Boolean,
-    ): Result<Unit> =
-        runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
-            val response =
-                likeRemoteDataSource.postLike(
-                    accessToken = accessToken,
-                    IsLikeRequest(recipeId, isLike),
-                )
-            body(response, RESPONSE_CODE_SUCCESS)
-        }
+        override suspend fun postIsLike(
+            recipeId: Long,
+            isLike: Boolean,
+        ): Result<Unit> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response =
+                    likeRemoteDataSource.postLike(
+                        accessToken = accessToken,
+                        IsLikeRequest(recipeId, isLike),
+                    )
+                body(response, RESPONSE_CODE_SUCCESS)
+            }
 
-    companion object {
-        private const val RESPONSE_CODE_SUCCESS = 200
+        companion object {
+            private const val RESPONSE_CODE_SUCCESS = 200
+        }
     }
-}
