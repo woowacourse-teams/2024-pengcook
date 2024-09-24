@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemStepRecipeBinding
 import net.pengcook.android.presentation.core.model.RecipeStep
 
-
 class RecipeStepViewHolder(
     private val binding: ItemStepRecipeBinding,
     private val fragmentManager: FragmentManager,
