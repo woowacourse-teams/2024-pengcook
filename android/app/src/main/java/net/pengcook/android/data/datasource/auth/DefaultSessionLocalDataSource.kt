@@ -12,8 +12,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import net.pengcook.android.data.model.auth.Session
 import net.pengcook.android.domain.model.auth.Platform
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultSessionLocalDataSource(
+@Singleton
+class DefaultSessionLocalDataSource @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : SessionLocalDataSource {
     override val sessionData: Flow<Session> =

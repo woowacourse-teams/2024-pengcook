@@ -7,8 +7,11 @@ import net.pengcook.android.data.model.profile.UserProfileResponse
 import net.pengcook.android.data.remote.api.FeedService
 import net.pengcook.android.data.remote.api.ProfileService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultProfileRemoteDataSource(
+@Singleton
+class DefaultProfileRemoteDataSource@Inject constructor(
     private val profileService: ProfileService,
     private val feedService: FeedService,
 ) : ProfileRemoteDataSource {

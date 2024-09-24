@@ -7,8 +7,11 @@ import net.pengcook.android.data.model.usercontrol.ReportUserRequest
 import net.pengcook.android.data.remote.api.UserControlService
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultUserControlDataSource(
+@Singleton
+class DefaultUserControlDataSource@Inject constructor(
     private val userControlService: UserControlService,
 ) : NetworkResponseHandler(),
     UserControlDataSource {

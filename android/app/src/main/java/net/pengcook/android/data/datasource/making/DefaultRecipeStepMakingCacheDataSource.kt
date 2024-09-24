@@ -1,8 +1,12 @@
 package net.pengcook.android.data.datasource.making
 
 import net.pengcook.android.presentation.core.model.RecipeStepMaking
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultRecipeStepMakingCacheDataSource : RecipeStepMakingCacheDataSource {
+@Singleton
+class DefaultRecipeStepMakingCacheDataSource @Inject constructor() :
+    RecipeStepMakingCacheDataSource {
     private var recipeSteps: Map<Int, RecipeStepMaking> = emptyMap()
 
     override suspend fun fetchRecipeStepByStepNumber(

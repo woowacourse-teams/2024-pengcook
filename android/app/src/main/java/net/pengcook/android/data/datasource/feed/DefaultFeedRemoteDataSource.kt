@@ -4,8 +4,11 @@ import net.pengcook.android.data.model.feed.item.FeedItemResponse
 import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.remote.api.FeedService
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultFeedRemoteDataSource(
+@Singleton
+class DefaultFeedRemoteDataSource @Inject constructor(
     private val feedService: FeedService,
 ) : FeedRemoteDataSource {
     override suspend fun fetchRecipes(
@@ -15,9 +18,11 @@ class DefaultFeedRemoteDataSource(
         category: String?,
         keyword: String?,
         userId: Long?,
-    ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
+    ): Response<List<FeedItemResponse>> =
+        feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
 
-    override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
+    override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> =
+        feedService.fetchRecipeSteps(recipeId)
 
     override suspend fun deleteRecipe(
         accessToken: String,

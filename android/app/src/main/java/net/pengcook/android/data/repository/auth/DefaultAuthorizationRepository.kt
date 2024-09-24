@@ -21,8 +21,11 @@ import net.pengcook.android.domain.model.auth.SignInResult
 import net.pengcook.android.domain.model.auth.SignUp
 import net.pengcook.android.domain.model.auth.UserInformation
 import net.pengcook.android.domain.model.auth.UserSignUpForm
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultAuthorizationRepository(
+@Singleton
+class DefaultAuthorizationRepository@Inject constructor(
     private val authorizationRemoteDataSource: AuthorizationRemoteDataSource,
     private val sessionLocalDataSource: SessionLocalDataSource,
 ) : AuthorizationRepository, NetworkResponseHandler() {

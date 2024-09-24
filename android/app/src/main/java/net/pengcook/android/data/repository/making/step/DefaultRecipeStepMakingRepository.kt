@@ -8,8 +8,11 @@ import net.pengcook.android.data.datasource.making.RecipeStepMakingLocalDataSour
 import net.pengcook.android.data.model.step.RecipeStepEntity
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.RecipeStepMaking
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DefaultRecipeStepMakingRepository(
+@Singleton
+class DefaultRecipeStepMakingRepository@Inject constructor(
     private val recipeStepMakingLocalDataSource: RecipeStepMakingLocalDataSource,
     private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
 ) : NetworkResponseHandler(),
