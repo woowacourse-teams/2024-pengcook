@@ -28,12 +28,12 @@ class RecipeStepViewHolder(
 
         initTimer(recipeStep)
 
-        contentClickListner(moveToNextStep)
+        contentClickListener(moveToNextStep)
 
         binding.executePendingBindings()
     }
 
-    private fun contentClickListner(moveToNextStep: () -> Unit) {
+    private fun contentClickListener(moveToNextStep: () -> Unit) {
         val contentClickListener =
             View.OnClickListener {
                 if (!isTimerRunning) {
