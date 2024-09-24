@@ -21,66 +21,63 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultMakingRecipeRepository @Inject constructor(
-    private val sessionLocalDataSource: SessionLocalDataSource,
-    private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource,
-    private val makingRecipeLocalDataSource: MakingRecipeLocalDataSource,
-) : MakingRecipeRepository, NetworkResponseHandler() {
-    override suspend fun fetchImageUri(keyName: String): String {
-        return makingRecipeRemoteDataSource.fetchImageUri(keyName)
-    }
+class DefaultMakingRecipeRepository
+    @Inject
+    constructor(
+        private val sessionLocalDataSource: SessionLocalDataSource,
+        private val makingRecipeRemoteDataSource: MakingRecipeRemoteDataSource,
+        private val makingRecipeLocalDataSource: MakingRecipeLocalDataSource,
+    ) : NetworkResponseHandler(),
+        MakingRecipeRepository {
+        override suspend fun fetchImageUri(keyName: String): String = makingRecipeRemoteDataSource.fetchImageUri(keyName)
 
-    override suspend fun uploadImageToS3(
-        presignedUrl: String,
-        file: File,
-    ) {
-        makingRecipeRemoteDataSource.uploadImageToS3(presignedUrl, file)
-    }
+        override suspend fun uploadImageToS3(
+            presignedUrl: String,
+            file: File,
+        ) {
+            makingRecipeRemoteDataSource.uploadImageToS3(presignedUrl, file)
+        }
 
-    override suspend fun fetchTotalRecipeData(): Result<RecipeCreation?> {
-        return runCatching {
-            makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
+        override suspend fun fetchTotalRecipeData(): Result<RecipeCreation?> =
+            runCatching {
+                makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
+            }
+
+        override suspend fun fetchRecipeDescription(): Result<RecipeDescription?> =
+            runCatching {
+                makingRecipeLocalDataSource.fetchRecipeDescription()?.toRecipeDescription()
+            }
+
+        override suspend fun saveRecipeDescription(recipeDescription: RecipeDescription): Result<Long> =
+            runCatching {
+                val id = recipeDescription.recipeDescriptionId
+                val recipeDescriptionEntity = recipeDescription.toRecipeDescriptionEntity(id)
+                val categoryEntities = recipeDescription.categories.toCategoryEntities(id)
+                val ingredientEntities = recipeDescription.ingredients.toIngredientEntities(id)
+                makingRecipeLocalDataSource.saveRecipeDescription(
+                    recipeDescription = recipeDescriptionEntity,
+                    ingredients = ingredientEntities,
+                    categories = categoryEntities,
+                )
+            }
+
+        override suspend fun postNewRecipe(newRecipe: RecipeCreation): Result<Long> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken
+                        ?: throw RuntimeException()
+                val request = newRecipe.toRecipeCreationRequest()
+                val response = makingRecipeRemoteDataSource.uploadNewRecipe(accessToken, request)
+                body(response, VALID_POST_CODE).recipeId
+            }
+
+        override fun deleteRecipeDescription(recipeId: Long) {
+            CoroutineScope(Job()).launch {
+                makingRecipeLocalDataSource.deleteCreatedRecipeById(recipeId)
+            }
+        }
+
+        companion object {
+            private const val VALID_POST_CODE = 201
         }
     }
-
-    override suspend fun fetchRecipeDescription(): Result<RecipeDescription?> {
-        return runCatching {
-            makingRecipeLocalDataSource.fetchRecipeDescription()?.toRecipeDescription()
-        }
-    }
-
-    override suspend fun saveRecipeDescription(recipeDescription: RecipeDescription): Result<Long> {
-        return runCatching {
-            val id = recipeDescription.recipeDescriptionId
-            val recipeDescriptionEntity = recipeDescription.toRecipeDescriptionEntity(id)
-            val categoryEntities = recipeDescription.categories.toCategoryEntities(id)
-            val ingredientEntities = recipeDescription.ingredients.toIngredientEntities(id)
-            makingRecipeLocalDataSource.saveRecipeDescription(
-                recipeDescription = recipeDescriptionEntity,
-                ingredients = ingredientEntities,
-                categories = categoryEntities,
-            )
-        }
-    }
-
-    override suspend fun postNewRecipe(newRecipe: RecipeCreation): Result<Long> {
-        return runCatching {
-            val accessToken =
-                sessionLocalDataSource.sessionData.first().accessToken
-                    ?: throw RuntimeException()
-            val request = newRecipe.toRecipeCreationRequest()
-            val response = makingRecipeRemoteDataSource.uploadNewRecipe(accessToken, request)
-            body(response, VALID_POST_CODE).recipeId
-        }
-    }
-
-    override fun deleteRecipeDescription(recipeId: Long) {
-        CoroutineScope(Job()).launch {
-            makingRecipeLocalDataSource.deleteCreatedRecipeById(recipeId)
-        }
-    }
-
-    companion object {
-        private const val VALID_POST_CODE = 201
-    }
-}
