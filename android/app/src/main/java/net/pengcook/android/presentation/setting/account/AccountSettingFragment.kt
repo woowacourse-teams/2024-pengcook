@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentAccountSettingBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.setting.MenuItem
 import net.pengcook.android.presentation.setting.SettingItemRecyclerViewAdapter
 
@@ -25,12 +24,7 @@ class AccountSettingFragment : Fragment() {
     private val binding: FragmentAccountSettingBinding
         get() = _binding!!
 
-    private val viewModel: AccountSettingViewModel by viewModels {
-        val application = requireContext().applicationContext as DefaultPengcookApplication
-        val sessionRepository = application.appModule.sessionRepository
-        val authorizationRepository = application.appModule.authorizationRepository
-        AccountSettingViewModelFactory(sessionRepository, authorizationRepository)
-    }
+    private val viewModel: AccountSettingViewModel by viewModels()
 
     private val adapter: SettingItemRecyclerViewAdapter by lazy {
         SettingItemRecyclerViewAdapter(
@@ -70,6 +64,7 @@ class AccountSettingFragment : Fragment() {
                 is AccountSettingUiEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
+
                 is AccountSettingUiEvent.SignOut -> {
                     FirebaseAuth.getInstance().signOut()
                     val gso =
@@ -82,6 +77,7 @@ class AccountSettingFragment : Fragment() {
                     googleSignInClient.signOut()
                     navController.navigate(R.id.action_accountSettingFragment_to_onboardingFragment)
                 }
+
                 is AccountSettingUiEvent.DeleteAccount -> {
                     FirebaseAuth.getInstance().currentUser?.delete()
                     navController.navigate(R.id.action_accountSettingFragment_to_onboardingFragment)

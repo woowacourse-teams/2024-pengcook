@@ -1,10 +1,11 @@
-package net.pengcook.android.presentation.setting
+package net.pengcook.android.presentation.setting.edit
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
@@ -18,13 +19,15 @@ import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.signup.BottomButtonClickListener
 import java.io.File
+import javax.inject.Inject
 
-class EditProfileViewModel(
+@HiltViewModel
+class EditProfileViewModel @Inject constructor(
     private val authorizationRepository: AuthorizationRepository,
     private val imageRepository: ImageRepository,
     private val profileRepository: ProfileRepository,
-    private val validateUsernameUseCase: ValidateUsernameUseCase = ValidateUsernameUseCase(),
-    private val validateNicknameUseCase: ValidateNicknameUseCase = ValidateNicknameUseCase(),
+    private val validateUsernameUseCase: ValidateUsernameUseCase,
+    private val validateNicknameUseCase: ValidateNicknameUseCase,
 ) : ViewModel(),
     BottomButtonClickListener,
     SpinnerItemChangeListener,

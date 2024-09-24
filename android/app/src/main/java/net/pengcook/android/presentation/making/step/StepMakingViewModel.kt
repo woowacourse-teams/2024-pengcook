@@ -4,7 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.making.step.RecipeStepMakingRepository
@@ -16,9 +19,9 @@ import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.step.listener.StepMakingEventHandler
 import java.io.File
 
-class StepMakingViewModel(
-    private val recipeId: Long,
-    val maximumStep: Int = 15,
+class StepMakingViewModel @AssistedInject constructor(
+    @Assisted private val recipeId: Long,
+    @Assisted val maximumStep: Int = 15,
     private val recipeStepMakingRepository: RecipeStepMakingRepository,
     private val makingRecipeRepository: MakingRecipeRepository,
 ) : ViewModel(),
@@ -282,5 +285,18 @@ class StepMakingViewModel(
             }.onFailure {
                 _uiEvent.value = Event(RecipeStepMakingEvent.RecipePostFailure)
             }
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: StepMakingViewModelFactory,
+            recipeId: Long,
+            maximumStep: Int = 15,
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return assistedFactory.create(recipeId, maximumStep) as T
+            }
+        }
     }
 }

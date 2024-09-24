@@ -3,8 +3,11 @@ package net.pengcook.android.presentation.comment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.comment.CommentRepository
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
@@ -13,8 +16,9 @@ import net.pengcook.android.presentation.core.model.Comment
 import net.pengcook.android.presentation.core.model.ReportReason
 import net.pengcook.android.presentation.core.util.Event
 
-class CommentViewModel(
-    private val recipeId: Long,
+
+class CommentViewModel @AssistedInject constructor(
+    @Assisted private val recipeId: Long,
     private val commentRepository: CommentRepository,
     private val userControlRepository: UserControlRepository,
 ) : ViewModel(),
@@ -170,5 +174,19 @@ class CommentViewModel(
 
     override fun onDelete(comment: Comment) {
         _deleteCommentEvent.value = Event(comment)
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: CommentViewModelFactory,
+            recipeId: Long,
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return assistedFactory.create(recipeId) as T
+            }
+
+        }
+
     }
 }

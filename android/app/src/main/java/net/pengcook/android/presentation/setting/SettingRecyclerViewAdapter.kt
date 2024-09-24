@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemSettingContainerBinding
+import net.pengcook.android.presentation.setting.model.Setting
 
 class SettingRecyclerViewAdapter(
     private val settings: List<Setting>,

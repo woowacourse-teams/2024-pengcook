@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.profile
+package net.pengcook.android.presentation.profile.model
 
 data class Profile(
     val username: String,

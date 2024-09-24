@@ -2,13 +2,15 @@ package net.pengcook.android.presentation.profile
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import net.pengcook.android.data.repository.profile.ProfileRepository
 import net.pengcook.android.domain.model.profile.UserProfile
 import net.pengcook.android.presentation.core.model.Recipe
 
-class ProfilePagingSource(
-    private val initialPageNumber: Int = 0,
-    private val profileFeedType: ProfileFeedType,
+class ProfilePagingSource @AssistedInject constructor(
+    @Assisted private val initialPageNumber: Int = 0,
+    @Assisted private val profileFeedType: ProfileFeedType,
     private val profileRepository: ProfileRepository,
 ) : PagingSource<Int, ProfileViewItem>() {
     private var userId: Long? = null
@@ -79,5 +81,15 @@ class ProfilePagingSource(
         pageSize: Int,
     ): Result<List<Recipe>> {
         return profileRepository.fetchUserFeeds(userId, pageNumber, pageSize)
+    }
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: ProfilePagingSourceFactory,
+            initialPageNumber: Int,
+            profileFeedType: ProfileFeedType,
+        ): PagingSource<Int, ProfileViewItem> {
+            return assistedFactory.create(initialPageNumber, profileFeedType)
+        }
     }
 }

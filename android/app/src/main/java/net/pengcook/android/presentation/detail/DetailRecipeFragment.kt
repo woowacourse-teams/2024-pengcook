@@ -13,10 +13,10 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentDetailRecipeBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.detail.dialog.ReportDialogFragment
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailRecipeFragment : Fragment() {
@@ -24,14 +24,11 @@ class DetailRecipeFragment : Fragment() {
     private val binding by lazy { FragmentDetailRecipeBinding.inflate(layoutInflater) }
     private val recipe: Recipe by lazy { args.recipe }
 
+    @Inject
+    lateinit var provideFactory: DetailRecipeViewModelFactory
+
     private val viewModel: DetailRecipeViewModel by viewModels {
-        val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        DetailRecipeViewModelFactory(
-            recipe = recipe,
-            likeRepository = application.appModule.likeRepository,
-            feedRepository = application.appModule.feedRepository,
-            userControlRepository = application.appModule.userControlRepository,
-        )
+        DetailRecipeViewModel.provideFactory(provideFactory, recipe)
     }
 
     override fun onCreateView(
@@ -73,16 +70,19 @@ class DetailRecipeFragment : Fragment() {
                     viewModel.blockUser()
                     true
                 }
+
                 R.id.action_delete -> {
                     viewModel.deleteRecipe()
                     true
                 }
+
                 R.id.action_report -> {
                     // Handle report action
                     val dialog = ReportDialogFragment.newInstance(recipe)
                     dialog.show(parentFragmentManager, "ReportReasonDialog")
                     true
                 }
+
                 else -> false
             }
         }
@@ -112,15 +112,19 @@ class DetailRecipeFragment : Fragment() {
                 is DetailRecipeUiEvent.NavigateToStep -> {
                     navigateToStep()
                 }
+
                 is DetailRecipeUiEvent.NavigateToComment -> {
                     navigateToComment()
                 }
+
                 is DetailRecipeUiEvent.NavigateBackWithDelete -> {
                     navigateBackWithDelete()
                 }
+
                 is DetailRecipeUiEvent.NavigateBackWithBlock -> {
                     navigateBackWithBlock()
                 }
+
                 is DetailRecipeUiEvent.NavigateBack -> {
                     findNavController().navigateUp()
                 }
@@ -147,12 +151,14 @@ class DetailRecipeFragment : Fragment() {
     }
 
     private fun navigateToStep() {
-        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment(recipeId = recipe.recipeId)
+        val action =
+            DetailRecipeFragmentDirections.actionDetailRecipeFragmentToRecipeStepFragment(recipeId = recipe.recipeId)
         findNavController().navigate(action)
     }
 
     private fun navigateToComment() {
-        val action = DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = recipe.recipeId)
+        val action =
+            DetailRecipeFragmentDirections.actionDetailRecipeFragmentToCommentFragment(recipeId = recipe.recipeId)
         findNavController().navigate(action)
     }
 }

@@ -29,10 +29,7 @@ class RecipeMakingFragment : Fragment() {
     private val binding: FragmentRecipeMakingBinding
         get() = _binding!!
 
-    private val viewModel: RecipeMakingViewModel by viewModels {
-        val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        RecipeMakingViewModelFactory(application.appModule.makingRecipeRepository)
-    }
+    private val viewModel: RecipeMakingViewModel by viewModels()
 
     private lateinit var photoUri: Uri
     private var currentPhotoPath: String? = null

@@ -11,22 +11,20 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.databinding.FragmentRecipeStepBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeStepFragment : Fragment() {
     private val args by navArgs<RecipeStepFragmentArgs>()
     private val recipeId: Long by lazy { args.recipeId }
-    private val viewModel: RecipeStepViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        RecipeStepViewModelFactory(
-            recipeId = recipeId,
-            feedRepository = appModule.feedRepository,
-        )
-    }
 
+    @Inject
+    lateinit var viewModelFactory: RecipeStepViewModelFactory
+
+    private val viewModel: RecipeStepViewModel by viewModels {
+        RecipeStepViewModel.provideFactory(viewModelFactory, recipeId)
+    }
     private var _binding: FragmentRecipeStepBinding? = null
     val binding: FragmentRecipeStepBinding
         get() = _binding!!

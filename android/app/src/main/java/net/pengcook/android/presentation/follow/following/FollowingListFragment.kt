@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow
+package net.pengcook.android.presentation.follow.following
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import net.pengcook.android.databinding.FragmentFollowerListBinding
-import net.pengcook.android.presentation.core.util.AnalyticsLogging
+import net.pengcook.android.databinding.FragmentFollowingListBinding
+import net.pengcook.android.presentation.follow.FollowUserAdapter
 
 @AndroidEntryPoint
-class FollowerListFragment : Fragment() {
-    private var _binding: FragmentFollowerListBinding? = null
-    private val binding: FragmentFollowerListBinding
+class FollowingListFragment : Fragment() {
+    private var _binding: FragmentFollowingListBinding? = null
+    private val binding: FragmentFollowingListBinding
         get() = _binding!!
-    private val viewModel: FollowerListViewModel by viewModels()
+    private val viewModel: FollowingListViewModel by viewModels()
     private val adapter: FollowUserAdapter by lazy {
         FollowUserAdapter(viewModel, viewModel)
     }
@@ -28,7 +25,7 @@ class FollowerListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentFollowerListBinding.inflate(inflater, container, false)
+        _binding = FragmentFollowingListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,13 +37,6 @@ class FollowerListFragment : Fragment() {
         binding.viewModel = viewModel
         binding.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
-        AnalyticsLogging.viewLogEvent("FollowerList")
-        viewModel.pagingDataFlow.observe(viewLifecycleOwner) {
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                adapter.submitData(it)
-            }
-        }
     }
 
     override fun onDestroyView() {

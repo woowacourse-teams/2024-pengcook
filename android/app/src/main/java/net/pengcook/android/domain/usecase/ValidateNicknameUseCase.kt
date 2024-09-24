@@ -1,6 +1,8 @@
 package net.pengcook.android.domain.usecase
 
-class ValidateNicknameUseCase {
+import javax.inject.Inject
+
+class ValidateNicknameUseCase @Inject constructor() {
     operator fun invoke(
         nickname: String,
         lengthRange: IntRange = RANGE_NICKNAME,

@@ -14,7 +14,3 @@ class CategoryViewModel : ViewModel(), CategoryEventListener {
         _uiEvent.value = Event(CategoryUiEvent.NavigateToList(categoryCode))
     }
 }
-
-sealed interface CategoryUiEvent {
-    data class NavigateToList(val categoryCode: String) : CategoryUiEvent
-}

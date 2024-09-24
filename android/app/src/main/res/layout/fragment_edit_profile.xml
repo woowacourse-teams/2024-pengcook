@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="net.pengcook.android.presentation.setting.EditProfileViewModel" />
+            type="net.pengcook.android.presentation.setting.edit.EditProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

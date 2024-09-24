@@ -9,6 +9,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,8 +18,10 @@ import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
+import javax.inject.Inject
 
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     feedRepository: FeedRepository,
 ) : ViewModel(), SearchEventListener, FeedItemEventListener {
     val searchKeyword: MutableStateFlow<String> = MutableStateFlow(INITIAL_KEYWORD)
@@ -56,8 +59,8 @@ class SearchViewModel(
         recipe: Recipe,
     ): Boolean =
         keyword.isEmpty() ||
-            recipe.title.contains(keyword, ignoreCase = true) ||
-            recipe.introduction.contains(keyword, ignoreCase = true)
+                recipe.title.contains(keyword, ignoreCase = true) ||
+                recipe.introduction.contains(keyword, ignoreCase = true)
 
     companion object {
         private const val INITIAL_KEYWORD = ""

@@ -2,6 +2,7 @@ package net.pengcook.android.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +13,10 @@ import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.domain.model.auth.RenewedTokens
 import net.pengcook.android.domain.model.auth.SignInResult
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val authorizationRepository: AuthorizationRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {

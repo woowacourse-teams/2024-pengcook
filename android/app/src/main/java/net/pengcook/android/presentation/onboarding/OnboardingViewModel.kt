@@ -4,14 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.auth.SessionRepository
 import net.pengcook.android.domain.model.auth.Platform
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.signup.BottomButtonClickListener
+import javax.inject.Inject
 
-class OnboardingViewModel(
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
     private val authorizationRepository: AuthorizationRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel(), BottomButtonClickListener {
