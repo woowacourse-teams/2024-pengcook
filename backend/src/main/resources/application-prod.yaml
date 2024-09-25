@@ -1,9 +1,15 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(cn6onsNXSnrnvANMmBDbQSB6OP/o03OBqiJ/pNSOQcMqMEBjJ/Z9O2XwRHz91Mwby+b/6BE/dgWVwdNyj+mtQMkuBfp/gLsTbsTx59qPfOw5XWZfCFadailfuzzMYXeWFrz/myWwyXFAB9BodfQinJD8t4M0d3SnfP1an6fzrp4=)
-    username: ENC(DlL3wN5qVKsCmYegk8VBzuI14OT3CkqeYA5Cg7NPObiTUeM+1oJsGKEWkUdnRcMf)
-    password: ENC(Xljdaq5zSKNLXbvnubUmz/nwBDWvx9P0AOj6Co1OiywEbasCulkNi98VI4uapwYA)
+    writer:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ENC(7Eb7HLy4XGt7oZ5akK94JRpNTrUZCTWCWB4GxkfYevRTXt8o+1Nng5xkiDuZs/C65JLQeiyay28rv11TerDbAoDbkaPy+/RVnmJ9u9ptn1egT1DRa2r/DQqjFJpaMKJOUS4RgqlgXnzX9YeoluklOg/MXiN0ytZ3hL6g4r2105dIfjsDYXEWrZ5re4xWdpdyFsGA/Myy+PLgC1W6IPe7oqykGOX813YF/eruARSNvqg=)
+      username: ENC(/zcXohHbWSIDGm9isu+a+OQiozDhAIMdXCXSOW015Wr7nzUE5fTAbphRRlHhTe04)
+      password: ENC(iomaVwc+euAA68HcO3c6QVrT0S6wuQuEfF/L5aDwcgg+bVXj1vFuabw+2NkmIKn9)
+    reader:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ENC(tYJazrEzTDDxxA+qSueTghq4sN9H7oD/BnN0sYCF0boJPmqKoeZ2gpXKuhHRo6ypqEXIC/5DzN/i+sx3VUzWiDIMVueu3L/f6jaOc5uvG5kOZMFrdHPw1+2spwIym8CaaQScxfK/dHij4Dj1DRwX8Rx4bnnVxHrWF1b17LVSDA5zR5ucpQgBKY9TqM3yu5WDY/9H52xU3NYNH2k7EbZTe7eNrCcUAWCJivLeSI3wqALin542gI2JPT7tNmBfqb90)
+      username: ENC(GNUiUECtErHYF6dF2ShPxadoBEXei2/T8PZsYowfsiSPJjAbYYpsqS4kpOr95R20)
+      password: ENC(eJ+rHEgtvjg+6btMzexSdyzvMgxrEQlaxVf2QgSRD9fdVgxHh+OEAO8xCws5rHiG)
 
   jpa:
     hibernate:
