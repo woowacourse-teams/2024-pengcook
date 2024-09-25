@@ -36,12 +36,6 @@ springdoc:
   swagger-ui:
     enabled: false
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
-
 logging:
   level:
     org:

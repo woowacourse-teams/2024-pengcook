@@ -27,12 +27,6 @@ cloud:
     region:
       static: ENC(a7sCLLXDx5Fn76E+NLdyxLoL3MEp6x1J/OcoFyg0ejxLrGAQ/O+82ZoDr6LXcRAt)
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
-
 logging:
   level:
     org:
