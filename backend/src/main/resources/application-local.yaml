@@ -31,9 +31,3 @@ cloud:
       cloudfront-cname: ENC(3hfGWnS8F+CY67V0fc9kjS9inVeoFpNbnrjVE0xivh+P+BgBrbZOi19ZwdIRBL9tNO5L8+y9gJHSH1TKtaV+lA==)
     region:
       static: ENC(+TXuroM2fUTZ5CpylDnJfO672+ZFCdA+AVKRDLKoCWKJm+0gQ8/GH+QtS7jLG2v9)
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
