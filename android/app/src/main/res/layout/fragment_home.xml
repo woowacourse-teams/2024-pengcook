@@ -39,14 +39,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_logo">
 
-            <!-- RecyclerView for posts -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeRcView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:paddingHorizontal="12dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
                 tools:listitem="@layout/item_feed" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
