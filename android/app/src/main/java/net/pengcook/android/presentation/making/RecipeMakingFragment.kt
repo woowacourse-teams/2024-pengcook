@@ -125,7 +125,7 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun compressAndFetchPresignedUrl(uri: Uri) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val compressedFile = imageUtils.compressAndResizeImage(uri)
                 currentPhotoPath = compressedFile.absolutePath
