@@ -59,7 +59,7 @@ class SignUpFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    processImageUri(photoUri)
+                    compressAndFetchPresignedUrl(photoUri)
                 }
             } ?: run {
                 showSnackBar(getString(R.string.image_selection_failed))
@@ -102,7 +102,7 @@ class SignUpFragment : Fragment() {
         viewModel.uploadImageToS3(presignedUrl, file)
     }
 
-    private fun processImageUri(uri: Uri) {
+    private fun compressAndFetchPresignedUrl(uri: Uri) {
         lifecycleScope.launch {
             try {
                 val compressedFile = imageUtils.compressAndResizeImage(uri)
