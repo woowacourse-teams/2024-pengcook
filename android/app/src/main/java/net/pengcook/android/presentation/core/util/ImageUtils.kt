@@ -50,23 +50,6 @@ class ImageUtils(
             file,
         )
 
-//    fun processImageUri(uri: Uri): String? =
-//        try {
-//            val inputStream = context.contentResolver.openInputStream(uri)
-//            if (inputStream != null) {
-//                val tempFile = createTempImageFile()
-//                tempFile.outputStream().use { outputStream ->
-//                    inputStream.copyTo(outputStream)
-//                }
-//                tempFile.absolutePath
-//            } else {
-//                null
-//            }
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            null
-//        }
-
     fun isPermissionGranted(permissions: Array<String>): Boolean =
         permissions.all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
