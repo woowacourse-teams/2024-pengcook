@@ -130,9 +130,7 @@ class RecipeMakingFragment : Fragment() {
                 val compressedFile = imageUtils.compressAndResizeImage(uri)
                 currentPhotoPath = compressedFile.absolutePath
 
-                withContext(Dispatchers.Main) {
-                    viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-                }
+                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
             } catch (e: IOException) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
