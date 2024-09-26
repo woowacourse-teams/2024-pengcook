@@ -22,26 +22,34 @@
             android:id="@+id/main_logo"
             android:layout_width="130dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
             android:layout_marginVertical="8dp"
+            android:layout_marginStart="16dp"
             android:src="@drawable/peng_cook"
+            app:layout_constraintBottom_toTopOf="@id/swipe_refresh_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/homeRcView"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- RecyclerView for posts -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeRcView"
-            android:layout_width="0dp"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingHorizontal="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main_logo"
-            tools:listitem="@layout/item_feed" />
+            app:layout_constraintTop_toBottomOf="@id/main_logo">
 
+            <!-- RecyclerView for posts -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/homeRcView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:paddingHorizontal="12dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+                tools:listitem="@layout/item_feed" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
