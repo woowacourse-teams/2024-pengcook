@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -51,22 +50,22 @@ class ImageUtils(
             file,
         )
 
-    fun processImageUri(uri: Uri): String? =
-        try {
-            val inputStream = context.contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                val tempFile = createTempImageFile()
-                tempFile.outputStream().use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
-                tempFile.absolutePath
-            } else {
-                null
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
+//    fun processImageUri(uri: Uri): String? =
+//        try {
+//            val inputStream = context.contentResolver.openInputStream(uri)
+//            if (inputStream != null) {
+//                val tempFile = createTempImageFile()
+//                tempFile.outputStream().use { outputStream ->
+//                    inputStream.copyTo(outputStream)
+//                }
+//                tempFile.absolutePath
+//            } else {
+//                null
+//            }
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//            null
+//        }
 
     fun isPermissionGranted(permissions: Array<String>): Boolean =
         permissions.all {
@@ -78,23 +77,23 @@ class ImageUtils(
             val inputStream = context.contentResolver.openInputStream(uri)
             val originalBitmap = BitmapFactory.decodeStream(inputStream)
 
-            // 이미지 리사이즈
             val resizedBitmap =
-                Bitmap.createScaledBitmap(
-                    originalBitmap,
-                    MAX_WIDTH,
-                    MAX_HEIGHT,
-                    true,
+                adjustImageOrientation(
+                    Bitmap.createScaledBitmap(
+                        originalBitmap,
+                        MAX_WIDTH,
+                        MAX_HEIGHT,
+                        true,
+                    ),
+                    uri,
                 )
 
-            // 압축된 파일 생성
             val compressedFile = createTempImageFile()
             val outputStream = FileOutputStream(compressedFile)
             resizedBitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESSED_QUALITY, outputStream)
             outputStream.flush()
             outputStream.close()
 
-            // 메모리 정리
             originalBitmap.recycle()
             resizedBitmap.recycle()
 
