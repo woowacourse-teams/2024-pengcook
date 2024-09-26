@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSignUpBinding
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
@@ -28,6 +29,7 @@ import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -101,11 +103,20 @@ class SignUpFragment : Fragment() {
     }
 
     private fun processImageUri(uri: Uri) {
-        currentPhotoPath = imageUtils.processImageUri(uri)
-        if (currentPhotoPath != null) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            showSnackBar(getString(R.string.image_selection_failed))
+        lifecycleScope.launch {
+            try {
+                val compressedFile = imageUtils.compressAndResizeImage(uri)
+                currentPhotoPath = compressedFile.absolutePath
+
+                withContext(Dispatchers.Main) {
+                    viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    showSnackBar(getString(R.string.image_selection_failed))
+                }
+            }
         }
     }
 

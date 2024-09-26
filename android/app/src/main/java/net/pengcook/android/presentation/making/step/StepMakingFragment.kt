@@ -9,11 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.datastore.core.IOException
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentMakingStepBinding
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
@@ -182,11 +187,20 @@ class StepMakingFragment : Fragment() {
     }
 
     private fun processImageUri(uri: Uri) {
-        currentPhotoPath = imageUtils.processImageUri(uri)
-        if (currentPhotoPath != null) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            showToast(getString(R.string.image_selection_failed))
+        lifecycleScope.launch {
+            try {
+                val compressedFile = imageUtils.compressAndResizeImage(uri)
+                currentPhotoPath = compressedFile.absolutePath
+
+                withContext(Dispatchers.Main) {
+                    viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.image_selection_failed))
+                }
+            }
         }
     }
 
