@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,19 @@ class HomeFragment : Fragment() {
         AnalyticsLogging.viewLogEvent("Home")
         initBinding()
         observing()
+        initSwipeRefreshLayout()
+    }
+
+    private fun initSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshData()
+        }
+    }
+
+    private fun refreshData() {
+        viewModel.refreshFeed()
+
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun observing() {
@@ -79,5 +93,11 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.homeRcView.adapter = adapter
+
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collect { loadStates ->
+                binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
+            }
+        }
     }
 }
