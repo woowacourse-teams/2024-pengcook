@@ -70,7 +70,7 @@ class RecipeMakingFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    processImageUri(photoUri)
+                    compressAndFetchPresignedUrl(photoUri)
                 }
             } ?: run {
                 showSnackBar(getString(R.string.image_selection_failed))
@@ -124,7 +124,7 @@ class RecipeMakingFragment : Fragment() {
         takePictureLauncher.launch(photoUri)
     }
 
-    private fun processImageUri(uri: Uri) {
+    private fun compressAndFetchPresignedUrl(uri: Uri) {
         lifecycleScope.launch {
             try {
                 val compressedFile = imageUtils.compressAndResizeImage(uri)
