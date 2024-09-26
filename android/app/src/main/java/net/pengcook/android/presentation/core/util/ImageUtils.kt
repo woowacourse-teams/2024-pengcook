@@ -94,9 +94,6 @@ class ImageUtils(
             outputStream.flush()
             outputStream.close()
 
-            originalBitmap.recycle()
-            resizedBitmap.recycle()
-
             compressedFile
         }
 
