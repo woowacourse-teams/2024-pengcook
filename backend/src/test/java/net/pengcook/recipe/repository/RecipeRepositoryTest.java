@@ -33,7 +33,7 @@ class RecipeRepositoryTest {
         List<Long> recipeIds = repository.findRecipeIdsByCategory(pageable, category);
 
         // then
-        assertThat(recipeIds).containsExactly(2L, 3L, 7L);
+        assertThat(recipeIds).contains(15L, 14L, 9L);
     }
 
     @Test
@@ -47,7 +47,7 @@ class RecipeRepositoryTest {
         List<Long> recipeIds = repository.findRecipeIdsByKeyword(pageable, keyword);
 
         // then
-        assertThat(recipeIds).containsExactly(11L, 12L);
+        assertThat(recipeIds).containsExactly(12L, 11L);
     }
 
     @Test

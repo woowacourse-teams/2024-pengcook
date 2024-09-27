@@ -16,6 +16,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             SELECT DISTINCT recipe.id
             FROM CategoryRecipe
             WHERE category.name = :category
+            ORDER BY recipe.id DESC
             """)
     List<Long> findRecipeIdsByCategory(Pageable pageable, String category);
 
@@ -24,6 +25,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             FROM Recipe
             WHERE title LIKE CONCAT('%', :keyword, '%')
             OR description LIKE CONCAT('%', :keyword, '%')
+            ORDER BY id DESC
             """)
     List<Long> findRecipeIdsByKeyword(Pageable pageable, String keyword);
 
