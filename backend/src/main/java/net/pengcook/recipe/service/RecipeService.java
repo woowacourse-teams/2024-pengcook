@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecipeService {
 
     private static final String KEY_RECIPE = "id";
-    
+
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
@@ -91,8 +91,7 @@ public class RecipeService {
             );
             return recipeRepository.findAll(descPageable).stream()
                     .map(Recipe::getId)
-                    .toList()
-                    .reversed();
+                    .toList();
         }
         if (conditionCount == 1) {
             return findRecipeIdsBySingleCondition(pageRecipeRequest);
