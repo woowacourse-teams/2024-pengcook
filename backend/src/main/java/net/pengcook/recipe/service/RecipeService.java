@@ -122,6 +122,7 @@ public class RecipeService {
                     .map(Recipe::getId)
                     .toList();
         }
+        // TODO: need to throw illegal state
         return List.of();
     }
 
