@@ -13,6 +13,23 @@ import org.springframework.data.repository.query.Param;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("""
+            SELECT DISTINCT recipe.id
+            FROM CategoryRecipe
+            WHERE category.name = :category
+            """)
+    List<Long> findRecipeIdsByCategory(Pageable pageable, String category);
+
+    @Query("""
+            SELECT DISTINCT id
+            FROM Recipe
+            WHERE title LIKE CONCAT('%', :keyword, '%')
+            OR description LIKE CONCAT('%', :keyword, '%')
+            """)
+    List<Long> findRecipeIdsByKeyword(Pageable pageable, String keyword);
+
+    List<Recipe> findRecipeByAuthorIdOrderByIdDesc(Pageable pageable, long authorId);
+
+    @Query("""
             SELECT DISTINCT r.id
             FROM Recipe r
             LEFT JOIN CategoryRecipe cr ON cr.recipe = r
@@ -104,8 +121,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             """)
     List<RecipeDataResponse> findRecipeData(long recipeId);
 
-    int countByAuthorId(long userId);
-
     @Query("""
             SELECT r.id
             FROM Recipe r
@@ -113,11 +128,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             """)
     List<Long> findRecipeIdsByUserId(long userId);
 
-    @Query("""
-            SELECT r.id
-            FROM Recipe r
-            WHERE r.author.id = :userId
-            ORDER BY r.id DESC
-            """)
-    List<Long> findRecipeIdsByUserId(long userId, Pageable pageable);
+    int countByAuthorId(long userId);
 }

@@ -30,7 +30,9 @@ import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RecipeService {
 
+    private static final String KEY_RECIPE = "id";
+    
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
@@ -66,14 +70,7 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readRecipesV1(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
-        Pageable pageable = pageRecipeRequest.getPageable();
-        List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
-                pageable,
-                pageRecipeRequest.category(),
-                pageRecipeRequest.keyword(),
-                pageRecipeRequest.userId()
-        );
-
+        List<Long> recipeIds = findRecipeIdsByMultipleCondition(pageRecipeRequest);
         List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(recipeIds);
 
         return recipeHomeResponses.stream()
@@ -81,6 +78,54 @@ public class RecipeService {
                 .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
+
+    private List<Long> findRecipeIdsByMultipleCondition(PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
+        long conditionCount = pageRecipeRequest.getConditionCount();
+
+        if (conditionCount == 0) {
+            Pageable descPageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(KEY_RECIPE).descending()
+            );
+            return recipeRepository.findAll(descPageable).stream()
+                    .map(Recipe::getId)
+                    .toList()
+                    .reversed();
+        }
+        if (conditionCount == 1) {
+            return findRecipeIdsBySingleCondition(pageRecipeRequest);
+        }
+
+        return recipeRepository.findRecipeIdsByCategoryAndKeyword(
+                pageable,
+                pageRecipeRequest.category(),
+                pageRecipeRequest.keyword(),
+                pageRecipeRequest.userId()
+        );
+    }
+
+    private List<Long> findRecipeIdsBySingleCondition(PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
+        String category = pageRecipeRequest.category();
+        String keyword = pageRecipeRequest.keyword();
+        Long userId = pageRecipeRequest.userId();
+
+        if (category != null) {
+            return recipeRepository.findRecipeIdsByCategory(pageable, category);
+        }
+        if (keyword != null) {
+            return recipeRepository.findRecipeIdsByKeyword(pageable, keyword);
+        }
+        if (userId != null) {
+            return recipeRepository.findRecipeByAuthorIdOrderByIdDesc(pageable, userId).stream()
+                    .map(Recipe::getId)
+                    .toList();
+        }
+        return List.of();
+    }
+
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
@@ -163,7 +208,8 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
-    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo, List<RecipeDataResponse> groupedResponses) {
+    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo,
+                                                             List<RecipeDataResponse> groupedResponses) {
         RecipeDataResponse firstResponse = groupedResponses.getFirst();
 
         return new RecipeHomeWithMineResponse(
