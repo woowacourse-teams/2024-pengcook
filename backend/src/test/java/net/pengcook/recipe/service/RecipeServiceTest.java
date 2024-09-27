@@ -54,6 +54,7 @@ class RecipeServiceTest {
         List<RecipeHomeWithMineResponseV1> recipeHomeWithMineResponses = recipeService.readRecipesV1(userInfo,
                 pageRecipeRequest);
 
+        System.out.println("recipeHomeWithMineResponses = " + recipeHomeWithMineResponses);
         assertAll(
                 () -> assertThat(recipeHomeWithMineResponses.getFirst().mine()).isFalse(),
                 () -> assertThat(recipeHomeWithMineResponses.getLast().mine()).isTrue()

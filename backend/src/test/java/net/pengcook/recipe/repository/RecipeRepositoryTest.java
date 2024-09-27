@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.RecipeHomeResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,34 @@ class RecipeRepositoryTest {
 
     @Autowired
     private RecipeRepository repository;
+
+    @Test
+    @DisplayName("요청한 페이지에 카테고리 이름으로 레시피 id 목록을 반환한다.")
+    void findRecipeIdsByCategory() {
+        // given
+        Pageable pageable = PageRequest.of(0, 3);
+        String category = "한식";
+
+        // when
+        List<Long> recipeIds = repository.findRecipeIdsByCategory(pageable, category);
+
+        // then
+        assertThat(recipeIds).containsExactly(2L, 3L, 7L);
+    }
+
+    @Test
+    @DisplayName("요청한 페이지에 키워드로 레시피 id 목록을 반환한다.")
+    void findRecipeIdsByKeyword() {
+        // given
+        Pageable pageable = PageRequest.of(0, 3);
+        String keyword = "이크";
+
+        // when
+        List<Long> recipeIds = repository.findRecipeIdsByKeyword(pageable, keyword);
+
+        // then
+        assertThat(recipeIds).containsExactly(11L, 12L);
+    }
 
     @Test
     @DisplayName("요청한 페이지에 해당하는 레시피 id 목록을 반환한다.")
@@ -51,7 +80,9 @@ class RecipeRepositoryTest {
     void findRecipeIdsByUserId() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeIdsByUserId(1L, pageable);
+        List<Long> recipeIds = repository.findRecipeByAuthorIdOrderByIdDesc(pageable, 1L).stream()
+                .map(Recipe::getId)
+                .toList();
 
         assertThat(recipeIds).containsExactly(14L, 13L, 12L);
     }
