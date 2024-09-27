@@ -2,6 +2,8 @@ package net.pengcook.recipe.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
+import java.util.Objects;
+import java.util.stream.Stream;
 import net.pengcook.recipe.exception.InvalidParameterException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,5 +25,11 @@ public record PageRecipeRequest(
 
     public Pageable getPageable() {
         return PageRequest.of(pageNumber, pageSize);
+    }
+
+    public long getConditionCount() {
+        return Stream.of(category, keyword, userId)
+                .filter(Objects::nonNull)
+                .count();
     }
 }
