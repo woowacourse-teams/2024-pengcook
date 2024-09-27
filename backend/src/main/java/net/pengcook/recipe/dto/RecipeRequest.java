@@ -4,11 +4,12 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 
 public record RecipeRequest(
-        @NotBlank String title,
+        @NotBlank @Size(max = 255) String title,
         @NotBlank String cookingTime,
         @NotBlank String thumbnail,
         @Min(0) @Max(10) int difficulty,
