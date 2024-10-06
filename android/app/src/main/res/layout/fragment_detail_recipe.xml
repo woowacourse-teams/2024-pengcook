@@ -96,7 +96,7 @@
                         android:id="@+id/iv_thumbnail_recipe"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         app:imageUrl="@{recipe.thumbnail}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

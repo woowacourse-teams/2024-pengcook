@@ -85,8 +85,21 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <include
+                    android:id="@+id/et_time_amount"
+                    layout="@layout/item_minute_second_picker_with_warning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/cl_btn_add_image"
+                    app:title="@{@string/making_form_time_required}"
+                    app:minute="@={vm.minuteContent}"
+                    app:second="@={vm.secondContent}"
+                    app:visibleCondition="@{vm.errorVisibility}"/>
+
+                <include
                     android:id="@+id/et_guide_step_recipe"
-                    layout="@layout/item_form_multi_text"
+                    layout="@layout/item_form_multi_text_with_warning"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
@@ -95,8 +108,9 @@
                     app:hintContent="@{@string/step_making_hint}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cl_btn_add_image"
-                    app:title="@{String.valueOf(vm.stepNumber)}" />
+                    app:layout_constraintTop_toBottomOf="@id/et_time_amount"
+                    app:title="@{String.valueOf(vm.stepNumber)}"
+                    app:errorVisibility="@{vm.errorVisibility}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

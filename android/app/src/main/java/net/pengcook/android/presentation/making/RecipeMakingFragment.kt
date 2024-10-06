@@ -202,8 +202,8 @@ class RecipeMakingFragment : Fragment() {
         val etHour = binding.itemTimeRequired.etTimeAmountPicker.etHour
         val etMinute = binding.itemTimeRequired.etTimeAmountPicker.etMinute
         val etSecond = binding.itemTimeRequired.etTimeAmountPicker.etSecond
+        etHour.filters = arrayOf(MinMaxInputFilter(0, 23))
         arrayOf(MinMaxInputFilter(0, 59)).also { filters ->
-            etHour.filters = filters
             etMinute.filters = filters
             etSecond.filters = filters
         }

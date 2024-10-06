@@ -17,33 +17,33 @@
         <variable
             name="content"
             type="String" />
+
+        <variable
+            name="errorVisibility"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_form_text_title"
-            style="@style/Body.Regular.B2"
-            android:fontFamily="@font/notosans_medium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            bind:stepCount="@{title}"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title" />
-
         <include
-            android:id="@+id/et_form_text_content"
-            layout="@layout/item_multi_textfield"
-            android:layout_width="match_parent"
+            android:id="@+id/et_content"
+            layout="@layout/item_form_multi_text"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             app:content="@={content}"
             app:hintContent="@{hintContent}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_form_text_title" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:title="@{title}" />
+
+        <TextView
+            android:id="@+id/tv_alert_message"
+            style="@style/WarningMessageUnfilledForm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_content"
+            bind:visibility="@{errorVisibility &amp;&amp; (content == null || content.isEmpty())}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

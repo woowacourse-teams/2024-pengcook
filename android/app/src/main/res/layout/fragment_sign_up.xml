@@ -101,7 +101,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             app:buttonClickListener="@{viewModel}"
-            app:buttonText="@{(viewModel.imageUploaded == false &amp;&amp; viewModel.imageSelected == true) ? @string/making_uploading_image : @string/making_step}"
+            app:buttonText="@{(viewModel.imageUploaded == false &amp;&amp; viewModel.imageSelected == true) ? @string/making_uploading_image : @string/signup_button_next}"
             app:enabled="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_sign_up" />
