@@ -24,6 +24,7 @@ import net.pengcook.android.databinding.FragmentMakingStepBinding
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
+import net.pengcook.android.presentation.core.util.MinMaxInputFilter
 import java.io.File
 import javax.inject.Inject
 
@@ -111,6 +112,7 @@ class StepMakingFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         initBinding()
+        initTimeFormatInput()
         AnalyticsLogging.viewLogEvent("RecipeMaking")
         observeViewModel()
     }
@@ -125,6 +127,15 @@ class StepMakingFragment : Fragment() {
         binding.vm = viewModel
         binding.eventHandler = viewModel
         binding.appbarEventListener = viewModel
+    }
+
+    private fun initTimeFormatInput() {
+        val etMinute = binding.etTimeAmount.etTimeAmountPicker.etMinute
+        val etSecond = binding.etTimeAmount.etTimeAmountPicker.etSecond
+        arrayOf(MinMaxInputFilter(0, 59)).also { filters ->
+            etMinute.filters = filters
+            etSecond.filters = filters
+        }
     }
 
     private fun observeViewModel() {
