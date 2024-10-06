@@ -13,8 +13,6 @@ class FollowPagingSource(
         return runCatching {
             val users = fetchUsers()
             val pageData = users.getOrNull() ?: emptyList()
-            println(pageData.size)
-            println(params.loadSize)
             val nextKey = if (pageData.size < params.loadSize) null else pageNumber + 1
             LoadResult.Page(
                 data = pageData,
