@@ -13,6 +13,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 sequence = 1,
                 description = "description1",
                 image = "https://static.wtable.co.kr/image/production/service/recipe/291/a9bb71ac-3eed-447c-baf4-47cd68bd4e43.jpg",
+                cookingTime = "114325",
             ),
             RecipeStepResponse(
                 stepId = 2,
@@ -20,6 +21,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 sequence = 2,
                 description = "description2",
                 image = "https://static.wtable.co.kr/image/production/service/recipe/291/30ef8cd6-3d65-4fbb-88c1-14aac9e6f393.jpg",
+                cookingTime = "114325",
             ),
             RecipeStepResponse(
                 stepId = 3,
@@ -27,6 +29,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 sequence = 3,
                 description = "description3",
                 image = "https://static.wtable.co.kr/image/production/service/recipe/291/84fc1319-8e86-407f-a19c-90215165e6ab.jpg",
+                cookingTime = "114325",
             ),
             RecipeStepResponse(
                 stepId = 4,
@@ -34,6 +37,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 sequence = 4,
                 description = "description4",
                 image = "",
+                cookingTime = "114325",
             ),
         )
 
@@ -56,6 +60,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 sequence = recipeStepRequest.sequence,
                 description = recipeStepRequest.description,
                 image = recipeStepRequest.image,
+                cookingTime = recipeStepRequest.cookingTime,
             ),
         )
         return Response.success(Unit)

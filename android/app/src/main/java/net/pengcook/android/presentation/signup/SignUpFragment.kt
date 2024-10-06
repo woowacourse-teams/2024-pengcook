@@ -17,32 +17,32 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSignUpBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding: FragmentSignUpBinding
         get() = _binding!!
     private val args: SignUpFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var viewModelFactory: SignUpViewModelFactory
     private val viewModel: SignUpViewModel by viewModels {
-        val application = (requireContext().applicationContext) as DefaultPengcookApplication
-        val module = application.appModule
-        SignUpViewModelFactory(
-            args.platform,
-            module.authorizationRepository,
-            module.sessionRepository,
-            module.imageRepository,
-        )
+        SignUpViewModel.provideFactory(viewModelFactory, args.platform)
     }
     private val imageUtils: ImageUtils by lazy { ImageUtils(requireContext()) }
     private lateinit var photoUri: Uri
@@ -59,7 +59,7 @@ class SignUpFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    processImageUri(photoUri)
+                    compressAndFetchPresignedUrl(photoUri)
                 }
             } ?: run {
                 showSnackBar(getString(R.string.image_selection_failed))
@@ -102,12 +102,19 @@ class SignUpFragment : Fragment() {
         viewModel.uploadImageToS3(presignedUrl, file)
     }
 
-    private fun processImageUri(uri: Uri) {
-        currentPhotoPath = imageUtils.processImageUri(uri)
-        if (currentPhotoPath != null) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            showSnackBar(getString(R.string.image_selection_failed))
+    private fun compressAndFetchPresignedUrl(uri: Uri) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val compressedFile = imageUtils.compressAndResizeImage(uri)
+                currentPhotoPath = compressedFile.absolutePath
+
+                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    showSnackBar(getString(R.string.image_selection_failed))
+                }
+            }
         }
     }
 
@@ -142,15 +149,19 @@ class SignUpFragment : Fragment() {
                 is SignUpEvent.SignInSuccessful -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
                 }
+
                 is SignUpEvent.Error -> {
                     showSnackBar(getString(R.string.signup_message_error))
                 }
+
                 is SignUpEvent.BackPressed -> {
                     findNavController().navigate(R.id.action_signUpFragment_to_onboardingFragment)
                 }
+
                 is SignUpEvent.NicknameLengthInvalid -> {
                     showSnackBar(getString(R.string.signup_message_invalid_nickname))
                 }
+
                 is SignUpEvent.UsernameInvalid -> showSnackBar(getString(R.string.signup_message_invalid_username))
                 is SignUpEvent.NicknameDuplicated -> showSnackBar(getString(R.string.signup_message_duplicated_username))
                 is SignUpEvent.SignUpFormNotCompleted -> showSnackBar(getString(R.string.signup_message_form_not_completed))

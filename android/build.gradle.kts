@@ -6,6 +6,8 @@ plugins {
 
     // Add the dependency for the Crashlytics Gradle plugin
     id("com.google.firebase.crashlytics") version "2.9.9" apply false
+    // hilt
+    id("com.google.dagger.hilt.android") version "2.51.1" apply false
 }
 
 allprojects {

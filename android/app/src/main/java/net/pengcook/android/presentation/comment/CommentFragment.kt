@@ -10,12 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.comment.bottomsheet.CommentMenuBottomFragment
 import net.pengcook.android.presentation.core.model.Comment
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CommentFragment : Fragment() {
     private var _binding: FragmentCommentBinding? = null
     private val binding: FragmentCommentBinding
@@ -24,14 +26,10 @@ class CommentFragment : Fragment() {
     private val args by navArgs<CommentFragmentArgs>()
     private val recipeId: Long by lazy { args.recipeId }
 
+    @Inject
+    lateinit var viewmodelFactory: CommentViewModelFactory
     private val viewModel: CommentViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        CommentViewModelFactory(
-            recipeId = recipeId,
-            commentRepository = appModule.commentRepository,
-            userControlRepository = appModule.userControlRepository,
-        )
+        CommentViewModel.provideFactory(viewmodelFactory, recipeId)
     }
     private val adapter: CommentAdapter by lazy { CommentAdapter(viewModel) }
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="hintContent"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+
+        <variable
+            name="visibleCondition"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/et_form_text"
+            layout="@layout/item_form_text"
+            android:layout_width="0dp"
+            app:title="@{title}"
+            app:hintContent="@{hintContent}"
+            app:content="@={content}"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_alert_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_form_text"
+            bind:visibility="@{visibleCondition &amp;&amp; (content == null || content.isEmpty())}"
+            style="@style/WarningMessageUnfilledForm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

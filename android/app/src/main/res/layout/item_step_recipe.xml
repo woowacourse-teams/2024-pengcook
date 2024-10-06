@@ -8,11 +8,20 @@
         <variable
             name="recipeStep"
             type="net.pengcook.android.presentation.core.model.RecipeStep" />
+
+        <variable
+            name="contentClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:onClick="@{contentClickListener}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_image_container"
@@ -36,18 +45,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 tools:src="@drawable/img_kimchi_soup" />
-
-            <include
-                android:id="@+id/timer"
-                layout="@layout/item_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/timer"
+            layout="@layout/item_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:clickListener="@{clickListener}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_image_container" />
 
         <TextView
             android:layout_width="0dp"
@@ -58,7 +67,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_image_container" />
+            app:layout_constraintTop_toBottomOf="@id/timer" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

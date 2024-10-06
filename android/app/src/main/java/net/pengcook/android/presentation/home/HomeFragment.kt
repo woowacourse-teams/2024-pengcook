@@ -8,20 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentHomeBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Recipe
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private val viewModel: HomeViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        HomeViewModelFactory(appModule.feedRepository)
-    }
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
         FeedRecyclerViewAdapter(viewModel)
@@ -45,6 +43,19 @@ class HomeFragment : Fragment() {
         AnalyticsLogging.viewLogEvent("Home")
         initBinding()
         observing()
+        initSwipeRefreshLayout()
+    }
+
+    private fun initSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshData()
+        }
+    }
+
+    private fun refreshData() {
+        viewModel.refreshFeed()
+
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun observing() {
@@ -82,5 +93,11 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.homeRcView.adapter = adapter
+
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collect { loadStates ->
+                binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
+            }
+        }
     }
 }

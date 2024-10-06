@@ -41,7 +41,7 @@ class FakeFeedRepository(
     override suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>> =
         runCatching {
             List(10) {
-                RecipeStep(it.toLong() + 1, 1L, "description${it + 1}", "image${it + 1}", it + 1)
+                RecipeStep(it.toLong() + 1, 1L, "description${it + 1}", "image${it + 1}", it + 1, "10")
             }
         }
 

@@ -5,6 +5,8 @@ import net.pengcook.android.R
 import net.pengcook.android.databinding.ItemUserFollowBinding
 import net.pengcook.android.presentation.core.listener.UserManipulationButtonClickListener
 import net.pengcook.android.presentation.core.model.User
+import net.pengcook.android.presentation.follow.follower.FollowerListFragment
+import net.pengcook.android.presentation.follow.following.FollowingListFragment
 
 class FollowUserViewHolder(
     private val binding: ItemUserFollowBinding,

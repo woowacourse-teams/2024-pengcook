@@ -9,24 +9,25 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentCategoryFeedListBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CategoryFeedListFragment : Fragment() {
     private var _binding: FragmentCategoryFeedListBinding? = null
     private val binding: FragmentCategoryFeedListBinding
         get() = _binding!!
     private val args: CategoryFeedListFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var viewModelFactory: CategoryFeedListViewModelFactory
+
     private val viewModel: CategoryFeedListViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        CategoryFeedListViewModelFactory(
-            appModule.feedRepository,
-            args.category,
-        )
+        CategoryFeedListViewModel.provideFactory(viewModelFactory, args.category)
     }
     private val adapter: CategoryFeedListAdapter by lazy {
         CategoryFeedListAdapter(viewModel)

@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentSettingBinding
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
+import net.pengcook.android.presentation.setting.model.Setting
 
+@AndroidEntryPoint
 class SettingFragment :
     Fragment(),
     SettingMenuItemClickListener,
@@ -22,12 +25,6 @@ class SettingFragment :
         get() = _binding!!
     private val settings: List<Setting> =
         listOf(
-            Setting(
-                listOf(MenuItem.LIKES, MenuItem.COMMENTS),
-            ),
-            Setting(
-                listOf(MenuItem.BLOCKED, MenuItem.LANGUAGE),
-            ),
             Setting(
                 listOf(MenuItem.PRIVACY_POLICY, MenuItem.TERMS_OF_USE, MenuItem.ACCOUNT),
             ),

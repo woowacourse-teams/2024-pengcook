@@ -12,23 +12,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.ActivityMainBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: MainViewModel by viewModels {
-        val application = application as DefaultPengcookApplication
-        MainViewModelFactory(
-            application.appModule.authorizationRepository,
-            application.appModule.sessionRepository,
-        )
-    }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

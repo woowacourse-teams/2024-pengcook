@@ -9,26 +9,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentProfileBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding
         get() = _binding!!
-    private val viewModel: ProfileViewModel by viewModels {
-        val application = (requireContext().applicationContext as DefaultPengcookApplication)
-        val profilePagingSource =
-            ProfilePagingSource(
-                profileFeedType = ProfileFeedType.MyFeed,
-                profileRepository = application.appModule.profileRepository,
-            )
-        ProfileViewModelFactory(profilePagingSource)
-    }
+    private val viewModel: ProfileViewModel by viewModels()
     private val adapter: ProfileAdapter by lazy { ProfileAdapter(viewModel, viewModel) }
 
     override fun onCreateView(

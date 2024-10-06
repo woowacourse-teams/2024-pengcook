@@ -11,6 +11,8 @@ plugins {
 
     // Add the Crashlytics Gradle plugin
     id("com.google.firebase.crashlytics")
+
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -25,7 +27,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 18
-        versionName = "0.0.1"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -53,12 +55,12 @@ android {
         }
 
         debug {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+//            isMinifyEnabled = true
+//            isShrinkResources = true
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro",
+//            )
             buildConfigField("String", "BASE_URL", properties.getProperty("base_url_dev"))
         }
     }
@@ -161,4 +163,8 @@ dependencies {
 
     // Image Cropper
     implementation("commons-io:commons-io:2.4")
+
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 }

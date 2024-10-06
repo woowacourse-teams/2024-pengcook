@@ -227,7 +227,7 @@
 
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="net.pengcook.android.presentation.setting.EditProfileFragment"
+        android:name="net.pengcook.android.presentation.setting.edit.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile">
         <action

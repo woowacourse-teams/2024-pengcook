@@ -55,9 +55,9 @@
     <string name="search_message_failure">Search Error Occurred.</string>
 
     <string name="step_making_hint">Write Recipe Introduction</string>
-    <string name="making_step_title">Recipe title</string>
+    <string name="making_step_title">Steps</string>
     <string name="step_format">step %s</string>
-    <string name="making_appbar_title">New Recipe</string>
+    <string name="making_appbar_title">Recipe Summary</string>
     <string name="making_form_recipe_title">Recipe Title</string>
     <string name="making_form_category">Category</string>
     <string name="making_form_ingredient">Ingredient</string>
@@ -69,7 +69,9 @@
     <string name="making_write_ingredient">Write Ingredient</string>
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
+    <string name="making_step">Make Recipe Step</string>
     <string name="making_next_step">Next Step</string>
+
     <string name="making_uploading_image">Uploading Image...</string>
     <string name="back_making_step">Back</string>
     <string name="camera_permission_granted">Camera permission is allowed.</string>
@@ -112,6 +114,7 @@
     <string name="comment_format_singular">Comment %d</string>
     <string name="comment_format_plural">Comments %,d</string>
 
+    <string name="detail_appbar_title">Description</string>
     <string name="detail_comment_format_singular">%d Comment</string>
     <string name="detail_comment_format_plural">%,d Comments</string>
     <string name="setting_account_sign_out">Sign out</string>
@@ -125,6 +128,7 @@
     <string name="report_title_bottom">Please choose the reason of report</string>
     <string name="report_title_dialog">Choose reason of report</string>
     <string name="recipe_report_success">Recipe Report Success</string>
+    <string name="alert_message_fill_form">Please fill this form</string>
 
 
 </resources>

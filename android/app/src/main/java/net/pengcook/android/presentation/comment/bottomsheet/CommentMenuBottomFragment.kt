@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentMenuBottomBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.model.Comment
 
 class CommentMenuBottomFragment : BottomSheetDialogFragment() {
@@ -18,13 +17,7 @@ class CommentMenuBottomFragment : BottomSheetDialogFragment() {
     private val binding
         get() = _binding!!
 
-    private val viewModel: CommentMenuBottomViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        CommentMenuBottomViewModelFactory(
-            userControlRepository = appModule.userControlRepository,
-        )
-    }
+    private val viewModel: CommentMenuBottomViewModel by viewModels()
 
     private val selectedComment: Comment? by lazy { arguments?.getParcelable("selected_comment") }
 

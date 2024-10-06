@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="selectedRating"
+            type="float" />
+
+        <variable
+            name="visibleCondition"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/form_rating_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:title="@{title}"
+            app:selectedRating="@={selectedRating}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            layout="@layout/item_form_rating"/>
+
+
+        <TextView
+            android:id="@+id/tv_alert_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_rating_bar"
+            style="@style/WarningMessageUnfilledForm"
+            bind:visibility="@{selectedRating == 0.0 &amp;&amp; visibleCondition}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

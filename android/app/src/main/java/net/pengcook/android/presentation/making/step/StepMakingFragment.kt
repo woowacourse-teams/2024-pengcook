@@ -9,32 +9,38 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.datastore.core.IOException
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.navigateUp
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentMakingStepBinding
-import net.pengcook.android.presentation.DefaultPengcookApplication
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import java.io.File
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class StepMakingFragment : Fragment() {
     private var _binding: FragmentMakingStepBinding? = null
     private val binding: FragmentMakingStepBinding
         get() = _binding!!
     private val args: StepMakingFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var viewModelFactory: StepMakingViewModelFactory
+
     private val viewModel: StepMakingViewModel by viewModels {
-        val appModule =
-            (requireContext().applicationContext as DefaultPengcookApplication).appModule
-        StepMakingViewModelFactory(
+        StepMakingViewModel.provideFactory(
+            assistedFactory = viewModelFactory,
             recipeId = args.recipeId,
-            maximumStep = MAXIMUM_STEPS,
-            recipeStepMakingRepository = appModule.recipeStepMakingRepository,
-            makingRecipeRepository = appModule.makingRecipeRepository,
         )
     }
 
@@ -71,7 +77,7 @@ class StepMakingFragment : Fragment() {
                 if (currentPhotoPath != null) {
                     viewModel.fetchImageUri(File(currentPhotoPath!!).name)
                 } else {
-                    processImageUri(photoUri)
+                    compressAndFetchPresignedUrl(photoUri)
                 }
             } ?: run {
                 showToast(getString(R.string.image_selection_failed))
@@ -180,12 +186,18 @@ class StepMakingFragment : Fragment() {
         viewModel.uploadImageToS3(presignedUrl, file)
     }
 
-    private fun processImageUri(uri: Uri) {
-        currentPhotoPath = imageUtils.processImageUri(uri)
-        if (currentPhotoPath != null) {
-            viewModel.fetchImageUri(File(currentPhotoPath!!).name)
-        } else {
-            showToast(getString(R.string.image_selection_failed))
+    private fun compressAndFetchPresignedUrl(uri: Uri) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val compressedFile = imageUtils.compressAndResizeImage(uri)
+                currentPhotoPath = compressedFile.absolutePath
+                viewModel.fetchImageUri(File(currentPhotoPath!!).name)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.image_selection_failed))
+                }
+            }
         }
     }
 
