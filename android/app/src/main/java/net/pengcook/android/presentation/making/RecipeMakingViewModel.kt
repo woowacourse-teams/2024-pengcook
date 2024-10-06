@@ -112,8 +112,8 @@ class RecipeMakingViewModel
                 val ingredients = ingredientContent.value?.trim()
                 val title = titleContent.value?.trim()
                 val hour = hourContent.value
-                val minute = minuteContent.value
                 val second = secondContent.value
+                val minute = minuteContent.value
 
                 if (category.isNullOrEmpty() ||
                     introduction.isNullOrEmpty() ||

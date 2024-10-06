@@ -55,7 +55,7 @@ class DefaultRecipeStepMakingRepository
         private fun RecipeStepMaking.toRecipeStepEntity(): RecipeStepEntity =
             RecipeStepEntity(
                 recipeDescriptionId = recipeId,
-                cookingTime = "00:00:00",
+                cookingTime = cookingTime,
                 stepNumber = sequence,
                 description = description.ifEmpty { null },
                 imageUri = imageUri.ifEmpty { null },
@@ -70,5 +70,6 @@ class DefaultRecipeStepMakingRepository
                 description = description ?: "",
                 imageUri = imageUri ?: "",
                 image = imageTitle ?: "",
+                cookingTime = cookingTime ?: "00:00:00",
             )
     }

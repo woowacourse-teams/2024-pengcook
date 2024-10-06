@@ -29,6 +29,8 @@ class StepMakingViewModel
     ) : ViewModel(),
         StepMakingEventHandler,
         AppbarDoubleActionEventListener {
+        private val stepTraversalStatus = MutableList(maximumStep) { false }
+
         private val _stepNumber = MutableLiveData<Int>(1)
         val stepNumber: LiveData<Int> get() = _stepNumber
 
@@ -56,7 +58,16 @@ class StepMakingViewModel
         val uiEvent: LiveData<Event<RecipeStepMakingEvent>>
             get() = _uiEvent
 
+        private var completionPressed = false
+
+        private val _errorVisibility: MutableLiveData<Boolean> = MutableLiveData(false)
+        val errorVisibility: LiveData<Boolean>
+            get() = _errorVisibility
+
         private val stepCompletion: MutableMap<Int, Boolean> = mutableMapOf(1 to false)
+
+        val minuteContent = MutableLiveData<String>()
+        val secondContent = MutableLiveData<String>()
 
         init {
             val stepNumber = stepNumber.value
@@ -72,6 +83,7 @@ class StepMakingViewModel
         override fun moveToNextPage() {
             val imageUploaded = imageUploaded.value
             val introduction = introductionContent.value
+
             if (imageUploaded != true) {
                 _uiEvent.value = Event(RecipeStepMakingEvent.ImageNotUploaded)
                 return
@@ -115,6 +127,9 @@ class StepMakingViewModel
 
         override fun customAction() {
             viewModelScope.launch {
+                completionPressed = true
+                _errorVisibility.value = true
+
                 if (imageSelected.value != true) {
                     _uiEvent.value = Event(RecipeStepMakingEvent.FormNotCompleted)
                     return@launch
@@ -184,6 +199,8 @@ class StepMakingViewModel
         private fun initStepData(stepNumber: Int) {
             viewModelScope.launch {
                 _isLoading.value = true
+                _errorVisibility.value = completionPressed && stepTraversalStatus[stepNumber - 1]
+                stepTraversalStatus[stepNumber - 1] = true
                 _imageUri.value = null
                 fetchRecipeStep(stepNumber)
                 _isLoading.value = false
@@ -214,6 +231,8 @@ class StepMakingViewModel
             _imageUploaded.value = false
             introductionContent.value = ""
             thumbnailTitle = null
+            minuteContent.value = ""
+            secondContent.value = ""
         }
 
         private suspend fun postRecipe(recipeCreation: RecipeCreation) {
@@ -249,7 +268,11 @@ class StepMakingViewModel
                 sequence = stepNumber,
             ).onSuccess { recipeStep ->
                 if (recipeStep == null) return@onSuccess
+                val minute = recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(1) ?: ""
+                val second = recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(2) ?: ""
                 introductionContent.value = recipeStep.description
+                minuteContent.value = if (minute.toIntOrNull() == 0) "" else minute
+                secondContent.value = if (second.toIntOrNull() == 0) "" else second
                 if (recipeStep.imageUri.isNotEmpty()) {
                     _imageUri.value = Uri.parse(recipeStep.imageUri)
                 }
@@ -269,6 +292,11 @@ class StepMakingViewModel
             stepNumber: Int,
             stepAction: StepAction,
         ) {
+            val minute = minuteContent.value
+            val second = secondContent.value
+            println("minute : $minute")
+            println("second : $second")
+
             val recipeStep =
                 RecipeStepMaking(
                     recipeId = recipeId,
@@ -277,6 +305,12 @@ class StepMakingViewModel
                     image = thumbnailTitle ?: "",
                     stepId = 1L,
                     imageUri = imageUri.value?.toString() ?: "",
+                    cookingTime =
+                        FORMAT_TIME_REQUIRED.format(
+                            0,
+                            minute?.toIntOrNull() ?: 0,
+                            second?.toIntOrNull() ?: 0,
+                        ),
                 )
 
             recipeStepMakingRepository.saveRecipeStep(recipeId = recipeId, recipeStep = recipeStep)
@@ -290,6 +324,9 @@ class StepMakingViewModel
         }
 
         companion object {
+            private const val FORMAT_TIME_REQUIRED = "%02d:%02d:%02d"
+            private const val SEPARATOR_TIME = ":"
+
             fun provideFactory(
                 assistedFactory: StepMakingViewModelFactory,
                 recipeId: Long,
