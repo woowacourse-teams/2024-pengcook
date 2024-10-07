@@ -268,11 +268,13 @@ class StepMakingViewModel
                 sequence = stepNumber,
             ).onSuccess { recipeStep ->
                 if (recipeStep == null) return@onSuccess
-                val minute = recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(1) ?: ""
-                val second = recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(2) ?: ""
+                val minute =
+                    recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(1) ?: DEFAULT_TIME_STRING
+                val second =
+                    recipeStep.cookingTime.split(SEPARATOR_TIME).getOrNull(2) ?: DEFAULT_TIME_STRING
                 introductionContent.value = recipeStep.description
-                minuteContent.value = if (minute.toIntOrNull() == 0) "" else minute
-                secondContent.value = if (second.toIntOrNull() == 0) "" else second
+                minuteContent.value = if (minute.toIntOrNull() == 0) DEFAULT_TIME_STRING else minute
+                secondContent.value = if (second.toIntOrNull() == 0) DEFAULT_TIME_STRING else second
                 if (recipeStep.imageUri.isNotEmpty()) {
                     _imageUri.value = Uri.parse(recipeStep.imageUri)
                 }
@@ -294,22 +296,20 @@ class StepMakingViewModel
         ) {
             val minute = minuteContent.value
             val second = secondContent.value
-            println("minute : $minute")
-            println("second : $second")
 
             val recipeStep =
                 RecipeStepMaking(
                     recipeId = recipeId,
                     sequence = stepNumber,
-                    description = introductionContent.value ?: "",
-                    image = thumbnailTitle ?: "",
+                    description = introductionContent.value ?: DEFAULT_TIME_STRING,
+                    image = thumbnailTitle ?: DEFAULT_TIME_STRING,
                     stepId = 1L,
-                    imageUri = imageUri.value?.toString() ?: "",
+                    imageUri = imageUri.value?.toString() ?: DEFAULT_IMAGE_URI,
                     cookingTime =
                         FORMAT_TIME_REQUIRED.format(
-                            0,
-                            minute?.toIntOrNull() ?: 0,
-                            second?.toIntOrNull() ?: 0,
+                            DEFAULT_TIME_VALUE,
+                            minute?.toIntOrNull() ?: DEFAULT_TIME_VALUE,
+                            second?.toIntOrNull() ?: DEFAULT_TIME_VALUE,
                         ),
                 )
 
@@ -326,6 +326,9 @@ class StepMakingViewModel
         companion object {
             private const val FORMAT_TIME_REQUIRED = "%02d:%02d:%02d"
             private const val SEPARATOR_TIME = ":"
+            private const val DEFAULT_TIME_STRING = ""
+            private const val DEFAULT_TIME_VALUE = 0
+            private const val DEFAULT_IMAGE_URI = ""
 
             fun provideFactory(
                 assistedFactory: StepMakingViewModelFactory,
