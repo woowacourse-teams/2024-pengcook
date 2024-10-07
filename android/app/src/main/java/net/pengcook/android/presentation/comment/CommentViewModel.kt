@@ -39,10 +39,6 @@ class CommentViewModel
 
         val commentContent: MutableLiveData<String> = MutableLiveData()
 
-        private val _isCommentEmpty: MutableLiveData<Event<Boolean>> = MutableLiveData()
-        val isCommentEmpty: LiveData<Event<Boolean>>
-            get() = _isCommentEmpty
-
         private val _quitCommentEvent: MutableLiveData<Event<Boolean>> = MutableLiveData()
         val quitCommentEvent: LiveData<Event<Boolean>>
             get() = _quitCommentEvent
@@ -81,12 +77,7 @@ class CommentViewModel
         private fun initializeComments() {
             viewModelScope.launch {
                 val comments = fetchComments()
-                if (comments.isEmpty()) {
-                    _isCommentEmpty.value = Event(true)
-                    return@launch
-                }
-                _comments.value =
-                    comments.filter { it.userId !in (blockedUserIds.value ?: emptyList()) }
+                _comments.value = comments.filter { it.userId !in (blockedUserIds.value ?: emptyList()) }
             }
         }
 
