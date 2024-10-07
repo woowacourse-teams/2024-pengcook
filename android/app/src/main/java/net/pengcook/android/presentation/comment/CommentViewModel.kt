@@ -109,13 +109,7 @@ class CommentViewModel
             _showCommentMenuEvent.value = Event(comment)
         }
 
-        fun blockUser(comment: Comment) {
-            viewModelScope.launch {
-                userControlRepository.blockUser(comment.userId)
-            }
-        }
-
-        fun onReportComment(
+        private fun onReportComment(
             comment: Comment,
             reportReason: ReportReason,
         ) {
