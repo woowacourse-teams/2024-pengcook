@@ -61,20 +61,10 @@ class CommentFragment : Fragment() {
     }
 
     private fun observeViewModels() {
-        observeCommentEmptyState()
         observeComments()
         observeQuitCommentEvent()
         observeShowCommentMenuEvent()
         observeCommentMenuEvents()
-    }
-
-    private fun observeCommentEmptyState() {
-        viewModel.isCommentEmpty.observe(viewLifecycleOwner) { event ->
-            val isCommentEmpty = event.getContentIfNotHandled() ?: return@observe
-            if (isCommentEmpty) {
-                showToast(getString(R.string.comment_empty_list))
-            }
-        }
     }
 
     private fun observeComments() {
