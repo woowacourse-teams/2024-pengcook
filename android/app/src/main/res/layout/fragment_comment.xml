@@ -53,10 +53,9 @@
                 android:id="@+id/tv_count_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                bind:commentCount="@{vm.commentCount}"
+                android:text="@string/comments"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                tools:text="Comments 12"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

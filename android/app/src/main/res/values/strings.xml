@@ -129,6 +129,7 @@
     <string name="report_title_dialog">Choose reason of report</string>
     <string name="recipe_report_success">Recipe Report Success</string>
     <string name="alert_message_fill_form">Please fill this form</string>
+    <string name="comments">Comments</string>
 
 
 </resources>
