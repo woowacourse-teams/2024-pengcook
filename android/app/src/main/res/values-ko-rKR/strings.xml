@@ -10,11 +10,10 @@
     <string name="separator">,&#160;</string>
 
     <string name="onboarding_app_title">PengCook</string>
-    <string name="onboarding_introduction">요리를 쉽게! 당신의 레시피!</string>
+    <string name="onboarding_introduction">요리를 쉽게! 나만의 레시피!</string>
     <string name="onboarding_google_sign_in">구글로 로그인하기</string>
     <string name="onboarding_terms">
-        회원가입 시,
-        &lt;a href="https://pengcook.net/terms-of-service">&lt;u>이용 약관&lt;/u>&lt;/a>과 &lt;a href="https://pengcook.net/privacy-policy">&lt;u>개인정보 처리방침&lt;/u>&lt;/a>에&lt;br/> 동의하는 것으로 간주합니다.
+        회원가입 시, &lt;a href="https://pengcook.net/terms-of-service">&lt;u>이용 약관&lt;/u>&lt;/a>과 &lt;a href="https://pengcook.net/privacy-policy">&lt;u>개인정보 처리방침&lt;/u>&lt;/a>에&lt;br/> 동의하는 것으로 간주합니다.
     </string>
     <string name="onboarding_logo_image_desc">logo</string>
     <string name="onboarding_network_error">예상치 못한 오류가 발생했습니다.</string>
