@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.datastore.core.IOException
 import androidx.fragment.app.Fragment
@@ -108,7 +107,7 @@ class RecipeMakingFragment : Fragment() {
         initBinding()
         initTimeFormatInput()
         observeUiEvent()
-        setUpCategorySpinner()
+//        setUpCategorySpinner()
     }
 
     override fun onDestroyView() {
@@ -209,16 +208,16 @@ class RecipeMakingFragment : Fragment() {
         }
     }
 
-    private fun setUpCategorySpinner() {
-        val countryAdapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_spinner_item,
-                resources.getStringArray(R.array.signup_countries),
-            )
-        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.makingRecipeCategory.spFormContent.spDefault.adapter = countryAdapter
-    }
+//    private fun setUpCategorySpinner() {
+//        val countryAdapter =
+//            ArrayAdapter(
+//                requireContext(),
+//                android.R.layout.simple_spinner_item,
+//                resources.getStringArray(R.array.signup_countries),
+//            )
+//        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        binding.makingRecipeCategory.spFormContent.spDefault.adapter = countryAdapter
+//    }
 
     private fun showSnackBar(message: String) {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()

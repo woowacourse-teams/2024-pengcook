@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeLocalDataSource
 import net.pengcook.android.data.datasource.makingrecipe.MakingRecipeRemoteDataSource
-import net.pengcook.android.data.util.mapper.toCategoryEntities
+import net.pengcook.android.data.model.makingrecipe.entity.CategoryEntity
 import net.pengcook.android.data.util.mapper.toIngredientEntities
 import net.pengcook.android.data.util.mapper.toRecipeCreation
 import net.pengcook.android.data.util.mapper.toRecipeCreationRequest
@@ -40,7 +40,9 @@ class DefaultMakingRecipeRepository
 
         override suspend fun fetchTotalRecipeData(): Result<RecipeCreation?> =
             runCatching {
-                makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
+                val recipeCreation = makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
+                println(recipeCreation)
+                recipeCreation
             }
 
         override suspend fun fetchRecipeDescription(): Result<RecipeDescription?> =
@@ -52,12 +54,13 @@ class DefaultMakingRecipeRepository
             runCatching {
                 val id = recipeDescription.recipeDescriptionId
                 val recipeDescriptionEntity = recipeDescription.toRecipeDescriptionEntity(id)
-                val categoryEntities = recipeDescription.categories.toCategoryEntities(id)
+//                val categoryEntities = recipeDescription.categories.toCategoryEntities(id)
+                val categoryEntity = CategoryEntity(recipeId = id, categoryName = recipeDescription.categories.joinToString())
                 val ingredientEntities = recipeDescription.ingredients.toIngredientEntities(id)
                 makingRecipeLocalDataSource.saveRecipeDescription(
                     recipeDescription = recipeDescriptionEntity,
                     ingredients = ingredientEntities,
-                    categories = categoryEntities,
+                    category = categoryEntity,
                 )
             }
 

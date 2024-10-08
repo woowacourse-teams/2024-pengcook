@@ -19,7 +19,7 @@ import net.pengcook.android.data.local.database.contract.RecipeDescriptionContra
     ],
 )
 data class CategoryEntity(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(CategoryContract.COLUMN_ID) val id: Long = 0,
     @ColumnInfo(CategoryContract.COLUMN_RECIPE_DESCRIPTION_ID) val recipeId: Long,
     @ColumnInfo(CategoryContract.COLUMN_CATEGORY_NAME) val categoryName: String,

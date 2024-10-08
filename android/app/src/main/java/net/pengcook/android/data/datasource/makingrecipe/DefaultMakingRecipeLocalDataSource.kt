@@ -26,12 +26,12 @@ class DefaultMakingRecipeLocalDataSource
         override suspend fun saveRecipeDescription(
             recipeDescription: RecipeDescriptionEntity,
             ingredients: List<IngredientEntity>,
-            categories: List<CategoryEntity>,
+            category: CategoryEntity,
         ): Long {
             return database.withTransaction {
                 recipeDescriptionDao.insertCreatedRecipeDescription(recipeDescription)
                 ingredientDao.saveIngredients(ingredients)
-                categoryDao.saveCategories(categories)
+                categoryDao.saveSingleCategory(category)
                 recipeDescription.id
             }
         }

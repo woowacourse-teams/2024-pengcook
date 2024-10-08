@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCategoryBinding
-import net.pengcook.android.presentation.core.style.GridSpacingItemDecoration
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 @AndroidEntryPoint
@@ -37,9 +37,26 @@ class CategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
         AnalyticsLogging.viewLogEvent("Category")
-        binding.adapter = adapter
+        initializeAdapter()
         setUpCategories()
         observeEvents()
+    }
+
+    private fun initializeAdapter() {
+        binding.adapter = adapter
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rvCategory.layoutManager =
+            layoutManager.apply {
+                spanSizeLookup =
+                    object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return when (position) {
+                                0 -> 3
+                                else -> 1
+                            }
+                        }
+                    }
+            }
     }
 
     override fun onDestroyView() {
@@ -65,33 +82,31 @@ class CategoryFragment : Fragment() {
     private fun setUpCategories() {
         val categories = categories()
         adapter.submitList(categories)
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.item_spacing_category)
-        binding.rvCategory.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
     }
 
     private fun categories() =
         listOf(
             Category(
                 id = 100,
-                title = "흑백요리사",
+                title = getString(R.string.category_culinary_classwars),
                 imageUrl = "https://github.com/user-attachments/assets/81327a0a-715d-4c91-b570-43c3386d1866",
                 code = "흑백요리사",
             ),
             Category(
                 1,
-                "한식",
+                getString(R.string.category_korean),
                 "https://www.90daykorean.com/wp-content/uploads/2015/04/bigstock-Bibimbap-On-A-Concrete-Backgro-449450285-1024x683.jpg",
                 "Korean",
             ),
             Category(
                 2,
-                "일식",
+                getString(R.string.category_japanese),
                 "https://railrocker.com/playground/wp-content/uploads/2020/02/Onigiri-traditional-Japanese-Rice-Balls.jpg",
                 "Japanese",
             ),
             Category(
                 3,
-                "중식",
+                getString(R.string.category_chinese),
                 "https://image.yes24.com/images/chyes24/0/a/3/7/0a379fd46d1e404ed63adc3beee52b33.jpg",
                 "Chinese",
             ),
