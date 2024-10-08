@@ -72,46 +72,28 @@ class CategoryFragment : Fragment() {
     private fun categories() =
         listOf(
             Category(
+                id = 100,
+                title = "흑백요리사",
+                imageUrl = "https://github.com/user-attachments/assets/81327a0a-715d-4c91-b570-43c3386d1866",
+                code = "흑백요리사",
+            ),
+            Category(
                 1,
-                "Belgian",
-                "https://www.starttravel.co.uk/media/images/84310b25-c298-444e-8695-5ee4830e1e79.png",
-                "Belgian",
+                "한식",
+                "https://www.90daykorean.com/wp-content/uploads/2015/04/bigstock-Bibimbap-On-A-Concrete-Backgro-449450285-1024x683.jpg",
+                "Korean",
             ),
             Category(
                 2,
-                "French",
-                "https://admin.expatica.com/fr/wp-content/uploads/sites/5/2023/11/french-food-1536x1024.jpg",
-                "French",
-            ),
-            Category(
-                3,
-                "German",
-                "https://admin.expatica.com/de/wp-content/uploads/sites/6/2023/11/bratwurst-sauerkraut.jpg",
-                "German",
-            ),
-            Category(
-                4,
-                "Indonesian",
-                "https://tasteofbali.ro/wp-content/uploads/2023/02/asian_food_Taste_of_Bali-1024x682.jpg",
-                "Indonesian",
-            ),
-            Category(
-                5,
-                "Seafood",
-                "https://cdn11.bigcommerce.com/s-iz8lky8j1x/product_images/uploaded_images/istock-520490716.jpg",
-                "Seafood",
-            ),
-            Category(
-                6,
-                "Japanese",
+                "일식",
                 "https://railrocker.com/playground/wp-content/uploads/2020/02/Onigiri-traditional-Japanese-Rice-Balls.jpg",
                 "Japanese",
             ),
             Category(
-                7,
-                "Korean",
-                "https://www.90daykorean.com/wp-content/uploads/2015/04/bigstock-Bibimbap-On-A-Concrete-Backgro-449450285-1024x683.jpg",
-                "Korean",
+                3,
+                "중식",
+                "https://image.yes24.com/images/chyes24/0/a/3/7/0a379fd46d1e404ed63adc3beee52b33.jpg",
+                "Chinese",
             ),
         )
 }
