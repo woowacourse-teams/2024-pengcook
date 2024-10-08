@@ -120,7 +120,8 @@
     <string name="comment_format_singular">댓글 %d</string>
     <string name="comment_format_plural">댓글 %,d</string>
 
-    <string name="detail_appbar_title">개요</string>
+    <string name="detail_appbar_title">레시피 개요</string>
+    <string name="detail_start">시작하기</string>
     <string name="detail_comment_format_singular">%d Comment</string>
     <string name="detail_comment_format_plural">%,d Comments</string>
     <string name="setting_account_sign_out">로그아웃</string>

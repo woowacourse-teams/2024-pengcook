@@ -226,7 +226,7 @@
                             android:id="@+id/tv_ingredients_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ingredients"
+                            android:text="@string/making_form_ingredient"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -249,7 +249,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Time Required"
+                            android:text="@string/making_form_time_required"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -272,7 +272,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:text="Difficulty"
+                            android:text="@string/making_form_difficulty"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -295,7 +295,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:text="Introduction"
+                            android:text="@string/making_form_introduction"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -321,7 +321,7 @@
                             android:background="@drawable/shape_button_round_corner"
                             android:gravity="center"
                             android:onClick="@{() -> vm.onNavigateToMakingStep()}"
-                            android:text="Start"
+                            android:text="@string/detail_start"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold"
@@ -361,39 +361,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="Comments 12" />
 
-                        <EditText
-                            android:id="@+id/et_custom_comment"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="12dp"
-                            android:layout_marginTop="12dp"
-                            android:background="@drawable/custom_edittext"
-                            android:hint="Have a comment?"
-                            android:inputType="text"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_count_comment" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp"
-                            android:src="@drawable/ic_mention"
-                            app:layout_constraintBottom_toBottomOf="@id/et_custom_comment"
-                            app:layout_constraintEnd_toEndOf="@id/et_custom_comment"
-                            app:layout_constraintTop_toTopOf="@id/et_custom_comment" />
-
-                        <com.google.android.material.divider.MaterialDivider
-                            style="@style/CustomDivider"
-                            android:layout_marginTop="20dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/et_custom_comment" />
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
