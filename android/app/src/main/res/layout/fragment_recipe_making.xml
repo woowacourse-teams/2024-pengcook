@@ -67,16 +67,17 @@
 
                 <include
                     android:id="@+id/makingRecipeCategory"
-                    layout="@layout/item_form_spinner"
+                    layout="@layout/item_form_text_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     android:layout_marginVertical="16dp"
+                    app:content="@={vm.categoryContent}"
+                    app:hintContent="@{@string/making_write_category}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
-                    app:selectedValue="@{vm.categorySelectedValue}"
-                    app:title="@{@string/making_form_category}"
-                    app:spinnerItemChangeListener="@{vm}"/>
+                    app:title="@{@string/making_form_category}" />
 
                 <include
                     android:id="@+id/makingRecipeIngredient"

@@ -15,20 +15,19 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> categoryEventListener.onCategorySelect(category.code)}">
 
         <ImageView
             android:id="@+id/iv_category"
-            android:layout_width="120dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
             android:background="@drawable/bg_radius_filled"
             android:clipToOutline="true"
-            android:layout_margin="8dp"
+            android:layout_marginHorizontal="4dp"
             android:scaleType="centerCrop"
             app:imageUrl="@{category.imageUrl}"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,10 +35,11 @@
 
         <TextView
             android:id="@+id/tv_category"
-            style="@style/Body.Regular.B2"
+            style="@style/Headline.H5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
