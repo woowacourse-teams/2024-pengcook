@@ -67,6 +67,7 @@
 
     <string name="making_write_recipe_title">Write Recipe Title</string>
     <string name="making_write_ingredient">Write Ingredient</string>
+    <string name="making_write_category">Write Categories</string>
     <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
     <string name="making_next">Next</string>
     <string name="making_step">Make Recipe Step</string>
@@ -130,6 +131,10 @@
     <string name="recipe_report_success">Recipe Report Success</string>
     <string name="alert_message_fill_form">Please fill this form</string>
     <string name="comments">Comments</string>
+    <string name="category_culinary_classwars">Culinary Class Wars</string>
+    <string name="category_korean">Korean</string>
+    <string name="category_japanese">Japanese</string>
+    <string name="category_chinese">Chinese</string>
 
 
 </resources>

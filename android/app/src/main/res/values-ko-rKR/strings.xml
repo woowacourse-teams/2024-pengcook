@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PengCook</string>
+    <string name="hello_blank_fragment">hello world</string>
+
+    <string name="likes_format_singular">%d like</string>
+    <string name="likes_format_plural">%,d likes</string>
+    <string name="likes_format_zero"> </string>
+    <string name="time_format_required">%d mins</string>
+    <string name="separator">,&#160;</string>
+
+    <string name="onboarding_app_title">PengCook</string>
+    <string name="onboarding_introduction">요리를 쉽게! 당신의 레시피!</string>
+    <string name="onboarding_google_sign_in">구글로 로그인하기</string>
+    <string name="onboarding_terms">
+        회원가입 시,
+        &lt;a href="https://pengcook.net/terms-of-service">&lt;u>이용 약관&lt;/u>&lt;/a>과 &lt;a href="https://pengcook.net/privacy-policy">&lt;u>개인정보 처리방침&lt;/u>&lt;/a>에&lt;br/> 동의하는 것으로 간주합니다.
+    </string>
+    <string name="onboarding_logo_image_desc">logo</string>
+    <string name="onboarding_network_error">예상치 못한 오류가 발생했습니다.</string>
+    <string name="detail_error">Failed action</string>
+    <string name="signup_appbar">회원 가입</string>
+    <string name="signup_username_title">유저명</string>
+    <string name="signup_username_hint">유저명을 입력하세요.</string>
+    <string name="signup_nickname_title">닉네임</string>
+    <string name="signup_nickname_hint">닉네임을 입력하세요.</string>
+    <string name="signup_birth_date_title">생년월일</string>
+    <string name="signup_country_title">국가</string>
+    <string name="signup_button_next">다음</string>
+    <string name="signup_message_invalid_username">유저명은 2 ~ 30자 사이로 입력해야 합니다.</string>
+    <string name="signup_message_duplicated_username">유저명이 이미 존재합니다.</string>
+    <string name="signup_message_form_not_completed">입력되지 않은 폼이 있습니다.</string>
+    <string name="signup_message_invalid_nickname">닉네임은 1 ~ 30자 사이로 입력해야 합니다.</string>
+    <string name="signup_message_error">서버 오류가 발생했습니다.</string>
+    <string-array name="signup_countries">
+        <item>Belgian</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Indian</item>
+        <item>Indonesian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Turkish</item>
+        <item>Thai</item>
+        <item>Vietnam</item>
+    </string-array>
+    
+    <string name="category_culinary_classwars">흑백요리사</string>
+    <string name="category_korean">한식</string>
+    <string name="category_japanese">일식</string>
+    <string name="category_chinese">중식</string>
+
+    <string name="edit_recipe_title">레시피 명을 작성해주세요</string>
+
+    <string name="category_appbar">카테고리</string>
+
+    <string name="search_appbar">검색</string>
+    <string name="search_searchbar_hint">검색어를 입력하세요.</string>
+    <string name="search_message_failure">검색 중 오류가 발생했습니다.</string>
+
+    <string name="step_making_hint">레시피 스텝을 작성해주세요.</string>
+    <string name="making_step_title">스텝</string>
+    <string name="step_format">step %s</string>
+    <string name="making_appbar_title">레시피 개요</string>
+    <string name="making_form_recipe_title">레시피 제목</string>
+    <string name="making_form_category">카테고리</string>
+    <string name="making_form_ingredient">재료</string>
+    <string name="making_form_time_required">소요 시간</string>
+    <string name="making_form_difficulty">난이도</string>
+    <string name="making_form_introduction">소개글</string>
+
+    <string name="making_write_recipe_title">레시피 제목을 작성해주세요.</string>
+    <string name="making_write_ingredient">재료를 작성해주세요.</string>
+    <string name="making_write_recipe_introduction">레시피 소개글을 작성해주세요.</string>
+    <string name="making_write_category">예) 흑백요리사, 한식</string>
+    <string name="making_next">다음</string>
+    <string name="making_step">스텝 작성하기</string>
+    <string name="making_next_step">다음 스텝</string>
+
+    <string name="making_uploading_image">이미지 로딩 중...</string>
+    <string name="back_making_step">이전</string>
+    <string name="camera_permission_granted">카메라 권한이 허용되었습니다.</string>
+    <string name="camera_permission_needed">카메라 권한이 필요합니다.</string>
+    <string name="image_selection_failed">이미지 선택에 실패하였습니다.</string>
+    <string name="photo_capture_failed">사진 촬영에 실패하였습니다.</string>
+    <string name="image_upload_success">이미지가 성공적으로 업로드 되었습니다.</string>
+    <string name="image_upload_failed">이미지 업로드가 실패하였습니다.</string>
+    <string name="select_image_source">이미지 소스를 선택해주세요.</string>
+    <string name="take_photo">카메라로 가져오기</string>
+    <string name="choose_from_album">앨범에서 가져오기</string>
+
+    <string name="profile_numeric_indicators">%,d followers ・ %,d recipes</string>
+    <string name="profile_appbar_title">프로필</string>
+    <string name="profile_edit_button">프로필 수정</string>
+    <string name="profile_setting_button">설정</string>
+    <string name="profile_follower_button">제거</string>
+    <string name="profile_following_button">언팔로우</string>
+    <string name="profile_search_hint">검색</string>
+
+    <string name="setting_appbar_title">설정</string>
+    <string name="setting_menu_likes">좋아요</string>
+    <string name="setting_menu_comments">댓글 목록</string>
+    <string name="setting_menu_blocked">차단한 사용자</string>
+    <string name="setting_menu_language">언어</string>
+    <string name="setting_menu_privacy_policy">개인정보 처리방침</string>
+    <string name="setting_menu_privacy_terms">이용약관</string>
+    <string name="setting_menu_account">계정 관리</string>
+    <string name="setting_account_appbar_title">계정 관리</string>
+    <string name="setting_edit_profile_appbar_title">프로필 수정</string>
+    <string name="setting_edit_profile_save_button">저장하기</string>
+    <string name="making_warning_form_not_completed">입력되지 않은 폼이 있습니다.</string>
+    <string name="making_warning_post_failure">레시피 전송이 실패하였습니다.</string>
+    <string name="following">팔로잉</string>
+
+    <string name="comment_hint">댓글</string>
+    <string name="comment_empty_list">댓글이 없습니다.</string>
+    <string name="comment_appbar_title">댓글</string>
+    <string name="comment_format_none">댓글이 없습니다</string>
+    <string name="comment_format_singular">댓글 %d</string>
+    <string name="comment_format_plural">댓글 %,d</string>
+
+    <string name="detail_appbar_title">개요</string>
+    <string name="detail_comment_format_singular">%d Comment</string>
+    <string name="detail_comment_format_plural">%,d Comments</string>
+    <string name="setting_account_sign_out">로그아웃</string>
+    <string name="setting_account_delete_account">회원탈퇴</string>
+
+    <string name="step_appbar_title">레시피 스텝</string>
+
+    <string name="comment_reported">유저 %s가 신고되었습니다.</string>
+    <string name="comment_deleted">댓글이 삭제되었습니다.</string>
+
+    <string name="report_title_bottom">신고 사유를 선택해주세요.</string>
+    <string name="report_title_dialog">신고 사유를 선택해주세요.</string>
+    <string name="recipe_report_success">신고가 완료되었습니다.</string>
+    <string name="alert_message_fill_form">완료되지 않은 폼이 있습니다.</string>
+    <string name="comments">Comments</string>
+
+</resources>
