@@ -62,7 +62,8 @@ class SearchViewModel
         ): Boolean =
             keyword.isEmpty() ||
                 recipe.title.contains(keyword, ignoreCase = true) ||
-                recipe.introduction.contains(keyword, ignoreCase = true)
+                recipe.introduction.contains(keyword, ignoreCase = true) ||
+                recipe.category.joinToString().contains(keyword, ignoreCase = true)
 
         companion object {
             private const val INITIAL_KEYWORD = ""

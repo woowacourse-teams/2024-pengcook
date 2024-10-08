@@ -48,7 +48,7 @@ fun CreatedRecipe.toRecipeCreation(): RecipeCreation =
         cookingTime = recipeDescription.cookingTime,
         difficulty = recipeDescription.difficulty,
         ingredients = ingredients.map { it.toIngredient() },
-        categories = categories.map { it.categoryName },
+        categories = categories.first().categoryName.split(",").map(String::trim),
         thumbnail = recipeDescription.thumbnail,
         steps = steps.map { it.toRecipeStepMaking() },
     )

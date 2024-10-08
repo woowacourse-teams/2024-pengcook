@@ -10,7 +10,7 @@ interface MakingRecipeLocalDataSource {
     suspend fun saveRecipeDescription(
         recipeDescription: RecipeDescriptionEntity,
         ingredients: List<IngredientEntity>,
-        categories: List<CategoryEntity>,
+        category: CategoryEntity,
     ): Long
 
     suspend fun fetchTotalRecipeData(): CreatedRecipe?

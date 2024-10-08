@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
-import net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.making.listener.RecipeMakingEventListener
 import java.io.File
@@ -24,16 +23,12 @@ class RecipeMakingViewModel
         private val makingRecipeRepository: MakingRecipeRepository,
     ) : ViewModel(),
         RecipeMakingEventListener,
-        SpinnerItemChangeListener,
         AppbarSingleActionEventListener {
         private val _uiEvent: MutableLiveData<Event<RecipeMakingEvent>> = MutableLiveData()
         val uiEvent: LiveData<Event<RecipeMakingEvent>>
             get() = _uiEvent
 
-        private val _categorySelectedValue: MutableLiveData<String> = MutableLiveData()
-        val categorySelectedValue: LiveData<String>
-            get() = _categorySelectedValue
-
+        val categoryContent = MutableLiveData<String>()
         val titleContent = MutableLiveData<String>()
         val ingredientContent = MutableLiveData<String>()
         val difficultySelectedValue = MutableLiveData(0.0f)
@@ -106,7 +101,7 @@ class RecipeMakingViewModel
 
         override fun onConfirm() {
             viewModelScope.launch {
-                val category = categorySelectedValue.value?.trim()
+                val category = categoryContent.value?.trim()
                 val introduction = introductionContent.value?.trim()
                 val difficulty = difficultySelectedValue.value
                 val ingredients = ingredientContent.value?.trim()
@@ -146,10 +141,6 @@ class RecipeMakingViewModel
             }
         }
 
-        override fun onSelectionChange(item: String) {
-            _categorySelectedValue.value = item
-        }
-
         override fun onNavigateBack() {
             _uiEvent.value = Event(RecipeMakingEvent.MakingCancellation)
         }
@@ -182,7 +173,7 @@ class RecipeMakingViewModel
             thumbnailTitle = existingRecipe.thumbnail
             _imageUploaded.value = true
             _imageSelected.value = true
-            _categorySelectedValue.value = existingRecipe.categories.first()
+            categoryContent.value = existingRecipe.categories.joinToString()
             _currentImage.value = Uri.parse(existingRecipe.imageUri)
         }
 
@@ -197,7 +188,7 @@ class RecipeMakingViewModel
             val recipeDescription =
                 RecipeDescription(
                     recipeDescriptionId = recipeId ?: return,
-                    categories = listOf(category),
+                    categories = category.split(SEPARATOR_INGREDIENTS).map { it.trim() },
                     cookingTime = timeRequired,
                     description = introduction,
                     difficulty = (difficulty * 2).toInt(),
@@ -212,6 +203,7 @@ class RecipeMakingViewModel
                 .onSuccess { recipeId ->
                     _uiEvent.value = Event(RecipeMakingEvent.NavigateToMakingStep(recipeId))
                 }.onFailure {
+                    println(it.message)
                     _uiEvent.value = Event(RecipeMakingEvent.PostRecipeFailure)
                 }
         }
