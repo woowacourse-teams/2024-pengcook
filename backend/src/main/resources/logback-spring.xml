@@ -35,7 +35,13 @@
     </appender>
 
     <root level="INFO">
-        <springProfile name="!test">
+        <!--        <springProfile name="local">-->
+        <!--            <appender-ref ref="LOKI"/>-->
+        <!--        </springProfile>-->
+        <springProfile name="dev">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <springProfile name="prod">
             <appender-ref ref="LOKI"/>
         </springProfile>
         <appender-ref ref="CONSOLE"/>
