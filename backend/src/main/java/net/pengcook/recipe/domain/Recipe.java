@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AccessLevel;
@@ -36,6 +37,9 @@ public class Recipe {
     private LocalTime cookingTime;
 
     @Column(nullable = false)
+    private Duration cookingTimeDuration;
+
+    @Column(nullable = false)
     private String thumbnail;
 
     @Column(nullable = false)
@@ -56,12 +60,13 @@ public class Recipe {
     public Recipe(
             String title,
             User author,
-            LocalTime cookingTime,
+            Duration cookingTimeDuration,
             String thumbnail,
             int difficulty,
             String description
     ) {
-        this(0L, title, author, cookingTime, thumbnail, difficulty, 0, 0, description, LocalDateTime.now());
+        this(0L, title, author, LocalTime.MIN, cookingTimeDuration, thumbnail, difficulty, 0, 0, description,
+                LocalDateTime.now());
     }
 
     public void increaseLikeCount() {
