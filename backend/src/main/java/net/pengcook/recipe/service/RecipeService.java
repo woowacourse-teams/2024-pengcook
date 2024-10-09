@@ -1,6 +1,5 @@
 package net.pengcook.recipe.service;
 
-import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -153,7 +152,7 @@ public class RecipeService {
         Recipe recipe = new Recipe(
                 recipeRequest.title(),
                 author,
-                LocalTime.parse(recipeRequest.cookingTime()),
+                recipeRequest.parseCookingTime(),
                 thumbnailUrl,
                 recipeRequest.difficulty(),
                 recipeRequest.description()
