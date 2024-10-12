@@ -131,6 +131,11 @@
 
     <string name="comment_reported">유저 %s가 신고되었습니다.</string>
     <string name="comment_deleted">댓글이 삭제되었습니다.</string>
+    <string name="comment_menu_username">유저명 :</string>
+    <string name="comment_menu_comment_content">댓글 내용 :</string>
+    <string name="comment_menu_delete">삭제하기</string>
+    <string name="comment_menu_block">차단하기</string>
+    <string name="comment_menu_report">신고하기</string>
 
     <string name="report_title_bottom">신고 사유를 선택해주세요.</string>
     <string name="report_title_dialog">신고 사유를 선택해주세요.</string>
