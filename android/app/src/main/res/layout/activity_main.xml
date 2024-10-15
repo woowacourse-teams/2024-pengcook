@@ -28,7 +28,7 @@
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/bg_square"
+            android:background="?android:attr/windowBackground"
             app:itemActiveIndicatorStyle="@android:color/transparent"
             app:itemRippleColor="@null"
             app:itemIconSize="30dp"

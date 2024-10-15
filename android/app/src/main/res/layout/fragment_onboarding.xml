@@ -13,7 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFDF8"
         tools:context=".presentation.onboarding.OnboardingFragment">
 
         <ImageView
@@ -82,7 +81,7 @@
                 android:layout_marginTop="12dp"
                 android:gravity="center"
                 android:text="@string/onboarding_terms"
-                android:textColor="@color/gray_500"
+                android:textColor="@color/onboarding_contract_text"
                 android:textSize="14sp" />
 
         </LinearLayout>

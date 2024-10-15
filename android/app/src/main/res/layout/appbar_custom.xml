@@ -22,8 +22,7 @@
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp"
-            android:background="@color/white">
+            app:contentInsetStart="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

@@ -6,18 +6,16 @@
 
     <style name="BasicButton.RadiusButton">
         <item name="android:background">@drawable/bg_radius_button</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black_100</item>
     </style>
 
     <style name="BasicButton.RadiusButton.SignInButton" parent="BasicButton.RadiusButton">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black_100</item>
         <item name="android:fontFamily">@font/notosans_bold</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="BasicButton.RadiusButton.BottomButton" parent="BasicButton.RadiusButton">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black_100</item>
         <item name="android:fontFamily">@font/notosans_bold</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@drawable/bg_radius_outlined</item>
@@ -25,8 +23,6 @@
     </style>
 
     <style name="BasicButton.RadiusButton.ThinButton" parent="Widget.AppCompat.TextView">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black_100</item>
         <item name="android:fontFamily">@font/notosans_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/bg_radius_medium_outlined</item>

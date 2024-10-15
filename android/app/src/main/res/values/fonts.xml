@@ -2,7 +2,7 @@
 <resources>
     <style name="Headline">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black_100</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:fontFamily">@font/notosans_bold</item>
     </style>
     <style name="Headline.H1" parent="Headline">
@@ -23,7 +23,7 @@
 
     <style name="Body">
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/black_100</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:fontFamily">@font/notosans_regular</item>
     </style>
     <style name="Body.Regular" parent="Body">

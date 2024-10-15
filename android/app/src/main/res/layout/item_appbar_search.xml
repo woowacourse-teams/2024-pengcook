@@ -17,8 +17,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/ctb_search"
@@ -32,7 +31,7 @@
                 android:id="@+id/tb_search"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@color/white"
+                android:background="@color/screen_background"
                 app:layout_collapseMode="parallax" />
 
             <TextView

@@ -20,7 +20,6 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_action"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -29,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp"
+            android:background="@color/screen_background"
             app:layout_anchor="@+id/abl_default">
 
             <ImageView
@@ -38,6 +38,7 @@
                 android:onClick="@{() -> appbarEventListener.onNavigateBack()}"
                 android:padding="16dp"
                 android:src="@{icon}"
+                app:tint="@color/icon_color"
                 tools:src="@drawable/ic_back_24" />
 
             <TextView
