@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="stepImage"
+            type="net.pengcook.android.presentation.making.RecipeStepImage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <ImageView
+            android:id="@+id/iv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_radius_filled"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:imageUri="@{stepImage.uri}"
+            android:scaleType="centerCrop"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
