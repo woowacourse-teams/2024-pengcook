@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="vm"
-            type="net.pengcook.android.presentation.making.RecipeMakingViewModel" />
+            type="net.pengcook.android.presentation.making.RecipeMakingViewModel2" />
 
         <variable
             name="appbarEventListener"
@@ -31,7 +32,7 @@
             android:id="@+id/sv_recipe_making"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/nextButton"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/abl_recipe_making">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +45,7 @@
                     layout="@layout/item_add_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:imageUri="@{vm.currentImage}"
+                    app:imageUri="@{vm.thumbnailUri}"
                     app:recipeMakingEventListener="@{vm}"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -135,19 +136,55 @@
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
                     app:title="@{@string/making_form_introduction}" />
 
+                <TextView
+                    android:id="@+id/tv_form_step_images_title"
+                    style="@style/Body.Regular.B2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Steps`}"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIntroduction"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="12dp"
+                    tools:text="Title" />
+
+                <TextView
+                    android:id="@+id/tv_add_step_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv_form_step_images_title"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_form_step_images_title"
+                    style="@style/Body.Regular.B2"
+                    android:padding="12dp"
+                    android:onClick="@{() -> vm.onAddStepImages()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="Add Image" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_step_images"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_form_step_images_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    app:spanCount="4"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_step_image"
+                    tools:itemCount="8"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <include
-            android:id="@+id/nextButton"
-            layout="@layout/item_button_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:buttonClickListener="@{vm}"
-            app:enabled="@{true}"
-            app:buttonText="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true) ? @string/making_uploading_image : @string/making_step}"
-            app:layout_constraintBottom_toBottomOf="parent" />
+<!--        <include-->
+<!--            android:id="@+id/nextButton"-->
+<!--            layout="@layout/item_button_bottom"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="16dp"-->
+<!--            app:buttonClickListener="@{vm}"-->
+<!--            app:enabled="@{true}"-->
+<!--            app:buttonText="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true &amp;&amp; vm.stepImagesSelected == true) ? @string/making_uploading_image : @string/making_step}"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
