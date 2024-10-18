@@ -81,9 +81,11 @@
     <string name="photo_capture_failed">Failed to take a picture.</string>
     <string name="image_upload_success">Image upload successful!</string>
     <string name="image_upload_failed">Image upload failed!</string>
+    <string name="image_deletion_success">Step image has been deleted successfully.</string>
     <string name="select_image_source">Select image source</string>
     <string name="take_photo">Take a photo with a camera</string>
     <string name="choose_from_album">Select photos from album</string>
+    <string name="making_upload">Upload</string>
 
     <string name="profile_numeric_indicators">%,d followers ・ %,d recipes</string>
     <string name="profile_appbar_title">Profile</string>
@@ -136,6 +138,5 @@
     <string name="category_korean">Korean</string>
     <string name="category_japanese">Japanese</string>
     <string name="category_chinese">Chinese</string>
-
 
 </resources>

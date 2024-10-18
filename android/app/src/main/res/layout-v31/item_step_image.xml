@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="stepItemEventListener"
+            type="net.pengcook.android.presentation.making.StepItemEventListener" />
+
+        <variable
+            name="stepImage"
+            type="net.pengcook.android.presentation.making.RecipeStepImage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp">
+
+        <ImageView
+            android:id="@+id/iv_step_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_radius_filled"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:clipToOutline="true"
+            app:imageUri="@{stepImage.uri}"
+            android:alpha="@{!stepImage.loading &amp;&amp; stepImage.uploaded ? 1f : 0.5f}"
+            android:scaleType="centerCrop"/>
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_step_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_step_image"
+            app:layout_constraintStart_toStartOf="@id/iv_step_image"
+            app:layout_constraintEnd_toEndOf="@id/iv_step_image"
+            android:visibility="@{stepImage.isLoading ? View.VISIBLE : View.GONE}"/>
+
+        <ImageView
+            android:id="@+id/iv_upload_failure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_step_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_step_image"
+            app:layout_constraintStart_toStartOf="@id/iv_step_image"
+            app:layout_constraintEnd_toEndOf="@id/iv_step_image"
+            android:src="@drawable/ic_failure"
+            android:visibility="@{!stepImage.isLoading &amp;&amp; !stepImage.uploaded ? View.VISIBLE : View.GONE}"/>
+
+        <ImageView
+            android:id="@+id/iv_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="1dp"
+            android:background="@drawable/bg_radius_filled"
+            android:onClick="@{() -> stepItemEventListener.onImageChange(stepImage.itemId)}"
+            android:padding="6dp"
+            android:src="@drawable/ic_image_20"
+            app:layout_constraintEnd_toStartOf="@id/iv_remove"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_step_image" />
+
+        <ImageView
+            android:id="@+id/iv_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/bg_radius_filled"
+            android:onClick="@{() -> stepItemEventListener.onDelete(stepImage.itemId)}"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_edit"
+            app:layout_constraintTop_toBottomOf="@id/iv_step_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
