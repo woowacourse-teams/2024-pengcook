@@ -30,10 +30,10 @@
             layout="@layout/item_appbar_with_double_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:appbarEventListener="@{appbarEventListener}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:appbarEventListener="@{appbarEventListener}"
             app:leftIcon="@{@drawable/ic_close}"
             app:rightIcon="@{@drawable/ic_complete_making}"
             app:title="@{@string/making_step_title}" />
@@ -54,9 +54,9 @@
                     android:id="@+id/cl_btn_add_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> eventHandler.onAddImage()}"
                     android:padding="12dp"
-                    android:onClick="@{() -> eventHandler.onAddImage()}">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/makingRecipeThumbnail"
@@ -76,11 +76,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_add_photo"
-                        bind:visibility="@{vm.imageUri == null}"
                         app:layout_constraintBottom_toBottomOf="@+id/makingRecipeThumbnail"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail" />
+                        app:layout_constraintTop_toTopOf="@+id/makingRecipeThumbnail"
+                        bind:visibility="@{vm.imageUri == null}" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -92,10 +92,10 @@
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintTop_toBottomOf="@id/cl_btn_add_image"
-                    app:title="@{@string/making_form_time_required}"
                     app:minute="@={vm.minuteContent}"
                     app:second="@={vm.secondContent}"
-                    app:visibleCondition="@{vm.errorVisibility}"/>
+                    app:title="@{@string/making_form_time_required}"
+                    app:visibleCondition="@{vm.errorVisibility}" />
 
                 <include
                     android:id="@+id/et_guide_step_recipe"
@@ -105,12 +105,12 @@
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="16dp"
                     app:content="@={vm.introductionContent}"
+                    app:errorVisibility="@{vm.errorVisibility}"
                     app:hintContent="@{@string/step_making_hint}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/et_time_amount"
-                    app:title="@{String.valueOf(vm.stepNumber)}"
-                    app:errorVisibility="@{vm.errorVisibility}"/>
+                    app:title="@{String.valueOf(vm.stepNumber)}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -136,7 +136,7 @@
                 android:gravity="center"
                 android:onClick="@{() -> eventHandler.moveToPreviousPage()}"
                 android:text="@string/back_making_step"
-                android:textColor="@color/black_100"
+                android:textColor="@color/text_color"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_next_making_recipe"
@@ -154,20 +154,21 @@
                 android:layout_margin="24dp"
                 android:layout_marginHorizontal="16dp"
                 android:background="@drawable/selector_bottom_button"
+                android:enabled="@{true}"
                 android:fontFamily="@font/notosans_bold"
                 android:gravity="center"
                 android:onClick="@{() -> vm.moveToNextPage()}"
                 android:text="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true) ? @string/making_uploading_image : @string/making_next_step}"
-                android:textColor="@color/black_100"
+                android:textColor="@color/button_text_color"
                 android:textSize="16sp"
-                android:enabled="@{true}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@id/btn_back_step_making_recipe"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:visibility="@{vm.stepNumber != vm.maximumStep}" />
+                bind:visibility="@{vm.stepNumber != vm.maximumStep}"
+                tools:text="Next" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

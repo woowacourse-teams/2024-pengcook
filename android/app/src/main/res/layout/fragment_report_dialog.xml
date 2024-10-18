@@ -21,7 +21,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yellow_weak"
+        android:background="@color/screen_background"
         android:orientation="vertical"
         android:padding="16dp">
 
