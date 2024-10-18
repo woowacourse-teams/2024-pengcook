@@ -11,7 +11,7 @@
 
         <variable
             name="appbarEventListener"
-            type="net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener" />
+            type="net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,11 +20,12 @@
 
         <include
             android:id="@+id/abl_recipe_making"
-            layout="@layout/item_appbar_with_action"
+            layout="@layout/item_appbar_with_double_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:appbarEventListener="@{appbarEventListener}"
-            app:icon="@{@drawable/ic_back_24}"
+            app:leftIcon="@{@drawable/ic_back_24}"
+            app:rightIcon="@{@drawable/ic_complete_making}"
             app:layout_constraintTop_toTopOf="parent"
             app:title="@{@string/making_appbar_title}" />
 
@@ -45,12 +46,12 @@
                     layout="@layout/item_add_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:imageUri="@{vm.thumbnailUri}"
-                    app:recipeMakingEventListener="@{vm}"
                     android:scaleType="centerCrop"
+                    app:imageUri="@{vm.thumbnailUri}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:recipeMakingEventListener="@{vm}" />
 
                 <include
                     android:id="@+id/makingRecipeEditTitle"
@@ -58,56 +59,56 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     app:content="@={vm.titleContent}"
                     app:hintContent="@{@string/making_write_recipe_title}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_add_image"
-                    app:title="@{@string/making_form_recipe_title}" />
+                    app:title="@{@string/making_form_recipe_title}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <include
                     android:id="@+id/makingRecipeCategory"
                     layout="@layout/item_form_text_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     android:layout_marginVertical="16dp"
                     app:content="@={vm.categoryContent}"
                     app:hintContent="@{@string/making_write_category}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeEditTitle"
-                    app:title="@{@string/making_form_category}" />
+                    app:title="@{@string/making_form_category}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <include
                     android:id="@+id/makingRecipeIngredient"
                     layout="@layout/item_form_text_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     android:layout_marginVertical="16dp"
                     app:content="@={vm.ingredientContent}"
                     app:hintContent="@{@string/making_write_ingredient}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeCategory"
-                    app:title="@{@string/making_form_ingredient}" />
+                    app:title="@{@string/making_form_ingredient}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <include
                     android:id="@+id/item_time_required"
                     layout="@layout/item_time_amount_picker_with_warning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:title="@{@string/making_form_time_required}"
-                    app:hour="@={vm.hourContent}"
-                    app:minute="@={vm.minuteContent}"
-                    app:second="@={vm.secondContent}"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     android:layout_marginVertical="16dp"
+                    app:hour="@={vm.hourContent}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"/>
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIngredient"
+                    app:minute="@={vm.minuteContent}"
+                    app:second="@={vm.secondContent}"
+                    app:title="@{@string/making_form_time_required}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <include
                     android:id="@+id/makingRecipeDifficulty"
@@ -117,10 +118,10 @@
                     android:layout_marginVertical="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     app:layout_constraintTop_toBottomOf="@id/item_time_required"
                     app:selectedRating="@={vm.difficultySelectedValue}"
-                    app:title="@{@string/making_form_difficulty}" />
+                    app:title="@{@string/making_form_difficulty}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <include
                     android:id="@+id/makingRecipeIntroduction"
@@ -131,60 +132,61 @@
                     app:content="@={vm.introductionContent}"
                     app:hintContent="@{@string/step_making_hint}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:visibleCondition="@{vm.isMakingStepButtonClicked}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/makingRecipeDifficulty"
-                    app:title="@{@string/making_form_introduction}" />
+                    app:title="@{@string/making_form_introduction}"
+                    app:visibleCondition="@{vm.isMakingStepButtonClicked}" />
 
                 <TextView
                     android:id="@+id/tv_form_step_images_title"
                     style="@style/Body.Regular.B2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{`Steps`}"
-                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIntroduction"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="12dp"
+                    android:text="@{`Steps`}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/makingRecipeIntroduction"
                     tools:text="Title" />
 
                 <TextView
                     android:id="@+id/tv_add_step_image"
+                    style="@style/Body.Regular.B2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@id/tv_form_step_images_title"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_form_step_images_title"
-                    style="@style/Body.Regular.B2"
-                    android:padding="12dp"
                     android:onClick="@{() -> vm.onAddStepImages()}"
+                    android:padding="12dp"
+                    android:text="Add Image"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_form_step_images_title"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="Add Image" />
+                    app:layout_constraintTop_toTopOf="@id/tv_form_step_images_title" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_step_images"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_form_step_images_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="12dp"
-                    app:spanCount="4"
+                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:listitem="@layout/item_step_image"
-                    tools:itemCount="8"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_form_step_images_title"
+                    app:spanCount="4"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_step_image" />
+
+                <include
+                    android:id="@+id/nextButton"
+                    layout="@layout/item_button_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:buttonClickListener="@{vm}"
+                    app:buttonText="@{@string/making_upload}"
+                    app:enabled="@{true}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_step_images" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-<!--        <include-->
-<!--            android:id="@+id/nextButton"-->
-<!--            layout="@layout/item_button_bottom"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="16dp"-->
-<!--            app:buttonClickListener="@{vm}"-->
-<!--            app:enabled="@{true}"-->
-<!--            app:buttonText="@{(vm.imageUploaded == false &amp;&amp; vm.imageSelected == true &amp;&amp; vm.stepImagesSelected == true) ? @string/making_uploading_image : @string/making_step}"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent" />-->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -19,6 +19,14 @@ class DefaultRecipeStepMakingRepository
         private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
     ) : NetworkResponseHandler(),
         RecipeStepMakingRepository {
+        override suspend fun fetchRecipeStepsByRecipeId(recipeId: Long): Result<List<RecipeStepMaking>?> {
+            return runCatching {
+                recipeStepMakingLocalDataSource.fetchRecipeStepsByRecipeId(recipeId)?.map {
+                    it.toRecipeStepMaking()
+                }
+            }
+        }
+
         override suspend fun fetchRecipeStep(
             recipeId: Long,
             sequence: Int,
