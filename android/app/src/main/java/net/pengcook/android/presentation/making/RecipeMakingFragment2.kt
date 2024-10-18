@@ -36,11 +36,13 @@ class RecipeMakingFragment2 : Fragment() {
         get() = _binding!!
 
     private val viewModel: RecipeMakingViewModel2 by viewModels()
-    private val stepImageAdapter by lazy { StepImageAdapter() }
+    private val stepImageAdapter by lazy { StepImageAdapter(viewModel) }
     private val itemTouchHelper by lazy { ItemTouchHelper(ItemMoveCallback(stepImageAdapter)) }
 
     private var takenPhotoUri: Uri? = null
     private var takenPhotoPath: String? = null
+
+    private var targetStepItemId: Int? = null
 
     private val imageUtils: ImageUtils by lazy {
         ImageUtils(requireContext())
@@ -85,6 +87,25 @@ class RecipeMakingFragment2 : Fragment() {
                 try {
                     val compressedFile = imageUtils.compressAndResizeImage(uri)
                     viewModel.changeCurrentThumbnailImage(uri, compressedFile)
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        showSnackBar(getString(R.string.image_selection_failed))
+                    }
+                }
+            }
+        }
+
+    private val stepSingleImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri == null) {
+                showSnackBar(getString(R.string.image_selection_failed))
+                return@registerForActivityResult
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    val compressedFile = imageUtils.compressAndResizeImage(uri)
+                    viewModel.changeCurrentStepImage(targetStepItemId!!, uri, compressedFile)
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) {
                         showSnackBar(getString(R.string.image_selection_failed))
@@ -172,7 +193,9 @@ class RecipeMakingFragment2 : Fragment() {
             when (newEvent) {
                 is RecipeMakingEvent2.AddThumbnailImage -> addThumbnailImage()
                 is RecipeMakingEvent2.AddStepImages -> addStepImages()
-                is RecipeMakingEvent2.MakingCancellation -> findNavController().navigateUp()
+                is RecipeMakingEvent2.MakingCancellation -> {
+                    findNavController().navigateUp()
+                }
                 is RecipeMakingEvent2.NullPhotoPath -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
@@ -180,6 +203,14 @@ class RecipeMakingFragment2 : Fragment() {
                 is RecipeMakingEvent2.RecipeSavingSuccessful -> {}
                 is RecipeMakingEvent2.StepImageSelectionFailure -> showSnackBar(getString(R.string.image_upload_success))
                 is RecipeMakingEvent2.UnexpectedError -> showSnackBar(getString(R.string.image_upload_success))
+                is RecipeMakingEvent2.ChangeImage -> {
+                    targetStepItemId = newEvent.id
+                    stepSingleImageLauncher.launch("image/*")
+                }
+                is RecipeMakingEvent2.ImageDeletionSuccessful -> showSnackBar(getString(R.string.image_deletion_success))
+                is RecipeMakingEvent2.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
+                is RecipeMakingEvent2.RecipePostFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
+                is RecipeMakingEvent2.RecipePostSuccessful -> findNavController().navigateUp()
             }
         }
     }
