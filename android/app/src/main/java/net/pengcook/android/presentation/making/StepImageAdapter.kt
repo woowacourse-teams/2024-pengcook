@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemStepImageBinding
 
-class StepImageAdapter :
+class StepImageAdapter(
+    private val stepItemEventListener: StepItemEventListener,
+) :
     ListAdapter<RecipeStepImage, StepImageAdapter.ImageViewHolder>(diffUtil),
-    ItemMoveListener {
+        ItemMoveListener {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -18,7 +20,7 @@ class StepImageAdapter :
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemStepImageBinding =
             ItemStepImageBinding.inflate(layoutInflater, parent, false)
-        return ImageViewHolder(binding = binding)
+        return ImageViewHolder(binding = binding, stepItemEventListener = stepItemEventListener)
     }
 
     override fun onBindViewHolder(
@@ -35,13 +37,19 @@ class StepImageAdapter :
         val newList = currentList.toMutableList()
         val item = newList.removeAt(from)
         newList.add(to, item)
-        submitList(newList)
+//        submitList(newList)
+        stepItemEventListener.onOrderChange(newList)
     }
 
     class ImageViewHolder(
         private val binding: ItemStepImageBinding,
+        stepItemEventListener: StepItemEventListener,
     ) :
         RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.stepItemEventListener = stepItemEventListener
+        }
+
         fun bind(image: RecipeStepImage) {
             binding.stepImage = image
         }
@@ -83,7 +91,7 @@ class ItemMoveCallback(private val listener: ItemMoveListener) : ItemTouchHelper
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder,
     ): Boolean {
-        listener.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        listener.onItemMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
         return true
     }
 

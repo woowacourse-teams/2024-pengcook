@@ -24,36 +24,36 @@
             android:id="@+id/iv_step_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:alpha="@{!stepImage.loading &amp;&amp; stepImage.uploaded ? 1f : 0.5f}"
             android:background="@drawable/bg_radius_filled"
-            android:clipToOutline="true"
-            android:scaleType="centerCrop"
-            app:imageUri="@{stepImage.uri}"
             app:layout_constraintDimensionRatio="H,1:1"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:clipToOutline="true"
+            app:imageUri="@{stepImage.uri}"
+            android:alpha="@{!stepImage.loading &amp;&amp; stepImage.uploaded ? 1f : 0.5f}"
+            android:scaleType="centerCrop"/>
 
         <ProgressBar
             android:id="@+id/progress_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{stepImage.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_step_image"
-            app:layout_constraintEnd_toEndOf="@+id/iv_step_image"
-            app:layout_constraintStart_toStartOf="@+id/iv_step_image"
-            app:layout_constraintTop_toTopOf="@+id/iv_step_image" />
+            app:layout_constraintTop_toTopOf="@id/iv_step_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_step_image"
+            app:layout_constraintStart_toStartOf="@id/iv_step_image"
+            app:layout_constraintEnd_toEndOf="@id/iv_step_image"
+            android:visibility="@{stepImage.isLoading ? View.VISIBLE : View.GONE}"/>
 
         <ImageView
             android:id="@+id/iv_upload_failure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/iv_step_image"
+            app:layout_constraintBottom_toBottomOf="@id/iv_step_image"
+            app:layout_constraintStart_toStartOf="@id/iv_step_image"
+            app:layout_constraintEnd_toEndOf="@id/iv_step_image"
             android:src="@drawable/ic_failure"
-            android:visibility="@{!stepImage.loading &amp;&amp; !stepImage.uploaded ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_step_image"
-            app:layout_constraintEnd_toEndOf="@+id/iv_step_image"
-            app:layout_constraintStart_toStartOf="@+id/iv_step_image"
-            app:layout_constraintTop_toTopOf="@+id/iv_step_image" />
+            android:visibility="@{!stepImage.isLoading &amp;&amp; !stepImage.uploaded ? View.VISIBLE : View.GONE}"/>
 
         <ImageView
             android:id="@+id/iv_edit"
@@ -82,7 +82,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_edit"
             app:layout_constraintTop_toBottomOf="@id/iv_step_image" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

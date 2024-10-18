@@ -25,6 +25,10 @@ sealed interface RecipeMakingEvent {
 }
 
 sealed interface RecipeMakingEvent2 {
+    data class ChangeImage(val id: Int) : RecipeMakingEvent2
+
+    data class ImageDeletionSuccessful(val id: Int) : RecipeMakingEvent2
+
     data object UnexpectedError : RecipeMakingEvent2
 
 //    data class ThumbnailPresignedUrlSuccessful(val presignedUrl: String) : RecipeMakingEvent2
@@ -46,4 +50,10 @@ sealed interface RecipeMakingEvent2 {
     data object AddStepImages : RecipeMakingEvent2
 
     data object StepImageSelectionFailure : RecipeMakingEvent2
+
+    data object DescriptionFormNotCompleted : RecipeMakingEvent2
+
+    data object RecipePostFailure : RecipeMakingEvent2
+
+    data object RecipePostSuccessful : RecipeMakingEvent2
 }

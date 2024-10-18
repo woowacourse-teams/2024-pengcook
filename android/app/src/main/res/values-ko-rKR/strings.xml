@@ -86,9 +86,11 @@
     <string name="photo_capture_failed">사진 촬영에 실패하였습니다.</string>
     <string name="image_upload_success">이미지가 성공적으로 업로드 되었습니다.</string>
     <string name="image_upload_failed">이미지 업로드가 실패하였습니다.</string>
+    <string name="image_deletion_success">스텝 이미지가 삭제되었습니다.</string>
     <string name="select_image_source">이미지 소스를 선택해주세요.</string>
     <string name="take_photo">카메라로 가져오기</string>
     <string name="choose_from_album">앨범에서 가져오기</string>
+    <string name="making_upload">완료</string>
 
     <string name="profile_numeric_indicators">%,d followers ・ %,d recipes</string>
     <string name="profile_appbar_title">프로필</string>
