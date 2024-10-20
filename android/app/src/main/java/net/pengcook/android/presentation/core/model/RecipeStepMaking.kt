@@ -8,6 +8,7 @@ data class RecipeStepMaking(
     val sequence: Int,
     val imageUri: String,
     val cookingTime: String,
+    val imageUploaded: Boolean,
 ) {
     init {
         require(cookingTime.matches(Regex("\\d{2}:\\d{2}:\\d{2}"))) {

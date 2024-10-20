@@ -74,6 +74,7 @@ fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
         imageUri = imageUri ?: "",
         stepId = id,
         cookingTime = cookingTime ?: "00:00:00",
+        imageUploaded = imageUploaded,
     )
 
 fun IngredientEntity.toIngredient(): Ingredient =

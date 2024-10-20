@@ -3,7 +3,7 @@ package net.pengcook.android.data.repository.making.step
 import net.pengcook.android.presentation.core.model.RecipeStepMaking
 
 interface RecipeStepMakingRepository {
-    suspend fun fetchRecipeStepsByRecipeId(recipeId: Long): Result<List<RecipeStepMaking>?>
+    suspend fun fetchRecipeStepsByRecipeId(): Result<List<RecipeStepMaking>?>
 
     suspend fun fetchRecipeStep(
         recipeId: Long,
@@ -16,4 +16,18 @@ interface RecipeStepMakingRepository {
     ): Result<Unit>
 
     fun deleteRecipeSteps(recipeId: Long)
+
+    suspend fun deleteRecipeStepsNonAsync(recipeId: Long)
+
+    suspend fun updateRecipeStepImage(
+        id: Long,
+        imageUri: String?,
+        imageTitle: String?,
+        imageUploaded: Boolean,
+    )
+
+    suspend fun deleteRecipeStepByStepNumber(
+        recipeId: Long,
+        stepNumber: Int,
+    )
 }

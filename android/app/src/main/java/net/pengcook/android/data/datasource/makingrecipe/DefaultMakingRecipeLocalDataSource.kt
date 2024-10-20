@@ -31,6 +31,7 @@ class DefaultMakingRecipeLocalDataSource
             return database.withTransaction {
                 recipeDescriptionDao.insertCreatedRecipeDescription(recipeDescription)
                 ingredientDao.saveIngredients(ingredients)
+                categoryDao.deleteAllCategories()
                 categoryDao.saveSingleCategory(category)
                 recipeDescription.id
             }
