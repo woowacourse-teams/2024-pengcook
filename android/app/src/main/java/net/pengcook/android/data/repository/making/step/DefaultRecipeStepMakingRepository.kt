@@ -19,9 +19,9 @@ class DefaultRecipeStepMakingRepository
         private val recipeStepMakingCacheDataSource: RecipeStepMakingCacheDataSource,
     ) : NetworkResponseHandler(),
         RecipeStepMakingRepository {
-        override suspend fun fetchRecipeStepsByRecipeId(recipeId: Long): Result<List<RecipeStepMaking>?> {
+        override suspend fun fetchRecipeStepsByRecipeId(): Result<List<RecipeStepMaking>?> {
             return runCatching {
-                recipeStepMakingLocalDataSource.fetchRecipeStepsByRecipeId(recipeId)?.map {
+                recipeStepMakingLocalDataSource.fetchRecipeStepsByRecipeId()?.map {
                     it.toRecipeStepMaking()
                 }
             }
@@ -60,6 +60,31 @@ class DefaultRecipeStepMakingRepository
             }
         }
 
+        override suspend fun deleteRecipeStepsNonAsync(recipeId: Long) {
+            recipeStepMakingLocalDataSource.deleteRecipeStepsByRecipeId(recipeId)
+        }
+
+        override suspend fun updateRecipeStepImage(
+            id: Long,
+            imageUri: String?,
+            imageTitle: String?,
+            imageUploaded: Boolean,
+        ) {
+            recipeStepMakingLocalDataSource.updateRecipeStepImage(
+                id,
+                imageUri,
+                imageTitle,
+                imageUploaded,
+            )
+        }
+
+        override suspend fun deleteRecipeStepByStepNumber(
+            recipeId: Long,
+            stepNumber: Int,
+        ) {
+            recipeStepMakingLocalDataSource.deleteRecipeStepByStepNumber(recipeId, stepNumber)
+        }
+
         private fun RecipeStepMaking.toRecipeStepEntity(): RecipeStepEntity =
             RecipeStepEntity(
                 recipeDescriptionId = recipeId,
@@ -68,6 +93,7 @@ class DefaultRecipeStepMakingRepository
                 description = description.ifEmpty { null },
                 imageUri = imageUri.ifEmpty { null },
                 imageTitle = image.ifEmpty { null },
+                imageUploaded = imageUploaded,
             )
 
         private fun RecipeStepEntity.toRecipeStepMaking(): RecipeStepMaking =
@@ -79,5 +105,6 @@ class DefaultRecipeStepMakingRepository
                 imageUri = imageUri ?: "",
                 image = imageTitle ?: "",
                 cookingTime = cookingTime ?: "00:00:00",
+                imageUploaded = imageUploaded,
             )
     }

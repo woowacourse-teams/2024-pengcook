@@ -199,8 +199,8 @@ class RecipeMakingFragment2 : Fragment() {
                 is RecipeMakingEvent2.NullPhotoPath -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
-                is RecipeMakingEvent2.RecipeSavingFailure -> {}
-                is RecipeMakingEvent2.RecipeSavingSuccessful -> {}
+                is RecipeMakingEvent2.RecipeSavingFailure -> showSnackBar(getString(R.string.making_saving_failure))
+                is RecipeMakingEvent2.RecipeSavingSuccessful -> showSnackBar(getString(R.string.making_saving_successful))
                 is RecipeMakingEvent2.StepImageSelectionFailure -> showSnackBar(getString(R.string.image_upload_success))
                 is RecipeMakingEvent2.UnexpectedError -> showSnackBar(getString(R.string.image_upload_success))
                 is RecipeMakingEvent2.ChangeImage -> {

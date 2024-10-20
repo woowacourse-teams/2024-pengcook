@@ -9,6 +9,10 @@ data class RecipeStepImage(
     val file: File?,
     val uri: Uri,
     val uploaded: Boolean = false,
+    val description: String = "",
+    val cookingTime: String = "00:00:00",
+    val sequence: Int,
+    val imageTitle: String,
 ) {
     companion object {
         private var id: Int = 0
@@ -16,11 +20,15 @@ data class RecipeStepImage(
         fun of(
             uri: Uri,
             file: File? = null,
+            sequence: Int,
+            title: String,
         ): RecipeStepImage {
             return RecipeStepImage(
                 itemId = id++,
                 file = file,
                 uri = uri,
+                sequence = sequence,
+                imageTitle = title,
             )
         }
     }
