@@ -311,7 +311,8 @@ class StepMakingViewModel
                             minute?.toIntOrNull() ?: DEFAULT_TIME_VALUE,
                             second?.toIntOrNull() ?: DEFAULT_TIME_VALUE,
                         ),
-                    imageUploaded = true, // TODO 이미지 변경 시 달라질 수 음있음
+                    // TODO 이미지 변경 시 달라질 수 있음
+                    imageUploaded = true,
                 )
 
             recipeStepMakingRepository.saveRecipeStep(recipeId = recipeId, recipeStep = recipeStep)
