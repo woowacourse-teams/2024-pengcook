@@ -1,15 +1,11 @@
 package net.pengcook.android.presentation.making
 
-class RecipeMakingViewModel
-/*
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.makingrecipe.MakingRecipeRepository
 import net.pengcook.android.domain.model.recipemaking.RecipeDescription
@@ -21,7 +17,7 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
-//class RecipeMakingViewModel
+class RecipeMakingViewModel
     @Inject
     constructor(
         private val makingRecipeRepository: MakingRecipeRepository,
@@ -44,8 +40,6 @@ import kotlin.coroutines.cancellation.CancellationException
         private val _currentImage: MutableLiveData<Uri> = MutableLiveData()
         val currentImage: LiveData<Uri>
             get() = _currentImage
-
-        val currentStepImages: LiveData<MutableList<RecipeStepImage>> = MutableLiveData(mutableListOf())
 
         private val _imageUploaded: MutableLiveData<Boolean> = MutableLiveData(false)
         val imageUploaded: LiveData<Boolean>
@@ -72,29 +66,7 @@ import kotlin.coroutines.cancellation.CancellationException
                 _imageSelected.value = true
                 try {
                     val uri = makingRecipeRepository.fetchImageUri(keyName)
-//                    _uiEvent.value = Event(RecipeMakingEvent.PresignedUrlRequestSuccessful(uri))
-                } catch (e: Exception) {
-                    if (e is CancellationException) throw e
-                    _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
-                }
-            }
-        }
-
-        private val _stepImagesSelected: MutableLiveData<Boolean> = MutableLiveData(false)
-        val stepImagesSelected: LiveData<Boolean>
-            get() = _stepImagesSelected
-
-        fun fetchMultipleImageUris(keyNames: List<String>) {
-            _stepImagesSelected.value = true
-            viewModelScope.launch {
-                try {
-                    val presignedUrls =
-                        keyNames.map { key ->
-                            async { makingRecipeRepository.fetchImageUri(key) }
-                        }
-                    val urls = presignedUrls.awaitAll()
-                    _uiEvent.value =
-                        Event(RecipeMakingEvent.StepImagesPresignedUrlRequestSuccessful(urls))
+                    _uiEvent.value = Event(RecipeMakingEvent.PresignedUrlRequestSuccessful(uri))
                 } catch (e: Exception) {
                     if (e is CancellationException) throw e
                     _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
@@ -119,64 +91,6 @@ import kotlin.coroutines.cancellation.CancellationException
             }
         }
 
-        fun uploadMultipleImagesToS3(
-            presignedUrls: List<String>,
-            files: List<File>,
-        ) {
-            require(presignedUrls.size == files.size && files.size == currentStepImages.value?.size) { EXCEPTION_URL_FILE_SIZE_UNMATCHED }
-            for (i in 0 until presignedUrls.size) {
-                viewModelScope.launch {
-                    try {
-                        val presignedUrl = presignedUrls[i]
-                        val file = files[i]
-                        makingRecipeRepository.uploadImageToS3(presignedUrl, file)
-                        currentStepImages.value =
-                            currentStepImages.value?.get(i)?.copy(fileName = file.name, uploaded = true)
-                    } catch (e: Exception) {
-                        if (e is CancellationException) throw e
-//                        _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
-// //                    }
-                    }
-                    _uiEvent.value = Event(RecipeMakingEvent.PostStepImageCompleted)
-                }
-            }
-//            presignedUrls.zip(files) { url, file ->
-//                viewModelScope.launch {
-//                    try {
-//                        makingRecipeRepository.uploadImageToS3(url, file)
-//                        currentStepImages[index] =
-//                        currentStepImages.map {
-//                            it.copy(
-//                                fileName = file.name,
-//                                uploaded = true,
-//                            )
-//                        }
-
-//                        _uiEvent.value = Event(RecipeMakingEvent.PostImageSuccessful)
-//                    } catch (e: Exception) {
-//                        if (e is CancellationException) throw e
-//
-            _uiEvent.value = Event(RecipeMakingEvent.PostImageFailure)
-//                    }
-//                }
-//            }
-//            _uiEvent.value = Event(RecipeMakingEvent.PostStepImageCompleted)
-        }
-
-        fun addCurrentStepImages(uris: List<Uri>) {
-            val current =
-                currentStepImages.value =
-                    currentStepImages.value?.addAll(
-                        uris.map { uri ->
-                            RecipeStepImage.of(uri)
-                        },
-                    )
-        }
-
-        fun removeCurrentStepImages(uri: Uri) {
-            currentStepImages.removeIf { it.uri == uri }
-        }
-
         fun changeCurrentImage(uri: Uri) {
             _currentImage.value = uri
         }
@@ -186,7 +100,6 @@ import kotlin.coroutines.cancellation.CancellationException
         }
 
         override fun onAddStepImages() {
-            _uiEvent.value = Event(RecipeMakingEvent.AddStepImages)
         }
 
         override fun onConfirm() {
@@ -302,31 +215,5 @@ import kotlin.coroutines.cancellation.CancellationException
             private const val SEPARATOR_INGREDIENTS = ","
             private const val SEPARATOR_TIME = ":"
             private const val FORMAT_TIME_REQUIRED = "%02d:%02d:%02d"
-            private const val EXCEPTION_URL_FILE_SIZE_UNMATCHED =
-                "The sizes of files and urls should be the same."
         }
     }
-
-data class RecipeStepImage(
-    val itemId: Int,
-    val isLoading: Boolean = true,
-    val file: File?,
-    val uri: Uri,
-    val uploaded: Boolean = false,
-) {
-    companion object {
-        private var id: Int = 0
-
-        fun of(
-            uri: Uri,
-            file: File? = null,
-        ): RecipeStepImage {
-            return RecipeStepImage(
-                itemId = id++,
-                file = file,
-                uri = uri,
-            )
-        }
-    }
-}
-*/
