@@ -10,4 +10,5 @@ object RecipeStepContract {
     const val COLUMN_STEP_NUMBER = "step_number"
     const val COLUMN_COOKING_TIME = "cooking_time"
     const val COLUMN_DESCRIPTION = "description"
+    const val COLUMN_IMAGE_UPLOADED = "image_uploaded"
 }

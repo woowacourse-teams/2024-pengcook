@@ -40,7 +40,8 @@ class DefaultMakingRecipeRepository
 
         override suspend fun fetchTotalRecipeData(): Result<RecipeCreation?> =
             runCatching {
-                val recipeCreation = makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
+                val recipeCreation =
+                    makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
                 println(recipeCreation)
                 recipeCreation
             }
@@ -54,8 +55,11 @@ class DefaultMakingRecipeRepository
             runCatching {
                 val id = recipeDescription.recipeDescriptionId
                 val recipeDescriptionEntity = recipeDescription.toRecipeDescriptionEntity(id)
-//                val categoryEntities = recipeDescription.categories.toCategoryEntities(id)
-                val categoryEntity = CategoryEntity(recipeId = id, categoryName = recipeDescription.categories.joinToString())
+                val categoryEntity =
+                    CategoryEntity(
+                        recipeId = id,
+                        categoryName = recipeDescription.categories.joinToString(",") { it.trim() },
+                    )
                 val ingredientEntities = recipeDescription.ingredients.toIngredientEntities(id)
                 makingRecipeLocalDataSource.saveRecipeDescription(
                     recipeDescription = recipeDescriptionEntity,

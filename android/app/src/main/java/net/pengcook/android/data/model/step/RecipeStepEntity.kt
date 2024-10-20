@@ -37,4 +37,5 @@ data class RecipeStepEntity(
     @ColumnInfo(RecipeStepContract.COLUMN_COOKING_TIME) val cookingTime: String?,
     @ColumnInfo(RecipeStepContract.COLUMN_STEP_NUMBER) val stepNumber: Int,
     @ColumnInfo(RecipeStepContract.COLUMN_DESCRIPTION) val description: String?,
+    @ColumnInfo(RecipeStepContract.COLUMN_IMAGE_UPLOADED) val imageUploaded: Boolean,
 )
