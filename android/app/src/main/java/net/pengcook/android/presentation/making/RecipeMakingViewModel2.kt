@@ -331,9 +331,9 @@ class RecipeMakingViewModel2
                 difficultySelectedValue.value = difficulty.toFloat() / 2
                 introductionContent.value = description
                 val timeParts = cookingTime.split(SEPARATOR_TIME)
-                hourContent.value = timeParts.getOrNull(0)
-                minuteContent.value = timeParts.getOrNull(1)
-                secondContent.value = timeParts.getOrNull(2)
+                hourContent.value = timeParts[0]
+                minuteContent.value = timeParts[1]
+                secondContent.value = timeParts[2]
                 thumbnailTitle = thumbnail
                 categoryContent.value = categories.joinToString()
                 _thumbnailUri.value = Uri.parse(imageUri)
