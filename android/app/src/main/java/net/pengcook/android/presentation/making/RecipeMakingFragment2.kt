@@ -21,7 +21,6 @@ import kotlinx.coroutines.withContext
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentRecipeMakingBinding
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
-import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import net.pengcook.android.presentation.core.util.MinMaxInputFilter
 import java.io.File
@@ -97,12 +96,11 @@ class RecipeMakingFragment2 : Fragment() {
 
     private val stepSingleImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            if (uri == null) {
-                showSnackBar(getString(R.string.image_selection_failed))
-                return@registerForActivityResult
-            }
-
             viewLifecycleOwner.lifecycleScope.launch {
+                if (uri == null) {
+                    showSnackBar(getString(R.string.image_selection_failed))
+                    return@launch
+                }
                 try {
                     val compressedFile = imageUtils.compressAndResizeImage(uri)
                     viewModel.changeCurrentStepImage(
@@ -122,21 +120,13 @@ class RecipeMakingFragment2 : Fragment() {
         registerForActivityResult(
             contract = ActivityResultContracts.GetMultipleContents(),
         ) { uris ->
-            val filePaths =
-                uris.map { uri ->
-                    FileUtils.getPathFromUri(requireContext(), uri)
-                }
-
-            val files =
-                filePaths.map {
-                    if (it == null) {
-                        showSnackBar(getString(R.string.image_selection_failed))
-                        return@registerForActivityResult
+            viewLifecycleOwner.lifecycleScope.launch {
+                val compressedFiles =
+                    uris.map { uri ->
+                        imageUtils.compressAndResizeImage(uri)
                     }
-                    File(it)
-                }
-
-            viewModel.addStepImages(uris, files)
+                viewModel.addStepImages(uris, compressedFiles)
+            }
         }
 
     private val requestMultipleImagesRequestPermissionLauncher =
