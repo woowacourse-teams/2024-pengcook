@@ -69,8 +69,10 @@ class RecipeMakingFragment2 : Fragment() {
         registerForActivityResult(
             ActivityResultContracts.TakePicture(),
         ) { success ->
+            val takenPhotoUri = takenPhotoUri
+            val takenPhotoPath = takenPhotoPath
             if (success && takenPhotoPath != null && takenPhotoUri != null) {
-                viewModel.changeCurrentThumbnailImage(takenPhotoUri!!, File(takenPhotoPath!!))
+                viewModel.changeCurrentThumbnailImage(takenPhotoUri, File(takenPhotoPath))
             } else {
                 showSnackBar(getString(R.string.photo_capture_failed))
             }
@@ -105,7 +107,11 @@ class RecipeMakingFragment2 : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
                     val compressedFile = imageUtils.compressAndResizeImage(uri)
-                    viewModel.changeCurrentStepImage(targetStepItemId!!, uri, compressedFile)
+                    viewModel.changeCurrentStepImage(
+                        targetStepItemId ?: return@launch,
+                        uri,
+                        compressedFile,
+                    )
                 } catch (e: IOException) {
                     withContext(Dispatchers.Main) {
                         showSnackBar(getString(R.string.image_selection_failed))
@@ -125,7 +131,15 @@ class RecipeMakingFragment2 : Fragment() {
                             FileUtils.getPathFromUri(requireContext(), uri)
                         }
                     }.awaitAll()
-                val files = filePaths.map { File(it!!) }
+
+                val files =
+                    filePaths.map {
+                        if (it == null) {
+                            showSnackBar(getString(R.string.image_selection_failed))
+                            return@launch
+                        }
+                        File(it)
+                    }
 
                 viewModel.addStepImages(uris, files)
             }
@@ -207,6 +221,7 @@ class RecipeMakingFragment2 : Fragment() {
                 is RecipeMakingEvent2.MakingCancellation -> {
                     findNavController().navigateUp()
                 }
+
                 is RecipeMakingEvent2.NullPhotoPath -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageFailure -> showSnackBar(getString(R.string.image_upload_failed))
                 is RecipeMakingEvent2.PostImageSuccessful -> showSnackBar(getString(R.string.image_upload_success))
@@ -218,6 +233,7 @@ class RecipeMakingFragment2 : Fragment() {
                     targetStepItemId = newEvent.id
                     stepSingleImageLauncher.launch("image/*")
                 }
+
                 is RecipeMakingEvent2.ImageDeletionSuccessful -> showSnackBar(getString(R.string.image_deletion_success))
                 is RecipeMakingEvent2.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
                 is RecipeMakingEvent2.RecipePostFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
