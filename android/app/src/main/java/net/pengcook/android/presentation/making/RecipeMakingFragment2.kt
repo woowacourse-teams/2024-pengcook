@@ -131,6 +131,17 @@ class RecipeMakingFragment2 : Fragment() {
             }
         }
 
+    private val requestMultipleImagesRequestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                requestMultiplePhotoPermissionLauncher.launch("image/*")
+            } else {
+                showSnackBar(getString(R.string.camera_permission_needed))
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -219,15 +230,7 @@ class RecipeMakingFragment2 : Fragment() {
         if (imageUtils.isPermissionGranted(permissionArray)) {
             requestMultiplePhotoPermissionLauncher.launch("image/*")
         } else {
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission(),
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    requestMultiplePhotoPermissionLauncher.launch("image/*")
-                } else {
-                    showSnackBar(getString(R.string.camera_permission_needed))
-                }
-            }.launch(Manifest.permission.CAMERA)
+            requestMultipleImagesRequestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
 
