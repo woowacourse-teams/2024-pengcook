@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.R
@@ -124,25 +122,21 @@ class RecipeMakingFragment2 : Fragment() {
         registerForActivityResult(
             contract = ActivityResultContracts.GetMultipleContents(),
         ) { uris ->
-            viewLifecycleOwner.lifecycleScope.launch {
-                val filePaths =
-                    uris.map { uri ->
-                        async {
-                            FileUtils.getPathFromUri(requireContext(), uri)
-                        }
-                    }.awaitAll()
+            val filePaths =
+                uris.map { uri ->
+                    FileUtils.getPathFromUri(requireContext(), uri)
+                }
 
-                val files =
-                    filePaths.map {
-                        if (it == null) {
-                            showSnackBar(getString(R.string.image_selection_failed))
-                            return@launch
-                        }
-                        File(it)
+            val files =
+                filePaths.map {
+                    if (it == null) {
+                        showSnackBar(getString(R.string.image_selection_failed))
+                        return@registerForActivityResult
                     }
+                    File(it)
+                }
 
-                viewModel.addStepImages(uris, files)
-            }
+            viewModel.addStepImages(uris, files)
         }
 
     private val requestMultipleImagesRequestPermissionLauncher =
