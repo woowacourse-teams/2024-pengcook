@@ -216,7 +216,19 @@ class RecipeMakingFragment2 : Fragment() {
     }
 
     private fun addStepImages() {
-        requestMultiplePhotoPermissionLauncher.launch("image/*")
+        if (imageUtils.isPermissionGranted(permissionArray)) {
+            requestMultiplePhotoPermissionLauncher.launch("image/*")
+        } else {
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    requestMultiplePhotoPermissionLauncher.launch("image/*")
+                } else {
+                    showSnackBar(getString(R.string.camera_permission_needed))
+                }
+            }.launch(Manifest.permission.CAMERA)
+        }
     }
 
     private fun addThumbnailImage() {
