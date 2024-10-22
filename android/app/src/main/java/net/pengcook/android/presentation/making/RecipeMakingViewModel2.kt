@@ -261,28 +261,30 @@ class RecipeMakingViewModel2
         }
 
         override fun onConfirm() {
-            if (!validateDescriptionForm()) {
-                _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
-                _isMakingStepButtonClicked.value = true
-                return
-            }
-
-            currentStepImages.value?.forEach {
-                if (!it.uploaded || it.cookingTime.isEmpty() || it.description.isEmpty()) {
+            viewModelScope.launch {
+                if (!validateDescriptionForm()) {
                     _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
                     _isMakingStepButtonClicked.value = true
-                    return
+                    return@launch
                 }
-            }
 
-            if (currentStepImages.value.isNullOrEmpty()) {
-                _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
-                return
-            }
+                val currentStepImages = stepMakingRepository.fetchRecipeSteps().getOrNull()
 
-            _isLoading.value = true
+                currentStepImages?.forEach {
+                    if (!it.imageUploaded || it.cookingTime.isEmpty() || it.description.isEmpty()) {
+                        _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
+                        _isMakingStepButtonClicked.value = true
+                        return@launch
+                    }
+                }
 
-            viewModelScope.launch {
+                if (currentStepImages.isNullOrEmpty()) {
+                    _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
+                    return@launch
+                }
+
+                _isLoading.value = true
+
                 val recipeCreation = recipeCreation()
                 if (recipeCreation == null) {
                     _isLoading.value = false
@@ -429,12 +431,18 @@ class RecipeMakingViewModel2
         }
 
         override fun onStepImageClick(item: RecipeStepImage) {
-            _uiEvent.value =
-                Event(
-                    RecipeMakingEvent2.NavigateToMakingStep(
-                        sequence = currentStepImages.value?.indexOf(item) ?: return,
-                    ),
-                )
+            viewModelScope.launch(coroutineExceptionHandler) {
+                val recipeId = recipeId
+                if (recipeId != null) {
+                    saveRecipeSteps(recipeId)
+                }
+                _uiEvent.value =
+                    Event(
+                        RecipeMakingEvent2.NavigateToMakingStep(
+                            sequence = currentStepImages.value?.indexOf(item) ?: return@launch,
+                        ),
+                    )
+            }
         }
 
         override fun navigationAction() {
