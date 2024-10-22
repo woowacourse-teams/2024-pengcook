@@ -6,4 +6,6 @@ interface StepItemEventListener {
     fun onDelete(id: Int)
 
     fun onOrderChange(items: List<RecipeStepImage>)
+
+    fun onStepImageClick(item: RecipeStepImage)
 }
