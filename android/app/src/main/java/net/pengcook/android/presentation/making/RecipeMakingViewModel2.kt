@@ -96,7 +96,7 @@ class RecipeMakingViewModel2
 
         private fun initRecipeSteps() {
             viewModelScope.launch {
-                stepMakingRepository.fetchRecipeStepsByRecipeId()
+                stepMakingRepository.fetchRecipeSteps()
                     .onSuccess { steps ->
                         _currentStepImages.value = steps?.map { it.toRecipeStepImage() } ?: emptyList()
                     }.onFailure {
@@ -267,6 +267,14 @@ class RecipeMakingViewModel2
                 return
             }
 
+            currentStepImages.value?.forEach {
+                if (!it.uploaded || it.cookingTime.isEmpty() || it.description.isEmpty()) {
+                    _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
+                    _isMakingStepButtonClicked.value = true
+                    return
+                }
+            }
+
             if (currentStepImages.value.isNullOrEmpty()) {
                 _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
                 return
@@ -418,6 +426,15 @@ class RecipeMakingViewModel2
 
         override fun onOrderChange(items: List<RecipeStepImage>) {
             _currentStepImages.value = items
+        }
+
+        override fun onStepImageClick(item: RecipeStepImage) {
+            _uiEvent.value =
+                Event(
+                    RecipeMakingEvent2.NavigateToMakingStep(
+                        sequence = item.sequence,
+                    ),
+                )
         }
 
         override fun navigationAction() {

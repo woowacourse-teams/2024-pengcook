@@ -15,7 +15,7 @@ class DefaultRecipeStepMakingLocalDataSource
             return recipeStepDao.insertCreatedRecipeStep(recipeStep)
         }
 
-        override suspend fun fetchRecipeStepsByRecipeId(): List<RecipeStepEntity>? {
+        override suspend fun fetchRecipeSteps(): List<RecipeStepEntity>? {
             return recipeStepDao.fetchRecipeStepsByRecipeId()
         }
 
