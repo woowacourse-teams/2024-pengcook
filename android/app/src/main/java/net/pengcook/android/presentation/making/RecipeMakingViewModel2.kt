@@ -432,7 +432,7 @@ class RecipeMakingViewModel2
             _uiEvent.value =
                 Event(
                     RecipeMakingEvent2.NavigateToMakingStep(
-                        sequence = item.sequence,
+                        sequence = currentStepImages.value?.indexOf(item) ?: return,
                     ),
                 )
         }
