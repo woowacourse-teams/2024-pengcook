@@ -68,49 +68,42 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod
 
-      - name: Upload docker compose
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-compose
-          path: ./backend/src/main/resources/docker-compose-prod.yaml
-          if-no-files-found: error
-
-  deploy:
+  deploy-a:
     needs: build
-    runs-on: [self-hosted, prod]
+    runs-on: [self-hosted, prod-a]
     environment: prod
 
     steps:
-      - name: Set up environment variables
-        run: |
-          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
-
-      - name: Download docker compose
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-compose
-          path: ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-
-      - name: Rename downloaded file
-        run: |
-          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          mv docker-compose-prod.yaml docker-compose.yaml
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Pull latest Docker images
-        run: docker compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yaml pull
-
-      - name: Restart docker compose
+      - name: Run toggle script
         run: |
           cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
-          docker compose down
-          docker compose up -d
+          ./run-toggle.sh
+
+      - name: Clean up unused Docker images
+        run: docker image prune -af
+
+  deploy-b:
+    needs: build
+    runs-on: [self-hosted, prod-b]
+    environment: prod
+
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Run toggle script
+        run: |
+          cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          ./run-toggle.sh
 
       - name: Clean up unused Docker images
         run: docker image prune -af
