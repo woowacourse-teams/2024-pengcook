@@ -31,8 +31,6 @@ sealed interface RecipeMakingEvent2 {
 
     data object UnexpectedError : RecipeMakingEvent2
 
-//    data class ThumbnailPresignedUrlSuccessful(val presignedUrl: String) : RecipeMakingEvent2
-
     data object NullPhotoPath : RecipeMakingEvent2
 
     data object PostImageSuccessful : RecipeMakingEvent2
@@ -56,4 +54,6 @@ sealed interface RecipeMakingEvent2 {
     data object RecipePostFailure : RecipeMakingEvent2
 
     data object RecipePostSuccessful : RecipeMakingEvent2
+
+    data class NavigateToMakingStep(val sequence: Int) : RecipeMakingEvent2
 }
