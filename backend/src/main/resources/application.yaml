@@ -1,8 +1,6 @@
 spring:
   jpa:
     open-in-view: false
-    hibernate:
-      ddl-auto: validate
 
 jasypt:
   encryptor:
@@ -26,3 +24,6 @@ management:
         include:
           - health
           - prometheus
+
+server:
+  shutdown: graceful
