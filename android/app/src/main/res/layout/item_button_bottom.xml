@@ -30,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Next"
+            android:textColor="@color/button_text_color"
             android:background="@drawable/selector_bottom_button"
             android:enabled="@{enabled}"
             android:text="@{buttonText}"

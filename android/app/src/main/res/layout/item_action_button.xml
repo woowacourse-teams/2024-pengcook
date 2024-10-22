@@ -28,6 +28,7 @@
             android:background="@drawable/bg_radius_filled"
             android:minWidth="100dp"
             tools:text="button"
+            android:textColor="@color/button_text_color"
             style="@style/Headline.H4"
             android:gravity="center"
             android:padding="8dp"

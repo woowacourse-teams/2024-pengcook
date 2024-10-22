@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@={content}"
             android:hint="@{hint}"
+            android:textColorHint="@color/text_color"
             android:imeOptions="actionSearch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_search"

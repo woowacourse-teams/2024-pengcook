@@ -24,12 +24,12 @@
             layout="@layout/item_appbar_with_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:appbarEventListener="@{vm}"
+            app:icon="@{@drawable/ic_back_24}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@{@string/detail_appbar_title}"
-            app:icon="@{@drawable/ic_back_24}"
-            app:appbarEventListener="@{vm}" />
+            app:title="@{@string/detail_appbar_title}" />
 
         <ScrollView
             android:layout_width="0dp"
@@ -111,7 +111,8 @@
                         android:layout_marginTop="16dp"
                         android:src="@drawable/ic_menu_dots"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/icon_color" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -127,18 +128,18 @@
                         android:id="@+id/cl_overview_recipe"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="12dp">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/tv_category_recipe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:category="@{recipe.category}"
                             android:textSize="14sp"
+                            app:category="@{recipe.category}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:text="Category : Korean" />
@@ -149,11 +150,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:maxLines="3"
+                            android:paddingVertical="6dp"
                             android:text="@{recipe.title}"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            android:paddingVertical="6dp"
                             app:layout_constraintEnd_toStartOf="@id/iv_comment"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/tv_category_recipe"
@@ -169,8 +170,8 @@
                             android:padding="7dp"
                             android:src="@drawable/selector_favorite"
                             app:isFavorite="@{vm.isLike}"
-                            app:layout_constraintTop_toTopOf="@id/iv_comment"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/iv_comment" />
 
                         <TextView
                             android:id="@+id/tv_like_count"
@@ -193,7 +194,8 @@
                             android:padding="7dp"
                             android:src="@drawable/ic_comment"
                             app:layout_constraintEnd_toStartOf="@id/iv_favorite"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/icon_color" />
 
                         <TextView
                             android:id="@+id/tv_comment_count"
@@ -209,8 +211,8 @@
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe"
-                            android:layout_marginTop="12dp"/>
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/tv_title_recipe" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -227,7 +229,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/making_form_ingredient"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -238,7 +240,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             app:ingredients="@{recipe.ingredients}"
                             app:layout_constraintStart_toStartOf="@id/tv_ingredients_title"
                             app:layout_constraintTop_toBottomOf="@id/tv_ingredients_title"
@@ -250,7 +252,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:text="@string/making_form_time_required"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -262,7 +264,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:text="@{recipe.cookingTime}"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_required_time_title"
                             tools:text="60mins" />
@@ -273,7 +275,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:text="@string/making_form_difficulty"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -285,7 +287,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:text="@{String.valueOf(recipe.difficulty)}"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_difficulty_title"
                             tools:text="very high" />
@@ -296,7 +298,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:text="@string/making_form_introduction"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -308,7 +310,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:text="@{recipe.introduction}"
-                            android:textColor="@color/black"
+                            android:textColor="@color/text_color"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_introduction_title"
                             tools:text="Hard to cook, but worth the effort" />
@@ -322,7 +324,7 @@
                             android:gravity="center"
                             android:onClick="@{() -> vm.onNavigateToMakingStep()}"
                             android:text="@string/detail_start"
-                            android:textColor="@color/black"
+                            android:textColor="@color/button_text_color"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/homeFragment"
@@ -9,6 +10,7 @@
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/selector_menu_search"
+        android:iconTint="@color/icon_color"
         android:title="Search" />
 
     <item
@@ -19,10 +21,12 @@
     <item
         android:id="@+id/categoryFragment"
         android:icon="@drawable/selector_menu_category"
+        android:iconTint="@color/icon_color"
         android:title="Category" />
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/selector_menu_profile"
+        android:iconTint="@color/icon_color"
         android:title="Profile" />
 </menu>
