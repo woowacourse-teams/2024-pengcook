@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@{@string/making_appbar_title}" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/sv_recipe_making"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -163,15 +163,16 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_step_images"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="12dp"
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/nextButton"
                     app:layout_constraintTop_toBottomOf="@id/tv_form_step_images_title"
                     app:spanCount="4"
-                    tools:itemCount="8"
+                    tools:itemCount="30"
                     tools:listitem="@layout/item_step_image" />
 
                 <include
@@ -187,6 +188,6 @@
                     app:layout_constraintTop_toBottomOf="@id/rv_step_images" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
