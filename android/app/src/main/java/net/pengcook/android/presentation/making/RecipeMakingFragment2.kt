@@ -193,6 +193,9 @@ class RecipeMakingFragment2 : Fragment() {
     private fun observeStepItems() {
         viewModel.currentStepImages.observe(viewLifecycleOwner) {
             stepImageAdapter.submitList(it)
+            stepImageAdapter.currentList.forEach {
+                println("sequence : ${it.sequence}")
+            }
         }
     }
 
@@ -223,7 +226,6 @@ class RecipeMakingFragment2 : Fragment() {
                 is RecipeMakingEvent2.RecipePostFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
                 is RecipeMakingEvent2.RecipePostSuccessful -> findNavController().navigateUp()
                 is RecipeMakingEvent2.NavigateToMakingStep -> {
-                    println("navigate to making step")
                     val sequence = newEvent.sequence
                     val action =
                         RecipeMakingFragment2Directions.actionRecipeMakingFragmentToStepMakingFragment(1L)

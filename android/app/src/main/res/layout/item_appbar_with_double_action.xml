@@ -60,10 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
-                android:background="@color/screen_background"
                 android:onClick="@{() -> appbarEventListener.customAction()}"
                 android:src="@{rightIcon}"
-                app:tint="@color/icon_color"
                 tools:src="@drawable/ic_back_24" />
 
         </androidx.appcompat.widget.Toolbar>
