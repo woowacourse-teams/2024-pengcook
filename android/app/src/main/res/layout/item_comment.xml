@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:textStyle="bold"
+            app:tint="@color/text_color"
             android:translationZ="1dp"
             android:text="@{comment.userName}"
             app:layout_constraintStart_toEndOf="@id/iv_user_profile"
@@ -64,7 +65,7 @@
             android:layout_marginEnd="20dp"
             android:text="@{comment.message}"
             tools:text="It was great!! I think the cabbage is replaceable with lettuce."
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:layout_marginTop="6dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
@@ -72,6 +73,7 @@
         <ImageView
             android:id="@+id/iv_comment_menu"
             app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/icon_color"
             app:layout_constraintTop_toTopOf="@id/tv_user_name"
             app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
             android:src="@drawable/ic_menu_dots"

@@ -5,7 +5,7 @@ import net.pengcook.android.data.model.step.RecipeStepEntity
 interface RecipeStepMakingLocalDataSource {
     suspend fun insertCreatedRecipeStep(recipeStep: RecipeStepEntity): Long
 
-    suspend fun fetchRecipeStepsByRecipeId(recipeId: Long): List<RecipeStepEntity>?
+    suspend fun fetchRecipeSteps(): List<RecipeStepEntity>?
 
     suspend fun fetchRecipeStepByStepNumber(
         recipeId: Long,
@@ -13,4 +13,16 @@ interface RecipeStepMakingLocalDataSource {
     ): RecipeStepEntity?
 
     suspend fun deleteRecipeStepsByRecipeId(recipeId: Long)
+
+    suspend fun deleteRecipeStepByStepNumber(
+        recipeId: Long,
+        stepNumber: Int,
+    )
+
+    suspend fun updateRecipeStepImage(
+        id: Long,
+        imageUri: String?,
+        imageTitle: String?,
+        imageUploaded: Boolean,
+    )
 }

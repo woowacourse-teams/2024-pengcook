@@ -134,7 +134,7 @@
     </fragment>
     <fragment
         android:id="@+id/recipeMakingFragment"
-        android:name="net.pengcook.android.presentation.making.RecipeMakingFragment"
+        android:name="net.pengcook.android.presentation.making.RecipeMakingFragment2"
         android:label="RecipeMakingFragment">
         <action
             android:id="@+id/action_recipeMakingFragment_to_stepMakingFragment"

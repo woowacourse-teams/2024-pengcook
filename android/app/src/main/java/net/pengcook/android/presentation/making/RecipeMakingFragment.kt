@@ -151,6 +151,9 @@ class RecipeMakingFragment : Fragment() {
                 is RecipeMakingEvent.DescriptionFormNotCompleted -> showSnackBar(getString(R.string.making_warning_form_not_completed))
                 is RecipeMakingEvent.PostRecipeFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
                 is RecipeMakingEvent.MakingCancellation -> findNavController().navigateUp()
+                RecipeMakingEvent.AddStepImages -> {}
+                RecipeMakingEvent.PostStepImageCompleted -> {}
+                is RecipeMakingEvent.StepImagesPresignedUrlRequestSuccessful -> {}
             }
         }
     }
@@ -186,15 +189,15 @@ class RecipeMakingFragment : Fragment() {
     }
 
     private fun navigateToStepMaking(recipeId: Long) {
-        val action =
-            RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(recipeId)
-        findNavController().navigate(action)
+//        val action =
+//            RecipeMakingFragmentDirections.actionRecipeMakingFragmentToStepMakingFragment(recipeId)
+//        findNavController().navigate(action)
     }
 
     private fun initBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.vm = viewModel
-        binding.appbarEventListener = viewModel
+//        binding.lifecycleOwner = viewLifecycleOwner
+//        binding.vm = viewModel
+//        binding.appbarEventListener = viewModel
     }
 
     private fun initTimeFormatInput() {

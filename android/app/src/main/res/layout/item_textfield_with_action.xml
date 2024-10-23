@@ -49,6 +49,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{() -> actionEventHandler.onAction()}"
             android:layout_margin="14dp"
+            app:tint="@color/icon_color"
             android:src="@{icon}"
             tools:src="@drawable/ic_send_24"
             android:layout_width="30dp"

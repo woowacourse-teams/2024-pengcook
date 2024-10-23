@@ -25,8 +25,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_action"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_action"
@@ -42,14 +41,15 @@
                 android:onClick="@{() -> appbarEventListener.navigationAction()}"
                 android:padding="16dp"
                 android:src="@{leftIcon}"
+                app:tint="@color/icon_color"
                 tools:src="@drawable/ic_back_24" />
 
             <TextView
                 style="@style/Headline.H4"
-                android:fontFamily="@font/notosans_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/notosans_medium"
                 android:gravity="center"
                 android:text="@{title}"
                 tools:text="Sign Up" />

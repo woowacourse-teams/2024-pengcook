@@ -99,6 +99,9 @@ class RecipeMakingViewModel
             _uiEvent.value = Event(RecipeMakingEvent.AddImage)
         }
 
+        override fun onAddStepImages() {
+        }
+
         override fun onConfirm() {
             viewModelScope.launch {
                 val category = categoryContent.value?.trim()
