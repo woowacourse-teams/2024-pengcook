@@ -335,7 +335,6 @@ class RecipeControllerTest extends RestDocsSetting {
                         "레시피를 수정합니다.",
                         "레시피 수정 API",
                         requestFields(
-                                fieldWithPath("id").description("레시피 id"),
                                 fieldWithPath("title").description("레시피 제목"),
                                 fieldWithPath("cookingTime").description("조리 시간"),
                                 fieldWithPath("thumbnail").description("썸네일 이미지"),
