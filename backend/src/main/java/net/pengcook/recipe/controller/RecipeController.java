@@ -67,12 +67,13 @@ public class RecipeController {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 
-    @PutMapping
+    @PutMapping("/{recipeId}")
     public void updateRecipe(
             @LoginUser UserInfo userInfo,
+            @PathVariable Long recipeId,
             @RequestBody @Valid RecipeUpdateRequest recipeUpdateRequest
     ) {
-        recipeService.updateRecipe(userInfo, recipeUpdateRequest);
+        recipeService.updateRecipe(userInfo, recipeId, recipeUpdateRequest);
     }
 
     @GetMapping("/{recipeId}")

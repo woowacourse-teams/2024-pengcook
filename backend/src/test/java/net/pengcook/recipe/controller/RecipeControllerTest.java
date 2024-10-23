@@ -308,6 +308,7 @@ class RecipeControllerTest extends RestDocsSetting {
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("레시피를 수정한다.")
     void updateRecipe() {
+        long recipeId = 1L;
         List<String> categories = List.of("Dessert", "NewCategory");
         List<String> substitutions = List.of("Water", "Orange");
         List<IngredientCreateRequest> ingredients = List.of(
@@ -319,7 +320,6 @@ class RecipeControllerTest extends RestDocsSetting {
                 new RecipeStepRequest(null, "스텝2 설명", 2, "00:20:00")
         );
         RecipeUpdateRequest recipeUpdateRequest = new RecipeUpdateRequest(
-                1L,
                 "변경된 레시피 제목",
                 "00:30:00",
                 "변경된 썸네일.jpg",
@@ -353,7 +353,7 @@ class RecipeControllerTest extends RestDocsSetting {
                         )))
                 .contentType(ContentType.JSON)
                 .body(recipeUpdateRequest)
-                .when().put("/recipes")
+                .when().put("/recipes/" + recipeId)
                 .then().log().all()
                 .statusCode(200);
     }

@@ -170,10 +170,9 @@ public class RecipeService {
     }
 
     @Transactional
-    public void updateRecipe(UserInfo userInfo, RecipeUpdateRequest recipeUpdateRequest) {
-        User author = userRepository.findById(userInfo.getId()).orElseThrow();
-        Recipe recipe = recipeRepository.findById(userInfo.getId()).orElseThrow();
-        validateRecipeAuthor(author, recipe);
+    public void updateRecipe(UserInfo userInfo, Long recipeId, RecipeUpdateRequest recipeUpdateRequest) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        verifyRecipeOwner(userInfo, recipe);
 
         Recipe updatedRecipe = recipe.updateRecipe(
                 recipeUpdateRequest.title(),
@@ -183,15 +182,14 @@ public class RecipeService {
                 recipeUpdateRequest.description()
         );
 
+        ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
+        ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
+        categoryService.deleteCategoryRecipe(recipe);
+        categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
+
         recipeStepService.deleteRecipeStepsByRecipe(updatedRecipe.getId());
         recipeStepRepository.flush();
         recipeStepService.saveRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest.recipeSteps());
-    }
-
-    private void validateRecipeAuthor(User author, Recipe recipe) {
-        if (recipe.getAuthor().getId() != author.getId()) {
-            throw new UnauthorizedException("레시피를 수정할 수 없습니다.");
-        }
     }
 
     @Transactional(readOnly = true)
@@ -211,7 +209,7 @@ public class RecipeService {
         Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
 
         targetRecipe.ifPresent(recipe -> {
-            verifyUserCanDeleteRecipe(userInfo, recipe);
+            verifyRecipeOwner(userInfo, recipe);
             ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
             categoryService.deleteCategoryRecipe(recipe);
             commentService.deleteCommentsByRecipe(recipe.getId());
@@ -261,9 +259,11 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
-    private void verifyUserCanDeleteRecipe(UserInfo userInfo, Recipe recipe) {
-        if (recipe.getAuthor().getId() != userInfo.getId()) {
-            throw new UnauthorizedException("레시피를 삭제할 수 없습니다.");
+    private void verifyRecipeOwner(UserInfo userInfo, Recipe recipe) {
+        User author = recipe.getAuthor();
+        long authorId = author.getId();
+        if (!userInfo.isSameUser(authorId)) {
+            throw new UnauthorizedException("레시피에 대한 권한이 없습니다.");
         }
     }
 }
