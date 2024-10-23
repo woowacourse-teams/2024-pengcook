@@ -30,12 +30,12 @@ import net.pengcook.android.data.model.makingrecipe.entity.RecipeDescriptionEnti
     ],
 )
 data class RecipeStepEntity(
-    @ColumnInfo(RecipeStepContract.COLUMN_ID) val id: Long = System.currentTimeMillis(),
+    @ColumnInfo(RecipeStepContract.COLUMN_STEP_NUMBER) val stepNumber: Int,
+    @ColumnInfo(RecipeStepContract.COLUMN_ID) val id: Long = (System.currentTimeMillis().toString() + stepNumber.toString()).toLong(),
     @ColumnInfo(RecipeStepContract.COLUMN_RECIPE_DESCRIPTION_ID) val recipeDescriptionId: Long,
     @ColumnInfo(RecipeStepContract.COLUMN_IMAGE_URI) val imageUri: String?,
     @ColumnInfo(RecipeStepContract.COLUMN_IMAGE_TITLE) val imageTitle: String?,
     @ColumnInfo(RecipeStepContract.COLUMN_COOKING_TIME) val cookingTime: String?,
-    @ColumnInfo(RecipeStepContract.COLUMN_STEP_NUMBER) val stepNumber: Int,
     @ColumnInfo(RecipeStepContract.COLUMN_DESCRIPTION) val description: String?,
     @ColumnInfo(RecipeStepContract.COLUMN_IMAGE_UPLOADED) val imageUploaded: Boolean,
 )
