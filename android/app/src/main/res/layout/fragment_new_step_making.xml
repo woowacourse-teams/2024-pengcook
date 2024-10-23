@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="net.pengcook.android.presentation.making.newstep.NewStepMakingViewModel" />
+
+        <variable
+            name="appbarEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.making.newstep.NewStepMakingFragment">
+
+        <include
+            android:id="@+id/abl_step_making"
+            layout="@layout/item_appbar_with_double_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:appbarEventListener="@{appbarEventListener}"
+            app:leftIcon="@{@drawable/ic_back_24}"
+            app:rightIcon="@{@drawable/ic_complete_making}"
+            app:title="@{@string/making_appbar_title}" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_step_making"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/abl_step_making"
+            android:layout_marginBottom="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
