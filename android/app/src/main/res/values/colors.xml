@@ -23,6 +23,7 @@
     <color name="image_placeholder_background">#FFF7F7FB</color>
     <color name="profile_placeholder_background">#FFFFFFFF</color>
     <color name="next_button_color">#FF111111</color>
+    <color name="border_color">#FFD4D4DA</color>
 
     <!--onboarding-->
     <color name="onboarding_contract_text">#FF9E9E9E</color>

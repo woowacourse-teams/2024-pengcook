@@ -23,6 +23,8 @@
     <color name="image_placeholder_background">#FF555555</color>
     <color name="profile_placeholder_background">#FF222222</color>
     <color name="next_button_color">#FFB5B5B5</color>
+    <color name="border_color">#FFD4D4DA</color>
+
     <!--onboarding-->
     <color name="onboarding_contract_text">#FF9E9E9E</color>
     <color name="onboarding_google_button">#FF4285F4</color>
