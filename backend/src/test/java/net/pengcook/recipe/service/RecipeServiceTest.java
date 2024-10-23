@@ -109,9 +109,10 @@ class RecipeServiceTest {
     }
 
     @Test
-    @DisplayName("새로운 레시피를 생성한다.")
+    @DisplayName("레시피를 수정한다.")
     void updateRecipe() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        Long recipeId = 1L;
 
         List<String> categories = List.of("변경된 카테고리 1", "변경된 카테고리 2");
         List<String> substitutions = List.of("변경된 재료 1", "변경된 재료 2");
@@ -124,7 +125,6 @@ class RecipeServiceTest {
                 new RecipeStepRequest(null, "변경된 스텝2 설명", 2, "00:30:00")
         );
         RecipeUpdateRequest recipeUpdateRecipe = new RecipeUpdateRequest(
-                1L,
                 "변경된 제목",
                 "00:10:00",
                 "변경된 레시피 썸네일.jpg",
@@ -135,7 +135,7 @@ class RecipeServiceTest {
                 recipeStepRequests
         );
 
-        recipeService.updateRecipe(userInfo, recipeUpdateRecipe);
+        recipeService.updateRecipe(userInfo, recipeId, recipeUpdateRecipe);
 
         Recipe recipe = recipeRepository.findById(1L).orElseThrow();
         assertAll(
