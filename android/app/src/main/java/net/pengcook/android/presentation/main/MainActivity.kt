@@ -54,11 +54,9 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
 
-        // 리스너 중복 추가 방지
         navController.removeOnDestinationChangedListener(destinationChangedListener)
         navController.addOnDestinationChangedListener(destinationChangedListener)
 
-        // 현재 목적지에 따라 바텀 네비게이션 바 가시성 업데이트
         updateBottomNavVisibility(navController.currentDestination)
     }
 
