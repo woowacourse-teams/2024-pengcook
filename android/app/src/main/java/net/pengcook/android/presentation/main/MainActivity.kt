@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initializeSplashScreen()
         setContentView(binding.root)
-        initializeNavigation()
+        if (savedInstanceState == null) {
+            initializeNavigation()
+        }
     }
 
     private fun initializeSplashScreen() {
