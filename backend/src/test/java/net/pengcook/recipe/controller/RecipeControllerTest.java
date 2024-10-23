@@ -491,7 +491,8 @@ class RecipeControllerTest extends RestDocsSetting {
                 List.of(new IngredientResponse(2, "쌀", Requirement.REQUIRED),
                         new IngredientResponse(3, "계란", Requirement.OPTIONAL),
                         new IngredientResponse(4, "김치", Requirement.REQUIRED)),
-                true);
+                true,
+                false);
 
         RecipeDescriptionResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
@@ -521,7 +522,8 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("ingredient[].ingredientId").description("재료 아이디"),
                                 fieldWithPath("ingredient[].ingredientName").description("재료 이름"),
                                 fieldWithPath("ingredient[].requirement").description("재료 필수 여부"),
-                                fieldWithPath("mine").description("조회자 작성여부")
+                                fieldWithPath("mine").description("조회자 작성 여부"),
+                                fieldWithPath("isLike").description("조회자 좋아요 여부")
                         )))
                 .when()
                 .get("/recipes/{recipeId}", 2L)
