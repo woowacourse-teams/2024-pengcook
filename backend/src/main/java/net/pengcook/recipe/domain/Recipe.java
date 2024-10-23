@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -64,6 +65,22 @@ public class Recipe {
         this(0L, title, author, cookingTime, thumbnail, difficulty, 0, 0, description, LocalDateTime.now());
     }
 
+    public Recipe updateRecipe(
+            String title,
+            LocalTime cookingTime,
+            String thumbnail,
+            int difficulty,
+            String description
+    ) {
+        this.title = title;
+        this.cookingTime = cookingTime;
+        this.thumbnail = thumbnail;
+        this.difficulty = difficulty;
+        this.description = description;
+        return this;
+
+    }
+
     public void increaseLikeCount() {
         likeCount++;
     }
@@ -78,5 +95,22 @@ public class Recipe {
 
     public void decreaseCommentCount() {
         commentCount--;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Recipe recipe = (Recipe) o;
+        return Objects.equals(id, recipe.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
