@@ -246,6 +246,7 @@ class RecipeMakingViewModel2
                         println("uploaded : ${stepImage.uploaded}")
                         uploadStepImage(stepImage)
                         recipeId?.let { id ->
+                            saveRecipeDescription()
                             saveRecipeSteps(id)
                         }
                     }

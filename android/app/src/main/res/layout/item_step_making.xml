@@ -64,7 +64,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_time_amount"
-                app:title="@{String.valueOf(recipeStepMaking.sequence)}" />
+                app:title="@{String.valueOf(recipeStepMaking.sequence)}"
+                android:paddingBottom="12dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
