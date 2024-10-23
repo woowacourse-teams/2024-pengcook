@@ -23,10 +23,11 @@ class RecipeStepViewModel
         private var _recipeSteps: MutableLiveData<List<RecipeStep>> = MutableLiveData(emptyList())
         val recipeSteps: LiveData<List<RecipeStep>>
             get() = _recipeSteps
-
         private val _quitEvent = MutableLiveData<Event<Boolean>>()
         val quitEvent: LiveData<Event<Boolean>>
             get() = _quitEvent
+
+        var currentPosition: Int = 0
 
         fun fetchRecipeSteps() {
             viewModelScope.launch {
