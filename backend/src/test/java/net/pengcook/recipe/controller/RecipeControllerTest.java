@@ -28,6 +28,7 @@ import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeStepRequest;
+import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -301,6 +302,60 @@ class RecipeControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(201)
                 .body("recipeId", is(INITIAL_RECIPE_COUNT + 1));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("레시피를 수정한다.")
+    void updateRecipe() {
+        List<String> categories = List.of("Dessert", "NewCategory");
+        List<String> substitutions = List.of("Water", "Orange");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("Apple", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
+        );
+        List<RecipeStepRequest> recipeStepRequests = List.of(
+                new RecipeStepRequest("스텝1 이미지.jpg", "스텝1 설명", 1, "00:10:00"),
+                new RecipeStepRequest(null, "스텝2 설명", 2, "00:20:00")
+        );
+        RecipeUpdateRequest recipeUpdateRequest = new RecipeUpdateRequest(
+                1L,
+                "변경된 레시피 제목",
+                "00:30:00",
+                "변경된 썸네일.jpg",
+                4,
+                "변경된 레시피 설명",
+                categories,
+                ingredients,
+                recipeStepRequests
+        );
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "레시피를 수정합니다.",
+                        "레시피 수정 API",
+                        requestFields(
+                                fieldWithPath("id").description("레시피 id"),
+                                fieldWithPath("title").description("레시피 제목"),
+                                fieldWithPath("cookingTime").description("조리 시간"),
+                                fieldWithPath("thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("difficulty").description("난이도"),
+                                fieldWithPath("description").description("레시피 설명"),
+                                fieldWithPath("categories").description("카테고리 목록"),
+                                fieldWithPath("ingredients[]").description("재료 목록"),
+                                fieldWithPath("ingredients[].name").description("재료 이름"),
+                                fieldWithPath("ingredients[].requirement").description("재료 필수 여부"),
+                                fieldWithPath("ingredients[].substitutions").description("대체 재료 목록").optional(),
+                                fieldWithPath("recipeSteps[].image").description("레시피 스텝 이미지").optional(),
+                                fieldWithPath("recipeSteps[].description").description("레시피 스텝 설명"),
+                                fieldWithPath("recipeSteps[].sequence").description("레시피 스텝 순서"),
+                                fieldWithPath("recipeSteps[].cookingTime").description("레시피 스텝 소요시간")
+                        )))
+                .contentType(ContentType.JSON)
+                .body(recipeUpdateRequest)
+                .when().put("/recipes")
+                .then().log().all()
+                .statusCode(200);
     }
 
     @ParameterizedTest

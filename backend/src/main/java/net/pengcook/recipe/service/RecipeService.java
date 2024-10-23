@@ -26,8 +26,10 @@ import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
+import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
+    private final RecipeStepRepository recipeStepRepository;
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
@@ -126,7 +129,6 @@ public class RecipeService {
         return List.of();
     }
 
-
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
@@ -165,6 +167,31 @@ public class RecipeService {
         recipeStepService.saveRecipeSteps(savedRecipe.getId(), recipeRequest.recipeSteps());
 
         return new RecipeResponse(savedRecipe);
+    }
+
+    @Transactional
+    public void updateRecipe(UserInfo userInfo, RecipeUpdateRequest recipeUpdateRequest) {
+        User author = userRepository.findById(userInfo.getId()).orElseThrow();
+        Recipe recipe = recipeRepository.findById(userInfo.getId()).orElseThrow();
+        validateRecipeAuthor(author, recipe);
+
+        Recipe updatedRecipe = recipe.updateRecipe(
+                recipeUpdateRequest.title(),
+                LocalTime.parse(recipeUpdateRequest.cookingTime()),
+                s3ClientService.getImageUrl(recipeUpdateRequest.thumbnail()).url(),
+                recipeUpdateRequest.difficulty(),
+                recipeUpdateRequest.description()
+        );
+
+        recipeStepService.deleteRecipeStepsByRecipe(updatedRecipe.getId());
+        recipeStepRepository.flush();
+        recipeStepService.saveRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest.recipeSteps());
+    }
+
+    private void validateRecipeAuthor(User author, Recipe recipe) {
+        if (recipe.getAuthor().getId() != author.getId()) {
+            throw new UnauthorizedException("레시피를 수정할 수 없습니다.");
+        }
     }
 
     @Transactional(readOnly = true)

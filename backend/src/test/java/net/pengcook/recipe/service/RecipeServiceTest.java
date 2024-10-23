@@ -8,11 +8,13 @@ import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeStepRequest;
+import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -104,6 +106,43 @@ class RecipeServiceTest {
         RecipeResponse recipe = recipeService.createRecipe(userInfo, recipeRequest);
 
         assertThat(recipe.recipeId()).isEqualTo(16L);
+    }
+
+    @Test
+    @DisplayName("새로운 레시피를 생성한다.")
+    void updateRecipe() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        List<String> categories = List.of("변경된 카테고리 1", "변경된 카테고리 2");
+        List<String> substitutions = List.of("변경된 재료 1", "변경된 재료 2");
+        List<IngredientCreateRequest> ingredients = List.of(
+                new IngredientCreateRequest("변경된 재료 1", Requirement.REQUIRED, substitutions),
+                new IngredientCreateRequest("변경된 재료 2", Requirement.OPTIONAL, null)
+        );
+        List<RecipeStepRequest> recipeStepRequests = List.of(
+                new RecipeStepRequest(null, "변경된 스텝1 설명", 1, "00:20:00"),
+                new RecipeStepRequest(null, "변경된 스텝2 설명", 2, "00:30:00")
+        );
+        RecipeUpdateRequest recipeUpdateRecipe = new RecipeUpdateRequest(
+                1L,
+                "변경된 제목",
+                "00:10:00",
+                "변경된 레시피 썸네일.jpg",
+                1,
+                "변경된 레시피 설명",
+                categories,
+                ingredients,
+                recipeStepRequests
+        );
+
+        recipeService.updateRecipe(userInfo, recipeUpdateRecipe);
+
+        Recipe recipe = recipeRepository.findById(1L).orElseThrow();
+        assertAll(
+                () -> assertThat(recipe.getTitle()).isEqualTo("변경된 제목"),
+                () -> assertThat(recipe.getDifficulty()).isEqualTo(1),
+                () -> assertThat(recipe.getDescription()).isEqualTo("변경된 레시피 설명")
+        );
     }
 
     @Test
