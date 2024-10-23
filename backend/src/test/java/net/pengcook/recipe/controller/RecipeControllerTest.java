@@ -316,8 +316,8 @@ class RecipeControllerTest extends RestDocsSetting {
                 new IngredientCreateRequest("WaterMelon", Requirement.OPTIONAL, null)
         );
         List<RecipeStepRequest> recipeStepRequests = List.of(
-                new RecipeStepRequest("스텝1 이미지.jpg", "스텝1 설명", 1, "00:10:00"),
-                new RecipeStepRequest(null, "스텝2 설명", 2, "00:20:00")
+                new RecipeStepRequest("변경된 스텝 이미지 1.jpg", "변경된 스텝 설명 1", 1, "00:10:00"),
+                new RecipeStepRequest("변경된 스텝 이미지 2.jpg", "변경된 스텝 설명 2", 2, "00:20:00")
         );
         RecipeUpdateRequest recipeUpdateRequest = new RecipeUpdateRequest(
                 "변경된 레시피 제목",
@@ -352,7 +352,7 @@ class RecipeControllerTest extends RestDocsSetting {
                         )))
                 .contentType(ContentType.JSON)
                 .body(recipeUpdateRequest)
-                .when().put("/recipes/" + recipeId)
+                .when().put("/recipes/{recipeId}", recipeId)
                 .then().log().all()
                 .statusCode(200);
     }
