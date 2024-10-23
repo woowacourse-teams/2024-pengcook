@@ -75,12 +75,12 @@ class RecipeMakingViewModel2
 
         init {
             initRecipeDescription()
-            initRecipeSteps()
         }
 
         private fun initRecipeDescription() {
             viewModelScope.launch {
-                makingRecipeRepository.fetchRecipeDescription()
+                makingRecipeRepository
+                    .fetchRecipeDescription()
                     .onSuccess { existingRecipe ->
                         existingRecipe?.let {
                             recipeId = it.recipeDescriptionId
@@ -94,11 +94,13 @@ class RecipeMakingViewModel2
             }
         }
 
-        private fun initRecipeSteps() {
+        fun initRecipeSteps() {
             viewModelScope.launch {
-                stepMakingRepository.fetchRecipeSteps()
+                stepMakingRepository
+                    .fetchRecipeSteps()
                     .onSuccess { steps ->
                         _currentStepImages.value = steps?.map { it.toRecipeStepImage() } ?: emptyList()
+                        println("currentStepImages: ${currentStepImages.value}")
                     }.onFailure {
                         _currentStepImages.value = emptyList()
                     }
@@ -114,6 +116,8 @@ class RecipeMakingViewModel2
                 isLoading = false,
                 file = File(imageUri),
                 sequence = sequence,
+                description = description,
+                cookingTime = cookingTime,
             )
 
         private fun updateSingleStepImage(
@@ -165,7 +169,7 @@ class RecipeMakingViewModel2
             thumbnailFile: File,
         ) {
             _thumbnailUri.value = uri
-            uploadSingleImage(thumbnailFile)
+            uploadSingleThumbnailImage(thumbnailFile)
         }
 
         fun changeCurrentStepImage(
@@ -184,10 +188,23 @@ class RecipeMakingViewModel2
                 }
         }
 
-        private fun uploadSingleImage(file: File) {
+        private fun uploadSingleThumbnailImage(file: File) {
             viewModelScope.launch(coroutineExceptionHandler) {
                 val presignedUrl = makingRecipeRepository.fetchImageUri(file.name)
-                uploadImageToS3(presignedUrl, file)
+                uploadThumbnailImageToS3(presignedUrl, file)
+            }
+        }
+
+        private suspend fun uploadThumbnailImageToS3(
+            presignedUrl: String,
+            file: File,
+        ) {
+            runCatching {
+                makingRecipeRepository.uploadImageToS3(presignedUrl, file)
+            }.onSuccess {
+                thumbnailTitle = file.name
+            }.onFailure {
+                _uiEvent.value = Event(RecipeMakingEvent2.PostImageFailure)
             }
         }
 
@@ -197,9 +214,6 @@ class RecipeMakingViewModel2
         ) {
             runCatching {
                 makingRecipeRepository.uploadImageToS3(presignedUrl, file)
-            }.onSuccess {
-                thumbnailTitle = file.name
-                _uiEvent.value = Event(RecipeMakingEvent2.PostImageSuccessful)
             }.onFailure {
                 _uiEvent.value = Event(RecipeMakingEvent2.PostImageFailure)
             }
@@ -226,10 +240,14 @@ class RecipeMakingViewModel2
         }
 
         private fun uploadStepImages() {
-            viewModelScope.launch(coroutineExceptionHandler) {
-                currentStepImages.value?.forEach { stepImage ->
+            currentStepImages.value?.forEach { stepImage ->
+                viewModelScope.launch(coroutineExceptionHandler) {
                     if (!stepImage.uploaded) {
+                        println("uploaded : ${stepImage.uploaded}")
                         uploadStepImage(stepImage)
+                        recipeId?.let { id ->
+                            saveRecipeSteps(id)
+                        }
                     }
                 }
             }
@@ -262,6 +280,9 @@ class RecipeMakingViewModel2
 
         override fun onConfirm() {
             viewModelScope.launch {
+                saveRecipeSteps(recipeId ?: return@launch)
+                saveRecipeDescription()
+
                 if (!validateDescriptionForm()) {
                     _uiEvent.value = Event(RecipeMakingEvent2.DescriptionFormNotCompleted)
                     _isMakingStepButtonClicked.value = true
@@ -292,7 +313,8 @@ class RecipeMakingViewModel2
                     return@launch
                 }
 
-                makingRecipeRepository.postNewRecipe(recipeCreation)
+                makingRecipeRepository
+                    .postNewRecipe(recipeCreation)
                     .onSuccess {
                         _isLoading.value = false
                         recipeId?.let {
@@ -307,8 +329,8 @@ class RecipeMakingViewModel2
             }
         }
 
-        private fun validateDescriptionForm(): Boolean {
-            return !categoryContent.value.isNullOrBlank() &&
+        private fun validateDescriptionForm(): Boolean =
+            !categoryContent.value.isNullOrBlank() &&
                 !introductionContent.value.isNullOrBlank() &&
                 difficultySelectedValue.value != null &&
                 !ingredientContent.value.isNullOrBlank() &&
@@ -317,10 +339,9 @@ class RecipeMakingViewModel2
                 hourContent.value != null &&
                 minuteContent.value != null &&
                 secondContent.value != null
-        }
 
-        private suspend fun recipeCreation(): RecipeCreation? {
-            return makingRecipeRepository.fetchTotalRecipeData().getOrNull()?.let { recipeData ->
+        private suspend fun recipeCreation(): RecipeCreation? =
+            makingRecipeRepository.fetchTotalRecipeData().getOrNull()?.let { recipeData ->
                 RecipeCreation(
                     title = recipeData.title,
                     thumbnail = recipeData.thumbnail,
@@ -332,7 +353,6 @@ class RecipeMakingViewModel2
                     introduction = recipeData.introduction,
                 )
             }
-        }
 
         private fun restoreDescriptionContents(existingRecipe: RecipeDescription) {
             with(existingRecipe) {
@@ -341,9 +361,9 @@ class RecipeMakingViewModel2
                 difficultySelectedValue.value = difficulty.toFloat() / 2
                 introductionContent.value = description
                 val timeParts = cookingTime.split(SEPARATOR_TIME)
-                hourContent.value = timeParts[0]
-                minuteContent.value = timeParts[1]
-                secondContent.value = timeParts[2]
+                hourContent.value = if (timeParts[0] == "00") "" else timeParts[0]
+                minuteContent.value = if (timeParts[1] == "00") "" else timeParts[1]
+                secondContent.value = if (timeParts[2] == "00") "" else timeParts[2]
                 thumbnailTitle = thumbnail
                 categoryContent.value = categories.joinToString()
                 _thumbnailUri.value = Uri.parse(imageUri)
@@ -365,49 +385,52 @@ class RecipeMakingViewModel2
                 RecipeDescription(
                     recipeDescriptionId = recipeId ?: return,
                     categories =
-                        categoryContent.value?.split(SEPARATOR_INGREDIENTS)
+                        categoryContent.value
+                            ?.split(SEPARATOR_INGREDIENTS)
                             ?.filter { it.trim().isNotEmpty() || it.trim().isNotBlank() } ?: emptyList(),
                     cookingTime = formatTimeRequired(),
                     description = introductionContent.value ?: "",
                     difficulty = (difficultySelectedValue.value?.times(2))?.toInt() ?: 0,
                     ingredients =
-                        ingredientContent.value?.split(SEPARATOR_INGREDIENTS)
+                        ingredientContent.value
+                            ?.split(SEPARATOR_INGREDIENTS)
                             ?.filter { it.trim().isNotEmpty() || it.trim().isNotBlank() } ?: emptyList(),
                     thumbnail = thumbnailTitle ?: "",
                     title = titleContent.value ?: "",
                     imageUri = thumbnailUri.value.toString(),
                 )
 
-            makingRecipeRepository.saveRecipeDescription(recipeDescription)
+            makingRecipeRepository
+                .saveRecipeDescription(recipeDescription)
                 .onSuccess { _uiEvent.value = Event(RecipeMakingEvent2.RecipeSavingSuccessful) }
                 .onFailure { _uiEvent.value = Event(RecipeMakingEvent2.RecipeSavingFailure) }
         }
 
         private suspend fun saveRecipeSteps(recipeId: Long) {
             currentStepImages.value?.forEachIndexed { index, image ->
-                stepMakingRepository.saveRecipeStep(
-                    recipeId,
-                    RecipeStepMaking(
-                        1L,
+                stepMakingRepository
+                    .saveRecipeStep(
                         recipeId,
-                        image.description,
-                        image.imageTitle,
-                        index + 1,
-                        image.uri.toString(),
-                        image.cookingTime,
-                        imageUploaded = image.uploaded,
-                    ),
-                )
+                        RecipeStepMaking(
+                            1L,
+                            recipeId,
+                            image.description,
+                            image.imageTitle,
+                            index + 1,
+                            image.uri.toString(),
+                            image.cookingTime,
+                            imageUploaded = image.uploaded,
+                        ),
+                    )
             }
         }
 
-        private fun formatTimeRequired(): String {
-            return FORMAT_TIME_REQUIRED.format(
+        private fun formatTimeRequired(): String =
+            FORMAT_TIME_REQUIRED.format(
                 hourContent.value?.toIntOrNull() ?: 0,
                 minuteContent.value?.toIntOrNull() ?: 0,
                 secondContent.value?.toIntOrNull() ?: 0,
             )
-        }
 
         override fun onAddImage() {
             _uiEvent.value = Event(RecipeMakingEvent2.AddThumbnailImage)
@@ -423,7 +446,14 @@ class RecipeMakingViewModel2
 
         override fun onDelete(id: Int) {
             _currentStepImages.value = currentStepImages.value?.filter { it.itemId != id }
-            _uiEvent.value = Event(RecipeMakingEvent2.ImageDeletionSuccessful(id))
+
+            viewModelScope.launch {
+                recipeId?.let { recipeId ->
+                    stepMakingRepository.deleteRecipeStepsNonAsync(recipeId)
+                    saveRecipeSteps(recipeId)
+                    _uiEvent.value = Event(RecipeMakingEvent2.ImageDeletionSuccessful(id))
+                }
+            }
         }
 
         override fun onOrderChange(items: List<RecipeStepImage>) {
@@ -434,12 +464,13 @@ class RecipeMakingViewModel2
             viewModelScope.launch(coroutineExceptionHandler) {
                 val recipeId = recipeId
                 if (recipeId != null) {
+                    println("recipeId : $recipeId")
                     saveRecipeSteps(recipeId)
                 }
                 _uiEvent.value =
                     Event(
                         RecipeMakingEvent2.NavigateToMakingStep(
-                            sequence = currentStepImages.value?.indexOf(item) ?: return@launch,
+                            sequence = currentStepImages.value?.indexOf(item)?.plus(1) ?: return@launch,
                         ),
                     )
             }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter.LengthFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -163,6 +164,16 @@ class RecipeMakingFragment2 : Fragment() {
         observeStepItems()
     }
 
+/*    override fun onResume() {
+        super.onResume()
+        viewModel.initRecipeSteps()
+    }*/
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.initRecipeSteps()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -183,8 +194,8 @@ class RecipeMakingFragment2 : Fragment() {
         val etHour = binding.itemTimeRequired.etTimeAmountPicker.etHour
         val etMinute = binding.itemTimeRequired.etTimeAmountPicker.etMinute
         val etSecond = binding.itemTimeRequired.etTimeAmountPicker.etSecond
-        etHour.filters = arrayOf(MinMaxInputFilter(0, 23))
-        arrayOf(MinMaxInputFilter(0, 59)).also { filters ->
+        etHour.filters = arrayOf(MinMaxInputFilter(0, 23), LengthFilter(2))
+        arrayOf(MinMaxInputFilter(0, 59), LengthFilter(2)).also { filters ->
             etMinute.filters = filters
             etSecond.filters = filters
         }
@@ -193,9 +204,6 @@ class RecipeMakingFragment2 : Fragment() {
     private fun observeStepItems() {
         viewModel.currentStepImages.observe(viewLifecycleOwner) {
             stepImageAdapter.submitList(it)
-            stepImageAdapter.currentList.forEach {
-                println("sequence : ${it.sequence}")
-            }
         }
     }
 
@@ -226,9 +234,9 @@ class RecipeMakingFragment2 : Fragment() {
                 is RecipeMakingEvent2.RecipePostFailure -> showSnackBar(getString(R.string.making_warning_post_failure))
                 is RecipeMakingEvent2.RecipePostSuccessful -> findNavController().navigateUp()
                 is RecipeMakingEvent2.NavigateToMakingStep -> {
-                    val sequence = newEvent.sequence
+                    val sequence: Int = newEvent.sequence
                     val action =
-                        RecipeMakingFragment2Directions.actionRecipeMakingFragmentToStepMakingFragment(1L)
+                        RecipeMakingFragment2Directions.actionRecipeMakingFragmentToStepMakingFragment(sequence)
                     findNavController().navigate(action)
                 }
             }

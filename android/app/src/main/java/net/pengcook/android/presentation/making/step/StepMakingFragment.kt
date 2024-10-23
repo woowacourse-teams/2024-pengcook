@@ -25,6 +25,7 @@ import net.pengcook.android.presentation.core.util.AnalyticsLogging
 import net.pengcook.android.presentation.core.util.FileUtils
 import net.pengcook.android.presentation.core.util.ImageUtils
 import net.pengcook.android.presentation.core.util.MinMaxInputFilter
+import net.pengcook.android.presentation.making.newstep.NewStepMakingFragmentArgs
 import java.io.File
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class StepMakingFragment : Fragment() {
     private var _binding: FragmentMakingStepBinding? = null
     private val binding: FragmentMakingStepBinding
         get() = _binding!!
-    private val args: StepMakingFragmentArgs by navArgs()
+    private val args: NewStepMakingFragmentArgs by navArgs()
 
     @Inject
     lateinit var viewModelFactory: StepMakingViewModelFactory
@@ -41,7 +42,7 @@ class StepMakingFragment : Fragment() {
     private val viewModel: StepMakingViewModel by viewModels {
         StepMakingViewModel.provideFactory(
             assistedFactory = viewModelFactory,
-            recipeId = args.recipeId,
+            recipeId = args.sequence.toLong(),
         )
     }
 
@@ -151,9 +152,9 @@ class StepMakingFragment : Fragment() {
                 is RecipeStepMakingEvent.ImageNotUploaded -> showToast("Image is being uploaded.")
                 is RecipeStepMakingEvent.NavigateBackToDescription -> findNavController().navigateUp()
                 is RecipeStepMakingEvent.RecipePostSuccessful -> {
-                    val action =
+                    /*val action =
                         StepMakingFragmentDirections.actionStepMakingFragmentToHomeFragment()
-                    findNavController().navigate(action)
+                    findNavController().navigate(action)*/
                 }
             }
         }

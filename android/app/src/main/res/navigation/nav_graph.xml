@@ -142,11 +142,11 @@
     </fragment>
     <fragment
         android:id="@+id/stepMakingFragment"
-        android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"
-        android:label="StepMakingFragment">
+        android:name="net.pengcook.android.presentation.making.newstep.NewStepMakingFragment"
+        android:label="NewStepMakingFragment">
         <argument
-            android:name="recipeId"
-            app:argType="long" />
+            android:name="sequence"
+            app:argType="integer" />
         <action
             android:id="@+id/action_stepMakingFragment_to_recipeMakingFragment"
             app:popUpTo="@id/stepMakingFragment"
