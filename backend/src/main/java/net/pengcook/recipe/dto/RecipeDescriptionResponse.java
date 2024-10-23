@@ -18,14 +18,16 @@ public record RecipeDescriptionResponse(
         LocalDateTime createdAt,
         List<CategoryResponse> category,
         List<IngredientResponse> ingredient,
-        boolean mine
+        boolean mine,
+        boolean isLike
 ) {
 
     public RecipeDescriptionResponse(
             UserInfo userInfo,
             RecipeDataResponse firstResponse,
             List<CategoryResponse> category,
-            List<IngredientResponse> ingredient
+            List<IngredientResponse> ingredient,
+            boolean isLike
     ) {
         this(
                 firstResponse.recipeId(),
@@ -40,7 +42,8 @@ public record RecipeDescriptionResponse(
                 firstResponse.createdAt(),
                 category,
                 ingredient,
-                userInfo.isSameUser(firstResponse.authorId())
+                userInfo.isSameUser(firstResponse.authorId()),
+                isLike
         );
     }
 }

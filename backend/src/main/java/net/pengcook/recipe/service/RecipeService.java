@@ -195,12 +195,14 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
+        boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
         return new RecipeDescriptionResponse(
                 userInfo,
                 recipeDataResponses.getFirst(),
                 getCategoryResponses(recipeDataResponses),
-                getIngredientResponses(recipeDataResponses)
+                getIngredientResponses(recipeDataResponses),
+                isLike
         );
     }
 
