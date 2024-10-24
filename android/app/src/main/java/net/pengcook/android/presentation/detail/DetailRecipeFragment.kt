@@ -54,14 +54,7 @@ class DetailRecipeFragment : Fragment() {
             viewModel.loadRecipe()
             binding.swipeRefreshLayout.isRefreshing = false
         }
-//        setupMenu()
     }
-
-//    private fun setupMenu() {
-//        binding.ivMenu.setOnClickListener {
-//            showPopupMenu(it)
-//        }
-//    }
 
     private fun showPopupMenu(
         view: View,
@@ -84,6 +77,13 @@ class DetailRecipeFragment : Fragment() {
 
                 R.id.action_delete -> {
                     viewModel.deleteRecipe()
+                    true
+                }
+
+                R.id.action_edit -> {
+                    val action =
+                        DetailRecipeFragmentDirections.actionDetailRecipeFragmentToEditRecipeFragment(recipeId)
+                    findNavController().navigate(action)
                     true
                 }
 

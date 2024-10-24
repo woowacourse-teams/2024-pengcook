@@ -1,5 +1,6 @@
 package net.pengcook.android.data.repository.feed
 
+import net.pengcook.android.presentation.core.model.ChangedRecipe
 import net.pengcook.android.presentation.core.model.RecipeForItem
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.RecipeStep
@@ -42,14 +43,13 @@ class FakeFeedRepository(
             }
         }
 
-    override suspend fun deleteRecipe(recipeId: Long): Result<Unit> {
-        return runCatching {
+    override suspend fun deleteRecipe(recipeId: Long): Result<Unit> =
+        runCatching {
             Unit
         }
-    }
 
-    override suspend fun fetchRecipe(recipeId: Long): Result<RecipeForItem> {
-        return runCatching {
+    override suspend fun fetchRecipe(recipeId: Long): Result<RecipeForItem> =
+        runCatching {
             RecipeForItem(
                 recipeId = recipeId,
                 title = "recipe$recipeId",
@@ -66,5 +66,11 @@ class FakeFeedRepository(
                 isLiked = false,
             )
         }
+
+    override suspend fun updateRecipe(
+        recipeId: Long,
+        changedRecipe: ChangedRecipe,
+    ): Result<Unit> {
+        TODO("Not yet implemented")
     }
 }

@@ -1,7 +1,7 @@
 package net.pengcook.android.data.remote.api
 
+import net.pengcook.android.data.model.makingrecipe.request.RecipeStepRequest
 import net.pengcook.android.data.model.step.RecipeStepResponse
-import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

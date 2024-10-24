@@ -5,10 +5,12 @@ import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.feed.FeedRemoteDataSource
 import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
 import net.pengcook.android.data.model.step.RecipeStepResponse
+import net.pengcook.android.data.util.mapper.toRecipeEditRequest
 import net.pengcook.android.data.util.mapper.toRecipeForItem
 import net.pengcook.android.data.util.mapper.toRecipeForList
 import net.pengcook.android.data.util.mapper.toRecipeStep
 import net.pengcook.android.data.util.network.NetworkResponseHandler
+import net.pengcook.android.presentation.core.model.ChangedRecipe
 import net.pengcook.android.presentation.core.model.RecipeForItem
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.RecipeStep
@@ -65,6 +67,16 @@ class DefaultFeedRepository
                     sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
                 val response = feedRemoteDataSource.fetchRecipe(accessToken, recipeId)
                 body(response, RESPONSE_CODE_SUCCESS).toRecipeForItem()
+            }
+
+        override suspend fun updateRecipe(
+            recipeId: Long,
+            changedRecipe: ChangedRecipe,
+        ): Result<Unit> =
+            kotlin.runCatching {
+                val accessToken = sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = feedRemoteDataSource.updateRecipe(accessToken, recipeId, changedRecipe.toRecipeEditRequest())
+                body(response, RESPONSE_CODE_SUCCESS)
             }
 
         companion object {
