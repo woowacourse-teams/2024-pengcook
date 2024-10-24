@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
 
     private fun observeFeedData() {
         viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     adapter.submitData(pagingData)
                 }
@@ -95,7 +95,7 @@ class HomeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.homeRcView.adapter = adapter
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             adapter.loadStateFlow.collect { loadStates ->
                 binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
             }

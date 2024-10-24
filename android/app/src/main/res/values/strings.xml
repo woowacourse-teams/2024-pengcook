@@ -150,5 +150,8 @@
     <string name="category_japanese">Japanese</string>
     <string name="category_chinese">Chinese</string>
     <string name="comment_delete">Delete my comment</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_report">Report</string>
+    <string name="menu_block">Block</string>
 
 </resources>

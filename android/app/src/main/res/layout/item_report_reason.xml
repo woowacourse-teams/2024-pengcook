@@ -37,11 +37,11 @@
             tools:text="Report Reason"
             android:paddingVertical="16dp"
             android:text="@{reason.message}"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="14sp"
-            android:background="@color/yellow_medium" />
+            android:background="@color/button_color" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="0dp"

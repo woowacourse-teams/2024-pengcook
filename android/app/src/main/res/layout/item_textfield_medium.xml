@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            android:lines="4"
+            android:minLines="4"
             android:background="@drawable/bg_radius_outlined"
             android:hint="@{hintContent}"
             android:importantForAutofill="no"
