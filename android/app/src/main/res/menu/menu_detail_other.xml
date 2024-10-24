@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_report"
-        android:title="Report" />
+        android:title="@string/menu_report" />
     <item
         android:id="@+id/action_block"
-        android:title="Block" />
+        android:title="@string/menu_block" />
 </menu>

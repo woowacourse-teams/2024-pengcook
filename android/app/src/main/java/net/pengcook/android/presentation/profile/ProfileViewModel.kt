@@ -8,8 +8,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import javax.inject.Inject
@@ -24,11 +24,36 @@ class ProfileViewModel
         val uiEvent: LiveData<Event<ProfileUiEvent>>
             get() = _uiEvent
 
-        val items: LiveData<PagingData<ProfileViewItem>> =
-            Pager(
-                config = PagingConfig(pageSize = 30, initialLoadSize = 30),
-                pagingSourceFactory = { profilePagingSource },
-            ).liveData.cachedIn(viewModelScope)
+        private val _items: MutableLiveData<PagingData<ProfileViewItem>> = MutableLiveData()
+        val items: LiveData<PagingData<ProfileViewItem>>
+            get() = _items
+
+        init {
+            loadData()
+        }
+
+        fun loadData() {
+            println("loadData")
+            val pager =
+                Pager(
+                    config = PagingConfig(pageSize = 30, initialLoadSize = 30),
+                    pagingSourceFactory = {
+                        profilePagingSourceFactory.create(
+                            initialPageNumber = 0,
+                            profileFeedType = ProfileFeedType.MyFeed,
+                        )
+                    },
+                )
+
+            viewModelScope.launch {
+                pager.flow
+                    .cachedIn(viewModelScope)
+                    .collect { pagingData ->
+                        println("collected")
+                        _items.value = pagingData
+                    }
+            }
+        }
 
         override fun onLeftButtonClick() {
             _uiEvent.value = Event(ProfileUiEvent.NavigateToEditProfile)
@@ -42,12 +67,12 @@ class ProfileViewModel
             _uiEvent.value = Event(ProfileUiEvent.NavigateToRecipeDetail(recipe))
         }
 
-        private val profilePagingSource: ProfilePagingSource by lazy {
-            profilePagingSourceFactory.create(
-                initialPageNumber = 0,
-                profileFeedType = ProfileFeedType.MyFeed,
-            )
-        }
+//        private val profilePagingSource: ProfilePagingSource by lazy {
+//            profilePagingSourceFactory.create(
+//                initialPageNumber = 0,
+//                profileFeedType = ProfileFeedType.MyFeed,
+//            )
+//        }
     }
 
 sealed interface ProfileUiEvent {

@@ -150,5 +150,8 @@
     <string name="alert_message_fill_form">완료되지 않은 폼이 있습니다.</string>
     <string name="comments">Comments</string>
     <string name="comment_delete">삭제하기</string>
+    <string name="menu_delete">삭제하기</string>
+    <string name="menu_report">신고하기</string>
+    <string name="menu_block">차단하기</string>
 
 </resources>
