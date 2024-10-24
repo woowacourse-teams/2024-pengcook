@@ -146,6 +146,8 @@
     <string name="comment_menu_block">차단하기</string>
     <string name="comment_menu_report">신고하기</string>
 
+    <string name="edit_step_appbar_title">레시피 수정</string>
+
     <string name="report_title_bottom">신고 사유를 선택해주세요.</string>
     <string name="report_title_dialog">신고 사유를 선택해주세요.</string>
     <string name="recipe_report_success">신고가 완료되었습니다.</string>

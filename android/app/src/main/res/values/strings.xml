@@ -141,6 +141,7 @@
     <string name="comment_menu_block">Block</string>
     <string name="comment_menu_report">Report</string>
 
+    <string name="edit_step_appbar_title">Edit Step</string>
 
     <string name="report_title_bottom">Please choose the reason of report</string>
     <string name="report_title_dialog">Choose reason of report</string>
