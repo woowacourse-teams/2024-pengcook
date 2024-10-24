@@ -149,5 +149,6 @@
     <string name="category_korean">Korean</string>
     <string name="category_japanese">Japanese</string>
     <string name="category_chinese">Chinese</string>
+    <string name="comment_delete">Delete my comment</string>
 
 </resources>

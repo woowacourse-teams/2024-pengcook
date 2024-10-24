@@ -26,7 +26,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_button_round_corner"
+        android:background="@drawable/bg_radius"
         android:padding="24dp"
         tools:context=".presentation.comment.bottomsheet.CommentMenuBottomFragment">
 
@@ -132,7 +132,7 @@
             android:backgroundTint="@color/yellow_medium"
             android:fontFamily="@font/notosans_bold"
             android:padding="14dp"
-            android:text="Delete my comment"
+            android:text="@string/comment_delete"
             android:textColor="@color/yellow_weak"
             android:textSize="16sp"
             android:visibility="gone"

@@ -17,7 +17,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/screen_background">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/ctb_search"
@@ -25,7 +26,8 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
             app:layout_anchor="@+id/abl_default"
-            app:layout_scrollFlags="scroll|snap">
+            app:layout_scrollFlags="scroll|snap"
+            android:background="@color/screen_background">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tb_search"
