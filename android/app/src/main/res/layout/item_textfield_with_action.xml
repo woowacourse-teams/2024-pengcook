@@ -39,6 +39,7 @@
             android:padding="16dp"
             android:textSize="16sp"
             android:maxLength="30"
+            android:paddingEnd="40dp"
             android:text="@={content}"
             app:layout_constraintTop_toTopOf="parent"
             tools:hint="Hint" />
