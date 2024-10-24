@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.pengcook.android.databinding.FragmentHomeBinding
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.AnalyticsLogging
 
 @AndroidEntryPoint
@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
 
     private fun observeFeedData() {
         viewModel.feedData.observe(viewLifecycleOwner) { pagingData ->
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     adapter.submitData(pagingData)
                 }
@@ -78,14 +78,15 @@ class HomeFragment : Fragment() {
             val newEvent = event.getContentIfNotHandled() ?: return@observe
             when (newEvent) {
                 is HomeEvent.NavigateToDetail -> {
-                    onSingleMovieClicked(newEvent.recipe)
+                    onRecipeClick(newEvent.recipe)
                 }
             }
         }
     }
 
-    private fun onSingleMovieClicked(recipe: Recipe) {
-        val action = HomeFragmentDirections.actionHomeFragmentToDetailRecipeFragment(recipe)
+    private fun onRecipeClick(recipe: RecipeForList) {
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToDetailRecipeFragment(recipe.recipeId)
         findNavController().navigate(action)
     }
 
@@ -94,7 +95,7 @@ class HomeFragment : Fragment() {
         binding.viewModel = viewModel
         binding.homeRcView.adapter = adapter
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             adapter.loadStateFlow.collect { loadStates ->
                 binding.swipeRefreshLayout.isRefreshing = loadStates.refresh is LoadState.Loading
             }

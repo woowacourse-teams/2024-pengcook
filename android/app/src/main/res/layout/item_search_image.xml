@@ -6,7 +6,7 @@
 
         <variable
             name="recipe"
-            type="net.pengcook.android.presentation.core.model.Recipe" />
+            type="net.pengcook.android.presentation.core.model.RecipeForList" />
 
         <variable
             name="feedItemEventListener"

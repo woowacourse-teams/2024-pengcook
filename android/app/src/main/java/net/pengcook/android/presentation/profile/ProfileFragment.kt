@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,7 @@ class ProfileFragment : Fragment() {
         binding.layoutManager = layoutManager
         viewModel.items.observe(viewLifecycleOwner) { pagingData ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                binding.swipeRefreshLayout.isRefreshing = false
                 adapter.submitData(pagingData)
             }
         }
@@ -69,7 +71,7 @@ class ProfileFragment : Fragment() {
                 is ProfileUiEvent.NavigateToRecipeDetail -> {
                     val action =
                         ProfileFragmentDirections.actionProfileFragmentToDetailRecipeFragment(
-                            recipe = newEvent.recipe,
+                            recipeId = newEvent.recipe.recipeId,
                         )
                     findNavController().navigate(action)
                 }
@@ -79,10 +81,28 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+        initSwipeRefreshLayout()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initSwipeRefreshLayout() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.loadStateFlow.collect { loadState ->
+                binding.swipeRefreshLayout.isRefreshing = loadState.refresh is LoadState.Loading
+            }
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshData()
+        }
+    }
+
+    private fun refreshData() {
+        viewModel.loadData()
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class SearchViewModel
                 feedRepository = feedRepository,
             )
 
-        val allRecipes: Flow<PagingData<Recipe>> =
+        val allRecipes: Flow<PagingData<RecipeForList>> =
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, initialLoadSize = PAGE_SIZE),
                 pagingSourceFactory = { searchPagingSource },
@@ -52,18 +52,14 @@ class SearchViewModel
             _uiEvent.value = Event(SearchUiEvent.SearchFailure)
         }
 
-        override fun onNavigateToDetail(recipe: Recipe) {
+        override fun onNavigateToDetail(recipe: RecipeForList) {
             _uiEvent.value = Event(SearchUiEvent.RecipeSelected(recipe))
         }
 
         private fun hasKeyword(
             keyword: String,
-            recipe: Recipe,
-        ): Boolean =
-            keyword.isEmpty() ||
-                recipe.title.contains(keyword, ignoreCase = true) ||
-                recipe.introduction.contains(keyword, ignoreCase = true) ||
-                recipe.category.joinToString().contains(keyword, ignoreCase = true)
+            recipe: RecipeForList,
+        ): Boolean = keyword.isEmpty() || recipe.title.contains(keyword, ignoreCase = true)
 
         companion object {
             private const val INITIAL_KEYWORD = ""

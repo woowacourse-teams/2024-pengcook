@@ -2,7 +2,7 @@ package net.pengcook.android.presentation.profile
 
 import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemProfileFeedBinding
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 
 class ProfileFeedViewHolder(
     private val binding: ItemProfileFeedBinding,
@@ -12,7 +12,7 @@ class ProfileFeedViewHolder(
         binding.profileFeedClickListener = profileFeedClickListener
     }
 
-    fun bind(recipe: Recipe) {
+    fun bind(recipe: RecipeForList) {
         binding.recipe = recipe
     }
 }

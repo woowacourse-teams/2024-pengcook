@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.feed
 
-import net.pengcook.android.data.model.feed.item.FeedItemResponse
+import net.pengcook.android.data.model.feed.item.FeedItemResponse2
+import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
 import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.remote.api.FeedService
 import retrofit2.Response
@@ -20,7 +21,16 @@ class DefaultFeedRemoteDataSource
             category: String?,
             keyword: String?,
             userId: Long?,
-        ): Response<List<FeedItemResponse>> = feedService.fetchRecipes(accessToken, pageNumber, pageSize, category, keyword, userId)
+        ): Response<List<FeedItemResponseForList>> =
+            feedService.fetchRecipes2(
+                accessToken = accessToken,
+                accept = "application/vnd.pengcook.v1+json",
+                pageNumber = pageNumber,
+                pageSize = pageSize,
+                category = category,
+                keyword = keyword,
+                userId = userId,
+            )
 
         override suspend fun fetchRecipeSteps(recipeId: Long): Response<List<RecipeStepResponse>> = feedService.fetchRecipeSteps(recipeId)
 
@@ -28,4 +38,9 @@ class DefaultFeedRemoteDataSource
             accessToken: String,
             recipeId: Long,
         ): Response<Unit> = feedService.deleteRecipe(accessToken, recipeId)
+
+        override suspend fun fetchRecipe(
+            accessToken: String,
+            recipeId: Long,
+        ): Response<FeedItemResponse2> = feedService.fetchRecipe(accessToken, recipeId)
     }

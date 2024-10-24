@@ -138,11 +138,20 @@
 
     <string name="comment_reported">유저 %s가 신고되었습니다.</string>
     <string name="comment_deleted">댓글이 삭제되었습니다.</string>
+    <string name="comment_menu_username">유저명 :</string>
+    <string name="comment_menu_comment_content">댓글 내용 :</string>
+    <string name="comment_menu_delete">삭제하기</string>
+    <string name="comment_menu_block">차단하기</string>
+    <string name="comment_menu_report">신고하기</string>
 
     <string name="report_title_bottom">신고 사유를 선택해주세요.</string>
     <string name="report_title_dialog">신고 사유를 선택해주세요.</string>
     <string name="recipe_report_success">신고가 완료되었습니다.</string>
     <string name="alert_message_fill_form">완료되지 않은 폼이 있습니다.</string>
     <string name="comments">Comments</string>
+    <string name="comment_delete">삭제하기</string>
+    <string name="menu_delete">삭제하기</string>
+    <string name="menu_report">신고하기</string>
+    <string name="menu_block">차단하기</string>
 
 </resources>

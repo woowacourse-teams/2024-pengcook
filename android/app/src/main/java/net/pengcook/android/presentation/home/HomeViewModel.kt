@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 import javax.inject.Inject
@@ -28,8 +28,8 @@ class HomeViewModel
         val uiEvent: LiveData<Event<HomeEvent>>
             get() = _uiEvent
 
-        private val _feedData = MutableLiveData<PagingData<Recipe>>()
-        val feedData: LiveData<PagingData<Recipe>> = _feedData
+        private val _feedData = MutableLiveData<PagingData<RecipeForList>>()
+        val feedData: LiveData<PagingData<RecipeForList>> = _feedData
 
         init {
             loadFeedData()
@@ -55,7 +55,7 @@ class HomeViewModel
             loadFeedData()
         }
 
-        override fun onNavigateToDetail(recipe: Recipe) {
+        override fun onNavigateToDetail(recipe: RecipeForList) {
             _uiEvent.value = Event(HomeEvent.NavigateToDetail(recipe))
         }
 
@@ -66,6 +66,6 @@ class HomeViewModel
 
 sealed interface HomeEvent {
     data class NavigateToDetail(
-        val recipe: Recipe,
+        val recipe: RecipeForList,
     ) : HomeEvent
 }

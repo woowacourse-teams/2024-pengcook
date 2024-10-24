@@ -7,7 +7,7 @@
 
         <variable
             name="recipe"
-            type="net.pengcook.android.presentation.core.model.Recipe" />
+            type="net.pengcook.android.presentation.core.model.RecipeForList" />
 
         <variable
             name="eventListener"
@@ -23,7 +23,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/home_item_background">
 
             <!-- Recipe image -->
             <ImageView

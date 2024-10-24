@@ -9,14 +9,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForItem
 import net.pengcook.android.presentation.core.model.ReportReason
 
 class ReportDialogViewModel
     @AssistedInject
     constructor(
         private val userControlRepository: UserControlRepository,
-        @Assisted private val recipe: Recipe,
+        @Assisted private val recipe: RecipeForItem,
     ) : ViewModel(),
         ReportEventHandler {
         private var _reportReasons = MutableLiveData<List<ReportReason>>()
@@ -57,7 +57,7 @@ class ReportDialogViewModel
         companion object {
             fun provideFactory(
                 assistedFactory: ReportDialogViewModelFactory,
-                recipe: Recipe,
+                recipe: RecipeForItem,
             ): ViewModelProvider.Factory =
                 object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
