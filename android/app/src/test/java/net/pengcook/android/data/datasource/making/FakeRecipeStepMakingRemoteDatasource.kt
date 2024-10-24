@@ -1,14 +1,14 @@
 package net.pengcook.android.data.datasource.making
 
+import net.pengcook.android.data.model.makingrecipe.request.RecipeStepRequest
 import net.pengcook.android.data.model.step.RecipeStepResponse
-import net.pengcook.android.data.model.step.request.RecipeStepRequest
 import retrofit2.Response
 
 class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
     private val recipeSteps =
         mutableListOf(
             RecipeStepResponse(
-                stepId = 1,
+                id = 1,
                 recipeId = 1,
                 sequence = 1,
                 description = "description1",
@@ -16,7 +16,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 cookingTime = "114325",
             ),
             RecipeStepResponse(
-                stepId = 2,
+                id = 2,
                 recipeId = 1,
                 sequence = 2,
                 description = "description2",
@@ -24,7 +24,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 cookingTime = "114325",
             ),
             RecipeStepResponse(
-                stepId = 3,
+                id = 3,
                 recipeId = 1,
                 sequence = 3,
                 description = "description3",
@@ -32,7 +32,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
                 cookingTime = "114325",
             ),
             RecipeStepResponse(
-                stepId = 4,
+                id = 4,
                 recipeId = 1,
                 sequence = 4,
                 description = "description4",
@@ -55,7 +55,7 @@ class FakeRecipeStepMakingRemoteDatasource : RecipeStepMakingRemoteDataSource {
         }
         recipeSteps.add(
             RecipeStepResponse(
-                stepId = recipeSteps.size + 1L,
+                id = recipeSteps.size + 1L,
                 recipeId = recipeId,
                 sequence = recipeStepRequest.sequence,
                 description = recipeStepRequest.description,

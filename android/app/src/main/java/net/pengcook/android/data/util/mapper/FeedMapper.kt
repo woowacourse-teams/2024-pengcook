@@ -5,7 +5,10 @@ import net.pengcook.android.data.model.feed.item.CategoryResponse
 import net.pengcook.android.data.model.feed.item.FeedItemResponse2
 import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
 import net.pengcook.android.data.model.feed.item.IngredientResponse
+import net.pengcook.android.data.model.feed.item.RecipeEditRequest
+import net.pengcook.android.data.model.makingrecipe.request.RecipeStepRequest
 import net.pengcook.android.data.model.step.RecipeStepResponse
+import net.pengcook.android.presentation.core.model.ChangedRecipe
 import net.pengcook.android.presentation.core.model.Ingredient
 import net.pengcook.android.presentation.core.model.RecipeForItem
 import net.pengcook.android.presentation.core.model.RecipeForList
@@ -41,6 +44,18 @@ fun FeedItemResponse2.toRecipeForItem(): RecipeForItem =
         isLiked = isLike,
     )
 
+fun ChangedRecipe.toRecipeEditRequest(): RecipeEditRequest =
+    RecipeEditRequest(
+        title = title,
+        cookingTime = cookingTime,
+        thumbnail = thumbnail,
+        difficulty = difficulty,
+        description = description,
+        categories = categories,
+        ingredients = ingredients.map { it.toIngredientRequest() },
+        recipeSteps = recipeSteps.map { it.toRecipeStepRequest() },
+    )
+
 // fun FeedItemResponse.toRecipe(): Recipe =
 //    Recipe(
 //        title = title,
@@ -59,7 +74,7 @@ fun FeedItemResponse2.toRecipeForItem(): RecipeForItem =
 
 fun RecipeStepResponse.toRecipeStep(): RecipeStep =
     RecipeStep(
-        stepId = stepId,
+        stepId = id,
         recipeId = recipeId,
         description = description,
         image = image,
@@ -81,4 +96,12 @@ private fun IngredientResponse.toIngredient(): Ingredient =
         ingredientId = ingredientId,
         ingredientName = ingredientName,
         requirement = requirement,
+    )
+
+private fun RecipeStep.toRecipeStepRequest(): RecipeStepRequest =
+    RecipeStepRequest(
+        cookingTime = cookingTime,
+        description = description,
+        image = image,
+        sequence = sequence,
     )

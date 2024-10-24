@@ -43,7 +43,10 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
-            />
+        <action
+            android:id="@+id/action_detailRecipeFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment" />
+        />
     </fragment>
 
     <fragment
@@ -235,6 +238,39 @@
             app:destination="@id/profileFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editRecipeFragment"
+        android:name="net.pengcook.android.presentation.edit.EditRecipeFragment"
+        android:label="fragment_edit_recipe"
+        tools:layout="@layout/fragment_edit_recipe">
+        <argument
+            android:name="recipeId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_editRecipeFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment"
+            app:popUpTo="@id/detailRecipeFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_editRecipeFragment_to_editStepsFragment"
+            app:destination="@id/editStepsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editStepsFragment"
+        android:name="net.pengcook.android.presentation.edit.step.EditStepsFragment"
+        android:label="fragment_edit_recipe"
+        tools:layout="@layout/fragment_edit_recipe">
+        <argument
+            android:name="sequence"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_editStepsFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment"
+            app:popUpTo="@id/editRecipeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

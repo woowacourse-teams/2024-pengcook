@@ -65,6 +65,8 @@
     <string name="making_form_difficulty">Difficulty</string>
     <string name="making_form_introduction">Introduction</string>
 
+    <string name="edit_appbar_title">Edit Recipe</string>
+
     <string name="making_write_recipe_title">Write Recipe Title</string>
     <string name="making_write_ingredient">Write Ingredient</string>
     <string name="making_write_category">Write Categories</string>
@@ -151,6 +153,7 @@
     <string name="category_chinese">Chinese</string>
     <string name="comment_delete">Delete my comment</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_edit">Edit</string>
     <string name="menu_report">Report</string>
     <string name="menu_block">Block</string>
 

@@ -1,7 +1,7 @@
 package net.pengcook.android.data.model.step
 
 data class RecipeStepResponse(
-    val stepId: Long,
+    val id: Long,
     val description: String,
     val image: String,
     val recipeId: Long,

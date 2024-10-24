@@ -2,6 +2,7 @@ package net.pengcook.android.data.datasource.feed
 
 import net.pengcook.android.data.model.feed.item.FeedItemResponse2
 import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
+import net.pengcook.android.data.model.feed.item.RecipeEditRequest
 import net.pengcook.android.data.model.step.RecipeStepResponse
 import net.pengcook.android.data.remote.api.FeedService
 import retrofit2.Response
@@ -43,4 +44,10 @@ class DefaultFeedRemoteDataSource
             accessToken: String,
             recipeId: Long,
         ): Response<FeedItemResponse2> = feedService.fetchRecipe(accessToken, recipeId)
+
+        override suspend fun updateRecipe(
+            accessToken: String,
+            recipeId: Long,
+            recipeEditRequest: RecipeEditRequest,
+        ): Response<Unit> = feedService.updateRecipe(accessToken, recipeId, recipeEditRequest)
     }
