@@ -6,12 +6,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import net.pengcook.android.databinding.ItemSearchImageBinding
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
 class SearchAdapter(
     private val feedItemEventListener: FeedItemEventListener,
-) : PagingDataAdapter<Recipe, SearchAdapter.SearchViewHolder>(diffUtil) {
+) : PagingDataAdapter<RecipeForList, SearchAdapter.SearchViewHolder>(diffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -37,24 +37,24 @@ class SearchAdapter(
             binding.feedItemEventListener = feedItemEventListener
         }
 
-        fun bind(recipe: Recipe) {
+        fun bind(recipe: RecipeForList) {
             binding.recipe = recipe
         }
     }
 
     companion object {
         val diffUtil =
-            object : DiffUtil.ItemCallback<Recipe>() {
+            object : DiffUtil.ItemCallback<RecipeForList>() {
                 override fun areItemsTheSame(
-                    oldItem: Recipe,
-                    newItem: Recipe,
+                    oldItem: RecipeForList,
+                    newItem: RecipeForList,
                 ): Boolean {
                     return oldItem.recipeId == newItem.recipeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: Recipe,
-                    newItem: Recipe,
+                    oldItem: RecipeForList,
+                    newItem: RecipeForList,
                 ): Boolean {
                     return oldItem == newItem
                 }

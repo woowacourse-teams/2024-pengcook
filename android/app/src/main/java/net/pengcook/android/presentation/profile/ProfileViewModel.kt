@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import javax.inject.Inject
 
@@ -38,7 +38,7 @@ class ProfileViewModel
             _uiEvent.value = Event(ProfileUiEvent.NavigateToSetting)
         }
 
-        override fun onClick(recipe: Recipe) {
+        override fun onClick(recipe: RecipeForList) {
             _uiEvent.value = Event(ProfileUiEvent.NavigateToRecipeDetail(recipe))
         }
 
@@ -55,5 +55,5 @@ sealed interface ProfileUiEvent {
 
     data object NavigateToSetting : ProfileUiEvent
 
-    data class NavigateToRecipeDetail(val recipe: Recipe) : ProfileUiEvent
+    data class NavigateToRecipeDetail(val recipe: RecipeForList) : ProfileUiEvent
 }

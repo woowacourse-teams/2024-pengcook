@@ -27,7 +27,7 @@
 
     <!--onboarding-->
     <color name="onboarding_contract_text">#FF9E9E9E</color>
-    <color name="onboarding_google_button">#FF4285F4</color>
+    <color name="onboarding_google_button">#FFFFFFFF</color>
 
     <!-- home -->
     <color name="home_item_background">#FFFFFFFF</color>

@@ -69,7 +69,7 @@ class ProfileFragment : Fragment() {
                 is ProfileUiEvent.NavigateToRecipeDetail -> {
                     val action =
                         ProfileFragmentDirections.actionProfileFragmentToDetailRecipeFragment(
-                            recipe = newEvent.recipe,
+                            recipeId = newEvent.recipe.recipeId,
                         )
                     findNavController().navigate(action)
                 }

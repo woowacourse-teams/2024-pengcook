@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentCommentMenuBottomBinding
 import net.pengcook.android.presentation.core.model.Comment
 
+@AndroidEntryPoint
 class CommentMenuBottomFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentCommentMenuBottomBinding? = null
     private val binding

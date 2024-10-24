@@ -6,7 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import net.pengcook.android.data.repository.profile.ProfileRepository
 import net.pengcook.android.domain.model.profile.UserProfile
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 
 class ProfilePagingSource
     @AssistedInject
@@ -49,7 +49,7 @@ class ProfilePagingSource
                     )
                 }
             }.onFailure { throwable ->
-                LoadResult.Error<Int, Recipe>(throwable)
+                LoadResult.Error<Int, RecipeForList>(throwable)
             }.getOrThrow()
         }
 
@@ -81,7 +81,7 @@ class ProfilePagingSource
             userId: Long,
             pageNumber: Int,
             pageSize: Int,
-        ): Result<List<Recipe>> {
+        ): Result<List<RecipeForList>> {
             return profileRepository.fetchUserFeeds(userId, pageNumber, pageSize)
         }
 

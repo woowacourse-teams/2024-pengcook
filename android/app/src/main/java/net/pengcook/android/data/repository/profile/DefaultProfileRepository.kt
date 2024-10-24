@@ -4,11 +4,11 @@ import kotlinx.coroutines.flow.first
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.profile.ProfileRemoteDataSource
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
-import net.pengcook.android.data.util.mapper.toRecipe
+import net.pengcook.android.data.util.mapper.toRecipeForList
 import net.pengcook.android.data.util.mapper.toUserProfile
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.domain.model.profile.UserProfile
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -46,13 +46,13 @@ class DefaultProfileRepository
             userId: Long,
             pageNumber: Int,
             pageSize: Int,
-        ): Result<List<Recipe>> =
+        ): Result<List<RecipeForList>> =
             runCatching {
                 val accessToken =
                     sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
                 val response =
                     profileRemoteDataSource.fetchUserFeeds(accessToken, userId, pageNumber, pageSize)
-                body(response, CODE_SUCCESSFUL).map { recipeResponse -> recipeResponse.toRecipe() }
+                body(response, CODE_SUCCESSFUL).map { recipeResponse -> recipeResponse.toRecipeForList() }
             }
 
         companion object {

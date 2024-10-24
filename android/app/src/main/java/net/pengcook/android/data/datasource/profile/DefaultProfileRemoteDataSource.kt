@@ -1,6 +1,6 @@
 package net.pengcook.android.data.datasource.profile
 
-import net.pengcook.android.data.model.feed.item.FeedItemResponse
+import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.data.model.profile.UpdateProfileResponse
 import net.pengcook.android.data.model.profile.UserProfileResponse
@@ -32,9 +32,10 @@ class DefaultProfileRemoteDataSource
             userId: Long,
             pageNumber: Int,
             pageSize: Int,
-        ): Response<List<FeedItemResponse>> =
-            feedService.fetchRecipes(
+        ): Response<List<FeedItemResponseForList>> =
+            feedService.fetchRecipes2(
                 accessToken = accessToken,
+                accept = "application/vnd.pengcook.v1+json",
                 pageNumber = pageNumber,
                 pageSize = pageSize,
                 category = null,
