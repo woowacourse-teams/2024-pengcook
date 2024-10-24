@@ -50,7 +50,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/abl_detail_recipe">
+                app:layout_constraintTop_toBottomOf="@id/abl_detail_recipe"
+                android:visibility="@{!vm.uiState.isLoading &amp;&amp; vm.uiState.isSuccessful ? View.VISIBLE : View.GONE}">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

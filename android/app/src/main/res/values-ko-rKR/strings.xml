@@ -149,5 +149,6 @@
     <string name="recipe_report_success">신고가 완료되었습니다.</string>
     <string name="alert_message_fill_form">완료되지 않은 폼이 있습니다.</string>
     <string name="comments">Comments</string>
+    <string name="comment_delete">삭제하기</string>
 
 </resources>
