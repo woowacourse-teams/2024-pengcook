@@ -28,7 +28,7 @@
             app:appbarEventListener="@{appbarEventListener}"
             app:leftIcon="@{@drawable/ic_back_24}"
             app:rightIcon="@{@drawable/ic_complete_making}"
-            app:title="@{@string/making_appbar_title}" />
+            app:title="@{@string/edit_step_appbar_title}" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_step_making"
