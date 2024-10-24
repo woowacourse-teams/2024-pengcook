@@ -126,6 +126,12 @@
 
     <string name="comment_reported">User %s Reported</string>
     <string name="comment_deleted">Comment Deleted</string>
+    <string name="comment_menu_username">UserName :</string>
+    <string name="comment_menu_comment_content">Comment :</string>
+    <string name="comment_menu_delete">Delete my comment</string>
+    <string name="comment_menu_block">Block</string>
+    <string name="comment_menu_report">Report</string>
+
 
     <string name="report_title_bottom">Please choose the reason of report</string>
     <string name="report_title_dialog">Choose reason of report</string>
