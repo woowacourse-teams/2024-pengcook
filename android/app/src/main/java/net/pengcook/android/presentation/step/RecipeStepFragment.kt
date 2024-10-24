@@ -58,10 +58,33 @@ class RecipeStepFragment : Fragment() {
         binding.vpStepRecipe.apply {
             adapter = recipeStepPagerRecyclerAdapter
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            // ViewPager 설정 후 위치 복원
+            if (savedInstanceState != null) {
+                val position = savedInstanceState.getInt("current_step_position", 0)
+                setCurrentItem(position, false)
+            } else {
+                // ViewModel에서 위치 복원
+                setCurrentItem(viewModel.currentPosition, false)
+            }
         }
         observeViewModel()
 
         binding.dotsIndicator.attachTo(binding.vpStepRecipe)
+
+        // 페이지 변경 시 ViewModel에 위치 저장
+        binding.vpStepRecipe.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.currentPosition = position
+                }
+            },
+        )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("current_step_position", binding.vpStepRecipe.currentItem)
     }
 
     override fun onDestroyView() {
@@ -85,6 +108,9 @@ class RecipeStepFragment : Fragment() {
     private fun observeRecipeSteps() {
         viewModel.recipeSteps.observe(viewLifecycleOwner) { recipeSteps ->
             recipeStepPagerRecyclerAdapter.updateList(recipeSteps)
+            // 데이터 로드 후 위치 복원
+            val position = viewModel.currentPosition
+            binding.vpStepRecipe.setCurrentItem(position, false)
         }
     }
 }

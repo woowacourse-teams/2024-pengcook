@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -19,17 +20,25 @@ import net.pengcook.android.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
+    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var navController: NavController
+
+    private val destinationChangedListener =
+        NavController.OnDestinationChangedListener { _, destination, _ ->
+            updateBottomNavVisibility(destination)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeSplashScreen()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initializeNavigation()
+        initializeNavController()
+        initializeBottomNavigationView()
+        if (savedInstanceState == null) {
+            initializeStartDestination()
+        }
     }
 
     private fun initializeSplashScreen() {
@@ -40,29 +49,46 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeNavigation() {
+    private fun initializeNavController() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
-        val navController = navHostFragment.navController
-        initializeStartDestination(navController)
-        initializeBottomNavigationView(navController)
+        navController = navHostFragment.navController
+
+        navController.removeOnDestinationChangedListener(destinationChangedListener)
+        navController.addOnDestinationChangedListener(destinationChangedListener)
+
+        updateBottomNavVisibility(navController.currentDestination)
     }
 
-    private fun initializeStartDestination(navController: NavController) {
-        val navInflater = navController.navInflater
-        val graph = navInflater.inflate(R.navigation.nav_graph)
+    private fun initializeBottomNavigationView() {
+        val bottomNav = binding.bottomNav
+        NavigationUI.setupWithNavController(bottomNav, navController)
+        binding.bottomNav.itemIconTintList = null
+    }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                handleUiEvent(navController, graph)
+    private fun updateBottomNavVisibility(destination: NavDestination?) {
+        destination?.let {
+            when (it.id) {
+                R.id.homeFragment, R.id.searchFragment, R.id.profileFragment, R.id.categoryFragment ->
+                    binding.bottomNav.visibility = View.VISIBLE
+
+                else ->
+                    binding.bottomNav.visibility = View.GONE
             }
         }
     }
 
-    private suspend fun handleUiEvent(
-        navController: NavController,
-        graph: NavGraph,
-    ) {
+    private fun initializeStartDestination() {
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.nav_graph)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                handleUiEvent(graph)
+            }
+        }
+    }
+
+    private suspend fun handleUiEvent(graph: NavGraph) {
         viewModel.uiState.collect { event ->
             if (event == null) return@collect
             when (event) {
@@ -77,24 +103,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeBottomNavigationView(navController: NavController) {
-        val bottomNav = binding.bottomNav
-        NavigationUI.setupWithNavController(bottomNav, navController)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.homeFragment, R.id.searchFragment, R.id.profileFragment, R.id.categoryFragment ->
-                    bottomNav.visibility = View.VISIBLE
-
-                else -> bottomNav.visibility = View.GONE
-            }
-        }
-
-        binding.bottomNav.itemIconTintList = null
-    }
-
     private fun graphWithStartDestination(
         graph: NavGraph,
         startDestinationId: Int,
-    ): NavGraph = graph.apply { setStartDestination(startDestinationId) }
+    ): NavGraph =
+        graph.apply {
+            setStartDestination(startDestinationId)
+        }
 }
