@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.R
 import net.pengcook.android.databinding.FragmentReportDialogBinding
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForItem
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -19,7 +19,7 @@ class ReportDialogFragment : DialogFragment() {
     private val binding
         get() = _binding!!
 
-    private val recipe: Recipe? by lazy { arguments?.getParcelable("recipe") }
+    private val recipe: RecipeForItem? by lazy { arguments?.getParcelable("recipe") }
 
     @Inject
     lateinit var viewModelFactory: ReportDialogViewModelFactory
@@ -71,7 +71,7 @@ class ReportDialogFragment : DialogFragment() {
     companion object {
         private const val ARGS_KEY = "recipe"
 
-        fun newInstance(recipe: Recipe): ReportDialogFragment {
+        fun newInstance(recipe: RecipeForItem): ReportDialogFragment {
             val fragment = ReportDialogFragment()
             val args =
                 Bundle().apply {

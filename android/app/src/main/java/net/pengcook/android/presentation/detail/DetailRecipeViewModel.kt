@@ -12,108 +12,147 @@ import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.data.repository.like.LikeRepository
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForItem
+import net.pengcook.android.presentation.core.model.User
 import net.pengcook.android.presentation.core.util.Event
 
 class DetailRecipeViewModel
     @AssistedInject
     constructor(
-        @Assisted private val recipe: Recipe,
+        @Assisted private val id: Long,
         private val likeRepository: LikeRepository,
         private val feedRepository: FeedRepository,
         private val userControlRepository: UserControlRepository,
     ) : ViewModel(),
         AppbarSingleActionEventListener {
-        private val _uiState: MutableLiveData<Event<DetailRecipeUiEvent>> = MutableLiveData()
-        val uiState: LiveData<Event<DetailRecipeUiEvent>>
+        private val _uiEvent: MutableLiveData<Event<DetailRecipeUiEvent>> = MutableLiveData()
+        val uiEvent: LiveData<Event<DetailRecipeUiEvent>>
+            get() = _uiEvent
+
+        private val _uiState = MutableLiveData<RecipeDetailUiState>()
+        val uiState: LiveData<RecipeDetailUiState>
             get() = _uiState
 
-        private val _isLike = MutableLiveData<Boolean>()
-        val isLike: LiveData<Boolean> get() = _isLike
-
-        private val _error = MutableLiveData<Event<Unit>>()
-        val error: LiveData<Event<Unit>> get() = _error
-
-        private val _likeCount = MutableLiveData(recipe.likeCount)
-        val likeCount: LiveData<Long> get() = _likeCount
-
         init {
-            loadLikeData()
+            loadRecipe()
+        }
+
+        fun loadRecipe() {
+            viewModelScope.launch {
+                feedRepository.fetchRecipe(id)
+                    .onSuccess { recipe ->
+                        _uiState.value =
+                            RecipeDetailUiState(
+                                isLoading = false,
+                                isSuccessful = true,
+                                recipe = recipe,
+                                isLike = recipe.isLiked,
+                                likeCount = recipe.likeCount,
+                            )
+                    }.onFailure {
+                        _uiEvent.value = Event(DetailRecipeUiEvent.LoadRecipeFailure)
+                    }
+            }
         }
 
         fun toggleLike() {
-            _isLike.value = _isLike.value?.not()
-            if (_isLike.value == true) {
-                _likeCount.value = _likeCount.value?.plus(1)
-            } else {
-                _likeCount.value = _likeCount.value?.minus(1)
+            viewModelScope.launch {
+                val currentState = _uiState.value ?: return@launch
+                val newIsLike = currentState.isLike?.not() ?: return@launch
+                val newLikeCount =
+                    if (newIsLike) currentState.likeCount?.plus(1) else currentState.likeCount?.minus(1)
+
+                // 낙관적 업데이트: UI를 즉시 업데이트
+                _uiState.value =
+                    currentState.copy(
+                        isLike = newIsLike,
+                        likeCount = newLikeCount,
+                    )
+
+                // 서버에 변경사항 전송
+                likeRepository.postIsLike(id, newIsLike)
+                    .onSuccess { result ->
+                    }.onFailure {
+                        _uiState.value = currentState
+//                            _uiEvent.value = Event(DetailRecipeUiEvent.)
+                    }
             }
-            postLike()
         }
 
         fun onNavigateToMakingStep() {
-            _uiState.value = Event(DetailRecipeUiEvent.NavigateToStep)
+            _uiEvent.value = Event(DetailRecipeUiEvent.NavigateToStep)
         }
 
         fun onNavigateToComment() {
-            _uiState.value = Event(DetailRecipeUiEvent.NavigateToComment)
-        }
-
-        private fun loadLikeData() {
-            viewModelScope.launch {
-                likeRepository
-                    .loadIsLike(recipeId = recipe.recipeId)
-                    .onSuccess { isLike ->
-                        _isLike.value = isLike
-                    }.onFailure { _ ->
-                        _error.value = Event(Unit)
-                    }
-            }
-        }
-
-        private fun postLike() {
-            viewModelScope.launch {
-                isLike.value?.let {
-                    likeRepository.postIsLike(recipe.recipeId, it).onFailure { _ ->
-                        _error.value = Event(Unit)
-                    }
-                }
-            }
+            _uiEvent.value = Event(DetailRecipeUiEvent.NavigateToComment)
         }
 
         fun deleteRecipe() {
             viewModelScope.launch {
                 feedRepository
-                    .deleteRecipe(recipe.recipeId)
+                    .deleteRecipe(id)
                     .onSuccess {
-                        _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithDelete("delete"))
+                        _uiEvent.value = Event(DetailRecipeUiEvent.NavigateBackWithDelete("delete"))
                     }.onFailure { throwable ->
-                        _error.value = Event(Unit)
+                        _uiEvent.value = Event(DetailRecipeUiEvent.DeletionError)
                     }
             }
         }
 
         fun blockUser() {
             viewModelScope.launch {
-                userControlRepository.blockUser(recipe.user.id)
+                val user = uiState.value?.recipe?.user
+                userControlRepository.blockUser(user?.id ?: return@launch)
+                _uiEvent.value = Event(DetailRecipeUiEvent.NavigateBackWithBlock(user.username))
             }
-            _uiState.value = Event(DetailRecipeUiEvent.NavigateBackWithBlock(recipe.user.username))
+        }
+
+        fun openMenu(recipe: RecipeForItem) {
+            _uiEvent.value = Event(DetailRecipeUiEvent.OpenMenu(recipe))
         }
 
         override fun onNavigateBack() {
-            _uiState.value = Event(DetailRecipeUiEvent.NavigateBack)
+            _uiEvent.value = Event(DetailRecipeUiEvent.NavigateBack)
         }
 
         companion object {
             fun provideFactory(
                 assistedFactory: DetailRecipeViewModelFactory,
-                recipe: Recipe,
+                recipeId: Long,
             ): ViewModelProvider.Factory =
                 object : ViewModelProvider.Factory {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return assistedFactory.create(recipe) as T
+                        return assistedFactory.create(recipeId) as T
                     }
                 }
         }
     }
+
+data class RecipeDetailUiState(
+    val isLoading: Boolean = true,
+    val isSuccessful: Boolean = false,
+    val recipe: RecipeForItem =
+        RecipeForItem(
+            recipeId = 0,
+            title = "",
+            category = emptyList(),
+            thumbnail = "",
+            user =
+                User(
+                    id = 0,
+                    username = "",
+                    profile = "",
+                ),
+            isLiked = false,
+            likeCount = 0,
+            commentCount = 0,
+            difficulty = 0,
+            cookingTime = "00:00:00",
+            ingredients = emptyList(),
+            introduction = "",
+            mine = false,
+        ),
+    val isLike: Boolean? = null,
+    val likeCount: Long? = null,
+)

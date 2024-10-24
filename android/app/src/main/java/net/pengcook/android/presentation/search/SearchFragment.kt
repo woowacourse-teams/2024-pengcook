@@ -54,7 +54,6 @@ class SearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.allRecipes.collectLatest { pagingData ->
                 adapter.submitData(pagingData)
-                adapter.notifyDataSetChanged()
             }
         }
 
@@ -64,7 +63,7 @@ class SearchFragment : Fragment() {
                 is SearchUiEvent.RecipeSelected -> {
                     val action =
                         SearchFragmentDirections.actionSearchFragmentToDetailRecipeFragment(
-                            recipe = newEvent.recipe,
+                            recipeId = newEvent.recipe.recipeId,
                         )
                     findNavController().navigate(action)
                 }
@@ -86,6 +85,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 }

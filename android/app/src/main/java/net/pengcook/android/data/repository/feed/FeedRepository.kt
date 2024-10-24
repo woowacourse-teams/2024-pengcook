@@ -1,6 +1,7 @@
 package net.pengcook.android.data.repository.feed
 
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForItem
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.RecipeStep
 
 interface FeedRepository {
@@ -10,9 +11,11 @@ interface FeedRepository {
         category: String?,
         keyword: String?,
         userId: Long?,
-    ): Result<List<Recipe>>
+    ): Result<List<RecipeForList>>
 
     suspend fun fetchRecipeSteps(recipeId: Long): Result<List<RecipeStep>>
 
     suspend fun deleteRecipe(recipeId: Long): Result<Unit>
+
+    suspend fun fetchRecipe(recipeId: Long): Result<RecipeForItem>
 }

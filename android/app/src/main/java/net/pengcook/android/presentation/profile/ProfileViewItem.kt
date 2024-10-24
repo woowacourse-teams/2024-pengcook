@@ -1,7 +1,7 @@
 package net.pengcook.android.presentation.profile
 
 import net.pengcook.android.domain.model.profile.UserProfile
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 
 sealed class ProfileViewItem(open val viewType: Int) {
     class ProfileDescription(
@@ -14,7 +14,7 @@ sealed class ProfileViewItem(open val viewType: Int) {
     ) : ProfileViewItem(viewType)
 
     data class ProfileFeeds(
-        val recipe: Recipe,
+        val recipe: RecipeForList,
         override val viewType: Int = VIEW_TYPE_FEEDS,
     ) : ProfileViewItem(viewType)
 

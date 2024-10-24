@@ -3,15 +3,15 @@ package net.pengcook.android.data.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import net.pengcook.android.data.repository.feed.FeedRepository
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 
 class FeedPagingSource(
     private val feedRepository: FeedRepository,
     private val initialPageNumber: Int = 0,
     private val category: String? = null,
     private val userId: Long? = null,
-) : PagingSource<Int, Recipe>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Recipe> {
+) : PagingSource<Int, RecipeForList>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecipeForList> {
         val pageNumber = params.key ?: initialPageNumber
         return runCatching {
             val feeds =
@@ -24,11 +24,11 @@ class FeedPagingSource(
                 nextKey = nextKey,
             )
         }.onFailure { throwable ->
-            LoadResult.Error<Int, Recipe>(throwable)
+            LoadResult.Error<Int, RecipeForList>(throwable)
         }.getOrThrow()
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Recipe>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, RecipeForList>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
         }

@@ -1,6 +1,7 @@
 package net.pengcook.android.data.repository.feed
 
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForItem
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.RecipeStep
 import net.pengcook.android.presentation.core.model.User
 
@@ -15,25 +16,21 @@ class FakeFeedRepository(
         category: String?,
         keyword: String?,
         userId: Long?,
-    ): Result<List<Recipe>> =
+    ): Result<List<RecipeForList>> =
         runCatching {
             if (error) {
                 throw RuntimeException()
             }
             List(pageSize) { index ->
-                Recipe(
+                RecipeForList(
                     recipeId = pageNumber * pageSize + index.toLong(),
                     title = "recipe$index",
-                    category = listOf("Korean"),
-                    cookingTime = "10mins",
                     thumbnail = "thumbnail$index",
                     user = User(1, "user$index", "userThumbnail$index"),
                     likeCount = index.toLong(),
-                    ingredients = listOf(),
-                    difficulty = 5,
-                    introduction = "introduction$index",
                     commentCount = 10,
                     mine = false,
+                    createdAt = "",
                 )
             }
         }
@@ -46,6 +43,28 @@ class FakeFeedRepository(
         }
 
     override suspend fun deleteRecipe(recipeId: Long): Result<Unit> {
-        TODO("Not yet implemented")
+        return runCatching {
+            Unit
+        }
+    }
+
+    override suspend fun fetchRecipe(recipeId: Long): Result<RecipeForItem> {
+        return runCatching {
+            RecipeForItem(
+                recipeId = recipeId,
+                title = "recipe$recipeId",
+                category = listOf("category$recipeId"),
+                cookingTime = "cookingTime$recipeId",
+                thumbnail = "thumbnail$recipeId",
+                user = User(1, "user$recipeId", "userThumbnail$recipeId"),
+                likeCount = recipeId,
+                ingredients = listOf(),
+                difficulty = 1,
+                introduction = "introduction$recipeId",
+                commentCount = 10,
+                mine = false,
+                isLiked = false,
+            )
+        }
     }
 }

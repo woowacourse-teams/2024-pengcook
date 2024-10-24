@@ -1,6 +1,6 @@
 package net.pengcook.android.data.datasource.profile
 
-import net.pengcook.android.data.model.feed.item.FeedItemResponse
+import net.pengcook.android.data.model.feed.item.FeedItemResponseForList
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.data.model.profile.UpdateProfileResponse
 import net.pengcook.android.data.model.profile.UserProfileResponse
@@ -21,5 +21,5 @@ interface ProfileRemoteDataSource {
         userId: Long,
         pageNumber: Int,
         pageSize: Int,
-    ): Response<List<FeedItemResponse>>
+    ): Response<List<FeedItemResponseForList>>
 }

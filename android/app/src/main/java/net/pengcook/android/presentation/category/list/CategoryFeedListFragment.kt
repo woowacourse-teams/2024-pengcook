@@ -84,7 +84,7 @@ class CategoryFeedListFragment : Fragment() {
                 is CategoryFeedListUiEvent.NavigateToDetail -> {
                     val action =
                         CategoryFeedListFragmentDirections.actionCategoryFeedListFragmentToDetailRecipeFragment(
-                            newEvent.recipe,
+                            newEvent.recipe.recipeId,
                         )
                     findNavController().navigate(action)
                 }

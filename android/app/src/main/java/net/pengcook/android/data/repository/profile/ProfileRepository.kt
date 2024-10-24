@@ -2,7 +2,7 @@ package net.pengcook.android.data.repository.profile
 
 import net.pengcook.android.data.model.profile.UpdateProfileRequest
 import net.pengcook.android.domain.model.profile.UserProfile
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 
 interface ProfileRepository {
     suspend fun fetchUserInformation(userId: Long): Result<UserProfile>
@@ -15,5 +15,5 @@ interface ProfileRepository {
         userId: Long,
         pageNumber: Int,
         pageSize: Int,
-    ): Result<List<Recipe>>
+    ): Result<List<RecipeForList>>
 }

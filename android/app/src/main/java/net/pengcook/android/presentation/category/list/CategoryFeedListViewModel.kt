@@ -15,7 +15,7 @@ import dagger.assisted.AssistedInject
 import net.pengcook.android.data.datasource.FeedPagingSource
 import net.pengcook.android.data.repository.feed.FeedRepository
 import net.pengcook.android.presentation.core.listener.AppbarSingleActionEventListener
-import net.pengcook.android.presentation.core.model.Recipe
+import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
@@ -31,7 +31,7 @@ class CategoryFeedListViewModel
         val uiEvent: LiveData<Event<CategoryFeedListUiEvent>>
             get() = _uiEvent
 
-        val feedData: LiveData<PagingData<Recipe>> =
+        val feedData: LiveData<PagingData<RecipeForList>> =
             Pager(
                 config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
@@ -47,7 +47,7 @@ class CategoryFeedListViewModel
             _uiEvent.value = Event(CategoryFeedListUiEvent.NavigateBack)
         }
 
-        override fun onNavigateToDetail(recipe: Recipe) {
+        override fun onNavigateToDetail(recipe: RecipeForList) {
             _uiEvent.value = Event(CategoryFeedListUiEvent.NavigateToDetail(recipe))
         }
 
