@@ -84,7 +84,7 @@ object EditRecipeRepository {
 
     private fun RecipeCreation.toSavedRecipeDescription(): SavedRecipeDescription =
         SavedRecipeDescription(
-            id = 1L,
+            id = recipeId,
             title = title,
             imageUri = "",
             description = introduction,

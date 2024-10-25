@@ -37,6 +37,7 @@ class EditStepsViewModel :
 
     fun saveData() {
         val data = steps.value
+        println(data)
 
         if (data == null) {
             _uiEvent.value = EditStepsEvent.OnSaveFailure
@@ -47,6 +48,7 @@ class EditStepsViewModel :
 
     fun exit() {
         val data = steps.value
+        println(data)
 
         if (data == null) {
             _uiEvent.value = EditStepsEvent.OnSaveFailure
@@ -68,12 +70,17 @@ class EditStepsViewModel :
     }
 
     override fun navigationAction() {
+        exit()
+        println("data : ${EditRecipeRepository.fetchAllSavedRecipeData().getOrNull()}")
+
         _uiEvent.value = EditStepsEvent.NavigationEvent
     }
 
     override fun customAction() {
-        _uiEvent.value = EditStepsEvent.TempSaveEvent
         saveData()
+        println("data : ${EditRecipeRepository.fetchAllSavedRecipeData().getOrNull()}")
+
+        _uiEvent.value = EditStepsEvent.TempSaveEvent
     }
 
     override fun onDescriptionChanged(
