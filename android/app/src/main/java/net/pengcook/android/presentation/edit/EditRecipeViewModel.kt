@@ -95,7 +95,10 @@ class EditRecipeViewModel
                     minuteContent.value = recipe.cookingTime.split(":")[1]
                     secondContent.value = recipe.cookingTime.split(":")[2]
                     _thumbnailUri.value = Uri.parse(recipe.thumbnail)
-                    thumbnailTitle = recipe.thumbnail
+                    thumbnailTitle = recipe.thumbnail.split("/").lastOrNull() ?: run {
+                        _uiEvent.value = Event(EditRecipeEvent.RecipePostFailure)
+                        return@launch
+                    }
                 }
             }
         }
@@ -283,6 +286,8 @@ class EditRecipeViewModel
         }
 
         override fun onConfirm() {
+            val steps = EditRecipeRepository.fetchAllSavedRecipeData().getOrNull()?.steps
+
             val recipeCreation =
                 RecipeCreation(
                     title = titleContent.value ?: "",
@@ -302,16 +307,16 @@ class EditRecipeViewModel
                                 )
                             } ?: emptyList(),
                     steps =
-                        currentStepImages.value?.map {
+                        steps?.map {
                             RecipeStepMaking(
-                                stepId = it.itemId.toLong(),
+                                stepId = it.stepId,
                                 recipeId = recipeId,
                                 description = it.description,
-                                image = it.imageTitle,
+                                image = it.image,
                                 sequence = it.sequence,
-                                imageUri = it.uri.toString(),
+                                imageUri = it.imageUri,
                                 cookingTime = it.cookingTime,
-                                imageUploaded = it.uploaded,
+                                imageUploaded = it.imageUploaded,
                             )
                         } ?: emptyList(),
                     categories =
@@ -332,10 +337,8 @@ class EditRecipeViewModel
                 return
             }
 
-            val entireData = EditRecipeRepository.fetchAllSavedRecipeData().getOrNull()
-            if (entireData == null) {
-                return
-            }
+            val entireData = EditRecipeRepository.fetchAllSavedRecipeData().getOrNull() ?: return
+            println(entireData.steps)
             val changedRecipe =
                 ChangedRecipe(
                     title = entireData.title,
@@ -431,7 +434,7 @@ class EditRecipeViewModel
         private fun saveRecipeDescription() {
             val recipeDescription =
                 RecipeDescription(
-                    recipeDescriptionId = recipeId ?: return,
+                    recipeDescriptionId = recipeId,
                     categories =
                         categoryContent.value
                             ?.split(SEPARATOR_INGREDIENTS)
@@ -450,6 +453,7 @@ class EditRecipeViewModel
 
             val recipeCreation =
                 RecipeCreation(
+                    recipeId = recipeId,
                     title = recipeDescription.title,
                     introduction = recipeDescription.description,
                     cookingTime = recipeDescription.cookingTime,

@@ -251,6 +251,7 @@ class StepMakingViewModel
         private suspend fun recipeCreation(): RecipeCreation? {
             val recipeData = makingRecipeRepository.fetchTotalRecipeData().getOrNull() ?: return null
             return RecipeCreation(
+                recipeId = recipeId,
                 title = recipeData.title,
                 thumbnail = recipeData.thumbnail,
                 cookingTime = recipeData.cookingTime,

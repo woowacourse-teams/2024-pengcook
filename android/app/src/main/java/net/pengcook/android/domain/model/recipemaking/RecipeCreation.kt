@@ -4,6 +4,7 @@ import net.pengcook.android.presentation.core.model.Ingredient
 import net.pengcook.android.presentation.core.model.RecipeStepMaking
 
 data class RecipeCreation(
+    val recipeId: Long = 1L,
     val title: String,
     val introduction: String,
     val cookingTime: String,
