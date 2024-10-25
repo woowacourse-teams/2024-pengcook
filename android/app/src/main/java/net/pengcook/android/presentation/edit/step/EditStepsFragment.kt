@@ -96,7 +96,7 @@ class EditStepsFragment : Fragment() {
                 EditStepsEvent.OnFetchComplete -> {
                     // 데이터 로딩 완료
                     println("EditStepsFragment : ${args.sequence}")
-                    binding.vpStepMaking.setCurrentItem(args.sequence + 1, false)
+                    binding.vpStepMaking.setCurrentItem(args.sequence - 1, false)
                 }
 
                 EditStepsEvent.OnSaveFailure -> {
@@ -108,6 +108,7 @@ class EditStepsFragment : Fragment() {
         viewModel.steps.observe(viewLifecycleOwner) { steps ->
             println("EditStepsFragment : $steps")
             editStepsAdapter.submitList(steps)
+            binding.vpStepMaking.setCurrentItem(args.sequence - 1, false)
         }
     }
 }
