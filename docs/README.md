@@ -1,3 +1,4 @@
+<p align="end"><a href="https://github.com/woowacourse-teams/2024-pengcook/blob/main/docs/ko.md">Korean</a></p>
 <h1 align="middle">🍳 PengCook</h1>
 <p align="middle"><b>Social media for sharing world recipes<b></b></p>
 
