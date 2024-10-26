@@ -1,4 +1,4 @@
-<p align="end"><a href="https://github.com/woowacourse-teams/2024-pengcook/blob/main/docs/ko.md">Korean</a></p>
+<p align="end"><a href="https://github.com/woowacourse-teams/2024-pengcook/blob/main/docs/ko.md">한국어</a></p>
 <h1 align="middle">🍳 PengCook</h1>
 <p align="middle"><b>Social media for sharing world recipes<b></b></p>
 
@@ -13,6 +13,7 @@
 # 🛠️ Techonologies
 
 ![](https://github.com/user-attachments/assets/906293d0-e3cd-44f3-ac16-fd7bd3617c87)
+<br>
 
 # 👨🏻‍👩🏻‍👦🏻‍👦🏻 Team Members
 
@@ -42,4 +43,3 @@
     <td><a href="https://github.com/kmkim2689">KM</a></td>
 </tr>
 </table>
-<br>
