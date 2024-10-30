@@ -12,7 +12,7 @@
 
 # 🛠️ 기술
 
-![](https://github.com/user-attachments/assets/bf7c72cf-1d49-48fa-87cb-3b928e40b15d)
+![](https://github.com/user-attachments/assets/9012bc9e-5b68-4c31-be2e-7c69f122fd25)
 <br>
 
 # 👨🏻‍👩🏻‍👦🏻‍👦🏻 팀원
