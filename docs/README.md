@@ -7,7 +7,63 @@
 
 # 📝 Project Instruction
 
-![](https://github.com/user-attachments/assets/3b576e48-f02a-4f16-91fe-917718204d4e)
+<table>
+<tr>
+    <th>Home</th>
+    <th>Search</th>
+    <th>Category</th>
+</tr>
+<tr align="center">
+    <td><img src="https://i.postimg.cc/W1m0PWmG/1.gif" /></td>
+    <td><img src="https://i.postimg.cc/X7dspgcJ/4.gif" /></td>
+    <td><img src="https://i.postimg.cc/59H7MJX8/5.gif" /></td>
+</tr>
+<tr align="center">
+    <td>
+        새로운 요리를 발견해보세요
+        매일 같은 요리가 지겹지 않나요?
+        새로운 레시피들이
+        여러분을 기다리고 있어요
+    </td>
+    <td>
+        레시피를 쉽고 빠르게 검색해요
+        지금 만들고 싶은 레시피
+        재료, 요리 이름, 카테고리
+        원하는 키워드로 검색해요!
+    </td>
+    <td>
+        입맛대로 골라서 봐요 좋아하는 카테고리를 찾아요
+        한식부터 흑백요리사까지, 다양한 카테고리가 준비되어 있어요
+    </td>
+</tr>
+<tr>
+    <th>Profile</th>
+    <th>Detail</th>
+    <th>Post</th>
+</tr>
+<tr align="center">
+    <td><img src="https://i.postimg.cc/W1VXrJX7/7.gif" /></td>
+    <td><img src="https://i.postimg.cc/BZdhSzFk/2.gif" /></td>
+    <td><img src="https://i.postimg.cc/Rq5JkKNp/6.gif" /></td>
+</tr>
+<tr align="center">
+    <td>
+        나만의 레시피를 모아봐요
+        나만의 요리들을 모아서
+        나만의 레시피북을 완성해요!
+    </td>
+    <td>
+        원터치로 스텝을 넘겨요
+        요리중 불편한 조작 없이 터치 한번으로!
+        물이 묻은 손으로도 편하게 조작할 수 있어요
+    </td>
+    <td>
+        나만의 레시피를 공유해요
+        자신만의 비법으로 만든 인생 레시피
+        다른 사람들에게 마음껏 자랑해요
+    </td>
+</tr>
+</table>
 <br>
 
 # 🛠️ Techonologies
