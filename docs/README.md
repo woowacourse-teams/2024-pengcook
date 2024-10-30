@@ -14,26 +14,24 @@
     <th>Category</th>
 </tr>
 <tr align="center">
-    <td><img src="https://i.postimg.cc/W1m0PWmG/1.gif" /></td>
-    <td><img src="https://i.postimg.cc/X7dspgcJ/4.gif" /></td>
-    <td><img src="https://i.postimg.cc/59H7MJX8/5.gif" /></td>
+    <td><img src="https://github.com/user-attachments/assets/0aa771dd-cf36-436d-9c5f-517650802b8a" /></td>
+    <td><img src="https://github.com/user-attachments/assets/42995442-e97b-445f-90b5-e2b568390e14" /></td>
+    <td><img src="https://github.com/user-attachments/assets/f8981e59-267e-492b-9dd0-38e16d8f15ea" /></td>
 </tr>
 <tr align="center">
     <td>
-        새로운 요리를 발견해보세요
-        매일 같은 요리가 지겹지 않나요?
-        새로운 레시피들이
-        여러분을 기다리고 있어요
+        Discover new recipes!
+        Are you tired of the same meals every day?
+        Exciting new recipes are waiting for you.
     </td>
     <td>
-        레시피를 쉽고 빠르게 검색해요
-        지금 만들고 싶은 레시피
-        재료, 요리 이름, 카테고리
-        원하는 키워드로 검색해요!
+        Search recipes quickly and easily.
+        Find the recipe you want to make right now by searching for ingredients,
+        dish names, or categories with your favorite keywords!
     </td>
     <td>
-        입맛대로 골라서 봐요 좋아하는 카테고리를 찾아요
-        한식부터 흑백요리사까지, 다양한 카테고리가 준비되어 있어요
+        Pick and choose to suit your taste.
+        Browse your favorite categories from Korean cuisine to "Monochrome Chef" we've got a wide variety ready for you.
     </td>
 </tr>
 <tr>
@@ -42,25 +40,21 @@
     <th>Post</th>
 </tr>
 <tr align="center">
-    <td><img src="https://i.postimg.cc/W1VXrJX7/7.gif" /></td>
-    <td><img src="https://i.postimg.cc/BZdhSzFk/2.gif" /></td>
-    <td><img src="https://i.postimg.cc/Rq5JkKNp/6.gif" /></td>
+    <td><img src="https://github.com/user-attachments/assets/840a82f1-3dc9-4c09-a2f1-cfcd2356732a" /></td>
+    <td><img src="https://github.com/user-attachments/assets/262ba92e-557e-42c3-a173-7d779d2558b1" /></td>
+    <td><img src="https://github.com/user-attachments/assets/ef78185f-8ba4-4c54-8080-61abfaa277d7" /></td>
 </tr>
 <tr align="center">
     <td>
-        나만의 레시피를 모아봐요
-        나만의 요리들을 모아서
-        나만의 레시피북을 완성해요!
+        Collect your own recipes Gather your favorite dishes and create your very own recipe book!
     </td>
     <td>
-        원터치로 스텝을 넘겨요
-        요리중 불편한 조작 없이 터치 한번으로!
-        물이 묻은 손으로도 편하게 조작할 수 있어요
+        Swipe through steps with one touch Move to the next step with a single touch, no hassle!
+        Easily navigate even with wet hands while cooking. 
     </td>
     <td>
-        나만의 레시피를 공유해요
-        자신만의 비법으로 만든 인생 레시피
-        다른 사람들에게 마음껏 자랑해요
+        Share your unique recipes Show off your life’s best recipes made with your own secret touch.
+        Share them proudly with others!
     </td>
 </tr>
 </table>
