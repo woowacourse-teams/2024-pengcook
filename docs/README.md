@@ -12,7 +12,8 @@
 
 # 🛠️ Techonologies
 
-![](https://github.com/user-attachments/assets/6055649c-147b-48c8-b098-9a3427b7728c)
+![Group 216 (2)](https://github.com/user-attachments/assets/7260d3ff-cc1a-4b8d-aad1-dd42871d2724)
+
 <br>
 
 # 👨🏻‍👩🏻‍👦🏻‍👦🏻 Team Members
