@@ -94,3 +94,10 @@
     <td><a href="https://github.com/kmkim2689">KM</a></td>
 </tr>
 </table>
+
+# 📢 PengCook Social Media
+
+<a href="https://www.instagram.com/peng_cook/"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="instagram"/>
+</a>
+<a href="https://www.youtube.com/@PengCook-u8s"><img src="https://img.shields.io/badge/YouTube-%23FF0000.svg?style=for-the-badge&logo=YouTube&logoColor=white" alt="instagram"/>
+</a>
