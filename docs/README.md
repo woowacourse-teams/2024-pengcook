@@ -6,6 +6,17 @@
 <br>
 
 # 📝 Project Instruction
+## Why do we create PengCook? 
+
+The joy of eating is an indispensable pleasure in our lives.  
+In the midst of a busy life, there are often times when it’s hard to feel this joy.  
+That’s why we created a service where you can cook easily and share your creations effortlessly.
+
+## Who is good for?
+
+For those who feel unsatisfied with having the same meals every day—are you looking to easily follow others’ recipes?  
+We’ve eliminated the hassle of scrolling with wet hands and deciphering hard-to-read text instructions for cooking steps.  
+Now, you can cook more conveniently and enjoyably!
 
 <table>
 <tr>
