@@ -94,7 +94,7 @@ Now, you can cook more conveniently and enjoyably!
     <td><img src="https://avatars.githubusercontent.com/u/74256335" /></td>
     <td><img src="https://avatars.githubusercontent.com/u/101035437" /></td>
 </tr>
-<tr>
+<tr  style="text-align: center;">
     <td><a href="https://github.com/HaiSeong">Loki</a></td>
     <td><a href="https://github.com/geoje">Seyang</a></td>
     <td><a href="https://github.com/hyxrxn">Atto</a></td>
