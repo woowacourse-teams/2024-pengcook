@@ -42,7 +42,7 @@ Now, you can cook more conveniently and enjoyably!
     </td>
     <td>
         Pick and choose to suit your taste.
-        Browse your favorite categories from Korean cuisine to "Monochrome Chef" we've got a wide variety ready for you.
+        Browse your favorite categories from Korean cuisine to "Culinary Class Wars" we've got a wide variety ready for you.
     </td>
 </tr>
 <tr>
