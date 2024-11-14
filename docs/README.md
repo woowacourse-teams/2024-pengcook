@@ -2,11 +2,19 @@
 <h1 align="middle">🍳 PengCook</h1>
 <p align="middle"><b>Social media for sharing world recipes<b></b></p>
 
+<div style="text-align: center">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"/>
+<img src="https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"/>
+</div>
+
 ![](https://github.com/user-attachments/assets/6a3946ef-1fbf-47f2-9b6b-602a57b64ca2)
 <br>
 
 # 📝 Project Instruction
-## Why do we create PengCook? 
+
+## Why do we create PengCook?
 
 The joy of eating is an indispensable pleasure in our lives.  
 In the midst of a busy life, there are often times when it’s hard to feel this joy.  

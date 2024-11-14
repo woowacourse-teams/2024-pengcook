@@ -2,6 +2,13 @@
 <h1 align="middle">🍳 펭쿡</h1>
 <p align="middle"><b>세계 요리를 공유하기 위한 소셜 미디어<b></b></p>
 
+<div style="text-align: center">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=Android&logoColor=white"/>
+<img src="https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white"/>
+</div>
+
 ![](https://github.com/user-attachments/assets/396ed67b-685b-4e7d-88fe-48f76ba5f811)
 <br>
 
