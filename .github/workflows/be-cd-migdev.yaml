@@ -86,7 +86,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: backend/src/main/resources/docker-compose-dev.yaml
-          target: ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+          target: ~/${{ github.event.repository.name }}
 
       - name: Rename docker compose file
         uses: appleboy/ssh-action@v1.0.3
@@ -95,7 +95,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+            cd ~/${{ github.event.repository.name }}
             mv docker-compose-dev.yaml docker-compose.yaml
 
       - name: Set up environment variables
@@ -105,7 +105,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+            cd ~/${{ github.event.repository.name }}
             echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" > .env
             echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
             echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
@@ -117,7 +117,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Pull latest Docker images
-        run: docker compose -f ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}/docker-compose.yaml pull
+        run: docker compose -f ~/${{ github.event.repository.name }}/docker-compose.yaml pull
 
       - name: Downup docker compose
         uses: appleboy/ssh-action@v1.0.3
@@ -126,7 +126,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/${{ secrets.DOCKERHUB_IMAGE_NAME }}
+            cd ~/${{ github.event.repository.name }}
             docker compose down
             docker compose up -d
 
