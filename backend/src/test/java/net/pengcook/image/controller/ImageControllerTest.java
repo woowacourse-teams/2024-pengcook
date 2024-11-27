@@ -11,41 +11,43 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 
 import io.restassured.RestAssured;
 import net.pengcook.RestDocsSetting;
-import net.pengcook.image.dto.PresignedUrlResponse;
-import net.pengcook.image.service.S3ClientService;
+import net.pengcook.image.dto.UploadUrlResponse;
+import net.pengcook.image.service.ImageClientService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-class S3ControllerTest extends RestDocsSetting {
+class ImageControllerTest extends RestDocsSetting {
 
     @MockBean
-    private S3ClientService s3ClientService;
+    @Qualifier("imageClientService")
+    private ImageClientService imageClientService;
 
     @Test
-    @DisplayName("presigned url을 반환한다.")
-    void getPresignedUrl() {
-        String presignedUrl =
-                "https://bucketName.s3.region.amazonaws.com/serviceName/image/fileName?X-Amz-Security-Token=REDACTED&X-Amz-Algorithm=REDACTED&X-Amz-Date=REDACTED&X-Amz-SignedHeaders=REDACTED&X-Amz-Expires=REDACTED&X-Amz-Credential=REDACTED&X-Amz-Signature=REDACTED";
+    @DisplayName("upload url을 반환한다.")
+    void getUploadUrl() {
+        String fileName = "guiny.jpg";
+        String uploadUrl = "https://objectstorage.region.oraclecloud.com/p/REDACTED_TOKEN/n/namespace/b/bucketName/o/"
+                + fileName;
 
-        when(s3ClientService.generatePresignedPutUrl(any()))
-                .thenReturn(new PresignedUrlResponse(presignedUrl));
+        when(imageClientService.generateUploadUrl(any())).thenReturn(new UploadUrlResponse(uploadUrl));
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "이미지 업로드를 위한 presigned url을 요청합니다.",
-                        "presigned url 요청 API",
+                        "이미지 업로드를 위한 Upload URL을 요청합니다.",
+                        "Upload URL 요청 API",
                         queryParameters(
-                                parameterWithName("fileName").description("이미지 파일 이름")
+                                parameterWithName("fileName").description("저장할 이미지 파일 이름")
                         ),
                         responseFields(
-                                fieldWithPath("url").description("presigned url")
+                                fieldWithPath("url").description("Upload URL")
                         )))
                 .when()
-                .queryParam("fileName", "testImage.jpg")
+                .queryParam("fileName", fileName)
                 .get("/image")
                 .then().log().all()
                 .statusCode(200)
-                .body("url", equalTo(presignedUrl));
+                .body("url", equalTo(uploadUrl));
     }
 }
