@@ -125,7 +125,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/${{ github.event.repository.name }}
-            docker compsoe pull
+            docker compose pull
             docker compose down
             docker compose up -d
             docker image prune -af
