@@ -85,6 +85,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          strip_components: 4
           source: backend/src/main/resources/docker-compose-dev.yaml
           target: ~/${{ github.event.repository.name }}
 
