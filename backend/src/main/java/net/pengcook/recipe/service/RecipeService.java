@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.category.service.CategoryService;
 import net.pengcook.comment.service.CommentService;
-import net.pengcook.image.service.S3ClientService;
+import net.pengcook.image.service.ImageClientService;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
@@ -51,7 +51,7 @@ public class RecipeService {
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
-    private final S3ClientService s3ClientService;
+    private final ImageClientService imageClientService;
     private final RecipeStepService recipeStepService;
     private final IngredientRecipeService ingredientRecipeService;
     private final CommentService commentService;
@@ -151,7 +151,7 @@ public class RecipeService {
     @Transactional
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
-        String thumbnailUrl = s3ClientService.getImageUrl(recipeRequest.thumbnail()).url();
+        String thumbnailUrl = imageClientService.getImageUrl(recipeRequest.thumbnail()).url();
         Recipe recipe = new Recipe(
                 recipeRequest.title(),
                 author,
@@ -177,7 +177,7 @@ public class RecipeService {
         Recipe updatedRecipe = recipe.updateRecipe(
                 recipeUpdateRequest.title(),
                 LocalTime.parse(recipeUpdateRequest.cookingTime()),
-                s3ClientService.getImageUrl(recipeUpdateRequest.thumbnail()).url(),
+                imageClientService.getImageUrl(recipeUpdateRequest.thumbnail()).url(),
                 recipeUpdateRequest.difficulty(),
                 recipeUpdateRequest.description()
         );

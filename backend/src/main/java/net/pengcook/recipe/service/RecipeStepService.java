@@ -5,7 +5,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import net.pengcook.image.service.S3ClientService;
+import net.pengcook.image.service.ImageClientService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.RecipeStepRequest;
@@ -23,7 +23,7 @@ public class RecipeStepService {
 
     private final RecipeStepRepository recipeStepRepository;
     private final RecipeRepository recipeRepository;
-    private final S3ClientService s3ClientService;
+    private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
     public List<RecipeStepResponse> readRecipeSteps(long recipeId) {
@@ -71,7 +71,7 @@ public class RecipeStepService {
         if (image.isBlank()) {
             throw new InvalidParameterException("적절하지 않은 이미지 이름입니다.");
         }
-        return s3ClientService.getImageUrl(image).url();
+        return imageClientService.getImageUrl(image).url();
     }
 
     private LocalTime getValidatedCookingTime(String cookingTime) {

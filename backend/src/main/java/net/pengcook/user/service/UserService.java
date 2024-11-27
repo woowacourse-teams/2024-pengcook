@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
-import net.pengcook.image.service.S3ClientService;
+import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.service.RecipeService;
@@ -41,7 +41,7 @@ public class UserService {
     private final RecipeLikeRepository recipeLikeRepository;
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
-    private final S3ClientService s3ClientService;
+    private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
     public ProfileResponse getUserById(long userId) {
@@ -64,7 +64,7 @@ public class UserService {
 
         String userImage = updateProfileRequest.image();
         if (!userImage.startsWith("http")) {
-            userImage = s3ClientService.getImageUrl(userImage).url();
+            userImage = imageClientService.getImageUrl(userImage).url();
         }
 
         user.update(
