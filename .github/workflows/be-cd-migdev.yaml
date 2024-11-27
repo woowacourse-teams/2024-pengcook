@@ -117,10 +117,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Pull latest Docker images
-        run: docker compose -f ~/${{ github.event.repository.name }}/docker-compose.yaml pull
-
-      - name: Downup docker compose
+      - name: Update docker compose
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -128,8 +125,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/${{ github.event.repository.name }}
+            docker compsoe pull
             docker compose down
             docker compose up -d
-
-      - name: Clean up unused Docker images
-        run: docker image prune -af
+            docker image prune -af
