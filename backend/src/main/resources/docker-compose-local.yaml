@@ -1,3 +1,5 @@
+name: pengcook
+
 volumes:
   db:
   grafana:
@@ -34,9 +36,9 @@ services:
     ports:
       - 9100:9100
     command:
-      - '--path.rootfs=/host'
+      - "--path.rootfs=/host"
     volumes:
-      - '/:/host:ro'
+      - "/:/host:ro"
 
   prom:
     image: prom/prometheus
@@ -58,7 +60,7 @@ services:
             scrape_interval: 15s
             static_configs:
               - targets: ['host.docker.internal:8080']
-        
+
           - job_name: 'node'
             scrape_interval: 15s
             static_configs:
