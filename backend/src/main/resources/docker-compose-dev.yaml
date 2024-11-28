@@ -1,3 +1,5 @@
+name: pengcook
+
 volumes:
   db:
   grafana:
@@ -42,9 +44,9 @@ services:
     restart: unless-stopped
     pid: host
     command:
-      - '--path.rootfs=/host'
+      - "--path.rootfs=/host"
     volumes:
-      - '/:/host:ro,rslave'
+      - "/:/host:ro,rslave"
 
   prom:
     image: prom/prometheus
@@ -65,7 +67,7 @@ services:
             scrape_interval: 15s
             static_configs:
               - targets: ['app:8080']
-        
+
           - job_name: 'node'
             scrape_interval: 15s
             static_configs:
