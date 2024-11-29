@@ -1,16 +1,52 @@
 name: pengcook
 
 volumes:
+  db:
   grafana:
   prom:
 
 services:
+  db:
+    image: mysql:8.0.38
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      LANG: C.UTF-8
+      TZ: Asia/Seoul
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+
+  app:
+    image: pengcook/pengcook:prod
+    restart: unless-stopped
+    environment:
+      JASYPT_PASSWORD: ${JASYPT_PASSWORD}
+      TZ: Asia/Seoul
+    ports:
+      - 8080:8080
+    links:
+      - db
+      - loki
+
   loki:
     image: grafana/loki
     restart: unless-stopped
-    ports:
-      - 3100:3100
     command: -config.file=/etc/loki/local-config.yaml
+
+  node:
+    image: prom/node-exporter
+    restart: unless-stopped
+    pid: host
+    command:
+      - "--path.rootfs=/host"
+    volumes:
+      - "/:/host:ro,rslave"
 
   prom:
     image: prom/prometheus
@@ -30,12 +66,12 @@ services:
             metrics_path: '/actuator/prometheus'
             scrape_interval: 15s
             static_configs:
-              - targets: ['10.0.0.187']
+              - targets: ['app:8080']
 
           - job_name: 'node'
             scrape_interval: 15s
             static_configs:
-              - targets: ['10.0.0.187']
+              - targets: ['node:9100']
         EOF
         /bin/prometheus
 
@@ -45,7 +81,7 @@ services:
     volumes:
       - grafana:/var/lib/grafana
     environment:
-      - GF_SERVER_ROOT_URL=https://mon.pengcook.net
+      - GF_SERVER_ROOT_URL=https://dev.mon.pengcook.net
     ports:
       - 3000:3000
     links:

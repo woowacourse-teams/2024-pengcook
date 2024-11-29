@@ -1,9 +1,9 @@
-name: Backend CD Develop
+name: Backend CD Production
 
 on:
   push:
     branches:
-      - be/feat/423
+      - be/dev
 
 concurrency:
   group: ${{ github.ref }}
@@ -117,7 +117,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Update docker compose
+      - name: Run new docker compose
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
