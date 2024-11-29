@@ -6,22 +6,6 @@ volumes:
   prom:
 
 services:
-  db:
-    image: mysql:8.0.38
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      LANG: C.UTF-8
-      TZ: Asia/Seoul
-    volumes:
-      - db:/var/lib/mysql
-    ports:
-      - 3306:3306
-    command:
-      - --character-set-server=utf8
-      - --collation-server=utf8_general_ci
-
   app:
     image: pengcook/pengcook:prod
     restart: unless-stopped
@@ -30,14 +14,89 @@ services:
       TZ: Asia/Seoul
     ports:
       - 8080:8080
-    links:
-      - db
-      - loki
+
+  db:
+    image: mysql:8.0.38
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      LANG: C.UTF-8
+      TZ: Asia/Seoul
+    volumes:
+      - db:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --server-id=1
+      - --log-bin=mysql-bin
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=ON
+      - --binlog-do-db=pengcook
+    configs:
+      - source: db-init
+        target: /docker-entrypoint-initdb.d/db-init.sql
+    healthcheck:
+      test:
+        [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}" ]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  db-ro:
+    image: mysql:8.0.38
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      LANG: C.UTF-8
+      TZ: Asia/Seoul
+    volumes:
+      - db-ro:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --server-id=2
+      - --relay-log=relay-bin
+      - --read-only=1
+      - --gtid-mode=ON
+      - --enforce-gtid-consistency=ON
+    configs:
+      - source: db-ro-init
+        target: /docker-entrypoint-initdb.d/db-ro-init.sql
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_SERVER_ROOT_URL=https://mon.pengcook.net
+    ports:
+      - 3000:3000
+    configs:
+      - source: grafana-config
+        target: /etc/grafana/provisioning/datasources/ds.yaml
 
   loki:
     image: grafana/loki
     restart: unless-stopped
-    command: -config.file=/etc/loki/local-config.yaml
+
+  prom:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - prom:/prometheus
+    configs:
+      - source: prom-config
+        target: /prometheus/prometheus.yml
 
   node:
     image: prom/node-exporter
@@ -48,70 +107,49 @@ services:
     volumes:
       - "/:/host:ro,rslave"
 
-  prom:
-    image: prom/prometheus
-    restart: unless-stopped
-    volumes:
-      - prom:/prometheus
-    links:
-      - app
-      - node
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        cat <<EOF > /prometheus/prometheus.yml
-        scrape_configs:
-          - job_name: 'pengcook'
-            metrics_path: '/actuator/prometheus'
-            scrape_interval: 15s
-            static_configs:
-              - targets: ['app:8080']
+configs:
+  db-init:
+    content: |
+      ALTER USER 'root'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'root';
+  db-ro-init:
+    content: |
+      CHANGE REPLICATION SOURCE TO
+          SOURCE_HOST='db',
+          SOURCE_USER='root',
+          SOURCE_PASSWORD='${MYSQL_ROOT_PASSWORD}';
+      START REPLICA;
+  grafana-config:
+    content: |
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        orgId: 1
+        url: http://loki:3100
+        basicAuth: false
+        isDefault: true
+        version: 1
+        editable: false
 
-          - job_name: 'node'
-            scrape_interval: 15s
-            static_configs:
-              - targets: ['node:9100']
-        EOF
-        /bin/prometheus
-
-  grafana:
-    image: grafana/grafana
-    restart: unless-stopped
-    volumes:
-      - grafana:/var/lib/grafana
-    environment:
-      - GF_SERVER_ROOT_URL=https://dev.mon.pengcook.net
-    ports:
-      - 3000:3000
-    links:
-      - loki
-      - prom
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        mkdir -p /etc/grafana/provisioning/datasources
-        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
-        apiVersion: 1
-        datasources:
-        - name: Loki
-          type: loki
-          access: proxy
-          orgId: 1
-          url: http://loki:3100
-          basicAuth: false
-          isDefault: true
-          version: 1
-          editable: false
-
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          orgId: 1
-          url: http://prom:9090
-          basicAuth: false
-          isDefault: false
-          editable: false
-        EOF
-        /run.sh
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        url: http://prom:9090
+        basicAuth: false
+        isDefault: false
+        editable: false
+  prom-config:
+    content: |
+      scrape_configs:
+        - job_name: 'pengcook'
+          metrics_path: '/actuator/prometheus'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['app:8080']
+      
+        - job_name: 'node'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['node:9100']
