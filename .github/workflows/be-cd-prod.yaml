@@ -110,5 +110,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/${{ github.event.repository.name }}
-            ./run-toggle.sh
+            docker compose pull
+            STACK_EXISTS=$(docker stack ls --filter name=^${{ secrets.DOCKERHUB_IMAGE_NAME }}$ --format '{{.Name}}')
+            if [ -z "$STACK_EXISTS" ]; then
+              docker stack deploy -c docker-compose.yml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
+            else
+              docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ${{ secrets.DOCKERHUB_IMAGE_NAME }}_app
+            fi
             docker image prune -af
