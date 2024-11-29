@@ -9,6 +9,8 @@ services:
   db:
     image: mysql:8.0.38
     restart: unless-stopped
+    ports:
+      - 3306:3306
     environment:
       MYSQL_DATABASE: pengcook
       MYSQL_ROOT_PASSWORD: root
@@ -16,96 +18,85 @@ services:
       TZ: Asia/Seoul
     volumes:
       - db:/var/lib/mysql
-    ports:
-      - 3306:3306
     command:
-      - --character-set-server=utf8
-      - --collation-server=utf8_general_ci
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    configs:
+      - source: grafana-config
+        target: /etc/grafana/provisioning/datasources/ds.yaml
 
   loki:
     image: grafana/loki
     restart: unless-stopped
     ports:
       - 3100:3100
-    command: -config.file=/etc/loki/local-config.yaml
+
+  prom:
+    image: prom/prometheus
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    volumes:
+      - prom:/prometheus
+    configs:
+      - source: prom-config
+        target: /prometheus/prometheus.yml
 
   node:
     image: prom/node-exporter
     restart: unless-stopped
-    pid: host
     ports:
       - 9100:9100
+    pid: host
     command:
       - "--path.rootfs=/host"
     volumes:
       - "/:/host:ro"
 
-  prom:
-    image: prom/prometheus
-    restart: unless-stopped
-    volumes:
-      - prom:/prometheus
-    ports:
-      - 9090:9090
-    links:
-      - node
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        cat <<EOF > /prometheus/prometheus.yml
-        scrape_configs:
-          - job_name: 'pengcook'
-            metrics_path: '/actuator/prometheus'
-            scrape_interval: 15s
-            static_configs:
-              - targets: ['host.docker.internal:8080']
+configs:
+  grafana-config:
+    content: |
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        orgId: 1
+        url: http://loki:3100
+        basicAuth: false
+        isDefault: true
+        version: 1
+        editable: false
 
-          - job_name: 'node'
-            scrape_interval: 15s
-            static_configs:
-              - targets: ['node:9100']
-        EOF
-        /bin/prometheus
-
-  grafana:
-    image: grafana/grafana
-    restart: unless-stopped
-    volumes:
-      - grafana:/var/lib/grafana
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-    ports:
-      - 3000:3000
-    links:
-      - loki
-      - prom
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        mkdir -p /etc/grafana/provisioning/datasources
-        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
-        apiVersion: 1
-        datasources:
-        - name: Loki
-          type: loki
-          access: proxy
-          orgId: 1
-          url: http://loki:3100
-          basicAuth: false
-          isDefault: true
-          version: 1
-          editable: false
-
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          orgId: 1
-          url: http://prom:9090
-          basicAuth: false
-          isDefault: false
-          editable: false
-        EOF
-        /run.sh
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        url: http://prom:9090
+        basicAuth: false
+        isDefault: false
+        editable: false
+  prom-config:
+    content: |
+      scrape_configs:
+        - job_name: 'pengcook'
+          metrics_path: '/actuator/prometheus'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['host.docker.internal:8080']
+      
+        - job_name: 'node'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['node:9100']
