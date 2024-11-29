@@ -117,4 +117,4 @@ jobs:
             else
               docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ${{ secrets.DOCKERHUB_IMAGE_NAME }}_app
             fi
-            docker image prune -af
+            # docker image prune -af

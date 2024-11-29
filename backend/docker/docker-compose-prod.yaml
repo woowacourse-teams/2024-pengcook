@@ -44,15 +44,24 @@ services:
       - --gtid-mode=ON
       - --enforce-gtid-consistency=ON
       - --binlog-do-db=pengcook
-    configs:
-      - source: db-init
-        target: /docker-entrypoint-initdb.d/db-init.sql
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /docker-entrypoint-initdb.d/db-init.sql
+        ALTER USER 'root'@'%'
+            IDENTIFIED WITH 'mysql_native_password'
+            BY 'root';
+        EOF
+        docker-entrypoint.sh
 
   db-ro:
     image: mysql:8.0.38
     restart: unless-stopped
     ports:
       - 3307:3306
+    depends_on:
+      - db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       LANG: C.UTF-8
@@ -67,9 +76,17 @@ services:
       - --read-only=1
       - --gtid-mode=ON
       - --enforce-gtid-consistency=ON
-    configs:
-      - source: db-ro-init
-        target: /docker-entrypoint-initdb.d/db-ro-init.sql
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /docker-entrypoint-initdb.d/db-ro-init.sql
+        CHANGE REPLICATION SOURCE TO
+            SOURCE_HOST='db',
+            SOURCE_USER='root',
+            SOURCE_PASSWORD='${MYSQL_ROOT_PASSWORD}';
+        START REPLICA;
+        docker-entrypoint.sh
 
   grafana:
     image: grafana/grafana
@@ -80,9 +97,34 @@ services:
       - GF_SERVER_ROOT_URL=https://mon.pengcook.net
     ports:
       - 3000:3000
-    configs:
-      - source: grafana-config
-        target: /etc/grafana/provisioning/datasources/ds.yaml
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prom:9090
+          basicAuth: false
+          isDefault: false
+          editable: false
+        EOF
+        /run.sh
 
   loki:
     image: grafana/loki
@@ -93,9 +135,24 @@ services:
     restart: unless-stopped
     volumes:
       - prom:/prometheus
-    configs:
-      - source: prom-config
-        target: /prometheus/prometheus.yml
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /prometheus/prometheus.yml
+        scrape_configs:
+          - job_name: 'pengcook'
+            metrics_path: '/actuator/prometheus'
+            scrape_interval: 15s
+            static_configs:
+              - targets: ['app:8080']
+
+          - job_name: 'node'
+            scrape_interval: 15s
+            static_configs:
+              - targets: ['node:9100']
+        EOF
+        /bin/prometheus
 
   node:
     image: prom/node-exporter
@@ -105,52 +162,3 @@ services:
       - "--path.rootfs=/host"
     volumes:
       - "/:/host:ro,rslave"
-
-configs:
-  db-init:
-    content: |
-      ALTER USER 'root'@'%'
-          IDENTIFIED WITH 'mysql_native_password'
-          BY 'root';
-  db-ro-init:
-    content: |
-      CHANGE REPLICATION SOURCE TO
-          SOURCE_HOST='db',
-          SOURCE_USER='root',
-          SOURCE_PASSWORD='${MYSQL_ROOT_PASSWORD}';
-      START REPLICA;
-  grafana-config:
-    content: |
-      apiVersion: 1
-      datasources:
-      - name: Loki
-        type: loki
-        access: proxy
-        orgId: 1
-        url: http://loki:3100
-        basicAuth: false
-        isDefault: true
-        version: 1
-        editable: false
-
-      - name: Prometheus
-        type: prometheus
-        access: proxy
-        orgId: 1
-        url: http://prom:9090
-        basicAuth: false
-        isDefault: false
-        editable: false
-  prom-config:
-    content: |
-      scrape_configs:
-        - job_name: 'pengcook'
-          metrics_path: '/actuator/prometheus'
-          scrape_interval: 15s
-          static_configs:
-            - targets: ['app:8080']
-
-        - job_name: 'node'
-          scrape_interval: 15s
-          static_configs:
-            - targets: ['node:9100']
