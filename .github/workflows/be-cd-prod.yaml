@@ -102,7 +102,7 @@ jobs:
             echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
             echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
 
-      - name: Run new docker compose
+      - name: Deploy or Update Docker Swarm
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -111,7 +111,7 @@ jobs:
           script: |
             cd ~/${{ github.event.repository.name }}
             docker compose pull
-            STACK_EXISTS=$(docker stack ls --filter name=^${{ secrets.DOCKERHUB_IMAGE_NAME }}$ --format '{{.Name}}')
+            STACK_EXISTS=$(docker stack ls | grep -w ${{ secrets.DOCKERHUB_IMAGE_NAME }})
             if [ -z "$STACK_EXISTS" ]; then
               docker stack deploy -c docker-compose.yml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
             else
