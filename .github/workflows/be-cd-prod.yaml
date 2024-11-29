@@ -113,7 +113,7 @@ jobs:
             docker compose pull
             STACK_EXISTS=$(docker stack ls | grep -w ${{ secrets.DOCKERHUB_IMAGE_NAME }})
             if [ -z "$STACK_EXISTS" ]; then
-              docker stack deploy -c docker-compose.yml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
+              docker stack deploy -c docker-compose.yaml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
             else
               docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ${{ secrets.DOCKERHUB_IMAGE_NAME }}_app
             fi
