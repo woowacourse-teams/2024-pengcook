@@ -47,31 +47,12 @@ services:
     configs:
       - source: db-init
         target: /docker-entrypoint-initdb.d/db-init.sql
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-p${MYSQL_ROOT_PASSWORD}",
-        ]
-      interval: 30s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
 
   db-ro:
     image: mysql:8.0.38
     restart: unless-stopped
     ports:
       - 3307:3306
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       LANG: C.UTF-8
@@ -128,7 +109,9 @@ services:
 configs:
   db-init:
     content: |
-      ALTER USER 'root'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'root';
+      ALTER USER 'root'@'%'
+          IDENTIFIED WITH 'mysql_native_password'
+          BY 'root';
   db-ro-init:
     content: |
       CHANGE REPLICATION SOURCE TO
