@@ -1,5 +1,3 @@
-name: pengcook
-
 volumes:
   db:
   db-ro:
@@ -9,12 +7,11 @@ volumes:
 services:
   app:
     image: pengcook/pengcook:prod
-    restart: unless-stopped
+    ports:
+      - 8080:8080
     environment:
       JASYPT_PASSWORD: ${JASYPT_PASSWORD}
       TZ: Asia/Seoul
-    ports:
-      - 8080:8080
     deploy:
       replicas: 3
       update_config:
@@ -26,7 +23,6 @@ services:
 
   db:
     image: mysql:8.0.38
-    restart: unless-stopped
     ports:
       - 3306:3306
     environment:
@@ -36,14 +32,6 @@ services:
       TZ: Asia/Seoul
     volumes:
       - db:/var/lib/mysql
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_general_ci
-      - --server-id=1
-      - --log-bin=mysql-bin
-      - --gtid-mode=ON
-      - --enforce-gtid-consistency=ON
-      - --binlog-do-db=pengcook
     entrypoint:
       - sh
       - -euc
@@ -53,11 +41,17 @@ services:
             IDENTIFIED WITH 'mysql_native_password'
             BY 'root';
         EOF
-        docker-entrypoint.sh
+        docker-entrypoint.sh mysqld \
+          --character-set-server=utf8mb4 \
+          --collation-server=utf8mb4_general_ci \
+          --server-id=1 \
+          --log-bin=mysql-bin \
+          --gtid-mode=ON \
+          --enforce-gtid-consistency=ON \
+          --binlog-do-db=pengcook
 
   db-ro:
     image: mysql:8.0.38
-    restart: unless-stopped
     ports:
       - 3307:3306
     depends_on:
@@ -68,14 +62,6 @@ services:
       TZ: Asia/Seoul
     volumes:
       - db-ro:/var/lib/mysql
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_general_ci
-      - --server-id=2
-      - --relay-log=relay-bin
-      - --read-only=1
-      - --gtid-mode=ON
-      - --enforce-gtid-consistency=ON
     entrypoint:
       - sh
       - -euc
@@ -86,11 +72,18 @@ services:
             SOURCE_USER='root',
             SOURCE_PASSWORD='${MYSQL_ROOT_PASSWORD}';
         START REPLICA;
-        docker-entrypoint.sh
+        EOF
+        docker-entrypoint.sh mysqld \
+          --character-set-server=utf8mb4 \
+          --collation-server=utf8mb4_general_ci \
+          --server-id=2 \
+          --relay-log=relay-bin \
+          --read-only=1 \
+          --gtid-mode=ON \
+          --enforce-gtid-consistency=ON
 
   grafana:
     image: grafana/grafana
-    restart: unless-stopped
     volumes:
       - grafana:/var/lib/grafana
     environment:
@@ -128,11 +121,9 @@ services:
 
   loki:
     image: grafana/loki
-    restart: unless-stopped
 
   prom:
     image: prom/prometheus
-    restart: unless-stopped
     volumes:
       - prom:/prometheus
     entrypoint:
@@ -150,15 +141,6 @@ services:
           - job_name: 'node'
             scrape_interval: 15s
             static_configs:
-              - targets: ['node:9100']
+              - targets: ['host.docker.internal:9100']
         EOF
         /bin/prometheus
-
-  node:
-    image: prom/node-exporter
-    restart: unless-stopped
-    pid: host
-    command:
-      - "--path.rootfs=/host"
-    volumes:
-      - "/:/host:ro,rslave"
