@@ -2,9 +2,6 @@ name: Backend CD Production
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - be/feat/423
 
 concurrency:
   group: ${{ github.ref }}
@@ -118,4 +115,4 @@ jobs:
             else
               docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ${{ secrets.DOCKERHUB_IMAGE_NAME }}_app
             fi
-            # docker image prune -af
+            docker image prune -af
