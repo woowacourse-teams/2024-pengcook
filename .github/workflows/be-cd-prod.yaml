@@ -1,4 +1,4 @@
-name: Backend CD prodelop
+name: Backend CD Production
 
 on:
   workflow_dispatch:
