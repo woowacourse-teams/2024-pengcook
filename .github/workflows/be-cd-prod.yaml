@@ -102,12 +102,6 @@ jobs:
             echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
             echo "JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}" >> .env
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Run new docker compose
         uses: appleboy/ssh-action@v1.0.3
         with:
