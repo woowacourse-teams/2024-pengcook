@@ -2,6 +2,7 @@ name: pengcook
 
 volumes:
   db:
+  db-ro:
   grafana:
   prom:
 
