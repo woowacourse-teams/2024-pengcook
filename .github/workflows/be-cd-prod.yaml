@@ -108,11 +108,7 @@ jobs:
           script: |
             cd ~/${{ github.event.repository.name }}
             docker compose pull
-            STACK_EXISTS=$(docker stack ls | grep -w ${{ secrets.DOCKERHUB_IMAGE_NAME }})
-            # if [ -z "$STACK_EXISTS" ]; then
-              export $(cat .env)
-              docker stack up -c docker-compose.yaml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
-            # else
-            #   docker service update --force --image ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGE_NAME }}:prod ${{ secrets.DOCKERHUB_IMAGE_NAME }}_app
-            # fi
             docker system prune -af
+            STACK_EXISTS=$(docker stack ls | grep -w ${{ secrets.DOCKERHUB_IMAGE_NAME }})
+            export $(cat .env)
+            docker stack up -c docker-compose.yaml ${{ secrets.DOCKERHUB_IMAGE_NAME }}
