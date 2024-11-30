@@ -41,7 +41,7 @@ public class ImageConfig {
                     try {
                         return new ByteArrayInputStream(privateKey.getBytes(StandardCharsets.UTF_8));
                     } catch (Exception e) {
-                        throw new RuntimeException("Failed to load private key", e);
+                        throw new RuntimeException("object storage의 private key를 로드하는 데 실패했습니다.", e);
                     }
                 })
                 .region(Region.fromRegionId(region))
