@@ -2,6 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
+<!--        Remove comment if you want to test loki on local -->
 <!--    <springProfile name="local">-->
 <!--        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>-->
 <!--    </springProfile>-->
