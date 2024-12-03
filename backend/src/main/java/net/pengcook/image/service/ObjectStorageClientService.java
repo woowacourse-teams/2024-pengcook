@@ -29,13 +29,14 @@ public class ObjectStorageClientService implements ImageClientService {
     @Value("${oracle.cloud.url-prefix}")
     private String urlPrefix;
 
-    private static final int DURATION_SECONDS = 600;
+    @Value("${oracle.cloud.duration-seconds}")
+    private int durationSeconds;
 
     public UploadUrlResponse generateUploadUrl(String fileName) {
         CreatePreauthenticatedRequestDetails details = CreatePreauthenticatedRequestDetails.builder()
                 .accessType(AccessType.ObjectWrite)
                 .name("upload-" + fileName)
-                .timeExpires(Date.from(Instant.now().plusSeconds(DURATION_SECONDS)))
+                .timeExpires(Date.from(Instant.now().plusSeconds(durationSeconds)))
                 .objectName(fileName)
                 .build();
 

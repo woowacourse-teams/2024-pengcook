@@ -30,6 +30,7 @@ oracle:
     bucket-name: ENC(UOUpk4WqCJ2uCJC9TLuimSbIleeXUjq10oHOf9R/4ogHfU3pMqywNYA6dHFcqyGz)
     namespace: ENC(qOxV5BZjZLS9Ems+CFZNMFeKYselnH70DLLAfwgZzpTIXd4bHxWevLALm6CHli6h)
     url-prefix: ENC(2GeAcJRUdCxHYOKBlKjbBJqZBlw6PNIB4pYOa6X82dFa+n1H+uu4QvIFxtbbS/yLoafQ+1It4S3BvUBttFdsBuRCyAEIayN27YBi2fpQZqoX4YrBOQY3r1RRMb/ybHlv)
+    duration-seconds: 600
 
 server:
   tomcat:
