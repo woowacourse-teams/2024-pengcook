@@ -2,10 +2,13 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-<!--        Remove comment if you want to test loki on local -->
-<!--    <springProfile name="local">-->
-<!--        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>-->
-<!--    </springProfile>-->
+    <!--        Remove comment if you want to test loki on local -->
+    <springProfile name="local">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+    <springProfile name="test">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
     <springProfile name="dev">
         <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
     </springProfile>
@@ -33,10 +36,9 @@
     </appender>
 
     <root level="INFO">
-        <!--        Remove comment if you want to test loki on local -->
-        <!--        <springProfile name="local">-->
-        <!--            <appender-ref ref="LOKI"/>-->
-        <!--        </springProfile>-->
+        <springProfile name="local">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
         <springProfile name="dev">
             <appender-ref ref="LOKI"/>
         </springProfile>
