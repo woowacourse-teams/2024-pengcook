@@ -27,6 +27,7 @@ oracle:
     bucket-name: ENC(7AyUEbDIf9u78oT0rRRw1i6tMB2GgeA2TbqdrXNibewynpOLyY7JT3SIE9zqgiHG)
     namespace: ENC(6Il9NSYH1SYAcKaLxi6VlFs9XvqwkSB9VhMnKGoko3ul4hQcGoS5gZcxEa0sNWP5)
     url-prefix: ENC(KH5PC5/BySZUQQhEG+OZv7tyC+ia5F7nP/Y4jsch9I1xMAbdKNZn8396+BSRkP3CvyWLZZ6eI/WMgbynISAn6jYZ5GfP4bV9bKO2Vp97sZ/zJz0BNKOG8XHZSozoPqgI)
+    duration-seconds: 600
 
 logging:
   level:

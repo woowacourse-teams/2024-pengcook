@@ -31,3 +31,4 @@ oracle:
     bucket-name: ENC(wlsU2SkF+HxI3fx9dmUGU0sbQx8/ZJ85BeD7eteIaJV5zMvIOCSkieSjzlFHQkNZ)
     namespace: ENC(1ruYxdhedknwAfB+MnaLkSAMxibH2HsaqmjWyocyyF5Aj8fKo40DUPArfvQ+pegP)
     url-prefix: ENC(8EPwqoGID2d6nlODzV8b3LHulBcvp4tAL06KpuX5quG+QyDHBSlx4Gp6AufGGxz8t+TsXFDBjRBJK9bHOEQuzWY87EnGQEf+E6Qpf/WOesL0WeqOtTIFU80VV1sF4/ZS)
+    duration-seconds: 600

@@ -32,6 +32,7 @@ oracle:
     bucket-name: ENC(FlPAx/iHK75QmJTdlOguLyEvPoi1d+ZxF1pNQBo5UZk4oxSD2xPGjmgC/LHBKvWe)
     namespace: ENC(8zdD/nolmplXP9Lz7TVBWxOuJyKA07GEauQZ1Jkn4Jiddc2LA9tDVMQfCc2f5tKZ)
     url-prefix: ENC(e0dxHgl3UDKMLyjgxDkN1sOi+UcPbqs0WpLvlmUxt/O9/nA9W2jlzROQv8A3tgpi2CGKnFiksz9N7xMVo1xJZ0kbqGerY7fzI5XQI4BLCqFwcaSGYq1T/p5xCVNuhXel)
+    duration-seconds: 600
 
 springdoc:
   swagger-ui:
