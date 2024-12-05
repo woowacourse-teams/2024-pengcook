@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
+import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.service.CommentService;
@@ -40,5 +41,10 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable long commentId, @LoginUser UserInfo userInfo) {
         commentService.deleteComment(commentId, userInfo);
+    }
+
+    @GetMapping("/mine")
+    public List<CommentOfUserResponse> readCommentsOfMe(@LoginUser UserInfo userInfo) {
+        return commentService.readCommentsOfUser(userInfo);
     }
 }
