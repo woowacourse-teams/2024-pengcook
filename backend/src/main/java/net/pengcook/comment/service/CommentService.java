@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.domain.Comment;
+import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
@@ -70,6 +71,15 @@ public class CommentService {
     @Transactional
     public void deleteCommentsByUser(long userId) {
         commentRepository.deleteByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentOfUserResponse> readCommentsOfUser(UserInfo userInfo) {
+        List<Comment> comments = commentRepository.findAllByUserId(userInfo.getId());
+
+        return comments.stream()
+                .map(CommentOfUserResponse::new)
+                .toList();
     }
 
     private boolean isCommentOwner(UserInfo userInfo, Comment comment) {

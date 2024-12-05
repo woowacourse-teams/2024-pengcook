@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
+import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
 import net.pengcook.comment.exception.UnauthorizedDeletionException;
@@ -81,7 +82,8 @@ class CommentServiceTest {
 
         assertAll(
                 () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1),
-                () -> assertThat(recipeRepository.findById(recipeId).orElseThrow().getCommentCount()).isEqualTo(before - 1)
+                () -> assertThat(recipeRepository.findById(recipeId).orElseThrow().getCommentCount()).isEqualTo(
+                        before - 1)
         );
     }
 
@@ -119,5 +121,19 @@ class CommentServiceTest {
         commentService.deleteCommentsByUser(2L);
 
         assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
+    }
+
+    @Test
+    @DisplayName("특정 사용자의 댓글을 조회한다.")
+    void readCommentsOfUser() {
+        UserInfo userInfo = new UserInfo(2, "loki@pengcook.net");
+        List<CommentOfUserResponse> expect = List.of(
+                new CommentOfUserResponse(1L, 1L, "김밥", LocalDateTime.of(2024, 1, 1, 0, 0, 0), "great"),
+                new CommentOfUserResponse(3L, 2L, "김치찌개", LocalDateTime.of(2024, 5, 5, 0, 0, 0), "good")
+        );
+
+        List<CommentOfUserResponse> actual = commentService.readCommentsOfUser(userInfo);
+
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
     }
 }
