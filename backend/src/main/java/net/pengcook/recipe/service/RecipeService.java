@@ -4,49 +4,62 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.category.repository.CategoryRecipeRepository;
 import net.pengcook.category.service.CategoryService;
-import net.pengcook.image.service.S3ClientService;
+import net.pengcook.comment.service.CommentService;
+import net.pengcook.image.service.ImageClientService;
+import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
+import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.CategoryResponse;
 import net.pengcook.recipe.dto.IngredientResponse;
-import net.pengcook.recipe.dto.MainRecipeResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
-import net.pengcook.recipe.dto.RecipeOfCategoryRequest;
-import net.pengcook.recipe.dto.RecipeOfUserRequest;
+import net.pengcook.recipe.dto.RecipeDescriptionResponse;
+import net.pengcook.recipe.dto.RecipeHomeResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
+import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
-import net.pengcook.recipe.exception.InvalidParameterException;
+import net.pengcook.recipe.dto.RecipeUpdateRequest;
+import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class RecipeService {
 
+    private static final String KEY_RECIPE = "id";
+
     private final RecipeRepository recipeRepository;
-    private final CategoryRecipeRepository categoryRecipeRepository;
     private final UserRepository userRepository;
+    private final RecipeLikeRepository likeRepository;
+    private final RecipeStepRepository recipeStepRepository;
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
-    private final S3ClientService s3ClientService;
+    private final ImageClientService imageClientService;
     private final RecipeStepService recipeStepService;
+    private final IngredientRecipeService ingredientRecipeService;
+    private final CommentService commentService;
+    private final RecipeLikeService recipeLikeService;
 
-    public List<MainRecipeResponse> readRecipes(PageRecipeRequest pageRecipeRequest) {
-        Pageable pageable = getValidatedPageable(pageRecipeRequest.pageNumber(), pageRecipeRequest.pageSize());
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
         List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
                 pageable,
                 pageRecipeRequest.category(),
@@ -55,12 +68,90 @@ public class RecipeService {
         );
 
         List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
     }
 
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponseV1> readRecipesV1(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
+        List<Long> recipeIds = findRecipeIdsByMultipleCondition(pageRecipeRequest);
+        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(recipeIds);
+
+        return recipeHomeResponses.stream()
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
+                .toList();
+    }
+
+    private List<Long> findRecipeIdsByMultipleCondition(PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
+        long conditionCount = pageRecipeRequest.getConditionCount();
+
+        if (conditionCount == 0) {
+            Pageable descPageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(KEY_RECIPE).descending()
+            );
+            return recipeRepository.findAll(descPageable).stream()
+                    .map(Recipe::getId)
+                    .toList();
+        }
+        if (conditionCount == 1) {
+            return findRecipeIdsBySingleCondition(pageRecipeRequest);
+        }
+
+        return recipeRepository.findRecipeIdsByCategoryAndKeyword(
+                pageable,
+                pageRecipeRequest.category(),
+                pageRecipeRequest.keyword(),
+                pageRecipeRequest.userId()
+        );
+    }
+
+    private List<Long> findRecipeIdsBySingleCondition(PageRecipeRequest pageRecipeRequest) {
+        Pageable pageable = pageRecipeRequest.getPageable();
+        String category = pageRecipeRequest.category();
+        String keyword = pageRecipeRequest.keyword();
+        Long userId = pageRecipeRequest.userId();
+
+        if (category != null) {
+            return recipeRepository.findRecipeIdsByCategory(pageable, category);
+        }
+        if (keyword != null) {
+            return recipeRepository.findRecipeIdsByKeyword(pageable, keyword);
+        }
+        if (userId != null) {
+            return recipeRepository.findRecipeByAuthorIdOrderByIdDesc(pageable, userId).stream()
+                    .map(Recipe::getId)
+                    .toList();
+        }
+        // TODO: need to throw illegal state
+        return List.of();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
+        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
+
+        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(UserInfo userInfo) {
+        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(likeRecipeIds);
+
+        return recipeHomeResponses.stream()
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
+                .toList();
+    }
+
+    @Transactional
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {
         User author = userRepository.findById(userInfo.getId()).orElseThrow();
-        String thumbnailUrl = s3ClientService.getImageUrl(recipeRequest.thumbnail()).url();
+        String thumbnailUrl = imageClientService.getImageUrl(recipeRequest.thumbnail()).url();
         Recipe recipe = new Recipe(
                 recipeRequest.title(),
                 author,
@@ -78,49 +169,79 @@ public class RecipeService {
         return new RecipeResponse(savedRecipe);
     }
 
-    public List<MainRecipeResponse> readRecipesOfCategory(RecipeOfCategoryRequest request) {
-        String categoryName = request.category();
-        Pageable pageable = getValidatedPageable(request.pageNumber(), request.pageSize());
-        List<Long> recipeIds = categoryRecipeRepository.findRecipeIdsByCategoryName(categoryName, pageable);
+    @Transactional
+    public void updateRecipe(UserInfo userInfo, Long recipeId, RecipeUpdateRequest recipeUpdateRequest) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        verifyRecipeOwner(userInfo, recipe);
 
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
+        Recipe updatedRecipe = recipe.updateRecipe(
+                recipeUpdateRequest.title(),
+                LocalTime.parse(recipeUpdateRequest.cookingTime()),
+                imageClientService.getImageUrl(recipeUpdateRequest.thumbnail()).url(),
+                recipeUpdateRequest.difficulty(),
+                recipeUpdateRequest.description()
+        );
+
+        ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
+        ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
+        categoryService.deleteCategoryRecipe(recipe);
+        categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
+
+        recipeStepService.deleteRecipeStepsByRecipe(updatedRecipe.getId());
+        recipeStepRepository.flush();
+        recipeStepService.saveRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest.recipeSteps());
     }
 
-    public List<MainRecipeResponse> readRecipesOfUser(RecipeOfUserRequest request) {
-        long userId = request.userId();
-        Pageable pageable = getValidatedPageable(request.pageNumber(), request.pageSize());
-        List<Long> recipeIds = recipeRepository.findRecipeIdsByUserId(userId, pageable);
+    @Transactional(readOnly = true)
+    public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
+        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
+        boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(recipeDataResponses);
+        return new RecipeDescriptionResponse(
+                userInfo,
+                recipeDataResponses.getFirst(),
+                getCategoryResponses(recipeDataResponses),
+                getIngredientResponses(recipeDataResponses),
+                isLike
+        );
     }
 
-    private List<MainRecipeResponse> convertToMainRecipeResponses(List<RecipeDataResponse> recipeDataResponses) {
+    @Transactional
+    public void deleteRecipe(UserInfo userInfo, long recipeId) {
+        Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
+
+        targetRecipe.ifPresent(recipe -> {
+            verifyRecipeOwner(userInfo, recipe);
+            ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
+            categoryService.deleteCategoryRecipe(recipe);
+            commentService.deleteCommentsByRecipe(recipe.getId());
+            recipeLikeService.deleteLikesByRecipe(recipe.getId());
+            recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
+            recipeRepository.delete(recipe);
+        });
+    }
+
+    private List<RecipeHomeWithMineResponse> convertToMainRecipeResponses(
+            UserInfo userInfo,
+            List<RecipeDataResponse> recipeDataResponses
+    ) {
         Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
                 .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
                 .values();
 
         return groupedRecipeData.stream()
-                .map(this::getMainRecipeResponse)
-                .sorted(Comparator.comparing(MainRecipeResponse::recipeId).reversed())
+                .map(data -> getMainRecipeResponse(userInfo, data))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
                 .collect(Collectors.toList());
     }
 
-    private MainRecipeResponse getMainRecipeResponse(List<RecipeDataResponse> groupedResponses) {
+    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo,
+                                                             List<RecipeDataResponse> groupedResponses) {
         RecipeDataResponse firstResponse = groupedResponses.getFirst();
 
-        return new MainRecipeResponse(
-                firstResponse.recipeId(),
-                firstResponse.title(),
-                new AuthorResponse(firstResponse.authorId(), firstResponse.authorName(), firstResponse.authorImage()),
-                firstResponse.cookingTime(),
-                firstResponse.thumbnail(),
-                firstResponse.difficulty(),
-                firstResponse.likeCount(),
-                firstResponse.commentCount(),
-                firstResponse.description(),
-                firstResponse.createdAt(),
+        return new RecipeHomeWithMineResponse(
+                userInfo,
+                firstResponse,
                 getCategoryResponses(groupedResponses),
                 getIngredientResponses(groupedResponses)
         );
@@ -140,11 +261,11 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
-    private Pageable getValidatedPageable(int pageNumber, int pageSize) {
-        long offset = (long) pageNumber * pageSize;
-        if (offset > Integer.MAX_VALUE) {
-            throw new InvalidParameterException("적절하지 않은 페이지 정보입니다.");
+    private void verifyRecipeOwner(UserInfo userInfo, Recipe recipe) {
+        User author = recipe.getAuthor();
+        long authorId = author.getId();
+        if (!userInfo.isSameUser(authorId)) {
+            throw new UnauthorizedException("레시피에 대한 권한이 없습니다.");
         }
-        return PageRequest.of(pageNumber, pageSize);
     }
 }

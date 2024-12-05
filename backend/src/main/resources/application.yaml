@@ -1,7 +1,6 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: validate
+    open-in-view: false
 
 jasypt:
   encryptor:
@@ -17,3 +16,14 @@ springdoc:
   enable-default-api-docs: false
   api-docs:
     path: /openapi3.yaml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+
+server:
+  shutdown: graceful

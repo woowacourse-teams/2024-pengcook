@@ -4,38 +4,52 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.image.service.ImageClientService;
+import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
+import net.pengcook.user.domain.Reason;
+import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserReportRequest;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.UserNotFoundException;
+import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-@DataJpaTest
-@Import(UserService.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "/data/users.sql")
 class UserServiceTest {
 
     @Autowired
     UserRepository userRepository;
     @Autowired
+    RecipeRepository recipeRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    RecipeLikeRepository recipeLikeRepository;
+    @Autowired
+    UserBlockRepository userBlockRepository;
+    @Autowired
     UserReportRepository userReportRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    ImageClientService imageClientService;
 
     @Test
     @DisplayName("id를 통해 사용자의 정보를 불러온다.")
@@ -86,7 +100,7 @@ class UserServiceTest {
                 "loki@pengcook.net",
                 "loki_changed",
                 "로키_changed",
-                "loki_changed.jpg",
+                imageClientService.getImageUrl("loki_changed.jpg").url(),
                 "KOREA",
                 "hello world"
         );
@@ -118,20 +132,24 @@ class UserServiceTest {
 
     @Test
     @DisplayName("신고 테이블에 신고 내역을 저장한다.")
-    void reportUser() {
-        UserReportRequest spamReportRequest = new UserReportRequest(
-                2,
-                "SPAM",
-                "스팸 컨텐츠입니다."
+    void report() {
+        ReportRequest spamReportRequest = new ReportRequest(
+                1L,
+                Reason.SPAM_CONTENT,
+                Type.RECIPE,
+                1L,
+                null
         );
-        userService.reportUser(1, spamReportRequest);
+        userService.report(2, spamReportRequest);
 
         UserReport actual = userReportRepository.findById(1L).get();
         assertAll(
-                () -> assertThat(actual.getReporter().getId()).isEqualTo(1),
-                () -> assertThat(actual.getReportee().getId()).isEqualTo(2),
-                () -> assertThat(actual.getReason()).isEqualTo("SPAM"),
-                () -> assertThat(actual.getDetails()).isEqualTo("스팸 컨텐츠입니다.")
+                () -> assertThat(actual.getReporter().getId()).isEqualTo(2),
+                () -> assertThat(actual.getReportee().getId()).isEqualTo(1),
+                () -> assertThat(actual.getReason()).isEqualTo(Reason.SPAM_CONTENT),
+                () -> assertThat(actual.getType()).isEqualTo(Type.RECIPE),
+                () -> assertThat(actual.getTargetId()).isEqualTo(1L),
+                () -> assertThat(actual.getDetails()).isNull()
         );
     }
 
@@ -183,6 +201,86 @@ class UserServiceTest {
                 () -> assertThat(blockedUserGroup.isBlocked(2L)).isTrue(),
                 () -> assertThat(blockedUserGroup.isBlocked(3L)).isTrue(),
                 () -> assertThat(blockedUserGroup.isBlocked(4L)).isFalse()
+        );
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제한다.")
+    void deleteUser() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+
+        assertThat(userRepository.existsById(userInfo.getId())).isFalse();
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자가 작성했던 모든 게시글도 지운다.")
+    void deleteUserWithRecipes() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserRecipes = recipeRepository.findAll().stream()
+                .noneMatch(recipe -> recipe.getAuthor().isSameUser(userInfo.getId()));
+
+        assertThat(deletedUserRecipes).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자가 작성했던 모든 댓글도 지운다.")
+    void deleteUserWithComments() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserComments = commentRepository.findAll().stream()
+                .noneMatch(comment -> comment.getUser().isSameUser(userInfo.getId()));
+
+        assertThat(deletedUserComments).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자가 작성했던 모든 좋아요도 지운다.")
+    void deleteUserWithLikes() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserLikes = recipeLikeRepository.findAll().stream()
+                .noneMatch(like -> like.getUser().isSameUser(userInfo.getId()));
+
+        assertThat(deletedUserLikes).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 차단목록을 지운다.")
+    void deleteUserWithBlocks() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserBlockee = userBlockRepository.findAll().stream()
+                .noneMatch(userBlock -> userBlock.getBlockee().isSameUser(userInfo.getId()));
+        boolean deletedUserBlocker = userBlockRepository.findAll().stream()
+                .noneMatch(userBlock -> userBlock.getBlocker().isSameUser(userInfo.getId()));
+
+        assertAll(
+                () -> assertThat(deletedUserBlockee).isTrue(),
+                () -> assertThat(deletedUserBlocker).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 신고목록을 지운다.")
+    void deleteUserWithUserReports() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserReportee = userReportRepository.findAll().stream()
+                .noneMatch(userReport -> userReport.getReportee().isSameUser(userInfo.getId()));
+        boolean deletedUserReporter = userReportRepository.findAll().stream()
+                .noneMatch(userReport -> userReport.getReporter().isSameUser(userInfo.getId()));
+
+        assertAll(
+                () -> assertThat(deletedUserReportee).isTrue(),
+                () -> assertThat(deletedUserReporter).isTrue()
         );
     }
 }

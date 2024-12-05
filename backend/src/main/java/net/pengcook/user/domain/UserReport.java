@@ -1,6 +1,8 @@
 package net.pengcook.user.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,13 +32,19 @@ public class UserReport {
     @JoinColumn(name = "reportee_id")
     private User reportee;
 
-    private String reason;
+    @Enumerated(EnumType.STRING)
+    private Reason reason;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
+    private long targetId;
 
     private String details;
 
     private LocalDateTime createdAt;
 
-    public UserReport(User reporter, User reportee, String reason, String details) {
-        this(0L, reporter, reportee, reason, details, LocalDateTime.now());
+    public UserReport(User reporter, User reportee, Reason reason, Type type, long targetId, String details) {
+        this(0L, reporter, reportee, reason, type, targetId, details, LocalDateTime.now());
     }
 }

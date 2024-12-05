@@ -1,86 +1,88 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.7'
-	id 'io.spring.dependency-management' version '1.1.5'
-	id 'jacoco'
-	id 'com.epages.restdocs-api-spec' version '0.18.2'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.7'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'jacoco'
+    id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'net.pengcook'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-	implementation 'com.google.firebase:firebase-admin:9.3.0'
-	implementation 'com.auth0:java-jwt:4.4.0'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-	implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
-	implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    implementation 'com.google.firebase:firebase-admin:9.3.0'
+    implementation 'com.auth0:java-jwt:4.4.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.zalando:logbook-spring-boot-starter:3.9.0'
 
-	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-	runtimeOnly 'com.h2database:h2'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+    runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
-	testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
-	testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+    testImplementation 'com.epages:restdocs-api-spec-restassured:0.18.2'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation platform('software.amazon.awssdk:bom:2.17.89')
-	implementation 'software.amazon.awssdk:s3'
+    implementation platform('com.oracle.oci.sdk:oci-java-sdk-bom:3.54.0')
+    implementation 'com.oracle.oci.sdk:oci-java-sdk-objectstorage'
+    implementation 'com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey3'
 }
 
 test {
-	useJUnitPlatform()
-	systemProperty 'spring.profiles.active', 'test'
+    useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
 }
 
 openapi3 {
-	servers = [{ url = "https://dev.pengcook.net" }, { url = "http://localhost:8080" }]
-	title = 'Pengcook API'
-	description = 'Pengcook API description'
-	version = '0.1.0'
-	format = 'yaml'
+    servers = [{ url = "https://dev.pengcook.net" }, { url = "http://localhost:8080" }]
+    title = 'Pengcook API'
+    description = 'Pengcook API description'
+    version = '0.1.0'
+    format = 'yaml'
 }
 
 tasks.register("copyOasToSwagger", Copy) {
-	dependsOn("openapi3")
+    dependsOn("openapi3")
 
-	from layout.buildDirectory.file("api-spec/openapi3.yaml").get()
-	into "src/main/resources/static"
+    from layout.buildDirectory.file("api-spec/openapi3.yaml").get()
+    into "src/main/resources/static"
 }
 
 tasks.named("jar") {
-	enabled = false
+    enabled = false
 }
 
 jacocoTestReport {
-	dependsOn("test")
-	reports {
-		xml.required = true
-		csv.required = false
-		html.required = false
-	}
+    dependsOn("test")
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = false
+    }
 }

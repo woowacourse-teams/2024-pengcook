@@ -2,6 +2,7 @@ package net.pengcook.comment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +12,8 @@ import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
 import net.pengcook.comment.exception.UnauthorizedDeletionException;
 import net.pengcook.comment.repository.CommentRepository;
+import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +26,14 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts = "/data/comment.sql")
 class CommentServiceTest {
 
-    private static final int INITIAL_COMMENT_COUNT = 3;
+    private static final int INITIAL_COMMENT_COUNT = 4;
 
     @Autowired
     private CommentService commentService;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Test
     @DisplayName("레시피의 댓글을 조회한다.")
@@ -38,7 +43,9 @@ class CommentServiceTest {
                 new CommentOfRecipeResponse(1L, 2L, "loki.jpg", "loki", LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                         "great", false),
                 new CommentOfRecipeResponse(2L, 1L, "ela.jpg", "ela", LocalDateTime.of(2024, 1, 2, 0, 0, 0),
-                        "thank you", true)
+                        "thank you", true),
+                new CommentOfRecipeResponse(4L, 3L, "ato.jpg", "ato", LocalDateTime.of(2024, 1, 3, 0, 0, 0),
+                        "haha", false)
         );
 
         List<CommentOfRecipeResponse> actual = commentService.readComments(1L, userInfo);
@@ -51,20 +58,31 @@ class CommentServiceTest {
     void createComment() {
         CreateCommentRequest request = new CreateCommentRequest(2L, "thank you!");
         UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
+        Recipe recipe = recipeRepository.findById(2L).orElseThrow();
+        int before = recipe.getCommentCount();
 
         commentService.createComment(request, userInfo);
 
-        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1);
+        assertAll(
+                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1),
+                () -> assertThat(recipeRepository.findById(2L).orElseThrow().getCommentCount()).isEqualTo(before + 1)
+        );
     }
 
     @Test
     @DisplayName("댓글을 삭제한다.")
     void deleteComment() {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
+        Recipe recipe = commentRepository.findById(2L).orElseThrow().getRecipe();
+        Long recipeId = recipe.getId();
+        int before = recipe.getCommentCount();
 
         commentService.deleteComment(2L, userInfo);
 
-        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1);
+        assertAll(
+                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1),
+                () -> assertThat(recipeRepository.findById(recipeId).orElseThrow().getCommentCount()).isEqualTo(before - 1)
+        );
     }
 
     @Test
@@ -85,5 +103,21 @@ class CommentServiceTest {
         assertThatThrownBy(() -> commentService.deleteComment(1L, userInfo))
                 .isInstanceOf(UnauthorizedDeletionException.class)
                 .hasMessage("삭제 권한이 없습니다.");
+    }
+
+    @Test
+    @DisplayName("특정 레시피의 댓글들을 삭제한다.")
+    void deleteCommentsByRecipe() {
+        commentService.deleteCommentsByRecipe(1L);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 3);
+    }
+
+    @Test
+    @DisplayName("특정 사용자의 댓글들을 삭제한다.")
+    void deleteCommentsByUser() {
+        commentService.deleteCommentsByUser(2L);
+
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
     }
 }

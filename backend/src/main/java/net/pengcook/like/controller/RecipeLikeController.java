@@ -21,14 +21,6 @@ public class RecipeLikeController {
 
     private final RecipeLikeService likeService;
 
-    @GetMapping("/{recipeId}")
-    public RecipeLikeResponse readLike(
-            @LoginUser UserInfo userInfo,
-            @PathVariable("recipeId") long recipeId
-    ) {
-        return likeService.readLike(userInfo, recipeId);
-    }
-
     @PostMapping
     public void updateLike(
             @LoginUser UserInfo userInfo,
@@ -39,5 +31,13 @@ public class RecipeLikeController {
             return;
         }
         likeService.deleteLike(userInfo, likeRequest.recipeId());
+    }
+
+    @GetMapping("/{recipeId}")
+    public RecipeLikeResponse readLike(
+            @LoginUser UserInfo userInfo,
+            @PathVariable("recipeId") long recipeId
+    ) {
+        return likeService.readLike(userInfo, recipeId);
     }
 }

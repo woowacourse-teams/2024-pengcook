@@ -2,6 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
+    <!--        Remove comment if you want to test loki on local -->
     <springProfile name="local">
         <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
     </springProfile>
@@ -9,6 +10,9 @@
         <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
     </springProfile>
     <springProfile name="dev">
+        <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+    </springProfile>
+    <springProfile name="prod">
         <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
     </springProfile>
 
@@ -21,17 +25,7 @@
                 <pattern>app=Pengcook,host=${HOSTNAME},level=%level</pattern>
                 <readMarkers>true</readMarkers>
             </label>
-            <message>
-                <pattern>
-                    {
-                    "level":"%level",
-                    "class":"%logger{36}",
-                    "thread":"%thread",
-                    "message": "%message",
-                    "requestId": "%X{X-Request-ID}"
-                    }
-                </pattern>
-            </message>
+            <message class="com.github.loki4j.logback.JsonLayout"/>
         </format>
     </appender>
 
@@ -42,7 +36,13 @@
     </appender>
 
     <root level="INFO">
-        <springProfile name="!test">
+        <springProfile name="local">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <springProfile name="dev">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <springProfile name="prod">
             <appender-ref ref="LOKI"/>
         </springProfile>
         <appender-ref ref="CONSOLE"/>

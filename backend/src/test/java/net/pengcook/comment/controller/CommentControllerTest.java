@@ -25,6 +25,8 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(value = "/data/comment.sql")
 class CommentControllerTest extends RestDocsSetting {
 
+    private static final int COMMENT_COUNT_OF_FIRST_RECIPE = 3;
+
     @Test
     @WithLoginUser(email = "ela@pengcook.net")
     @DisplayName("레시피의 댓글을 조회한다.")
@@ -48,7 +50,17 @@ class CommentControllerTest extends RestDocsSetting {
                         )))
                 .when().get("/comments/{recipeId}", 1L)
                 .then().log().all()
-                .body("size()", is(2));
+                .body("size()", is(COMMENT_COUNT_OF_FIRST_RECIPE));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("레시피 댓글 조회 시 차단한 사용자의 댓글은 불러오지 않는다.")
+    void readCommentWithBlockedUser() {
+        RestAssured.given(spec).log().all()
+                .when().get("/comments/{recipeId}", 1L)
+                .then().log().all()
+                .body("size()", is(COMMENT_COUNT_OF_FIRST_RECIPE - 1));
     }
 
     @Test

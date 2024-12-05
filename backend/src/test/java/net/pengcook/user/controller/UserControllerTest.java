@@ -2,7 +2,9 @@ package net.pengcook.user.controller;
 
 import static com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -14,18 +16,29 @@ import io.restassured.http.ContentType;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.image.service.ImageClientService;
+import net.pengcook.user.domain.Reason;
+import net.pengcook.user.domain.Type;
 import net.pengcook.user.dto.ProfileResponse;
+import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
-import net.pengcook.user.dto.UserReportRequest;
+import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
 @Sql("/data/users.sql")
 class UserControllerTest extends RestDocsSetting {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    ImageClientService imageClientService;
 
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
@@ -131,7 +144,7 @@ class UserControllerTest extends RestDocsSetting {
                 "loki@pengcook.net",
                 "loki_changed",
                 "로키_changed",
-                "loki_changed.jpg",
+                imageClientService.getImageUrl("loki_changed.jpg").url(),
                 "KOREA",
                 "hello world"
         );
@@ -212,29 +225,35 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @WithLoginUser
-    @DisplayName("사용자를 신고한다.")
+    @DisplayName("레시피 또는 사용자 또는 댓글을 신고한다.")
     void report() {
-        UserReportRequest spamReportRequest = new UserReportRequest(
+        ReportRequest spamReportRequest = new ReportRequest(
                 1,
-                "SPAM",
-                "스팸 컨텐츠입니다."
+                Reason.SPAM_CONTENT,
+                Type.RECIPE,
+                1L,
+                null
         );
 
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "사용자를 신고합니다.",
-                        "사용자 신고 API",
+                        "레시피 또는 유저 또는 댓글을 신고한다.",
+                        "신고 API",
                         requestFields(
                                 fieldWithPath("reporteeId").description("피신고자 id"),
-                                fieldWithPath("reason").description("사유"),
-                                fieldWithPath("details").description("내용")
+                                fieldWithPath("reason").description("신고 사유"),
+                                fieldWithPath("type").description("신고 대상 종류"),
+                                fieldWithPath("targetId").description("신고 대상 id"),
+                                fieldWithPath("details").description("상세 내용")
                         ),
                         responseFields(
                                 fieldWithPath("reportId").description("신고 id"),
                                 fieldWithPath("reporterId").description("신고자 id"),
                                 fieldWithPath("reporteeId").description("피신고자 id"),
-                                fieldWithPath("reason").description("사유"),
-                                fieldWithPath("details").description("내용"),
+                                fieldWithPath("reason").description("신고 사유"),
+                                fieldWithPath("type").description("신고 대상 종류"),
+                                fieldWithPath("targetId").description("신고 대상 id"),
+                                fieldWithPath("details").description("상세 내용"),
                                 fieldWithPath("createdAt").description("신고 일자")
                         )))
                 .contentType(ContentType.JSON)
@@ -246,8 +265,39 @@ class UserControllerTest extends RestDocsSetting {
                 .body("reportId", is(1))
                 .body("reporterId", is(9))
                 .body("reporteeId", is(1))
-                .body("reason", is("SPAM"))
-                .body("details", is("스팸 컨텐츠입니다."));
+                .body("reason", is(Reason.SPAM_CONTENT.name()))
+                .body("type", is(Type.RECIPE.name()))
+                .body("targetId", is(1))
+                .body("details", nullValue());
+    }
+
+    @Test
+    @DisplayName("신고 사유 목록을 조회한다.")
+    void getReportReasons() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "신고 사유 목록을 조회합니다.",
+                        "신고 사유 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("[]").description("신고 사유 목록"),
+                                fieldWithPath("[].reason").description("신고 사유 종류"),
+                                fieldWithPath("[].message").description("신고 사유 메시지")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when().get("/user/report/reason")
+                .then().log().all()
+                .statusCode(200)
+                .body("[0].reason", equalTo(Reason.INAPPROPRIATE_CONTENT.name()))
+                .body("[0].message", equalTo(Reason.INAPPROPRIATE_CONTENT.getMessage()))
+                .body("[1].reason", equalTo(Reason.SPAM_CONTENT.name()))
+                .body("[1].message", equalTo(Reason.SPAM_CONTENT.getMessage()))
+                .body("[2].reason", equalTo(Reason.ABUSIVE_LANGUAGE.name()))
+                .body("[2].message", equalTo(Reason.ABUSIVE_LANGUAGE.getMessage()))
+                .body("[3].reason", equalTo(Reason.COPYRIGHT_INFRINGEMENT.name()))
+                .body("[3].message", equalTo(Reason.COPYRIGHT_INFRINGEMENT.getMessage()))
+                .body("[4].reason", equalTo(Reason.OTHERS.name()))
+                .body("[4].message", equalTo(Reason.OTHERS.getMessage()));
     }
 
     @Test
@@ -285,5 +335,24 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(201)
                 .body("blocker.id", is(1))
                 .body("blockee.id", is(2));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자를 삭제한다.")
+    void deleteUser() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 삭제합니다.",
+                        "사용자 삭제 API"
+                ))
+                .contentType(ContentType.JSON)
+                .when().delete("/user/me")
+                .then().log().all()
+                .statusCode(204);
+
+        boolean exists = userRepository.existsByEmail("loki@pengcook.net");
+
+        assertThat(exists).isFalse();
     }
 }

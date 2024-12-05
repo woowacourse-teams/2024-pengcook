@@ -15,9 +15,11 @@ import net.pengcook.authentication.dto.TokenRefreshResponse;
 import net.pengcook.authentication.exception.DuplicationException;
 import net.pengcook.authentication.exception.FirebaseTokenException;
 import net.pengcook.authentication.exception.NoSuchUserException;
+import net.pengcook.image.service.ImageClientService;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,9 @@ public class LoginService {
     private final FirebaseAuth firebaseAuth;
     private final UserRepository userRepository;
     private final JwtTokenManager jwtTokenManager;
+    private final ImageClientService imageClientService;
 
+    @Transactional(readOnly = true)
     public GoogleLoginResponse loginWithGoogle(GoogleLoginRequest googleLoginRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleLoginRequest.idToken());
         String email = decodedToken.getEmail();
@@ -44,6 +48,7 @@ public class LoginService {
         return new GoogleLoginResponse(true, accessToken, refreshToken);
     }
 
+    @Transactional
     public GoogleSignUpResponse signUpWithGoogle(GoogleSignUpRequest googleSignUpRequest) {
         User user = createUser(googleSignUpRequest);
 
@@ -71,23 +76,28 @@ public class LoginService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public void checkToken(long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
+    }
+
     private User createUser(GoogleSignUpRequest googleSignUpRequest) {
         FirebaseToken decodedToken = decodeIdToken(googleSignUpRequest.idToken());
 
-        if (googleSignUpRequest.image() == null) {
-            return new User(
-                    decodedToken.getEmail(),
-                    googleSignUpRequest.username(),
-                    googleSignUpRequest.nickname(),
-                    decodedToken.getPicture(),
-                    googleSignUpRequest.country()
-            );
+        String userImage = googleSignUpRequest.image();
+        if (userImage == null) {
+            userImage = decodedToken.getPicture();
         }
+        if (!userImage.startsWith("http")) {
+            userImage = imageClientService.getImageUrl(userImage).url();
+        }
+
         return new User(
                 decodedToken.getEmail(),
                 googleSignUpRequest.username(),
                 googleSignUpRequest.nickname(),
-                googleSignUpRequest.image(),
+                userImage,
                 googleSignUpRequest.country()
         );
     }
@@ -98,10 +108,5 @@ public class LoginService {
         } catch (FirebaseAuthException e) {
             throw new FirebaseTokenException("구글 인증에 실패했습니다.");
         }
-    }
-
-    public void checkToken(long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchUserException("존재하지 않는 사용자입니다."));
     }
 }
