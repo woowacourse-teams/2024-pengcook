@@ -27,7 +27,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentOfRecipeResponse> readComments(Long recipeId, UserInfo userInfo) {
-        List<Comment> comments = commentRepository.findByRecipeId(recipeId);
+        List<Comment> comments = commentRepository.findAllByRecipeId(recipeId);
 
         return comments.stream()
                 .map(comment -> new CommentOfRecipeResponse(comment, userInfo))
