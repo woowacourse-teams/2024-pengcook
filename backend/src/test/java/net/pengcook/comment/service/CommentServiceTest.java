@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
+import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
 import net.pengcook.comment.exception.UnauthorizedDeletionException;
@@ -26,7 +27,7 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql(scripts = "/data/comment.sql")
 class CommentServiceTest {
 
-    private static final int INITIAL_COMMENT_COUNT = 4;
+    private static final int INITIAL_TOTAL_COMMENT_COUNT = 4;
 
     @Autowired
     private CommentService commentService;
@@ -59,13 +60,14 @@ class CommentServiceTest {
         CreateCommentRequest request = new CreateCommentRequest(2L, "thank you!");
         UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
         Recipe recipe = recipeRepository.findById(2L).orElseThrow();
-        int before = recipe.getCommentCount();
+        int beforeRecipeCommentCount = recipe.getCommentCount();
 
         commentService.createComment(request, userInfo);
+        int afterRecipeCommentCount = recipeRepository.findById(2L).orElseThrow().getCommentCount();
 
         assertAll(
-                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT + 1),
-                () -> assertThat(recipeRepository.findById(2L).orElseThrow().getCommentCount()).isEqualTo(before + 1)
+                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_TOTAL_COMMENT_COUNT + 1),
+                () -> assertThat(afterRecipeCommentCount).isEqualTo(beforeRecipeCommentCount + 1)
         );
     }
 
@@ -75,13 +77,14 @@ class CommentServiceTest {
         UserInfo userInfo = new UserInfo(1L, "ela@pengcook.net");
         Recipe recipe = commentRepository.findById(2L).orElseThrow().getRecipe();
         Long recipeId = recipe.getId();
-        int before = recipe.getCommentCount();
+        int beforeRecipeCommentCount = recipe.getCommentCount();
 
         commentService.deleteComment(2L, userInfo);
+        int afterRecipeCommentCount = recipeRepository.findById(recipeId).orElseThrow().getCommentCount();
 
         assertAll(
-                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 1),
-                () -> assertThat(recipeRepository.findById(recipeId).orElseThrow().getCommentCount()).isEqualTo(before - 1)
+                () -> assertThat(commentRepository.count()).isEqualTo(INITIAL_TOTAL_COMMENT_COUNT - 1),
+                () -> assertThat(afterRecipeCommentCount).isEqualTo(beforeRecipeCommentCount - 1)
         );
     }
 
@@ -110,7 +113,7 @@ class CommentServiceTest {
     void deleteCommentsByRecipe() {
         commentService.deleteCommentsByRecipe(1L);
 
-        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 3);
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_TOTAL_COMMENT_COUNT - 3);
     }
 
     @Test
@@ -118,6 +121,20 @@ class CommentServiceTest {
     void deleteCommentsByUser() {
         commentService.deleteCommentsByUser(2L);
 
-        assertThat(commentRepository.count()).isEqualTo(INITIAL_COMMENT_COUNT - 2);
+        assertThat(commentRepository.count()).isEqualTo(INITIAL_TOTAL_COMMENT_COUNT - 2);
+    }
+
+    @Test
+    @DisplayName("특정 사용자의 댓글을 조회한다.")
+    void readCommentsOfUser() {
+        UserInfo userInfo = new UserInfo(2, "loki@pengcook.net");
+        List<CommentOfUserResponse> expect = List.of(
+                new CommentOfUserResponse(1L, 1L, "김밥", LocalDateTime.of(2024, 1, 1, 0, 0, 0), "great"),
+                new CommentOfUserResponse(3L, 2L, "김치찌개", LocalDateTime.of(2024, 5, 5, 0, 0, 0), "good")
+        );
+
+        List<CommentOfUserResponse> actual = commentService.readCommentsOfUser(userInfo);
+
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
     }
 }

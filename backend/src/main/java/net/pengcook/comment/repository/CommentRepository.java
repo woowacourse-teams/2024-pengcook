@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> findByRecipeId(long recipeId);
+    List<Comment> findAllByRecipeId(long recipeId);
 
     void deleteByRecipeId(long recipeId);
 
     void deleteByUserId(long userId);
+
+    List<Comment> findAllByUserId(long userId);
 }
