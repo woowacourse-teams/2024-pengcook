@@ -43,8 +43,8 @@ public class CommentController {
         commentService.deleteComment(commentId, userInfo);
     }
 
-    @GetMapping("/mine")
-    public List<CommentOfUserResponse> readCommentsOfMe(@LoginUser UserInfo userInfo) {
-        return commentService.readCommentsOfUser(userInfo);
+    @GetMapping(value = "/mine", produces = "application/vnd.pengcook.v1+json")
+    public List<CommentOfUserResponse> readCommentsOfMeV1(@LoginUser UserInfo userInfo) {
+        return commentService.readCommentsOfUserV1(userInfo);
     }
 }
