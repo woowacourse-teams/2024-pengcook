@@ -74,7 +74,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentOfUserResponse> readCommentsOfUser(UserInfo userInfo) {
+    public List<CommentOfUserResponse> readCommentsOfUserV1(UserInfo userInfo) {
         List<Comment> comments = commentRepository.findAllByUserId(userInfo.getId());
 
         return comments.stream()
