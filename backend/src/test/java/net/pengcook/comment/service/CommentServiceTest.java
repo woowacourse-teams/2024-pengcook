@@ -133,7 +133,7 @@ class CommentServiceTest {
                 new CommentOfUserResponse(3L, 2L, "김치찌개", LocalDateTime.of(2024, 5, 5, 0, 0, 0), "good")
         );
 
-        List<CommentOfUserResponse> actual = commentService.readCommentsOfUser(userInfo);
+        List<CommentOfUserResponse> actual = commentService.readCommentsOfUserV1(userInfo);
 
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expect);
     }
