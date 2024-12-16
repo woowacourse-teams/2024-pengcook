@@ -14,6 +14,8 @@ import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
 import net.pengcook.user.dto.UserBlockResponse;
+import net.pengcook.user.dto.UserFollowRequest;
+import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -84,4 +86,14 @@ public class UserController {
     ) {
         return userService.blockUser(userInfo.getId(), userBlockRequest.blockeeId());
     }
+
+    @PostMapping("/user/follow")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserFollowResponse followUser(
+            @LoginUser UserInfo userInfo,
+            @RequestBody @Valid UserFollowRequest userFollowRequest
+    ) {
+        return userService.followUser(userInfo.getId(), userFollowRequest.targetId());
+    }
+
 }
