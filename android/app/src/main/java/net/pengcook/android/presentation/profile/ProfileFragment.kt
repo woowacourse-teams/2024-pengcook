@@ -45,12 +45,11 @@ class ProfileFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         val spanSizeLookup =
             object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    return when (position) {
+                override fun getSpanSize(position: Int): Int =
+                    when (position) {
                         0, 1 -> 3
                         else -> 1
                     }
-                }
             }
         layoutManager.spanSizeLookup = spanSizeLookup
         binding.layoutManager = layoutManager
@@ -79,6 +78,10 @@ class ProfileFragment : Fragment() {
                 is ProfileUiEvent.NavigateToSetting -> {
                     findNavController().navigate(R.id.action_profileFragment_to_settingFragment)
                 }
+
+                ProfileUiEvent.NavigateToCommentList -> {
+                }
+                ProfileUiEvent.NavigateToFollowList -> {}
             }
         }
         initSwipeRefreshLayout()
