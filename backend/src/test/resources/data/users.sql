@@ -33,6 +33,9 @@ ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
 TRUNCATE TABLE user_report;
 ALTER TABLE user_report ALTER COLUMN id RESTART WITH 1;
 
+TRUNCATE TABLE user_follow;
+ALTER TABLE user_follow ALTER COLUMN id RESTART WITH 1;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 INSERT INTO users (email, username, nickname, image, region)
@@ -189,4 +192,8 @@ VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
 
 INSERT INTO user_block (blocker_id, blockee_id)
 VALUES (1, 2),
-       (1, 3)
+       (1, 3);
+
+INSERT INTO user_follow (follower_id, followee_id)
+VALUES (1, 4),
+       (4, 1);
