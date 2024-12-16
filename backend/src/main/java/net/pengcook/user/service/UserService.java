@@ -12,6 +12,7 @@ import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
+import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
@@ -19,11 +20,13 @@ import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
+import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.NotFoundException;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
+import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,7 @@ public class UserService {
     private final UserBlockRepository userBlockRepository;
     private final UserReportRepository userReportRepository;
     private final ImageClientService imageClientService;
+    private final UserFollowRepository userFollowRepository;
 
     @Transactional(readOnly = true)
     public ProfileResponse getUserById(long userId) {
@@ -127,11 +131,49 @@ public class UserService {
         userBlockRepository.deleteByBlockeeId(userInfo.getId());
         userReportRepository.deleteByReporterId(userInfo.getId());
         userReportRepository.deleteByReporteeId(userInfo.getId());
+
         List<Long> userRecipes = recipeRepository.findRecipeIdsByUserId(userInfo.getId());
         for (Long recipeId : userRecipes) {
             recipeService.deleteRecipe(userInfo, recipeId);
         }
-
+        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        for (UserFollow userFollow : followings) {
+            userFollow.getFollowee().decreaseUserFollowerCount();
+            userFollowRepository.delete(userFollow);
+        }
+        List<UserFollow> followers = userFollowRepository.findAllByFolloweeId(userInfo.getId());
+        for (UserFollow userFollow : followers) {
+            userFollow.getFollower().decreaseUserFolloweeCount();
+            userFollowRepository.delete(userFollow);
+        }
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public UserFollowResponse followUser(long followerId, long followeeId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
+        UserFollow userFollow = new UserFollow(follower, followee);
+
+        userFollowRepository.save(userFollow);
+        follower.increaseUserFolloweeCount();
+        followee.increaseUserFollowerCount();
+        return new UserFollowResponse(userFollow);
+    }
+
+    @Transactional
+    public void unfollowUser(long followerId, long followeeId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
+        UserFollow userFollow = userFollowRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
+                .orElseThrow(() -> new NotFoundException("팔로우 관계를 찾을 수 없습니다."));
+
+        userFollowRepository.delete(userFollow);
+        follower.decreaseUserFolloweeCount();
+        followee.decreaseUserFollowerCount();
     }
 }
