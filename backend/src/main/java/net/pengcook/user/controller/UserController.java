@@ -96,4 +96,21 @@ public class UserController {
         return userService.followUser(userInfo.getId(), userFollowRequest.targetId());
     }
 
+    @DeleteMapping("/user/follow")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void unfollowUser(
+            @LoginUser UserInfo userInfo,
+            @RequestBody @Valid UserFollowRequest userFollowRequest
+    ) {
+        userService.unfollowUser(userInfo.getId(), userFollowRequest.targetId());
+    }
+
+    @DeleteMapping("/user/follower")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeFollower(
+            @LoginUser UserInfo userInfo,
+            @RequestBody @Valid UserFollowRequest userFollowRequest
+    ) {
+        userService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
+    }
 }

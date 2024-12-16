@@ -153,4 +153,17 @@ public class UserService {
         return new UserFollowResponse(userFollow);
     }
 
+    @Transactional
+    public void unfollowUser(long followerId, long followeeId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
+        UserFollow userFollow = userFollowRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
+                .orElseThrow(() -> new NotFoundException("팔로우 관계를 찾을 수 없습니다."));
+
+        userFollowRepository.delete(userFollow);
+        follower.decreaseUserFolloweeCount();
+        followee.decreaseUserFollowerCount();
+    }
 }
