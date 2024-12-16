@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
@@ -12,16 +13,19 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
+import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
+import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
+import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -50,6 +54,8 @@ class UserServiceTest {
     UserService userService;
     @Autowired
     ImageClientService imageClientService;
+    @Autowired
+    private UserFollowRepository userFollowRepository;
 
     @Test
     @DisplayName("id를 통해 사용자의 정보를 불러온다.")
@@ -282,5 +288,47 @@ class UserServiceTest {
                 () -> assertThat(deletedUserReportee).isTrue(),
                 () -> assertThat(deletedUserReporter).isTrue()
         );
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 팔로우를 지운다.")
+    void deleteUserWithUserFollow() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        userService.deleteUser(userInfo);
+        boolean deletedUserFollower = userFollowRepository.findAll().stream()
+                .noneMatch(userFollow -> userFollow.getFollower().isSameUser(userInfo.getId()));
+        boolean deletedUserFollowee = userFollowRepository.findAll().stream()
+                .noneMatch(userFollow -> userFollow.getFollowee().isSameUser(userInfo.getId()));
+
+        assertAll(
+                () -> assertThat(deletedUserFollower).isTrue(),
+                () -> assertThat(deletedUserFollowee).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("사용자를 팔로우한다.")
+    void follow() {
+        long followerId = 1L;
+        long followeeId = 2L;
+        UserFollowResponse expected = new UserFollowResponse(1, 2);
+
+        UserFollowResponse actual = userService.followUser(followerId, followeeId);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("사용자를 언팔로우한다.")
+    void unfollow() {
+        long followerId = 1L;
+        long followeeId = 4L;
+        List<UserFollow> beforeUnfollow = userFollowRepository.findAllByFollowerId(followerId);
+
+        userService.unfollowUser(followerId, followeeId);
+
+        List<UserFollow> afterUnfollow = userFollowRepository.findAllByFollowerId(followerId);
+        assertThat(afterUnfollow.size()).isEqualTo(beforeUnfollow.size() - 1);
     }
 }
