@@ -131,11 +131,21 @@ public class UserService {
         userBlockRepository.deleteByBlockeeId(userInfo.getId());
         userReportRepository.deleteByReporterId(userInfo.getId());
         userReportRepository.deleteByReporteeId(userInfo.getId());
+
         List<Long> userRecipes = recipeRepository.findRecipeIdsByUserId(userInfo.getId());
         for (Long recipeId : userRecipes) {
             recipeService.deleteRecipe(userInfo, recipeId);
         }
-
+        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        for (UserFollow userFollow : followings) {
+            userFollow.getFollowee().decreaseUserFollowerCount();
+            userFollowRepository.delete(userFollow);
+        }
+        List<UserFollow> followers = userFollowRepository.findAllByFolloweeId(userInfo.getId());
+        for (UserFollow userFollow : followers) {
+            userFollow.getFollower().decreaseUserFolloweeCount();
+            userFollowRepository.delete(userFollow);
+        }
         userRepository.delete(user);
     }
 
