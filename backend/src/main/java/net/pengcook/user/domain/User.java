@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "users")
@@ -39,8 +40,22 @@ public class User {
     @Column(nullable = false)
     private String region;
 
-    public User(String email, String username, String nickname, String image, String region) {
-        this(0L, email, username, nickname, image, region);
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long userFollowerCount;
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private long userFolloweeCount;
+
+    public User(
+            String email,
+            String username,
+            String nickname,
+            String image,
+            String region
+    ) {
+        this(0L, email, username, nickname, image, region, 0, 0);
     }
 
     public boolean isSameUser(long userId) {
@@ -52,5 +67,21 @@ public class User {
         this.nickname = nickname;
         this.image = image;
         this.region = region;
+    }
+
+    public void increaseUserFollowerCount() {
+        userFollowerCount++;
+    }
+
+    public void decreaseUserFollowerCount() {
+        userFollowerCount--;
+    }
+
+    public void increaseUserFolloweeCount() {
+        userFolloweeCount++;
+    }
+
+    public void decreaseUserFolloweeCount() {
+        userFolloweeCount--;
     }
 }

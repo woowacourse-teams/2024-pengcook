@@ -24,8 +24,8 @@ public record ProfileResponse(
                 user.getImage(),
                 user.getRegion(),
                 "hello world",
-                0,
-                0,
+                user.getUserFollowerCount(),
+                user.getUserFolloweeCount(),
                 recipeCount
         );
     }
