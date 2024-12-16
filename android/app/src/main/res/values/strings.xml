@@ -98,6 +98,8 @@
     <string name="profile_appbar_title">Profile</string>
     <string name="profile_edit_button">Edit Profile</string>
     <string name="profile_setting_button">Setting</string>
+    <string name="profile_follow_list_button">Following / Follow</string>
+    <string name="profile_comment_list_button">Comment List</string>
     <string name="profile_follower_button">Remove</string>
     <string name="profile_following_button">Unfollow</string>
     <string name="profile_search_hint">Search</string>

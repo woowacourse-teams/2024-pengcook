@@ -103,6 +103,8 @@
     <string name="profile_appbar_title">프로필</string>
     <string name="profile_edit_button">프로필 수정</string>
     <string name="profile_setting_button">설정</string>
+    <string name="profile_follow_list_button">팔로잉 / 팔로우</string>
+    <string name="profile_comment_list_button">내 댓글</string>
     <string name="profile_follower_button">제거</string>
     <string name="profile_following_button">언팔로우</string>
     <string name="profile_search_hint">검색</string>

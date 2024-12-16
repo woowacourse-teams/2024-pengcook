@@ -100,18 +100,18 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
 
-    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation(libs.converter.gson)
     implementation("androidx.core:core-ktx:$coreKtx")
     implementation("androidx.activity:activity-ktx:1.8.2")
 
@@ -137,13 +137,13 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     // splash
-    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
-    implementation("androidx.startup:startup-runtime:1.1.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.startup:startup-runtime:1.2.0")
 
     // room
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    // annotationProcessor("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
 
     testImplementation(libs.junit)
@@ -154,7 +154,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.robolectric:robolectric:4.13")
-    testImplementation("androidx.paging:paging-common:$pagingVersion")
+    testImplementation("androidx.paging:paging-common-ktx:$pagingVersion")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")

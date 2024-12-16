@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import net.pengcook.android.databinding.ItemDoubleButtonBinding
+import net.pengcook.android.databinding.ItemProfileButtonBinding
 import net.pengcook.android.databinding.ItemProfileDescriptionBinding
 import net.pengcook.android.databinding.ItemProfileFeedBinding
 
 class ProfileAdapter(
-    private val doubleButtonClickListener: DoubleButtonClickListener,
+    private val profileButtonClickListener: ProfileButtonClickListener,
     private val profileFeedClickListener: ProfileFeedClickListener,
 ) : PagingDataAdapter<ProfileViewItem, RecyclerView.ViewHolder>(diffUtils) {
     override fun onCreateViewHolder(
@@ -25,10 +25,10 @@ class ProfileAdapter(
             }
 
             ProfileViewItem.VIEW_TYPE_PROFILE_BUTTONS -> {
-                val binding = ItemDoubleButtonBinding.inflate(inflater, parent, false)
+                val binding = ItemProfileButtonBinding.inflate(inflater, parent, false)
                 return ProfileButtonsViewHolder(
                     binding = binding,
-                    doubleButtonClickListener = doubleButtonClickListener,
+                    profileButtonClickListener = profileButtonClickListener,
                 )
             }
 
@@ -61,13 +61,12 @@ class ProfileAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
+    override fun getItemViewType(position: Int): Int =
+        when (position) {
             0 -> ProfileViewItem.VIEW_TYPE_PROFILE_DESC
             1 -> ProfileViewItem.VIEW_TYPE_PROFILE_BUTTONS
             else -> ProfileViewItem.VIEW_TYPE_FEEDS
         }
-    }
 
     companion object {
         val diffUtils =
@@ -90,9 +89,7 @@ class ProfileAdapter(
                 override fun areContentsTheSame(
                     oldItem: ProfileViewItem,
                     newItem: ProfileViewItem,
-                ): Boolean {
-                    return oldItem == newItem
-                }
+                ): Boolean = oldItem == newItem
             }
     }
 }
