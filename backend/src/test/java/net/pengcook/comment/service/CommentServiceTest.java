@@ -129,8 +129,8 @@ class CommentServiceTest {
     void readCommentsOfUser() {
         UserInfo userInfo = new UserInfo(2, "loki@pengcook.net");
         List<CommentOfUserResponse> expect = List.of(
-                new CommentOfUserResponse(1L, 1L, "김밥", LocalDateTime.of(2024, 1, 1, 0, 0, 0), "great"),
-                new CommentOfUserResponse(3L, 2L, "김치찌개", LocalDateTime.of(2024, 5, 5, 0, 0, 0), "good")
+                new CommentOfUserResponse(1L, 1L, "김밥", "김밥이미지.jpg", LocalDateTime.of(2024, 1, 1, 0, 0, 0), "great"),
+                new CommentOfUserResponse(3L, 2L, "김치찌개", "김치찌개이미지.jpg", LocalDateTime.of(2024, 5, 5, 0, 0, 0), "good")
         );
 
         List<CommentOfUserResponse> actual = commentService.readCommentsOfUserV1(userInfo);
