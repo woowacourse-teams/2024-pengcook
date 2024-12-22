@@ -7,6 +7,7 @@ public record CommentOfUserResponse(
         long commentId,
         long recipeId,
         String recipeTitle,
+        String recipeThumbnail,
         LocalDateTime createdAt,
         String message) {
 
@@ -15,6 +16,7 @@ public record CommentOfUserResponse(
                 comment.getId(),
                 comment.getRecipe().getId(),
                 comment.getRecipe().getTitle(),
+                comment.getRecipe().getThumbnail(),
                 comment.getCreatedAt(),
                 comment.getMessage());
     }

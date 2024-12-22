@@ -187,6 +187,7 @@ class CommentControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].commentId").description("댓글 아이디"),
                                 fieldWithPath("[].recipeId").description("레시피 아이디"),
                                 fieldWithPath("[].recipeTitle").description("레시피 제목"),
+                                fieldWithPath("[].recipeThumbnail").description("레시피 썸네일"),
                                 fieldWithPath("[].createdAt").description("작성 시간"),
                                 fieldWithPath("[].message").description("내용")
                         )))
