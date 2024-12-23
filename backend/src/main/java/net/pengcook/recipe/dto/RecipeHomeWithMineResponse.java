@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.category.dto.CategoryResponse;
+import net.pengcook.ingredient.dto.IngredientResponse;
 
 public record RecipeHomeWithMineResponse(
         long recipeId,

@@ -9,7 +9,9 @@ import net.pengcook.ingredient.domain.Ingredient;
 import net.pengcook.ingredient.domain.IngredientRecipe;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
+import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.ingredient.exception.InvalidNameException;
+import net.pengcook.ingredient.repository.IngredientRecipeRepository;
 import net.pengcook.ingredient.repository.IngredientRepository;
 import net.pengcook.recipe.domain.Recipe;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class IngredientService {
 
     private final IngredientRepository ingredientRepository;
+    private final IngredientRecipeRepository ingredientRecipeRepository;
     private final IngredientRecipeService ingredientRecipeService;
     private final IngredientSubstitutionService ingredientSubstitutionService;
 
@@ -30,6 +33,13 @@ public class IngredientService {
         for (IngredientCreateRequest request : requests) {
             registerOne(request, recipe);
         }
+    }
+
+    public List<IngredientResponse> findIngredientByRecipe(Recipe recipe) {
+        return ingredientRecipeRepository.findAllByRecipeId(recipe.getId())
+                .stream()
+                .map(IngredientResponse::new)
+                .toList();
     }
 
     private void registerOne(IngredientCreateRequest request, Recipe recipe) {
@@ -87,5 +97,4 @@ public class IngredientService {
         HashSet<String> nonDuplicate = new HashSet<>(names);
         return (names.size() != nonDuplicate.size());
     }
-
 }
