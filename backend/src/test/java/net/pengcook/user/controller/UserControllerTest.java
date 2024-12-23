@@ -24,6 +24,7 @@ import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
+import net.pengcook.user.dto.UserFollowRequest;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -224,7 +225,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @WithLoginUser
+    @WithLoginUser(email = "pond@pengcook.net")
     @DisplayName("레시피 또는 사용자 또는 댓글을 신고한다.")
     void report() {
         ReportRequest spamReportRequest = new ReportRequest(
@@ -263,7 +264,7 @@ class UserControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(201)
                 .body("reportId", is(1))
-                .body("reporterId", is(9))
+                .body("reporterId", is(5))
                 .body("reporteeId", is(1))
                 .body("reason", is(Reason.SPAM_CONTENT.name()))
                 .body("type", is(Type.RECIPE.name()))
@@ -338,7 +339,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @WithLoginUser(email = "loki@pengcook.net")
+    @WithLoginUser
     @DisplayName("사용자를 삭제한다.")
     void deleteUser() {
         RestAssured.given(spec).log().all()
@@ -351,8 +352,73 @@ class UserControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(204);
 
-        boolean exists = userRepository.existsByEmail("loki@pengcook.net");
+        boolean exists = userRepository.existsByEmail("tester@pengcook.net");
 
         assertThat(exists).isFalse();
+    }
+
+    @Test
+    @WithLoginUser(email = "pond@pengcook.net")
+    @DisplayName("사용자를 팔로우한다.")
+    void follow() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(3);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 팔로우한다.",
+                        "팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("followerId").description("팔로워 id"),
+                                fieldWithPath("followeeId").description("팔로이 id")
+                        )))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .post("/user/follow")
+                .then().log().all()
+                .statusCode(201)
+                .body("followerId", is(5))
+                .body("followeeId", is(3));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자를 언팔로우한다.")
+    void unfollow() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(4);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 언팔로우한다.",
+                        "언팔로우 API"
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .delete("/user/follow")
+                .then().log().all()
+                .statusCode(204);
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("팔로워를 삭제한다.")
+    void removeFollower() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(4);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로워를 삭제한다.",
+                        "팔로워 삭제 API"
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .delete("/user/follower")
+                .then().log().all()
+                .statusCode(204);
     }
 }
