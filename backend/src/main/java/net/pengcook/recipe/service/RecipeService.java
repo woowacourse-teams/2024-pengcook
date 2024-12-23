@@ -16,8 +16,8 @@ import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.CategoryResponse;
-import net.pengcook.recipe.dto.IngredientResponse;
+import net.pengcook.category.dto.CategoryResponse;
+import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
@@ -27,6 +27,7 @@ import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeUpdateRequest;
+import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
@@ -194,16 +195,13 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 레시피입니다."));
+        List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
+        List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
         boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
-        return new RecipeDescriptionResponse(
-                userInfo,
-                recipeDataResponses.getFirst(),
-                getCategoryResponses(recipeDataResponses),
-                getIngredientResponses(recipeDataResponses),
-                isLike
-        );
+        return new RecipeDescriptionResponse(userInfo, recipe, categories, ingredients, isLike);
     }
 
     @Transactional
