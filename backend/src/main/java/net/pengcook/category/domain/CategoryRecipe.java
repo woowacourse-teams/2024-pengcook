@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.pengcook.recipe.domain.Recipe;
 
@@ -22,6 +23,7 @@ public class CategoryRecipe {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @Getter
     private Category category;
 
     @ManyToOne
