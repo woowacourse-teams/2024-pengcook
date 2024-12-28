@@ -393,8 +393,10 @@ class UserControllerTest extends RestDocsSetting {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "사용자를 언팔로우한다.",
-                        "언팔로우 API"
-                ))
+                        "언팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        )))
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
@@ -412,8 +414,10 @@ class UserControllerTest extends RestDocsSetting {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "팔로워를 삭제한다.",
-                        "팔로워 삭제 API"
-                ))
+                        "팔로워 삭제 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로워 id")
+                        )))
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
