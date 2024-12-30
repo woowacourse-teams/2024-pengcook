@@ -7,6 +7,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
+import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
@@ -59,6 +60,14 @@ public class RecipeController {
     @GetMapping(value = "/likes", produces = "application/vnd.pengcook.v1+json")
     public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(@LoginUser UserInfo userInfo) {
         return recipeService.readLikeRecipesV1(userInfo);
+    }
+
+    @GetMapping("/follows")
+    public List<RecipeHomeResponse> readFollowRecipes(
+            @LoginUser UserInfo userInfo,
+            @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
+    ) {
+        return recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
     }
 
     @PostMapping

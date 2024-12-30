@@ -130,5 +130,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             """)
     List<Long> findRecipeIdsByUserId(long userId);
 
+    List<Recipe> findAllByAuthorIdIn(List<Long> authorIds, Pageable pageable);
+
     int countByAuthorId(long userId);
 }
