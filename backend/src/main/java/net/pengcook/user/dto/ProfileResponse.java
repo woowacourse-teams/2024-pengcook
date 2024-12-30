@@ -13,6 +13,9 @@ public record ProfileResponse(
         long follower,
         long following,
         long recipeCount
+        long followerCount,
+        long followingCount,
+        long recipeCount,
 ) {
 
     public ProfileResponse(User user, long recipeCount) {
@@ -27,6 +30,9 @@ public record ProfileResponse(
                 user.getUserFollowerCount(),
                 user.getUserFolloweeCount(),
                 recipeCount
+                user.getFollowerCount(),
+                user.getFolloweeCount(),
+                recipeCount,
         );
     }
 }

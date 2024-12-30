@@ -42,11 +42,11 @@ public class User {
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private long userFollowerCount;
+    private long followerCount;
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    private long userFolloweeCount;
+    private long followeeCount;
 
     public User(
             String email,
@@ -69,19 +69,19 @@ public class User {
         this.region = region;
     }
 
-    public void increaseUserFollowerCount() {
-        userFollowerCount++;
+    public void increaseFollowerCount() {
+        followerCount++;
     }
 
-    public void decreaseUserFollowerCount() {
-        userFollowerCount--;
+    public void decreaseFollowerCount() {
+        followerCount--;
     }
 
-    public void increaseUserFolloweeCount() {
-        userFolloweeCount++;
+    public void increaseFolloweeCount() {
+        followeeCount++;
     }
 
-    public void decreaseUserFolloweeCount() {
-        userFolloweeCount--;
+    public void decreaseFolloweeCount() {
+        followeeCount--;
     }
 }
