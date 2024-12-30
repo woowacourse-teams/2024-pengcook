@@ -13,6 +13,7 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
+import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
@@ -74,7 +75,7 @@ class UserServiceTest {
                 15L
         );
 
-        ProfileResponse actual = userService.getUserById(id);
+        ProfileResponse actual = userService.getProfile(4, id);
 
         assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
     }
@@ -294,16 +295,23 @@ class UserServiceTest {
     @DisplayName("사용자를 삭제하면 사용자와 관련있는 팔로우를 지운다.")
     void deleteUserWithUserFollow() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        User beforeDelete = userRepository.findById(4L).get();
+        long initialFollowerCount = beforeDelete.getFollowerCount();
+        long initialFolloweeCount = beforeDelete.getFolloweeCount();
 
         userService.deleteUser(userInfo);
+
         boolean deletedUserFollower = userFollowRepository.findAll().stream()
                 .noneMatch(userFollow -> userFollow.getFollower().isSameUser(userInfo.getId()));
         boolean deletedUserFollowee = userFollowRepository.findAll().stream()
                 .noneMatch(userFollow -> userFollow.getFollowee().isSameUser(userInfo.getId()));
+        User afterDelete = userRepository.findById(4L).get();
 
         assertAll(
                 () -> assertThat(deletedUserFollower).isTrue(),
-                () -> assertThat(deletedUserFollowee).isTrue()
+                () -> assertThat(deletedUserFollowee).isTrue(),
+                () -> assertThat(afterDelete.getFollowerCount()).isEqualTo(initialFollowerCount - 1),
+                () -> assertThat(afterDelete.getFolloweeCount()).isEqualTo(initialFolloweeCount - 1)
         );
     }
 
