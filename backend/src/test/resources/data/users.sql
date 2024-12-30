@@ -38,15 +38,15 @@ ALTER TABLE user_follow ALTER COLUMN id RESTART WITH 1;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
-INSERT INTO users (email, username, nickname, image, region)
-VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA'),
-       ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA'),
-       ('crocodile@pengcook.net', 'crocodile', '악어', 'crocodile.jpg', 'KOREA'),
-       ('birdsheep@pengcook.net', 'birdsheep', '새양', 'birdsheep.jpg', 'KOREA'),
-       ('pond@pengcook.net', 'pond', '폰드', 'pond.jpg', 'KOREA'),
-       ('ato@pengcook.net', 'ato', '아토', 'ato.jpg', 'KOREA'),
-       ('km@pengcook.net', 'km', '케이엠', 'km.jpg', 'KOREA'),
-       ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', 'KOREA');
+INSERT INTO users (email, username, nickname, image, region, follower_count, followee_count)
+VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA', 1, 1),
+       ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA', 0, 0),
+       ('crocodile@pengcook.net', 'crocodile', '악어', 'crocodile.jpg', 'KOREA', 0, 0),
+       ('birdsheep@pengcook.net', 'birdsheep', '새양', 'birdsheep.jpg', 'KOREA', 1, 1),
+       ('pond@pengcook.net', 'pond', '폰드', 'pond.jpg', 'KOREA', 0, 0),
+       ('ato@pengcook.net', 'ato', '아토', 'ato.jpg', 'KOREA', 0, 0),
+       ('km@pengcook.net', 'km', '케이엠', 'km.jpg', 'KOREA', 0, 0),
+       ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', 'KOREA', 0, 0);
 
 INSERT INTO category (name)
 VALUES ('한식'),

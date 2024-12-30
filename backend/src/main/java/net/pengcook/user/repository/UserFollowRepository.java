@@ -12,4 +12,6 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     List<UserFollow> findAllByFollowerId(long followerId);
 
     List<UserFollow> findAllByFolloweeId(long followeeId);
+
+    boolean existsByFollowerIdAndFolloweeId(long followerId, long followeeId);
 }
