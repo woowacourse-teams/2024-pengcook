@@ -70,9 +70,33 @@ class UserServiceTest {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
+        );
+
+        ProfileResponse actual = userService.getProfile(id, id);
+
+        assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("id를 통해 팔로우하는 사용자의 정보를 불러온다.")
+    void getFollowUserById() {
+        long id = 1L;
+        ProfileResponse expected = new ProfileResponse(
+                1L,
+                "loki@pengcook.net",
+                "loki",
+                "로키",
+                "loki.jpg",
+                "KOREA",
+                "hello world",
+                1L,
+                1L,
+                15L,
+                true
         );
 
         ProfileResponse actual = userService.getProfile(4, id);
@@ -85,7 +109,7 @@ class UserServiceTest {
     void getUserByIdWhenNotExistId() {
         long id = 2000L;
 
-        assertThatThrownBy(() -> userService.getUserById(id))
+        assertThatThrownBy(() -> userService.getProfile(1, id))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자를 찾을 수 없습니다.");
     }

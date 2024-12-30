@@ -37,12 +37,12 @@ public class UserController {
 
     @GetMapping("/user/me")
     public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo) {
-        return userService.getUserById(userInfo.getId());
+        return userService.getProfile(userInfo.getId(), userInfo.getId());
     }
 
     @GetMapping("/user/{userId}")
-    public ProfileResponse getUserProfile(@PathVariable long userId) {
-        return userService.getUserById(userId);
+    public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo, @PathVariable long userId) {
+        return userService.getProfile(userInfo.getId(), userId);
     }
 
     @PatchMapping("/user/me")

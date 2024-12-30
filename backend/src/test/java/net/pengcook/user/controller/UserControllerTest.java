@@ -53,9 +53,10 @@ class UserControllerTest extends RestDocsSetting {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
         );
 
         ProfileResponse actual = RestAssured.given(spec).log().all()
@@ -70,9 +71,10 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
                                 fieldWithPath("region").description("사용자 국가"),
                                 fieldWithPath("introduction").description("사용자 소개"),
-                                fieldWithPath("follower").description("팔로워 수"),
-                                fieldWithPath("following").description("팔로잉 수"),
-                                fieldWithPath("recipeCount").description("게시한 레시피 수")
+                                fieldWithPath("followerCount").description("팔로워 수"),
+                                fieldWithPath("followingCount").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수"),
+                                fieldWithPath("isFollow").description("팔로우 여부")
                         )
                 ))
                 .contentType(ContentType.JSON)
@@ -86,6 +88,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser
     @DisplayName("userId로 사용자 정보를 확인한다.")
     void getUserProfileWithUserId() {
         ProfileResponse expected = new ProfileResponse(
@@ -96,9 +99,10 @@ class UserControllerTest extends RestDocsSetting {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
         );
 
         ProfileResponse actual = RestAssured.given(spec).log().all()
@@ -113,9 +117,10 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
                                 fieldWithPath("region").description("사용자 국가"),
                                 fieldWithPath("introduction").description("사용자 소개"),
-                                fieldWithPath("follower").description("팔로워 수"),
-                                fieldWithPath("following").description("팔로잉 수"),
-                                fieldWithPath("recipeCount").description("게시한 레시피 수")
+                                fieldWithPath("followerCount").description("팔로워 수"),
+                                fieldWithPath("followingCount").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수"),
+                                fieldWithPath("isFollow").description("팔로우 여부")
                         )
                 ))
                 .contentType(ContentType.JSON)
