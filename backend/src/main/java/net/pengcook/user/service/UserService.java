@@ -49,11 +49,12 @@ public class UserService {
     private final UserFollowRepository userFollowRepository;
 
     @Transactional(readOnly = true)
-    public ProfileResponse getUserById(long userId) {
-        User user = userRepository.findById(userId)
+    public ProfileResponse getProfile(long followerId, long followeeId) {
+        User user = userRepository.findById(followeeId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
-        long recipeCount = recipeRepository.countByAuthorId(userId);
-        return new ProfileResponse(user, recipeCount);
+        long recipeCount = recipeRepository.countByAuthorId(followeeId);
+        boolean isFollow = userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId);
+        return new ProfileResponse(user, recipeCount, isFollow);
     }
 
     @Transactional(readOnly = true)
