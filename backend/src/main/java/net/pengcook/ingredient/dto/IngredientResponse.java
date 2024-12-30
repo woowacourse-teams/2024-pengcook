@@ -9,7 +9,7 @@ public record IngredientResponse(long ingredientId, String ingredientName, Requi
         this(
                 ingredientRecipe.getIngredient().getId(),
                 ingredientRecipe.getIngredient().getName(),
-                ingredientRecipe.getRequirement())
-        ;
+                ingredientRecipe.getRequirement()
+        );
     }
 }
