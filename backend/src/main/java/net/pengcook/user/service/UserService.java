@@ -23,6 +23,7 @@ import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
+import net.pengcook.user.exception.BadArgumentException;
 import net.pengcook.user.exception.NotFoundException;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
@@ -155,8 +156,12 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
         User followee = userRepository.findById(followeeId)
                 .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
-        UserFollow userFollow = new UserFollow(follower, followee);
+        boolean isFollow = userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId);
+        if (isFollow) {
+            throw new BadArgumentException("이미 팔로우 중입니다.");
+        }
 
+        UserFollow userFollow = new UserFollow(follower, followee);
         userFollowRepository.save(userFollow);
         follower.increaseFolloweeCount();
         followee.increaseFollowerCount();

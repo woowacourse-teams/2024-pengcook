@@ -9,14 +9,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.pengcook.user.exception.BadArgumentException;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"follower_id", "followee_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = "id")
 @Getter
 public class UserFollow {
 
@@ -33,6 +34,14 @@ public class UserFollow {
     private User followee;
 
     public UserFollow(User follower, User followee) {
-        this(0L, follower, followee);
+        validate(follower, followee);
+        this.follower = follower;
+        this.followee = followee;
+    }
+
+    private void validate(User follower, User followee) {
+        if (follower.equals(followee)) {
+            throw new BadArgumentException("자기 자신을 팔로우할 수 없습니다.");
+        }
     }
 }
