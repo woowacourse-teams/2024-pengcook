@@ -29,6 +29,8 @@ import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
+import net.pengcook.user.domain.UserFollow;
+import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +48,7 @@ public class RecipeService {
     private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
     private final RecipeStepRepository recipeStepRepository;
+    private final UserFollowRepository userFollowRepository;
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
@@ -143,6 +146,27 @@ public class RecipeService {
                 .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeResponse> readFollowRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
+        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        List<Long> followeeIds = followings.stream()
+                .map(userFollow -> userFollow.getFollowee().getId())
+                .toList();
+
+        List<Recipe> recipes = recipeRepository.findAllByAuthorIdIn(
+                followeeIds,
+                pageRecipeRequest.getPageable()
+        );
+        List<Long> recipeIds = recipes.stream()
+                .map(Recipe::getId)
+                .toList();
+
+        return recipeRepository.findRecipeDataV1(recipeIds).stream()
+                .sorted(Comparator.comparing(RecipeHomeResponse::recipeId).reversed())
+                .toList();
+    }
+
 
     @Transactional
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {

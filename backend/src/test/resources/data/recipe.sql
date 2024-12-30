@@ -30,6 +30,9 @@ ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
 TRUNCATE TABLE user_report;
 ALTER TABLE user_report ALTER COLUMN id RESTART WITH 1;
 
+TRUNCATE TABLE user_follow;
+ALTER TABLE user_follow ALTER COLUMN id RESTART WITH 1;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 INSERT INTO users (email, username, nickname, image, region)
