@@ -35,6 +35,7 @@ public class IngredientService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<IngredientResponse> findIngredientByRecipe(Recipe recipe) {
         return ingredientRecipeRepository.findAllByRecipeId(recipe.getId())
                 .stream()
