@@ -138,12 +138,12 @@ public class UserService {
         }
         List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
         for (UserFollow userFollow : followings) {
-            userFollow.getFollowee().decreaseUserFollowerCount();
+            userFollow.getFollowee().decreaseFollowerCount();
             userFollowRepository.delete(userFollow);
         }
         List<UserFollow> followers = userFollowRepository.findAllByFolloweeId(userInfo.getId());
         for (UserFollow userFollow : followers) {
-            userFollow.getFollower().decreaseUserFolloweeCount();
+            userFollow.getFollower().decreaseFolloweeCount();
             userFollowRepository.delete(userFollow);
         }
         userRepository.delete(user);
@@ -158,8 +158,8 @@ public class UserService {
         UserFollow userFollow = new UserFollow(follower, followee);
 
         userFollowRepository.save(userFollow);
-        follower.increaseUserFolloweeCount();
-        followee.increaseUserFollowerCount();
+        follower.increaseFolloweeCount();
+        followee.increaseFollowerCount();
         return new UserFollowResponse(userFollow);
     }
 
@@ -173,7 +173,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("팔로우 관계를 찾을 수 없습니다."));
 
         userFollowRepository.delete(userFollow);
-        follower.decreaseUserFolloweeCount();
-        followee.decreaseUserFollowerCount();
+        follower.decreaseFolloweeCount();
+        followee.decreaseFollowerCount();
     }
 }
