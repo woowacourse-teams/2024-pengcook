@@ -10,6 +10,7 @@ import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.user.domain.BlockeeGroup;
+import net.pengcook.user.domain.BlockerGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserFollow;
@@ -120,6 +121,14 @@ public class UserService {
         return userBlockRepository.findAllByBlockerId(blockerId).stream()
                 .map(UserBlock::getBlockee)
                 .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockeeGroup::new));
+    }
+
+    @Transactional(readOnly = true)
+    public BlockerGroup getBlockerGroup(long blockeeId) {
+
+        return userBlockRepository.findAllByBlockeeId(blockeeId).stream()
+                .map(UserBlock::getBlocker)
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockerGroup::new));
     }
 
     @Transactional
