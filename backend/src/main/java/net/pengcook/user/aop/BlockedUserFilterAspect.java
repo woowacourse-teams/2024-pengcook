@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.user.domain.BlockeeGroup;
 import net.pengcook.user.domain.Ownable;
-import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -35,9 +35,9 @@ public class BlockedUserFilterAspect {
             return ownables;
         }
 
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
+        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
 
-        return filterBlockedUsers(ownables, blockedUserGroup);
+        return filterBlockedUsers(ownables, blockeeGroup);
     }
 
     @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
@@ -53,8 +53,8 @@ public class BlockedUserFilterAspect {
             return ownableOptional;
         }
 
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
-        if (blockedUserGroup.isBlocked(ownableOptional.get().getOwnerId())) {
+        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
+        if (blockeeGroup.contains(ownableOptional.get().getOwnerId())) {
             return Optional.empty();
         }
 
@@ -74,8 +74,8 @@ public class BlockedUserFilterAspect {
             return ownable;
         }
 
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
-        if (blockedUserGroup.isBlocked(ownable.getOwnerId())) {
+        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
+        if (blockeeGroup.contains(ownable.getOwnerId())) {
             return null;
         }
 
@@ -91,9 +91,9 @@ public class BlockedUserFilterAspect {
         }
     }
 
-    private List<Ownable> filterBlockedUsers(List<Ownable> ownables, BlockedUserGroup blockedUserGroup) {
+    private List<Ownable> filterBlockedUsers(List<Ownable> ownables, BlockeeGroup blockeeGroup) {
         return ownables.stream()
-                .filter(item -> !blockedUserGroup.isBlocked(item.getOwnerId()))
+                .filter(item -> !blockeeGroup.contains(item.getOwnerId()))
                 .toList();
     }
 }
