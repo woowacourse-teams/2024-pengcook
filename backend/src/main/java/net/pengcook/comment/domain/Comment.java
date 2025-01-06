@@ -12,14 +12,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.user.domain.AuthorAble;
+import net.pengcook.user.domain.Ownable;
 import net.pengcook.user.domain.User;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Comment implements AuthorAble {
+public class Comment implements Ownable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Comment implements AuthorAble {
     }
 
     @Override
-    public long getAuthorId() {
+    public long getOwnerId() {
         return user.getId();
     }
 }
