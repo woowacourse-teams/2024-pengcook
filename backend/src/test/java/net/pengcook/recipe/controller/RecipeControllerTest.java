@@ -18,13 +18,12 @@ import java.util.List;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
+import net.pengcook.category.dto.CategoryResponse;
 import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
-import net.pengcook.recipe.dto.AuthorResponse;
-import net.pengcook.category.dto.CategoryResponse;
 import net.pengcook.ingredient.dto.IngredientResponse;
+import net.pengcook.recipe.dto.AuthorResponse;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
@@ -271,13 +270,15 @@ class RecipeControllerTest extends RestDocsSetting {
                                 fieldWithPath("[]").description("레시피 목록"),
                                 fieldWithPath("[].recipeId").description("레시피 아이디"),
                                 fieldWithPath("[].title").description("레시피 제목"),
-                                fieldWithPath("[].authorId").description("작성자 아이디"),
-                                fieldWithPath("[].authorName").description("작성자 이름"),
-                                fieldWithPath("[].authorImage").description("작성자 이미지"),
+                                fieldWithPath("[].author").description("작성자 정보"),
+                                fieldWithPath("[].author.authorId").description("작성자 아이디"),
+                                fieldWithPath("[].author.authorName").description("작성자 이름"),
+                                fieldWithPath("[].author.authorImage").description("작성자 이미지"),
                                 fieldWithPath("[].thumbnail").description("썸네일 이미지"),
                                 fieldWithPath("[].likeCount").description("좋아요 수"),
                                 fieldWithPath("[].commentCount").description("댓글 수"),
-                                fieldWithPath("[].createdAt").description("레시피 생성일시")
+                                fieldWithPath("[].createdAt").description("레시피 생성일시"),
+                                fieldWithPath("[].mine").description("조회자 작성 여부")
                         )))
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 5)
@@ -287,7 +288,7 @@ class RecipeControllerTest extends RestDocsSetting {
                 .body("size()", is(3))
                 .extract()
                 .jsonPath()
-                .getList(".", RecipeHomeResponse.class);
+                .getList(".", RecipeHomeWithMineResponseV1.class);
     }
 
 

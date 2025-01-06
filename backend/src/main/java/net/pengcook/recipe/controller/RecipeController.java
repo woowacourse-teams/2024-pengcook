@@ -7,7 +7,6 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
@@ -63,7 +62,7 @@ public class RecipeController {
     }
 
     @GetMapping("/follows")
-    public List<RecipeHomeResponse> readFollowRecipes(
+    public List<RecipeHomeWithMineResponseV1> readFollowRecipes(
             @LoginUser UserInfo userInfo,
             @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
     ) {
