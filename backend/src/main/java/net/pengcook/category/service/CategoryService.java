@@ -30,7 +30,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryResponse> findCategoryByRecipe(Recipe recipe) {
-        List<CategoryRecipe> categoryRecipes = categoryRecipeRepository.findAllByRecipe(recipe);
+        List<CategoryRecipe> categoryRecipes = categoryRecipeRepository.findAllByRecipeId(recipe.getId());
         return categoryRecipes.stream()
                 .map(CategoryRecipe::getCategory)
                 .map(CategoryResponse::new)
