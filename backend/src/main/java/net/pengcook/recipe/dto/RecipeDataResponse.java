@@ -3,7 +3,7 @@ package net.pengcook.recipe.dto;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import net.pengcook.ingredient.domain.Requirement;
-import net.pengcook.user.domain.AuthorAble;
+import net.pengcook.user.domain.Ownable;
 
 public record RecipeDataResponse(
         long recipeId,
@@ -23,10 +23,10 @@ public record RecipeDataResponse(
         long ingredientId,
         String ingredientName,
         Requirement ingredientRequirement
-) implements AuthorAble {
+) implements Ownable {
 
     @Override
-    public long getAuthorId() {
+    public long getOwnerId() {
         return authorId;
     }
 }

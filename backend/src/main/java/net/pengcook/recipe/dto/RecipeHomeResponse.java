@@ -1,7 +1,7 @@
 package net.pengcook.recipe.dto;
 
 import java.time.LocalDateTime;
-import net.pengcook.user.domain.AuthorAble;
+import net.pengcook.user.domain.Ownable;
 
 public record RecipeHomeResponse(
         long recipeId,
@@ -13,10 +13,10 @@ public record RecipeHomeResponse(
         int likeCount,
         int commentCount,
         LocalDateTime createdAt
-) implements AuthorAble {
+) implements Ownable {
 
     @Override
-    public long getAuthorId() {
+    public long getOwnerId() {
         return authorId;
     }
 }
