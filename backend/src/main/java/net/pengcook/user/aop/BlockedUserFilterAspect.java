@@ -5,7 +5,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.user.domain.BlockeeGroup;
+import net.pengcook.user.domain.BlockerGroup;
 import net.pengcook.user.domain.Ownable;
+import net.pengcook.user.exception.ForbiddenException;
 import net.pengcook.user.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -36,8 +38,9 @@ public class BlockedUserFilterAspect {
         }
 
         BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
+        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
 
-        return filterBlockedUsers(ownables, blockeeGroup);
+        return filterBlockedUsers(ownables, blockeeGroup, blockerGroup);
     }
 
     @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
@@ -55,17 +58,22 @@ public class BlockedUserFilterAspect {
 
         BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
         if (blockeeGroup.contains(ownableOptional.get().getOwnerId())) {
-            return Optional.empty();
+            throw new ForbiddenException("차단한 사용자입니다.");
+        }
+
+        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
+        if (blockerGroup.contains(ownableOptional.get().getOwnerId())) {
+            throw new ForbiddenException("게시글을 이용할 수 없습니다.");
         }
 
         return ownableOptional;
     }
 
     @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningOwnable() {
+    public void repositoryMethodsReturningAuthorAble() {
     }
 
-    @Around("repositoryMethodsReturningOwnable()")
+    @Around("repositoryMethodsReturningAuthorAble()")
     public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
         Ownable ownable = (Ownable) joinPoint.proceed();
 
@@ -76,7 +84,12 @@ public class BlockedUserFilterAspect {
 
         BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
         if (blockeeGroup.contains(ownable.getOwnerId())) {
-            return null;
+            throw new ForbiddenException("차단한 사용자입니다.");
+        }
+
+        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
+        if (blockerGroup.contains(ownable.getOwnerId())) {
+            throw new ForbiddenException("게시글을 이용할 수 없습니다.");
         }
 
         return ownable;
@@ -91,9 +104,14 @@ public class BlockedUserFilterAspect {
         }
     }
 
-    private List<Ownable> filterBlockedUsers(List<Ownable> ownables, BlockeeGroup blockeeGroup) {
-        return ownables.stream()
+    private List<Ownable> filterBlockedUsers(
+            List<Ownable> authorAbles,
+            BlockeeGroup blockeeGroup,
+            BlockerGroup blockerGroup
+    ) {
+        return authorAbles.stream()
                 .filter(item -> !blockeeGroup.contains(item.getOwnerId()))
+                .filter(item -> !blockerGroup.contains(item.getOwnerId()))
                 .toList();
     }
 }
