@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.authentication.resolver.LoginUser;
+import net.pengcook.user.dto.FollowInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportReasonResponse;
 import net.pengcook.user.dto.ReportRequest;
@@ -112,5 +113,10 @@ public class UserController {
             @RequestBody @Valid UserFollowRequest userFollowRequest
     ) {
         userService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
+    }
+
+    @GetMapping("/user/{userId}/follows")
+    public FollowInfoResponse getFollowInfo(@PathVariable long userId) {
+        return userService.getFollowInfo(userId);
     }
 }

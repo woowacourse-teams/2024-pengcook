@@ -14,6 +14,8 @@ import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
+import net.pengcook.user.dto.FollowInfoResponse;
+import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.ReportResponse;
@@ -178,6 +180,19 @@ public class UserService {
         follower.decreaseFolloweeCount();
         followee.decreaseFollowerCount();
     }
+
+    @Transactional(readOnly = true)
+    public FollowInfoResponse getFollowInfo(long userId) {
+        List<FollowUserInfoResponse> followers = userFollowRepository.findAllByFolloweeId(userId).stream()
+                .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollower()))
+                .toList();
+        List<FollowUserInfoResponse> followings = userFollowRepository.findAllByFollowerId(userId).stream()
+                .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollowee()))
+                .toList();
+
+        return new FollowInfoResponse(followers, followings);
+    }
+
     private User getUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("사용자 정보를 조회할 수 없습니다."));
