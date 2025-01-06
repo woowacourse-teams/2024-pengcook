@@ -153,10 +153,8 @@ public class UserService {
 
     @Transactional
     public UserFollowResponse followUser(long followerId, long followeeId) {
-        User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
-        User followee = userRepository.findById(followeeId)
-                .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
+        User follower = getUser(followerId);
+        User followee = getUser(followeeId);
         boolean isFollow = userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId);
         if (isFollow) {
             throw new BadArgumentException("이미 팔로우 중입니다.");
@@ -171,15 +169,17 @@ public class UserService {
 
     @Transactional
     public void unfollowUser(long followerId, long followeeId) {
-        User follower = userRepository.findById(followerId)
-                .orElseThrow(() -> new NotFoundException("팔로워 정보를 조회할 수 없습니다."));
-        User followee = userRepository.findById(followeeId)
-                .orElseThrow(() -> new NotFoundException("팔로이 정보를 조회할 수 없습니다."));
+        User follower = getUser(followerId);
+        User followee = getUser(followeeId);
         UserFollow userFollow = userFollowRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
                 .orElseThrow(() -> new NotFoundException("팔로우 관계를 찾을 수 없습니다."));
 
         userFollowRepository.delete(userFollow);
         follower.decreaseFolloweeCount();
         followee.decreaseFollowerCount();
+    }
+    private User getUser(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("사용자 정보를 조회할 수 없습니다."));
     }
 }
