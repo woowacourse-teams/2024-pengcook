@@ -4,11 +4,11 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class BlockedUserGroup {
+public class BlockeeGroup {
 
     private final Set<User> users;
 
-    public boolean isBlocked(long userId) {
+    public boolean contains(long userId) {
         return users.stream()
                 .anyMatch(user -> user.isSameUser(userId));
     }

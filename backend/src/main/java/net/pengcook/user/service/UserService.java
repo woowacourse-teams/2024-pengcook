@@ -8,7 +8,7 @@ import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.service.RecipeService;
-import net.pengcook.user.domain.BlockedUserGroup;
+import net.pengcook.user.domain.BlockeeGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserFollow;
@@ -131,11 +131,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public BlockedUserGroup getBlockedUserGroup(long blockerId) {
+    public BlockeeGroup getBlockeeGroup(long blockerId) {
 
         return userBlockRepository.findAllByBlockerId(blockerId).stream()
                 .map(UserBlock::getBlockee)
-                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockedUserGroup::new));
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockeeGroup::new));
     }
 
     @Transactional
