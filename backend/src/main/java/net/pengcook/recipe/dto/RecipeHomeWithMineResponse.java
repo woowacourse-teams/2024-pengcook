@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.category.dto.CategoryResponse;
+import net.pengcook.ingredient.dto.IngredientResponse;
+import net.pengcook.recipe.domain.Recipe;
 
 public record RecipeHomeWithMineResponse(
         long recipeId,
@@ -23,25 +26,25 @@ public record RecipeHomeWithMineResponse(
 
     public RecipeHomeWithMineResponse(
             UserInfo userInfo,
-            RecipeDataResponse firstResponse,
+            Recipe recipe,
             List<CategoryResponse> category,
             List<IngredientResponse> ingredient
 
     ) {
         this(
-                firstResponse.recipeId(),
-                firstResponse.title(),
-                new AuthorResponse(firstResponse.authorId(), firstResponse.authorName(), firstResponse.authorImage()),
-                firstResponse.cookingTime(),
-                firstResponse.thumbnail(),
-                firstResponse.difficulty(),
-                firstResponse.likeCount(),
-                firstResponse.commentCount(),
-                firstResponse.description(),
-                firstResponse.createdAt(),
+                recipe.getId(),
+                recipe.getTitle(),
+                new AuthorResponse(recipe.getAuthor()),
+                recipe.getCookingTime(),
+                recipe.getThumbnail(),
+                recipe.getDifficulty(),
+                recipe.getLikeCount(),
+                recipe.getCommentCount(),
+                recipe.getDescription(),
+                recipe.getCreatedAt(),
                 category,
                 ingredient,
-                userInfo.isSameUser(firstResponse.authorId())
+                userInfo.isSameUser(recipe.getAuthor().getId())
         );
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.user.domain.AuthorAble;
+import net.pengcook.user.domain.Ownable;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,64 +22,64 @@ public class BlockedUserFilterAspect {
 
     private final UserService userService;
 
-    @Pointcut("execution(java.util.List<net.pengcook.user.domain.AuthorAble+> net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningAuthorAbleList() {
+    @Pointcut("execution(java.util.List<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
+    public void repositoryMethodsReturningOwnableList() {
     }
 
-    @Around("repositoryMethodsReturningAuthorAbleList()")
+    @Around("repositoryMethodsReturningOwnableList()")
     public Object filterBlockedAuthorsFromList(ProceedingJoinPoint joinPoint) throws Throwable {
-        List<AuthorAble> authorAbles = (List<AuthorAble>) joinPoint.proceed();
+        List<Ownable> ownables = (List<Ownable>) joinPoint.proceed();
 
         UserInfo userInfo = getCurrentUserInfo();
         if (userInfo == null) {
-            return authorAbles;
+            return ownables;
         }
 
         BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
 
-        return filterBlockedUsers(authorAbles, blockedUserGroup);
+        return filterBlockedUsers(ownables, blockedUserGroup);
     }
 
-    @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.AuthorAble+> net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningOptionalAuthorAble() {
+    @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
+    public void repositoryMethodsReturningOptionalOwnable() {
     }
 
-    @Around("repositoryMethodsReturningOptionalAuthorAble()")
+    @Around("repositoryMethodsReturningOptionalOwnable()")
     public Object filterBlockedAuthorFromOptional(ProceedingJoinPoint joinPoint) throws Throwable {
-        Optional<AuthorAble> authorAbleOptional = (Optional<AuthorAble>) joinPoint.proceed();
+        Optional<Ownable> ownableOptional = (Optional<Ownable>) joinPoint.proceed();
 
         UserInfo userInfo = getCurrentUserInfo();
-        if (userInfo == null || authorAbleOptional.isEmpty()) {
-            return authorAbleOptional;
+        if (userInfo == null || ownableOptional.isEmpty()) {
+            return ownableOptional;
         }
 
         BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
-        if (blockedUserGroup.isBlocked(authorAbleOptional.get().getAuthorId())) {
+        if (blockedUserGroup.isBlocked(ownableOptional.get().getOwnerId())) {
             return Optional.empty();
         }
 
-        return authorAbleOptional;
+        return ownableOptional;
     }
 
-    @Pointcut("execution(net.pengcook.user.domain.AuthorAble+ net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningAuthorAble() {
+    @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
+    public void repositoryMethodsReturningOwnable() {
     }
 
-    @Around("repositoryMethodsReturningAuthorAble()")
+    @Around("repositoryMethodsReturningOwnable()")
     public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
-        AuthorAble authorAble = (AuthorAble) joinPoint.proceed();
+        Ownable ownable = (Ownable) joinPoint.proceed();
 
         UserInfo userInfo = getCurrentUserInfo();
         if (userInfo == null) {
-            return authorAble;
+            return ownable;
         }
 
         BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
-        if (blockedUserGroup.isBlocked(authorAble.getAuthorId())) {
+        if (blockedUserGroup.isBlocked(ownable.getOwnerId())) {
             return null;
         }
 
-        return authorAble;
+        return ownable;
     }
 
     private UserInfo getCurrentUserInfo() {
@@ -91,9 +91,9 @@ public class BlockedUserFilterAspect {
         }
     }
 
-    private List<AuthorAble> filterBlockedUsers(List<AuthorAble> authorAbles, BlockedUserGroup blockedUserGroup) {
-        return authorAbles.stream()
-                .filter(item -> !blockedUserGroup.isBlocked(item.getAuthorId()))
+    private List<Ownable> filterBlockedUsers(List<Ownable> ownables, BlockedUserGroup blockedUserGroup) {
+        return ownables.stream()
+                .filter(item -> !blockedUserGroup.isBlocked(item.getOwnerId()))
                 .toList();
     }
 }

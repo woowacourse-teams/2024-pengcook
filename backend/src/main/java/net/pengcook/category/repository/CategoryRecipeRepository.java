@@ -18,4 +18,6 @@ public interface CategoryRecipeRepository extends JpaRepository<CategoryRecipe, 
     List<Long> findRecipeIdsByCategoryName(String categoryName, Pageable pageable);
 
     void deleteByRecipe(Recipe recipe);
+
+    List<CategoryRecipe> findAllByRecipeId(Long recipeId);
 }

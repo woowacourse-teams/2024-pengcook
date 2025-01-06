@@ -1,25 +1,22 @@
 package net.pengcook.recipe.service;
 
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.category.dto.CategoryResponse;
 import net.pengcook.category.service.CategoryService;
 import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.ImageClientService;
+import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.CategoryResponse;
-import net.pengcook.recipe.dto.IngredientResponse;
 import net.pengcook.recipe.dto.PageRecipeRequest;
-import net.pengcook.recipe.dto.RecipeDataResponse;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
 import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
@@ -27,6 +24,7 @@ import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
 import net.pengcook.recipe.dto.RecipeUpdateRequest;
+import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
@@ -70,8 +68,7 @@ public class RecipeService {
                 pageRecipeRequest.userId()
         );
 
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeIds);
-        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+        return getRecipeHomeWithMineResponses(userInfo, recipeIds);
     }
 
     @Transactional(readOnly = true)
@@ -135,9 +132,8 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(likeRecipeIds);
 
-        return convertToMainRecipeResponses(userInfo, recipeDataResponses);
+        return getRecipeHomeWithMineResponses(userInfo, likeRecipeIds);
     }
 
     @Transactional(readOnly = true)
@@ -218,16 +214,13 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public RecipeDescriptionResponse readRecipeDescription(UserInfo userInfo, long recipeId) {
-        List<RecipeDataResponse> recipeDataResponses = recipeRepository.findRecipeData(recipeId);
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 레시피입니다."));
+        List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
+        List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
         boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
 
-        return new RecipeDescriptionResponse(
-                userInfo,
-                recipeDataResponses.getFirst(),
-                getCategoryResponses(recipeDataResponses),
-                getIngredientResponses(recipeDataResponses),
-                isLike
-        );
+        return new RecipeDescriptionResponse(userInfo, recipe, categories, ingredients, isLike);
     }
 
     @Transactional
@@ -245,44 +238,16 @@ public class RecipeService {
         });
     }
 
-    private List<RecipeHomeWithMineResponse> convertToMainRecipeResponses(
-            UserInfo userInfo,
-            List<RecipeDataResponse> recipeDataResponses
-    ) {
-        Collection<List<RecipeDataResponse>> groupedRecipeData = recipeDataResponses.stream()
-                .collect(Collectors.groupingBy(RecipeDataResponse::recipeId))
-                .values();
-
-        return groupedRecipeData.stream()
-                .map(data -> getMainRecipeResponse(userInfo, data))
+    private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Long> recipeIds) {
+        List<Recipe> recipes = recipeRepository.findAllByIdIn(recipeIds);
+        return recipes.stream()
+                .map(recipe -> {
+                    List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
+                    List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
+                    return new RecipeHomeWithMineResponse(userInfo, recipe, categories, ingredients);
+                })
                 .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
-                .collect(Collectors.toList());
-    }
-
-    private RecipeHomeWithMineResponse getMainRecipeResponse(UserInfo userInfo,
-                                                             List<RecipeDataResponse> groupedResponses) {
-        RecipeDataResponse firstResponse = groupedResponses.getFirst();
-
-        return new RecipeHomeWithMineResponse(
-                userInfo,
-                firstResponse,
-                getCategoryResponses(groupedResponses),
-                getIngredientResponses(groupedResponses)
-        );
-    }
-
-    private List<IngredientResponse> getIngredientResponses(List<RecipeDataResponse> groupedResponses) {
-        return groupedResponses.stream()
-                .map(r -> new IngredientResponse(r.ingredientId(), r.ingredientName(), r.ingredientRequirement()))
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    private List<CategoryResponse> getCategoryResponses(List<RecipeDataResponse> groupedResponses) {
-        return groupedResponses.stream()
-                .map(r -> new CategoryResponse(r.categoryId(), r.categoryName()))
-                .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void verifyRecipeOwner(UserInfo userInfo, Recipe recipe) {
