@@ -148,7 +148,8 @@ public class RecipeService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecipeHomeResponse> readFollowRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
+    public List<RecipeHomeWithMineResponseV1> readFollowRecipes(UserInfo userInfo,
+                                                                PageRecipeRequest pageRecipeRequest) {
         List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
         List<Long> followeeIds = followings.stream()
                 .map(userFollow -> userFollow.getFollowee().getId())
@@ -163,7 +164,8 @@ public class RecipeService {
                 .toList();
 
         return recipeRepository.findRecipeDataV1(recipeIds).stream()
-                .sorted(Comparator.comparing(RecipeHomeResponse::recipeId).reversed())
+                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
