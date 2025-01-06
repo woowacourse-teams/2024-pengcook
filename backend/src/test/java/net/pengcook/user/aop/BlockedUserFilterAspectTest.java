@@ -30,7 +30,7 @@ class BlockedUserFilterAspectTest {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("레시피 목록을 조회할때 차단한 사용자들의 레시피가 보이지 않는다.")
-    void filterAuthorAbles() {
+    void filterOwnables() {
         List<Long> authorIds = RestAssured.given().log().all()
                 .queryParam("pageNumber", 0)
                 .queryParam("pageSize", 10)
