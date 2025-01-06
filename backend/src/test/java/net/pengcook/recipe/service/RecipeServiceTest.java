@@ -10,7 +10,6 @@ import net.pengcook.ingredient.domain.Requirement;
 import net.pengcook.ingredient.dto.IngredientCreateRequest;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.PageRecipeRequest;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
 import net.pengcook.recipe.dto.RecipeResponse;
@@ -85,11 +84,11 @@ class RecipeServiceTest {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
         PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 10, null, null, null);
 
-        List<RecipeHomeResponse> actual = recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
+        List<RecipeHomeWithMineResponseV1> actual = recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
 
         assertAll(
                 () -> assertThat(actual).hasSize(3),
-                () -> assertThat(actual).extracting("authorId").containsOnly(4L),
+                () -> assertThat(actual).extracting("author.authorId").containsOnly(4L),
                 () -> assertThat(actual).extracting("recipeId")
                         .containsExactly(18L, 17L, 16L)
         );
