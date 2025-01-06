@@ -16,6 +16,8 @@ import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
+import net.pengcook.user.dto.FollowInfoResponse;
+import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
@@ -362,5 +364,24 @@ class UserServiceTest {
 
         List<UserFollow> afterUnfollow = userFollowRepository.findAllByFollowerId(followerId);
         assertThat(afterUnfollow.size()).isEqualTo(beforeUnfollow.size() - 1);
+    }
+
+    @Test
+    @DisplayName("팔로우 목록을 조회한다")
+    void getFollowInfo() {
+        long userId = 1L;
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1,
+                followUserInfoResponse,
+                1
+        );
+
+        FollowInfoResponse actual = userService.getFollowInfo(userId);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
