@@ -19,5 +19,5 @@ public interface CategoryRecipeRepository extends JpaRepository<CategoryRecipe, 
 
     void deleteByRecipe(Recipe recipe);
 
-    List<CategoryRecipe> findAllByRecipe(Recipe recipe);
+    List<CategoryRecipe> findAllByRecipeId(Long recipeId);
 }
