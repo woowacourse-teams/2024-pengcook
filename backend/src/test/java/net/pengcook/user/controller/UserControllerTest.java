@@ -13,12 +13,15 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.List;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
+import net.pengcook.user.dto.FollowInfoResponse;
+import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
@@ -429,5 +432,42 @@ class UserControllerTest extends RestDocsSetting {
                 .delete("/user/follower")
                 .then().log().all()
                 .statusCode(204);
+    }
+
+    @Test
+    @DisplayName("팔로우 목록을 조회한다.")
+    void getFollowInfo() {
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1,
+                followUserInfoResponse,
+                1
+        );
+
+        FollowInfoResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로우 목록을 조회한다.",
+                        "팔로우 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("followers").description("팔로워 목록"),
+                                fieldWithPath("followers[].username").description("사용자 이름"),
+                                fieldWithPath("followers[].image").description("사용자 이미지"),
+                                fieldWithPath("followerCount").description("팔로워 수"),
+                                fieldWithPath("followings").description("팔로잉 목록"),
+                                fieldWithPath("followings[].username").description("사용자 이름"),
+                                fieldWithPath("followings[].image").description("사용자 이미지"),
+                                fieldWithPath("followeeCount").description("팔로잉 수")
+                        )))
+                .contentType(ContentType.JSON)
+                .when().get("/user/{userId}/follows", 1L)
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(FollowInfoResponse.class);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
