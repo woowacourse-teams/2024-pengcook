@@ -529,7 +529,7 @@ class RecipeControllerTest extends RestDocsSetting {
     void readRecipeDescription() {
         RecipeDescriptionResponse expected = new RecipeDescriptionResponse(2L, "김밥",
                 new AuthorResponse(1L, "loki", "loki.jpg"), LocalTime.of(1, 0, 0),
-                "김밥이미지.jpg", 8, 1, 0, "김밥 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0),
+                "김밥이미지.jpg", 8, 1, 0, "김밥 조리법", LocalDateTime.of(2024, 7, 2, 11, 0, 0),
                 List.of(new CategoryResponse(1, "한식"), new CategoryResponse(3, "채식")),
                 List.of(new IngredientResponse(2, "쌀", Requirement.REQUIRED),
                         new IngredientResponse(3, "계란", Requirement.OPTIONAL),

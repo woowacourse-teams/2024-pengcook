@@ -80,7 +80,7 @@ class RecipeRepositoryTest {
     void findRecipeIdsByUserId() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeByAuthorIdOrderByIdDesc(pageable, 1L).stream()
+        List<Long> recipeIds = repository.findRecipeByAuthorIdOrderByCreatedAtDesc(pageable, 1L).stream()
                 .map(Recipe::getId)
                 .toList();
 

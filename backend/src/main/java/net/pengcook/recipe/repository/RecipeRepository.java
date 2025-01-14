@@ -12,33 +12,36 @@ import org.springframework.data.repository.query.Param;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("""
-            SELECT DISTINCT recipe.id
+            SELECT recipe.id
             FROM CategoryRecipe
             WHERE category.name = :category
-            ORDER BY recipe.id DESC
+            GROUP BY id, recipe.createdAt
+            ORDER BY recipe.createdAt DESC
             """)
     List<Long> findRecipeIdsByCategory(Pageable pageable, String category);
 
     @Query("""
-            SELECT DISTINCT id
+            SELECT id
             FROM Recipe
             WHERE title LIKE CONCAT('%', :keyword, '%')
             OR description LIKE CONCAT('%', :keyword, '%')
-            ORDER BY id DESC
+            GROUP BY id, createdAt
+            ORDER BY createdAt DESC
             """)
     List<Long> findRecipeIdsByKeyword(Pageable pageable, String keyword);
 
-    List<Recipe> findRecipeByAuthorIdOrderByIdDesc(Pageable pageable, long authorId);
+    List<Recipe> findRecipeByAuthorIdOrderByCreatedAtDesc(Pageable pageable, long authorId);
 
     @Query("""
-            SELECT DISTINCT r.id
+            SELECT r.id
             FROM Recipe r
             LEFT JOIN CategoryRecipe cr ON cr.recipe = r
             LEFT JOIN Category c ON cr.category = c
             WHERE (:category IS NULL OR c.name = :category)
             AND (:keyword IS NULL OR CONCAT(r.title, r.description) LIKE CONCAT('%', :keyword, '%'))
             AND (:userId IS NULL OR r.author.id = :userId)
-            ORDER BY r.id DESC
+            GROUP BY r.id, r.createdAt
+            ORDER BY r.createdAt DESC
             """)
     List<Long> findRecipeIdsByCategoryAndKeyword(
             Pageable pageable,
@@ -47,7 +50,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             @Param("userId") @Nullable Long userId
     );
 
-    List<Recipe> findAllByIdIn(List<Long> recipeIds);
+    List<Recipe> findAllByIdInOrderByCreatedAtDesc(List<Long> recipeIds);
 
     @Query("""
             SELECT new net.pengcook.recipe.dto.RecipeHomeResponse(
@@ -63,6 +66,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             )
             FROM Recipe r
             WHERE r.id IN :recipeIds
+            ORDER BY r.createdAt DESC
             """)
     List<RecipeHomeResponse> findRecipeDataV1(List<Long> recipeIds);
 

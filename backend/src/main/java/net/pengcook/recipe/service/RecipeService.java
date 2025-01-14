@@ -1,7 +1,6 @@
 package net.pengcook.recipe.service;
 
 import java.time.LocalTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RecipeService {
 
-    private static final String KEY_RECIPE = "id";
+    private static final String KEY_RECIPE = "createdAt";
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
@@ -78,7 +77,6 @@ public class RecipeService {
 
         return recipeHomeResponses.stream()
                 .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
@@ -121,7 +119,7 @@ public class RecipeService {
             return recipeRepository.findRecipeIdsByKeyword(pageable, keyword);
         }
         if (userId != null) {
-            return recipeRepository.findRecipeByAuthorIdOrderByIdDesc(pageable, userId).stream()
+            return recipeRepository.findRecipeByAuthorIdOrderByCreatedAtDesc(pageable, userId).stream()
                     .map(Recipe::getId)
                     .toList();
         }
@@ -143,7 +141,6 @@ public class RecipeService {
 
         return recipeHomeResponses.stream()
                 .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
@@ -234,14 +231,13 @@ public class RecipeService {
     }
 
     private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Long> recipeIds) {
-        List<Recipe> recipes = recipeRepository.findAllByIdIn(recipeIds);
+        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(recipeIds);
         return recipes.stream()
                 .map(recipe -> {
                     List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
                     List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
                     return new RecipeHomeWithMineResponse(userInfo, recipe, categories, ingredients);
                 })
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponse::recipeId).reversed())
                 .toList();
     }
 
