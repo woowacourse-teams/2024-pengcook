@@ -1,12 +1,13 @@
 package net.pengcook.comment.service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.domain.Comment;
-import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CommentOfRecipeResponse;
+import net.pengcook.comment.dto.CommentOfUserResponse;
 import net.pengcook.comment.dto.CreateCommentRequest;
 import net.pengcook.comment.exception.NotFoundException;
 import net.pengcook.comment.exception.UnauthorizedDeletionException;
@@ -79,6 +80,7 @@ public class CommentService {
 
         return comments.stream()
                 .map(CommentOfUserResponse::new)
+                .sorted(Comparator.comparing(CommentOfUserResponse::createdAt).reversed())
                 .toList();
     }
 
