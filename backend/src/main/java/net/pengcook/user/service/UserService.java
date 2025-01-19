@@ -97,6 +97,16 @@ public class UserService {
     }
 
     @Transactional
+    public void deleteBlock(long blockerId, long blockeeId) {
+        User blocker = userRepository.findById(blockerId)
+                .orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
+        User blockee = userRepository.findById(blockeeId)
+                .orElseThrow(() -> new UserNotFoundException("차단한 사용자를 찾을 수 없습니다."));
+
+        userBlockRepository.deleteByBlockerAndBlockee(blocker, blockee);
+    }
+
+    @Transactional
     public ReportResponse report(long reporterId, ReportRequest reportRequest) {
         User reporter = userRepository.findById(reporterId)
                 .orElseThrow(() -> new NotFoundException("신고자 정보를 조회할 수 없습니다."));
