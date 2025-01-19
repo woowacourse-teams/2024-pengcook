@@ -46,7 +46,7 @@ class UserFollowServiceTest {
     @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
     void followUserWhenBlockingOrBlocked() {
         long followerId = 1L;
-        long blockingFolloweeId = 2L;
+        long blockingFolloweeId = 3L;
         long blockedFolloweeId = 5L;
 
         assertThatThrownBy(() -> userFollowService.followUser(followerId, blockingFolloweeId))

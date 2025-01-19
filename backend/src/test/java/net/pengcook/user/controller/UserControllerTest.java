@@ -27,6 +27,7 @@ import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
+import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.dto.UserFollowRequest;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,8 @@ class UserControllerTest extends RestDocsSetting {
 
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    UserBlockRepository userBlockRepository;
     @Autowired
     ImageClientService imageClientService;
 
@@ -346,6 +348,31 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(201)
                 .body("blocker.id", is(1))
                 .body("blockee.id", is(2));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자 차단을 해제한다.")
+    void deleteBlock() {
+        UserBlockRequest userBlockRequest = new UserBlockRequest(3L);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자 차단을 해제합니다.",
+                        "사용자 차단 해제 API",
+                        requestFields(
+                                fieldWithPath("blockeeId").description("차단한 사용자 ID")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .body(userBlockRequest)
+                .when().delete("/user/block")
+                .then().log().all()
+                .statusCode(204);
+
+        boolean exists = userBlockRepository.existsByBlockerIdAndBlockeeId(1L, 3L);
+
+        assertThat(exists).isFalse();
     }
 
     @Test
