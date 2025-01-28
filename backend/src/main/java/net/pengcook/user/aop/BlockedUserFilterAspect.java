@@ -70,10 +70,10 @@ public class BlockedUserFilterAspect {
     }
 
     @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningAuthorAble() {
+    public void repositoryMethodsReturningOwnable() {
     }
 
-    @Around("repositoryMethodsReturningAuthorAble()")
+    @Around("repositoryMethodsReturningOwnable()")
     public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
         Ownable ownable = (Ownable) joinPoint.proceed();
 
@@ -105,11 +105,11 @@ public class BlockedUserFilterAspect {
     }
 
     private List<Ownable> filterBlockedUsers(
-            List<Ownable> authorAbles,
+            List<Ownable> ownable,
             BlockeeGroup blockeeGroup,
             BlockerGroup blockerGroup
     ) {
-        return authorAbles.stream()
+        return ownable.stream()
                 .filter(item -> !blockeeGroup.contains(item.getOwnerId()))
                 .filter(item -> !blockerGroup.contains(item.getOwnerId()))
                 .toList();
