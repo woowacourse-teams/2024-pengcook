@@ -18,6 +18,7 @@ import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserFollowRequest;
 import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
+import net.pengcook.user.service.UserFollowService;
 import net.pengcook.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserFollowService userFollowService;
 
     @GetMapping("/user/me")
     public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo) {
@@ -94,7 +96,7 @@ public class UserController {
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid UserFollowRequest userFollowRequest
     ) {
-        return userService.followUser(userInfo.getId(), userFollowRequest.targetId());
+        return userFollowService.followUser(userInfo.getId(), userFollowRequest.targetId());
     }
 
     @DeleteMapping("/user/follow")
@@ -103,7 +105,7 @@ public class UserController {
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid UserFollowRequest userFollowRequest
     ) {
-        userService.unfollowUser(userInfo.getId(), userFollowRequest.targetId());
+        userFollowService.unfollowUser(userInfo.getId(), userFollowRequest.targetId());
     }
 
     @DeleteMapping("/user/follower")
@@ -112,16 +114,16 @@ public class UserController {
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid UserFollowRequest userFollowRequest
     ) {
-        userService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
+        userFollowService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
     }
 
     @GetMapping("/user/{userId}/follower")
     public FollowInfoResponse getFollowerInfo(@PathVariable long userId) {
-        return userService.getFollowerInfo(userId);
+        return userFollowService.getFollowerInfo(userId);
     }
 
     @GetMapping("/user/{userId}/following")
     public FollowInfoResponse getFollowingInfo(@PathVariable long userId) {
-        return userService.getFollowingInfo(userId);
+        return userFollowService.getFollowingInfo(userId);
     }
 }

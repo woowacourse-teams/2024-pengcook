@@ -14,18 +14,14 @@ import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
-import net.pengcook.user.dto.FollowInfoResponse;
-import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
-import net.pengcook.user.exception.BadArgumentException;
 import net.pengcook.user.exception.NotFoundException;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
@@ -40,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final RecipeService recipeService;
+    private final UserFollowService userFollowService;
 
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
@@ -91,6 +88,7 @@ public class UserService {
         User blockee = userRepository.findById(blockeeId)
                 .orElseThrow(() -> new UserNotFoundException("차단할 사용자를 찾을 수 없습니다."));
 
+        userFollowService.blockUserFollow(blockerId, blockeeId);
         UserBlock userBlock = userBlockRepository.save(new UserBlock(blocker, blockee));
 
         return new UserBlockResponse(new UserResponse(userBlock.getBlocker()),
@@ -151,56 +149,5 @@ public class UserService {
             userFollowRepository.delete(userFollow);
         }
         userRepository.delete(user);
-    }
-
-    @Transactional
-    public UserFollowResponse followUser(long followerId, long followeeId) {
-        User follower = getUser(followerId);
-        User followee = getUser(followeeId);
-        boolean isFollow = userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId);
-        if (isFollow) {
-            throw new BadArgumentException("이미 팔로우 중입니다.");
-        }
-
-        UserFollow userFollow = new UserFollow(follower, followee);
-        userFollowRepository.save(userFollow);
-        follower.increaseFolloweeCount();
-        followee.increaseFollowerCount();
-        return new UserFollowResponse(userFollow);
-    }
-
-    @Transactional
-    public void unfollowUser(long followerId, long followeeId) {
-        User follower = getUser(followerId);
-        User followee = getUser(followeeId);
-        UserFollow userFollow = userFollowRepository.findByFollowerIdAndFolloweeId(followerId, followeeId)
-                .orElseThrow(() -> new NotFoundException("팔로우 관계를 찾을 수 없습니다."));
-
-        userFollowRepository.delete(userFollow);
-        follower.decreaseFolloweeCount();
-        followee.decreaseFollowerCount();
-    }
-
-    @Transactional(readOnly = true)
-    public FollowInfoResponse getFollowerInfo(long userId) {
-        List<FollowUserInfoResponse> followers = userFollowRepository.findAllByFolloweeId(userId).stream()
-                .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollower()))
-                .toList();
-
-        return new FollowInfoResponse(followers);
-    }
-
-    @Transactional(readOnly = true)
-    public FollowInfoResponse getFollowingInfo(long userId) {
-        List<FollowUserInfoResponse> followings = userFollowRepository.findAllByFollowerId(userId).stream()
-                .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollowee()))
-                .toList();
-
-        return new FollowInfoResponse(followings);
-    }
-
-    private User getUser(long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("사용자 정보를 조회할 수 없습니다."));
     }
 }
