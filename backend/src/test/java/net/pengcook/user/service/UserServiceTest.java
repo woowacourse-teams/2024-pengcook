@@ -375,13 +375,15 @@ class UserServiceTest {
         );
         FollowInfoResponse expected = new FollowInfoResponse(
                 followUserInfoResponse,
-                1,
-                followUserInfoResponse,
                 1
         );
 
-        FollowInfoResponse actual = userService.getFollowInfo(userId);
+        FollowInfoResponse actualFollower = userService.getFollowerInfo(userId);
+        FollowInfoResponse actualFollowee = userService.getFollowingInfo(userId);
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertAll(
+                () -> assertThat(actualFollower).usingRecursiveComparison().isEqualTo(expected),
+                () -> assertThat(actualFollowee).usingRecursiveComparison().isEqualTo(expected)
+        );
     }
 }
