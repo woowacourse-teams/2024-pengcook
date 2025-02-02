@@ -115,8 +115,13 @@ public class UserController {
         userService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
     }
 
-    @GetMapping("/user/{userId}/follows")
-    public FollowInfoResponse getFollowInfo(@PathVariable long userId) {
-        return userService.getFollowInfo(userId);
+    @GetMapping("/user/{userId}/follower")
+    public FollowInfoResponse getFollowerInfo(@PathVariable long userId) {
+        return userService.getFollowerInfo(userId);
+    }
+
+    @GetMapping("/user/{userId}/following")
+    public FollowInfoResponse getFollowingInfo(@PathVariable long userId) {
+        return userService.getFollowingInfo(userId);
     }
 }

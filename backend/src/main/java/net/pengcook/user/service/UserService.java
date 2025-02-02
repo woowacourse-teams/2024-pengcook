@@ -182,15 +182,21 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public FollowInfoResponse getFollowInfo(long userId) {
+    public FollowInfoResponse getFollowerInfo(long userId) {
         List<FollowUserInfoResponse> followers = userFollowRepository.findAllByFolloweeId(userId).stream()
                 .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollower()))
                 .toList();
+
+        return new FollowInfoResponse(followers);
+    }
+
+    @Transactional(readOnly = true)
+    public FollowInfoResponse getFollowingInfo(long userId) {
         List<FollowUserInfoResponse> followings = userFollowRepository.findAllByFollowerId(userId).stream()
                 .map(userFollow -> new FollowUserInfoResponse(userFollow.getFollowee()))
                 .toList();
 
-        return new FollowInfoResponse(followers, followings);
+        return new FollowInfoResponse(followings);
     }
 
     private User getUser(long userId) {

@@ -435,34 +435,59 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @DisplayName("팔로우 목록을 조회한다.")
-    void getFollowInfo() {
+    @DisplayName("팔로워 목록을 조회한다.")
+    void getFollowerInfo() {
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
                 new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
         );
         FollowInfoResponse expected = new FollowInfoResponse(
-                followUserInfoResponse,
-                1,
                 followUserInfoResponse,
                 1
         );
 
         FollowInfoResponse actual = RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "팔로우 목록을 조회한다.",
-                        "팔로우 목록 조회 API",
+                        "팔로워 목록을 조회한다.",
+                        "팔로워 목록 조회 API",
                         responseFields(
-                                fieldWithPath("followers").description("팔로워 목록"),
-                                fieldWithPath("followers[].username").description("사용자 이름"),
-                                fieldWithPath("followers[].image").description("사용자 이미지"),
-                                fieldWithPath("followerCount").description("팔로워 수"),
-                                fieldWithPath("followings").description("팔로잉 목록"),
-                                fieldWithPath("followings[].username").description("사용자 이름"),
-                                fieldWithPath("followings[].image").description("사용자 이미지"),
-                                fieldWithPath("followeeCount").description("팔로잉 수")
+                                fieldWithPath("follows").description("팔로워 목록"),
+                                fieldWithPath("follows[].username").description("사용자 이름"),
+                                fieldWithPath("follows[].image").description("사용자 이미지"),
+                                fieldWithPath("followCount").description("팔로워 수")
                         )))
                 .contentType(ContentType.JSON)
-                .when().get("/user/{userId}/follows", 1L)
+                .when().get("/user/{userId}/follower", 1L)
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(FollowInfoResponse.class);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("팔로잉 목록을 조회한다.")
+    void getFollowInfo() {
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1
+        );
+
+        FollowInfoResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로잉 목록을 조회한다.",
+                        "팔로잉 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("follows").description("팔로잉 목록"),
+                                fieldWithPath("follows[].username").description("사용자 이름"),
+                                fieldWithPath("follows[].image").description("사용자 이미지"),
+                                fieldWithPath("followCount").description("팔로잉 수")
+                        )))
+                .contentType(ContentType.JSON)
+                .when().get("/user/{userId}/following", 1L)
                 .then().log().all()
                 .statusCode(200)
                 .extract()
