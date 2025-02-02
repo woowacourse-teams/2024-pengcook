@@ -3,12 +3,10 @@ package net.pengcook.user.dto;
 import java.util.List;
 
 public record FollowInfoResponse(
-        List<FollowUserInfoResponse> followers,
-        long followerCount,
-        List<FollowUserInfoResponse> followings,
-        long followeeCount
+        List<FollowUserInfoResponse> follows,
+        long followCount
 ) {
-    public FollowInfoResponse(List<FollowUserInfoResponse> followers, List<FollowUserInfoResponse> followings) {
-        this(followers, followers.size(), followings, followings.size());
+    public FollowInfoResponse(List<FollowUserInfoResponse> follows) {
+        this(follows, follows.size());
     }
 }
