@@ -155,10 +155,7 @@ public class RecipeService {
                 .map(userFollow -> userFollow.getFollowee().getId())
                 .toList();
 
-        List<Recipe> recipes = recipeRepository.findAllByAuthorIdIn(
-                followeeIds,
-                pageRecipeRequest.getPageable()
-        );
+        List<Recipe> recipes = recipeRepository.findAllByAuthorIdIn(followeeIds, pageRecipeRequest.getPageable());
         List<Long> recipeIds = recipes.stream()
                 .map(Recipe::getId)
                 .toList();
