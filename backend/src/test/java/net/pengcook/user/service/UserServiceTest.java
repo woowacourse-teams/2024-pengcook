@@ -26,6 +26,7 @@ import net.pengcook.user.dto.UserBlockResponse;
 import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
+import net.pengcook.user.exception.IllegalStateException;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.repository.UserFollowRepository;
@@ -376,12 +377,27 @@ class UserServiceTest {
     @DisplayName("사용자를 팔로우한다.")
     void follow() {
         long followerId = 1L;
-        long followeeId = 2L;
-        UserFollowResponse expected = new UserFollowResponse(1, 2);
+        long followeeId = 6L;
+        UserFollowResponse expected = new UserFollowResponse(1, 6);
 
         UserFollowResponse actual = userFollowService.followUser(followerId, followeeId);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
+    void followUserWhenBlockingOrBlocked() {
+        long followerId = 1L;
+        long blockingFolloweeId = 2L;
+        long blockedFolloweeId = 5L;
+
+        assertThatThrownBy(() -> userFollowService.followUser(followerId, blockingFolloweeId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("팔로우 할 수 없습니다.");
+        assertThatThrownBy(() -> userFollowService.followUser(followerId, blockedFolloweeId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("팔로우 할 수 없습니다.");
     }
 
     @Test
