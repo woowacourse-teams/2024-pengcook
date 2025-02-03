@@ -192,7 +192,8 @@ VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
 
 INSERT INTO user_block (blocker_id, blockee_id)
 VALUES (1, 2),
-       (1, 3);
+       (1, 3),
+       (5, 1);
 
 INSERT INTO user_follow (follower_id, followee_id)
 VALUES (1, 4),

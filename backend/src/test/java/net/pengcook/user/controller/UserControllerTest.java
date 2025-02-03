@@ -31,6 +31,8 @@ import net.pengcook.user.dto.UserFollowRequest;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -390,6 +392,29 @@ class UserControllerTest extends RestDocsSetting {
                 .statusCode(201)
                 .body("followerId", is(5))
                 .body("followeeId", is(3));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"3", "5"})
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
+    void followUserWhenBlockingOrBlocked(int followeeId) {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(followeeId);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 팔로우한다.",
+                        "팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .post("/user/follow")
+                .then().log().all()
+                .statusCode(403);
     }
 
     @Test
