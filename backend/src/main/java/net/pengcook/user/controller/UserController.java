@@ -98,6 +98,11 @@ public class UserController {
         userService.deleteBlock(userInfo.getId(), userBlockRequest.blockeeId());
     }
 
+    @GetMapping("/block/list")
+    public List<UserBlockResponse> getBlockees(@LoginUser UserInfo userInfo) {
+        return userService.getBlockeesOf(userInfo.getId());
+    }
+
     @PostMapping("/follow")
     @ResponseStatus(HttpStatus.CREATED)
     public UserFollowResponse followUser(
