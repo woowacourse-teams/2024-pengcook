@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
@@ -284,6 +285,25 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.deleteBlock(blockerId, blockeeId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("차단한 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("차단 목록을 불러온다.")
+    void getBlockeesOf() {
+        long blockerId = 1L;
+        List<UserBlockResponse> expected = List.of(
+                new UserBlockResponse(
+                        new UserResponse(blockerId, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA"),
+                        new UserResponse(3L, "crocodile@pengcook.net", "crocodile", "악어", "crocodile.jpg", "KOREA")
+                ),
+                new UserBlockResponse(
+                        new UserResponse(blockerId, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA"),
+                        new UserResponse(4L, "birdsheep@pengcook.net", "birdsheep", "새양", "birdsheep.jpg", "KOREA")
+                ));
+
+        List<UserBlockResponse> userBlockResponses = userService.getBlockeesOf(blockerId);
+
+        assertThat(userBlockResponses).containsExactlyElementsOf(expected);
     }
 
     @Test

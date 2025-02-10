@@ -376,6 +376,60 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자의 차단 목록을 불러온다.")
+    void getBlockeesOf() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "로그인한 사용자의 차단 목록을 조회합니다.",
+                        "차단 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("[]").description("차단 목록"),
+                                fieldWithPath("[].blocker.id").description("차단자 ID"),
+                                fieldWithPath("[].blocker.email").description("차단자 이메일"),
+                                fieldWithPath("[].blocker.username").description("차단자 아이디"),
+                                fieldWithPath("[].blocker.nickname").description("차단자 닉네임"),
+                                fieldWithPath("[].blocker.image").description("차단자 프로필 이미지"),
+                                fieldWithPath("[].blocker.region").description("차단자 국가"),
+                                fieldWithPath("[].blockee.id").description("차단대상 ID"),
+                                fieldWithPath("[].blockee.email").description("차단대상 이메일"),
+                                fieldWithPath("[].blockee.username").description("차단대상 아이디"),
+                                fieldWithPath("[].blockee.nickname").description("차단대상 닉네임"),
+                                fieldWithPath("[].blockee.image").description("차단대상 프로필 이미지"),
+                                fieldWithPath("[].blockee.region").description("차단대상 국가")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when().get("/user/block/list")
+                .then().log().all()
+                .statusCode(200)
+                .body("[0].blocker.id", equalTo(1))
+                .body("[0].blocker.email", equalTo("loki@pengcook.net"))
+                .body("[0].blocker.username", equalTo("loki"))
+                .body("[0].blocker.nickname", equalTo("로키"))
+                .body("[0].blocker.image", equalTo("loki.jpg"))
+                .body("[0].blocker.region", equalTo("KOREA"))
+                .body("[0].blockee.id", equalTo(3))
+                .body("[0].blockee.email", equalTo("crocodile@pengcook.net"))
+                .body("[0].blockee.username", equalTo("crocodile"))
+                .body("[0].blockee.nickname", equalTo("악어"))
+                .body("[0].blockee.image", equalTo("crocodile.jpg"))
+                .body("[0].blockee.region", equalTo("KOREA"))
+                .body("[1].blocker.id", equalTo(1))
+                .body("[1].blocker.email", equalTo("loki@pengcook.net"))
+                .body("[1].blocker.username", equalTo("loki"))
+                .body("[1].blocker.nickname", equalTo("로키"))
+                .body("[1].blocker.image", equalTo("loki.jpg"))
+                .body("[1].blocker.region", equalTo("KOREA"))
+                .body("[1].blockee.id", equalTo(4))
+                .body("[1].blockee.email", equalTo("birdsheep@pengcook.net"))
+                .body("[1].blockee.username", equalTo("birdsheep"))
+                .body("[1].blockee.nickname", equalTo("새양"))
+                .body("[1].blockee.image", equalTo("birdsheep.jpg"))
+                .body("[1].blockee.region", equalTo("KOREA"));
+    }
+
+    @Test
     @WithLoginUser
     @DisplayName("사용자를 삭제한다.")
     void deleteUser() {
