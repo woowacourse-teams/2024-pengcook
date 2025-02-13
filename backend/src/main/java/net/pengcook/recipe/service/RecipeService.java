@@ -17,7 +17,6 @@ import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.PageRecipeRequest;
 import net.pengcook.recipe.dto.RecipeDescriptionResponse;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponse;
 import net.pengcook.recipe.dto.RecipeHomeWithMineResponseV1;
 import net.pengcook.recipe.dto.RecipeRequest;
@@ -73,10 +72,10 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readRecipesV1(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
         List<Long> recipeIds = findRecipeIdsByMultipleCondition(pageRecipeRequest);
-        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(recipeIds);
+        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(recipeIds);
 
-        return recipeHomeResponses.stream()
-                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+        return recipes.stream()
+                .map(recipe -> new RecipeHomeWithMineResponseV1(userInfo, recipe))
                 .toList();
     }
 
@@ -137,10 +136,10 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
-        List<RecipeHomeResponse> recipeHomeResponses = recipeRepository.findRecipeDataV1(likeRecipeIds);
+        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
-        return recipeHomeResponses.stream()
-                .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
+        return recipes.stream()
+                .map(recipe -> new RecipeHomeWithMineResponseV1(userInfo, recipe))
                 .toList();
     }
 
@@ -219,15 +218,18 @@ public class RecipeService {
     public void deleteRecipe(UserInfo userInfo, long recipeId) {
         Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
 
-        targetRecipe.ifPresent(recipe -> {
-            verifyRecipeOwner(userInfo, recipe);
-            ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
-            categoryService.deleteCategoryRecipe(recipe);
-            commentService.deleteCommentsByRecipe(recipe.getId());
-            recipeLikeService.deleteLikesByRecipe(recipe.getId());
-            recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
-            recipeRepository.delete(recipe);
-        });
+        targetRecipe.ifPresent(recipe -> deleteRecipe(userInfo, recipe));
+    }
+
+    @Transactional
+    public void deleteRecipe(UserInfo userInfo, Recipe recipe) {
+        verifyRecipeOwner(userInfo, recipe);
+        ingredientRecipeService.deleteIngredientRecipe(recipe.getId());
+        categoryService.deleteCategoryRecipe(recipe);
+        commentService.deleteCommentsByRecipe(recipe.getId());
+        recipeLikeService.deleteLikesByRecipe(recipe.getId());
+        recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
+        recipeRepository.delete(recipe);
     }
 
     private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Long> recipeIds) {

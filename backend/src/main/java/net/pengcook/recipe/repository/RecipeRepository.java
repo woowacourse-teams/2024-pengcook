@@ -3,7 +3,6 @@ package net.pengcook.recipe.repository;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -50,30 +49,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findAllByIdInOrderByCreatedAtDesc(List<Long> recipeIds);
 
-    @Query("""
-            SELECT new net.pengcook.recipe.dto.RecipeHomeResponse(
-                r.id,
-                r.title,
-                r.author.id,
-                r.author.username,
-                r.author.image,
-                r.thumbnail,
-                r.likeCount,
-                r.commentCount,
-                r.createdAt
-            )
-            FROM Recipe r
-            WHERE r.id IN :recipeIds
-            ORDER BY r.createdAt DESC
-            """)
-    List<RecipeHomeResponse> findRecipeDataV1(List<Long> recipeIds);
-
-    @Query("""
-            SELECT r.id
-            FROM Recipe r
-            WHERE r.author.id = :userId
-            """)
-    List<Long> findRecipeIdsByUserId(long userId);
+    List<Recipe> findAllByAuthorId(long authorId);
 
     List<Recipe> findAllByAuthorIdInOrderByCreatedAtDesc(List<Long> authorIds, Pageable pageable);
 

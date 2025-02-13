@@ -17,22 +17,6 @@ public record RecipeHomeWithMineResponseV1(
 
     public RecipeHomeWithMineResponseV1(
             UserInfo userInfo,
-            RecipeHomeResponse firstResponse
-    ) {
-        this(
-                firstResponse.recipeId(),
-                firstResponse.title(),
-                new AuthorResponse(firstResponse.authorId(), firstResponse.authorName(), firstResponse.authorImage()),
-                firstResponse.thumbnail(),
-                firstResponse.likeCount(),
-                firstResponse.commentCount(),
-                firstResponse.createdAt(),
-                userInfo.isSameUser(firstResponse.authorId())
-        );
-    }
-
-    public RecipeHomeWithMineResponseV1(
-            UserInfo userInfo,
             Recipe recipe
     ) {
         this(
