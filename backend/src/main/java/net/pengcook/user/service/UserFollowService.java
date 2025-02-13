@@ -36,16 +36,6 @@ public class UserFollowService {
         return new UserFollowResponse(userFollow);
     }
 
-    private void validate(long followerId, long followeeId) {
-        if (userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId)) {
-            throw new IllegalStateException("이미 팔로우 중입니다.");
-        }
-        if (userBlockRepository.existsByBlockerIdAndBlockeeId(followerId, followeeId)
-                || userBlockRepository.existsByBlockerIdAndBlockeeId(followeeId, followerId)) {
-            throw new IllegalStateException("팔로우 할 수 없습니다.");
-        }
-    }
-
     @Transactional
     public void unfollowUser(long followerId, long followeeId) {
         User follower = getUser(followerId);
@@ -87,5 +77,15 @@ public class UserFollowService {
     private User getUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("사용자 정보를 조회할 수 없습니다."));
+    }
+
+    private void validate(long followerId, long followeeId) {
+        if (userFollowRepository.existsByFollowerIdAndFolloweeId(followerId, followeeId)) {
+            throw new IllegalStateException("이미 팔로우 중입니다.");
+        }
+        if (userBlockRepository.existsByBlockerIdAndBlockeeId(followerId, followeeId)
+                || userBlockRepository.existsByBlockerIdAndBlockeeId(followeeId, followerId)) {
+            throw new IllegalStateException("팔로우 할 수 없습니다.");
+        }
     }
 }
