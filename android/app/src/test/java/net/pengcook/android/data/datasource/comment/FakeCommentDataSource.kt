@@ -2,6 +2,7 @@ package net.pengcook.android.data.datasource.comment
 
 import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
+import net.pengcook.android.data.model.comment.MyCommentResponse
 import retrofit2.Response
 
 class FakeCommentDataSource : CommentDataSource {
@@ -35,6 +36,10 @@ class FakeCommentDataSource : CommentDataSource {
     ): Response<List<CommentResponse>> {
         val result = comments.filter { it.recipeId == recipeId }.map { it.toCommentResponse() }
         return Response.success(result)
+    }
+
+    override suspend fun fetchMyComments(accessToken: String): Response<List<MyCommentResponse>> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun postComment(

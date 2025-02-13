@@ -5,8 +5,10 @@ import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.comment.CommentDataSource
 import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
+import net.pengcook.android.data.model.comment.MyCommentResponse
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.Comment
+import net.pengcook.android.presentation.core.model.MyComment
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,6 +26,14 @@ class DefaultCommentRepository
                     sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
                 val response = commentDataSource.fetchComment(accessToken, recipeId)
                 body(response, RESPONSE_CODE_SUCCESS).map { it.toComment() }
+            }
+
+        override suspend fun fetchMyComments(): Result<List<MyComment>> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = commentDataSource.fetchMyComments(accessToken)
+                body(response, RESPONSE_CODE_SUCCESS).map { it.toMyComment() }
             }
 
         override suspend fun postComment(
@@ -59,6 +69,16 @@ class DefaultCommentRepository
                 createdAt = createdAt,
                 message = message,
                 mine = mine,
+            )
+
+        private fun MyCommentResponse.toMyComment(): MyComment =
+            MyComment(
+                commentId = commentId,
+                recipeId = recipeId,
+                recipeTitle = recipeTitle,
+                createdAt = createdAt,
+                message = message,
+                recipeImage = recipeThumbnail,
             )
 
         companion object {
