@@ -414,8 +414,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("팔로우 목록을 조회한다")
-    void getFollowInfo() {
+    @DisplayName("팔로워 목록을 조회한다")
+    void getFollowerInfo() {
         long userId = 1L;
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
                 new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
@@ -426,11 +426,24 @@ class UserServiceTest {
         );
 
         FollowInfoResponse actualFollower = userFollowService.getFollowerInfo(userId);
+
+        assertThat(actualFollower).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("팔로잉 목록을 조회한다")
+    void getFollowingInfo() {
+        long userId = 1L;
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1
+        );
+
         FollowInfoResponse actualFollowee = userFollowService.getFollowingInfo(userId);
 
-        assertAll(
-                () -> assertThat(actualFollower).usingRecursiveComparison().isEqualTo(expected),
-                () -> assertThat(actualFollowee).usingRecursiveComparison().isEqualTo(expected)
-        );
+        assertThat(actualFollowee).usingRecursiveComparison().isEqualTo(expected);
     }
 }
