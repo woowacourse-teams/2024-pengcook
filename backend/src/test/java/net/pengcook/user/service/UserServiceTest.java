@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
@@ -14,19 +13,14 @@ import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.User;
-import net.pengcook.user.domain.UserFollow;
 import net.pengcook.user.domain.UserReport;
-import net.pengcook.user.dto.FollowInfoResponse;
-import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserFollowResponse;
 import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
-import net.pengcook.user.exception.IllegalStateException;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
 import net.pengcook.user.repository.UserFollowRepository;
@@ -371,79 +365,5 @@ class UserServiceTest {
                 () -> assertThat(afterDelete.getFollowerCount()).isEqualTo(initialFollowerCount - 1),
                 () -> assertThat(afterDelete.getFolloweeCount()).isEqualTo(initialFolloweeCount - 1)
         );
-    }
-
-    @Test
-    @DisplayName("사용자를 팔로우한다.")
-    void follow() {
-        long followerId = 1L;
-        long followeeId = 6L;
-        UserFollowResponse expected = new UserFollowResponse(1, 6);
-
-        UserFollowResponse actual = userFollowService.followUser(followerId, followeeId);
-
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
-    void followUserWhenBlockingOrBlocked() {
-        long followerId = 1L;
-        long blockingFolloweeId = 2L;
-        long blockedFolloweeId = 5L;
-
-        assertThatThrownBy(() -> userFollowService.followUser(followerId, blockingFolloweeId))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("팔로우 할 수 없습니다.");
-        assertThatThrownBy(() -> userFollowService.followUser(followerId, blockedFolloweeId))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("팔로우 할 수 없습니다.");
-    }
-
-    @Test
-    @DisplayName("사용자를 언팔로우한다.")
-    void unfollow() {
-        long followerId = 1L;
-        long followeeId = 4L;
-        List<UserFollow> beforeUnfollow = userFollowRepository.findAllByFollowerId(followerId);
-
-        userFollowService.unfollowUser(followerId, followeeId);
-
-        List<UserFollow> afterUnfollow = userFollowRepository.findAllByFollowerId(followerId);
-        assertThat(afterUnfollow.size()).isEqualTo(beforeUnfollow.size() - 1);
-    }
-
-    @Test
-    @DisplayName("팔로워 목록을 조회한다")
-    void getFollowerInfo() {
-        long userId = 1L;
-        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
-        );
-        FollowInfoResponse expected = new FollowInfoResponse(
-                followUserInfoResponse,
-                1
-        );
-
-        FollowInfoResponse actualFollower = userFollowService.getFollowerInfo(userId);
-
-        assertThat(actualFollower).usingRecursiveComparison().isEqualTo(expected);
-    }
-
-    @Test
-    @DisplayName("팔로잉 목록을 조회한다")
-    void getFollowingInfo() {
-        long userId = 1L;
-        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
-        );
-        FollowInfoResponse expected = new FollowInfoResponse(
-                followUserInfoResponse,
-                1
-        );
-
-        FollowInfoResponse actualFollowee = userFollowService.getFollowingInfo(userId);
-
-        assertThat(actualFollowee).usingRecursiveComparison().isEqualTo(expected);
     }
 }
