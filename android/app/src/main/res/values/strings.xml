@@ -107,6 +107,7 @@
     <string name="setting_appbar_title">Setting</string>
     <string name="setting_menu_likes">Likes</string>
     <string name="setting_menu_comments">Comments</string>
+    <string name="setting_menu_my_comments">My Comments</string>
     <string name="setting_menu_blocked">Blocked</string>
     <string name="setting_menu_language">Language</string>
     <string name="setting_menu_privacy_policy">Privacy Policy</string>
