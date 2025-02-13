@@ -2,6 +2,7 @@ package net.pengcook.android.data.datasource.comment
 
 import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
+import net.pengcook.android.data.model.comment.MyCommentResponse
 import net.pengcook.android.data.remote.api.CommentService
 import retrofit2.Response
 import javax.inject.Inject
@@ -17,6 +18,9 @@ class DefaultCommentDataSource
             accessToken: String,
             recipeId: Long,
         ): Response<List<CommentResponse>> = commentService.fetchComments(accessToken, recipeId)
+
+        override suspend fun fetchMyComments(accessToken: String): Response<List<MyCommentResponse>> =
+            commentService.fetchMyComments(accessToken)
 
         override suspend fun postComment(
             accessToken: String,
