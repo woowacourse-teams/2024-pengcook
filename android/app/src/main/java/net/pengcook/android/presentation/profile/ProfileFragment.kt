@@ -79,8 +79,7 @@ class ProfileFragment : Fragment() {
                     findNavController().navigate(R.id.action_profileFragment_to_settingFragment)
                 }
 
-                ProfileUiEvent.NavigateToCommentList -> {
-                }
+                ProfileUiEvent.NavigateToCommentList -> {}
                 ProfileUiEvent.NavigateToFollowList -> {}
             }
         }

@@ -26,7 +26,7 @@ class SettingFragment :
     private val settings: List<Setting> =
         listOf(
             Setting(
-                listOf(MenuItem.PRIVACY_POLICY, MenuItem.TERMS_OF_USE, MenuItem.ACCOUNT),
+                listOf(MenuItem.PRIVACY_POLICY, MenuItem.TERMS_OF_USE, MenuItem.MY_COMMENTS, MenuItem.ACCOUNT),
             ),
         )
     private val adapter: SettingRecyclerViewAdapter by lazy {
@@ -61,6 +61,7 @@ class SettingFragment :
     override fun onSettingMenuItemClick(menuItem: MenuItem) {
         when (menuItem) {
             MenuItem.LIKES -> {}
+            MenuItem.MY_COMMENTS -> findNavController().navigate(R.id.action_settingFragment_to_myCommentFragment)
             MenuItem.COMMENTS -> {}
             MenuItem.BLOCKED -> {}
             MenuItem.LANGUAGE -> {}
@@ -68,6 +69,7 @@ class SettingFragment :
             MenuItem.TERMS_OF_USE -> navigateToBrowser("https://pengcook.net/terms-of-service")
             MenuItem.ACCOUNT ->
                 findNavController().navigate(R.id.action_settingFragment_to_accountSettingFragment)
+
             else -> Unit
         }
     }

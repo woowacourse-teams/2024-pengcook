@@ -13,7 +13,5 @@ class ProfileButtonsViewHolder(
         binding.profileButtonClickListener = profileButtonClickListener
         binding.editProfile = context.getString(R.string.profile_edit_button)
         binding.settings = context.getString(R.string.profile_setting_button)
-        binding.followList = context.getString(R.string.profile_follow_list_button)
-        binding.commentList = context.getString(R.string.profile_comment_list_button)
     }
 }
