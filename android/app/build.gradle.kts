@@ -76,14 +76,16 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
 dependencies {
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
-    val retrofitVersion = "2.11.0"
-    val okHttpVersion = "4.12.0"
     val gsonVersion = "2.11.0"
     val coreKtx = "1.13.1"
     val coroutineVersion = "1.8.1"
@@ -167,4 +169,15 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // compose
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.material:material:1.7.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.activity:activity-compose:1.9.3")
+
+    // coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 }
