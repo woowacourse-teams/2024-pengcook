@@ -62,7 +62,7 @@
     <string name="step_making_hint">레시피 스텝을 작성해주세요.</string>
     <string name="making_step_title">스텝</string>
     <string name="step_format">step %s</string>
-    <string name="making_appbar_title">레시피 개요</string>
+    <string name="making_appbar_title">레시피 스텝</string>
     <string name="making_form_recipe_title">레시피 제목</string>
     <string name="making_form_category">카테고리</string>
     <string name="making_form_ingredient">재료</string>
@@ -112,6 +112,7 @@
     <string name="setting_appbar_title">설정</string>
     <string name="setting_menu_likes">좋아요</string>
     <string name="setting_menu_comments">댓글 목록</string>
+    <string name="setting_menu_my_comments">내 댓글 목록</string>
     <string name="setting_menu_blocked">차단한 사용자</string>
     <string name="setting_menu_language">언어</string>
     <string name="setting_menu_privacy_policy">개인정보 처리방침</string>
