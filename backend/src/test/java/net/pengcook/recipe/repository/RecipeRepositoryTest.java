@@ -1,12 +1,9 @@
 package net.pengcook.recipe.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.recipe.dto.RecipeHomeResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,21 +55,6 @@ class RecipeRepositoryTest {
         List<Long> recipeIds = repository.findRecipeIdsByCategoryAndKeyword(pageable, null, null, null);
 
         assertThat(recipeIds).containsExactly(15L, 14L, 13L);
-    }
-
-    @Test
-    @DisplayName("레시피 id에 해당되는 세부 정보를 반환한다.")
-    void findRecipeData() {
-        List<Long> recipeIds = List.of(4L, 3L);
-        RecipeHomeResponse expectedData = new RecipeHomeResponse(4, "토마토스파게티", 1, "loki", "loki.jpg",
-                "토마토스파게티이미지.jpg", 2, 0, LocalDateTime.of(2024, 7, 2, 13, 0, 0));
-
-        List<RecipeHomeResponse> recipeData = repository.findRecipeDataV1(recipeIds);
-
-        assertAll(
-                () -> assertThat(recipeData).hasSize(2),
-                () -> assertThat(recipeData).contains(expectedData)
-        );
     }
 
     @Test
