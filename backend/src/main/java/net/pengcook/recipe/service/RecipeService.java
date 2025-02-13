@@ -154,11 +154,11 @@ public class RecipeService {
         List<Long> followeeIds = followings.stream()
                 .map(userFollow -> userFollow.getFollowee().getId())
                 .toList();
-        List<Recipe> recipes = recipeRepository.findAllByAuthorIdIn(followeeIds, pageRecipeRequest.getPageable());
+        List<Recipe> recipes = recipeRepository.findAllByAuthorIdInOrderByCreatedAtDesc(followeeIds,
+                pageRecipeRequest.getPageable());
 
         return recipes.stream()
                 .map(recipe -> new RecipeHomeWithMineResponseV1(userInfo, recipe))
-                .sorted(Comparator.comparing(RecipeHomeWithMineResponseV1::recipeId).reversed())
                 .toList();
     }
 
