@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RecipeService {
 
-    private static final String KEY_RECIPE = "createdAt";
+    private static final String CREATION_DATE = "createdAt";
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
@@ -88,7 +88,7 @@ public class RecipeService {
             Pageable descPageable = PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(KEY_RECIPE).descending()
+                    Sort.by(CREATION_DATE).descending()
             );
             return recipeRepository.findAll(descPageable).stream()
                     .map(Recipe::getId)
