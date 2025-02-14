@@ -15,7 +15,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             SELECT recipe.id
             FROM CategoryRecipe
             WHERE category.name = :category
-            GROUP BY id, recipe.createdAt
             ORDER BY recipe.createdAt DESC
             """)
     List<Long> findRecipeIdsByCategory(Pageable pageable, String category);
@@ -25,7 +24,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             FROM Recipe
             WHERE title LIKE CONCAT('%', :keyword, '%')
             OR description LIKE CONCAT('%', :keyword, '%')
-            GROUP BY id, createdAt
             ORDER BY createdAt DESC
             """)
     List<Long> findRecipeIdsByKeyword(Pageable pageable, String keyword);
