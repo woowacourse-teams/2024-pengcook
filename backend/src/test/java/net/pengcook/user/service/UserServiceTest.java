@@ -12,6 +12,7 @@ import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
+import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserReport;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
@@ -22,6 +23,7 @@ import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.UserNotFoundException;
 import net.pengcook.user.repository.UserBlockRepository;
+import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserReportRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +51,11 @@ class UserServiceTest {
     @Autowired
     UserService userService;
     @Autowired
+    UserFollowService userFollowService;
+    @Autowired
     ImageClientService imageClientService;
+    @Autowired
+    private UserFollowRepository userFollowRepository;
 
     @Test
     @DisplayName("id를 통해 사용자의 정보를 불러온다.")
@@ -63,12 +69,36 @@ class UserServiceTest {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
         );
 
-        ProfileResponse actual = userService.getUserById(id);
+        ProfileResponse actual = userService.getProfile(id, id);
+
+        assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("id를 통해 팔로우하는 사용자의 정보를 불러온다.")
+    void getFollowUserById() {
+        long id = 1L;
+        ProfileResponse expected = new ProfileResponse(
+                1L,
+                "loki@pengcook.net",
+                "loki",
+                "로키",
+                "loki.jpg",
+                "KOREA",
+                "hello world",
+                1L,
+                1L,
+                15L,
+                true
+        );
+
+        ProfileResponse actual = userService.getProfile(4, id);
 
         assertThat(actual).usingRecursiveAssertion().isEqualTo(expected);
     }
@@ -78,7 +108,7 @@ class UserServiceTest {
     void getUserByIdWhenNotExistId() {
         long id = 2000L;
 
-        assertThatThrownBy(() -> userService.getUserById(id))
+        assertThatThrownBy(() -> userService.getProfile(1, id))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자를 찾을 수 없습니다.");
     }
@@ -166,6 +196,35 @@ class UserServiceTest {
         UserBlockResponse actual = userService.blockUser(blockerId, blockeeId);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("팔로우 관계에 있는 사용자를 차단하면 관련된 팔로우를 제거한다. ")
+    void blockUserFollow() {
+        long blockerId = 1L;
+        long blockeeId = 4L;
+        User beforeBlockBlockee = userRepository.findById(blockeeId).get();
+        User beforeBlockBlocker = userRepository.findById(blockerId).get();
+        long initialFollowerCountOfBlockee = beforeBlockBlockee.getFollowerCount();
+        long initialFollowerCountOfBlocker = beforeBlockBlocker.getFollowerCount();
+        long initialFolloweeCountOfBlockee = beforeBlockBlockee.getFolloweeCount();
+        long initialFolloweeCountBlocker = beforeBlockBlocker.getFolloweeCount();
+
+        userService.blockUser(blockerId, blockeeId);
+
+        boolean isFollowing = userFollowRepository.existsByFollowerIdAndFolloweeId(blockerId, blockeeId);
+        boolean isFollowed = userFollowRepository.existsByFollowerIdAndFolloweeId(blockeeId, blockerId);
+        User afterBlockBlockee = userRepository.findById(blockeeId).get();
+        User afterBlockBlocker = userRepository.findById(blockerId).get();
+
+        assertAll(
+                () -> assertThat(isFollowing).isFalse(),
+                () -> assertThat(isFollowed).isFalse(),
+                () -> assertThat(afterBlockBlockee.getFollowerCount()).isEqualTo(initialFollowerCountOfBlockee - 1),
+                () -> assertThat(afterBlockBlocker.getFollowerCount()).isEqualTo(initialFollowerCountOfBlocker - 1),
+                () -> assertThat(afterBlockBlockee.getFolloweeCount()).isEqualTo(initialFolloweeCountOfBlockee - 1),
+                () -> assertThat(afterBlockBlocker.getFolloweeCount()).isEqualTo(initialFolloweeCountBlocker - 1)
+        );
     }
 
     @Test
@@ -281,6 +340,30 @@ class UserServiceTest {
         assertAll(
                 () -> assertThat(deletedUserReportee).isTrue(),
                 () -> assertThat(deletedUserReporter).isTrue()
+        );
+    }
+
+    @Test
+    @DisplayName("사용자를 삭제하면 사용자와 관련있는 팔로우를 지운다.")
+    void deleteUserWithUserFollow() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        User beforeDelete = userRepository.findById(4L).get();
+        long initialFollowerCount = beforeDelete.getFollowerCount();
+        long initialFolloweeCount = beforeDelete.getFolloweeCount();
+
+        userService.deleteUser(userInfo);
+
+        boolean deletedUserFollower = userFollowRepository.findAll().stream()
+                .noneMatch(userFollow -> userFollow.getFollower().isSameUser(userInfo.getId()));
+        boolean deletedUserFollowee = userFollowRepository.findAll().stream()
+                .noneMatch(userFollow -> userFollow.getFollowee().isSameUser(userInfo.getId()));
+        User afterDelete = userRepository.findById(4L).get();
+
+        assertAll(
+                () -> assertThat(deletedUserFollower).isTrue(),
+                () -> assertThat(deletedUserFollowee).isTrue(),
+                () -> assertThat(afterDelete.getFollowerCount()).isEqualTo(initialFollowerCount - 1),
+                () -> assertThat(afterDelete.getFolloweeCount()).isEqualTo(initialFolloweeCount - 1)
         );
     }
 }

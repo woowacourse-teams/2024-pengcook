@@ -33,17 +33,20 @@ ALTER TABLE user_block ALTER COLUMN id RESTART WITH 1;
 TRUNCATE TABLE user_report;
 ALTER TABLE user_report ALTER COLUMN id RESTART WITH 1;
 
+TRUNCATE TABLE user_follow;
+ALTER TABLE user_follow ALTER COLUMN id RESTART WITH 1;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
-INSERT INTO users (email, username, nickname, image, region)
-VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA'),
-       ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA'),
-       ('crocodile@pengcook.net', 'crocodile', '악어', 'crocodile.jpg', 'KOREA'),
-       ('birdsheep@pengcook.net', 'birdsheep', '새양', 'birdsheep.jpg', 'KOREA'),
-       ('pond@pengcook.net', 'pond', '폰드', 'pond.jpg', 'KOREA'),
-       ('ato@pengcook.net', 'ato', '아토', 'ato.jpg', 'KOREA'),
-       ('km@pengcook.net', 'km', '케이엠', 'km.jpg', 'KOREA'),
-       ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', 'KOREA');
+INSERT INTO users (email, username, nickname, image, region, follower_count, followee_count)
+VALUES ('loki@pengcook.net', 'loki', '로키', 'loki.jpg', 'KOREA', 1, 1),
+       ('ela@pengcook.net', 'ela', '엘라', 'ela.jpg', 'KOREA', 0, 0),
+       ('crocodile@pengcook.net', 'crocodile', '악어', 'crocodile.jpg', 'KOREA', 0, 0),
+       ('birdsheep@pengcook.net', 'birdsheep', '새양', 'birdsheep.jpg', 'KOREA', 1, 1),
+       ('pond@pengcook.net', 'pond', '폰드', 'pond.jpg', 'KOREA', 0, 0),
+       ('ato@pengcook.net', 'ato', '아토', 'ato.jpg', 'KOREA', 0, 0),
+       ('km@pengcook.net', 'km', '케이엠', 'km.jpg', 'KOREA', 0, 0),
+       ('hadi@pengcook.net', 'hadi', '하디', 'hadi.jpg', 'KOREA', 0, 0);
 
 INSERT INTO category (name)
 VALUES ('한식'),
@@ -189,4 +192,9 @@ VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1),
 
 INSERT INTO user_block (blocker_id, blockee_id)
 VALUES (1, 2),
-       (1, 3)
+       (1, 3),
+       (5, 1);
+
+INSERT INTO user_follow (follower_id, followee_id)
+VALUES (1, 4),
+       (4, 1);

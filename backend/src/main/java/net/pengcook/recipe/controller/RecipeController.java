@@ -61,6 +61,14 @@ public class RecipeController {
         return recipeService.readLikeRecipesV1(userInfo);
     }
 
+    @GetMapping("/follows")
+    public List<RecipeHomeWithMineResponseV1> readFollowRecipes(
+            @LoginUser UserInfo userInfo,
+            @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
+    ) {
+        return recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody @Valid RecipeRequest recipeRequest) {

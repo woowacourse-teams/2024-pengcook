@@ -78,6 +78,23 @@ class RecipeServiceTest {
     }
 
     @Test
+    @Sql({"/data/recipe.sql", "/data/follow.sql"})
+    @DisplayName("팔로우하는 사용자의 레시피 개요를 최신순으로 조회한다.")
+    void readFollowRecipes() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        PageRecipeRequest pageRecipeRequest = new PageRecipeRequest(0, 10, null, null, null);
+
+        List<RecipeHomeWithMineResponseV1> actual = recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
+
+        assertAll(
+                () -> assertThat(actual).hasSize(3),
+                () -> assertThat(actual).extracting("author.authorId").containsOnly(4L),
+                () -> assertThat(actual).extracting("recipeId")
+                        .containsExactly(18L, 17L, 16L)
+        );
+    }
+
+    @Test
     @DisplayName("새로운 레시피를 생성한다.")
     void createRecipe() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");

@@ -28,6 +28,8 @@ import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
+import net.pengcook.user.domain.UserFollow;
+import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,7 @@ public class RecipeService {
     private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
     private final RecipeStepRepository recipeStepRepository;
+    private final UserFollowRepository userFollowRepository;
 
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
@@ -140,6 +143,22 @@ public class RecipeService {
                 .map(recipeHomeResponse -> new RecipeHomeWithMineResponseV1(userInfo, recipeHomeResponse))
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<RecipeHomeWithMineResponseV1> readFollowRecipes(UserInfo userInfo,
+                                                                PageRecipeRequest pageRecipeRequest) {
+        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        List<Long> followeeIds = followings.stream()
+                .map(userFollow -> userFollow.getFollowee().getId())
+                .toList();
+        List<Recipe> recipes = recipeRepository.findAllByAuthorIdInOrderByCreatedAtDesc(followeeIds,
+                pageRecipeRequest.getPageable());
+
+        return recipes.stream()
+                .map(recipe -> new RecipeHomeWithMineResponseV1(userInfo, recipe))
+                .toList();
+    }
+
 
     @Transactional
     public RecipeResponse createRecipe(UserInfo userInfo, RecipeRequest recipeRequest) {

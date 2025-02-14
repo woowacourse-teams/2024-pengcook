@@ -10,12 +10,13 @@ public record ProfileResponse(
         String image,
         String region,
         String introduction,
-        long follower,
-        long following,
-        long recipeCount
+        long followerCount,
+        long followingCount,
+        long recipeCount,
+        boolean isFollow
 ) {
 
-    public ProfileResponse(User user, long recipeCount) {
+    public ProfileResponse(User user, long recipeCount, boolean isFollow) {
         this(
                 user.getId(),
                 user.getEmail(),
@@ -24,9 +25,10 @@ public record ProfileResponse(
                 user.getImage(),
                 user.getRegion(),
                 "hello world",
-                0,
-                0,
-                recipeCount
+                user.getFollowerCount(),
+                user.getFolloweeCount(),
+                recipeCount,
+                isFollow
         );
     }
 }

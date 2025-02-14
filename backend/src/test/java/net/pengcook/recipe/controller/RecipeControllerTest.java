@@ -249,6 +249,49 @@ class RecipeControllerTest extends RestDocsSetting {
                 .getList(".", RecipeHomeWithMineResponseV1.class);
     }
 
+
+    @Test
+    @Sql({"/data/recipe.sql", "/data/follow.sql"})
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("팔로우한 사용자들의 레시피 개요 목록을 조회한다.")
+    void readFollowRecipes() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로우한 사용자들의 레시피 개요 목록을 조회한다.",
+                        "팔로우한 사용자들의 레시피 조회 API",
+                        queryParameters(
+                                parameterWithName("pageNumber").description("페이지 번호"),
+                                parameterWithName("pageSize").description("페이지 크기"),
+                                parameterWithName("category").description("조회 카테고리").optional(),
+                                parameterWithName("keyword").description("제목 또는 설명 검색 키워드").optional(),
+                                parameterWithName("userId").description("작성자 아이디").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("레시피 목록"),
+                                fieldWithPath("[].recipeId").description("레시피 아이디"),
+                                fieldWithPath("[].title").description("레시피 제목"),
+                                fieldWithPath("[].author").description("작성자 정보"),
+                                fieldWithPath("[].author.authorId").description("작성자 아이디"),
+                                fieldWithPath("[].author.authorName").description("작성자 이름"),
+                                fieldWithPath("[].author.authorImage").description("작성자 이미지"),
+                                fieldWithPath("[].thumbnail").description("썸네일 이미지"),
+                                fieldWithPath("[].likeCount").description("좋아요 수"),
+                                fieldWithPath("[].commentCount").description("댓글 수"),
+                                fieldWithPath("[].createdAt").description("레시피 생성일시"),
+                                fieldWithPath("[].mine").description("조회자 작성 여부")
+                        )))
+                .queryParam("pageNumber", 0)
+                .queryParam("pageSize", 5)
+                .when()
+                .get("/recipes/follows")
+                .then().log().all()
+                .body("size()", is(3))
+                .extract()
+                .jsonPath()
+                .getList(".", RecipeHomeWithMineResponseV1.class);
+    }
+
+
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("새로운 레시피를 생성한다.")

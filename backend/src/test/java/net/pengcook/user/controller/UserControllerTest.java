@@ -13,20 +13,26 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.List;
 import net.pengcook.RestDocsSetting;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
+import net.pengcook.user.dto.FollowInfoResponse;
+import net.pengcook.user.dto.FollowUserInfoResponse;
 import net.pengcook.user.dto.ProfileResponse;
 import net.pengcook.user.dto.ReportRequest;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockRequest;
+import net.pengcook.user.dto.UserFollowRequest;
 import net.pengcook.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -52,9 +58,10 @@ class UserControllerTest extends RestDocsSetting {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
         );
 
         ProfileResponse actual = RestAssured.given(spec).log().all()
@@ -69,9 +76,10 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
                                 fieldWithPath("region").description("사용자 국가"),
                                 fieldWithPath("introduction").description("사용자 소개"),
-                                fieldWithPath("follower").description("팔로워 수"),
-                                fieldWithPath("following").description("팔로잉 수"),
-                                fieldWithPath("recipeCount").description("게시한 레시피 수")
+                                fieldWithPath("followerCount").description("팔로워 수"),
+                                fieldWithPath("followingCount").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수"),
+                                fieldWithPath("isFollow").description("팔로우 여부")
                         )
                 ))
                 .contentType(ContentType.JSON)
@@ -85,6 +93,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
+    @WithLoginUser
     @DisplayName("userId로 사용자 정보를 확인한다.")
     void getUserProfileWithUserId() {
         ProfileResponse expected = new ProfileResponse(
@@ -95,9 +104,10 @@ class UserControllerTest extends RestDocsSetting {
                 "loki.jpg",
                 "KOREA",
                 "hello world",
-                0L,
-                0L,
-                15L
+                1L,
+                1L,
+                15L,
+                false
         );
 
         ProfileResponse actual = RestAssured.given(spec).log().all()
@@ -112,9 +122,10 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
                                 fieldWithPath("region").description("사용자 국가"),
                                 fieldWithPath("introduction").description("사용자 소개"),
-                                fieldWithPath("follower").description("팔로워 수"),
-                                fieldWithPath("following").description("팔로잉 수"),
-                                fieldWithPath("recipeCount").description("게시한 레시피 수")
+                                fieldWithPath("followerCount").description("팔로워 수"),
+                                fieldWithPath("followingCount").description("팔로잉 수"),
+                                fieldWithPath("recipeCount").description("게시한 레시피 수"),
+                                fieldWithPath("isFollow").description("팔로우 여부")
                         )
                 ))
                 .contentType(ContentType.JSON)
@@ -224,7 +235,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @WithLoginUser
+    @WithLoginUser(email = "pond@pengcook.net")
     @DisplayName("레시피 또는 사용자 또는 댓글을 신고한다.")
     void report() {
         ReportRequest spamReportRequest = new ReportRequest(
@@ -263,7 +274,7 @@ class UserControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(201)
                 .body("reportId", is(1))
-                .body("reporterId", is(9))
+                .body("reporterId", is(5))
                 .body("reporteeId", is(1))
                 .body("reason", is(Reason.SPAM_CONTENT.name()))
                 .body("type", is(Type.RECIPE.name()))
@@ -338,7 +349,7 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @WithLoginUser(email = "loki@pengcook.net")
+    @WithLoginUser
     @DisplayName("사용자를 삭제한다.")
     void deleteUser() {
         RestAssured.given(spec).log().all()
@@ -351,8 +362,162 @@ class UserControllerTest extends RestDocsSetting {
                 .then().log().all()
                 .statusCode(204);
 
-        boolean exists = userRepository.existsByEmail("loki@pengcook.net");
+        boolean exists = userRepository.existsByEmail("tester@pengcook.net");
 
         assertThat(exists).isFalse();
+    }
+
+    @Test
+    @WithLoginUser(email = "pond@pengcook.net")
+    @DisplayName("사용자를 팔로우한다.")
+    void follow() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(3);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 팔로우한다.",
+                        "팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("followerId").description("팔로워 id"),
+                                fieldWithPath("followeeId").description("팔로이 id")
+                        )))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .post("/user/follow")
+                .then().log().all()
+                .statusCode(201)
+                .body("followerId", is(5))
+                .body("followeeId", is(3));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"3", "5"})
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
+    void followUserWhenBlockingOrBlocked(int followeeId) {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(followeeId);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 팔로우한다.",
+                        "팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        )
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .post("/user/follow")
+                .then().log().all()
+                .statusCode(403);
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("사용자를 언팔로우한다.")
+    void unfollow() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(4);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "사용자를 언팔로우한다.",
+                        "언팔로우 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로이 id")
+                        )))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .delete("/user/follow")
+                .then().log().all()
+                .statusCode(204);
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("팔로워를 삭제한다.")
+    void removeFollower() {
+        UserFollowRequest userFollowRequest = new UserFollowRequest(4);
+
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로워를 삭제한다.",
+                        "팔로워 삭제 API",
+                        requestFields(
+                                fieldWithPath("targetId").description("팔로워 id")
+                        )))
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userFollowRequest)
+                .delete("/user/follower")
+                .then().log().all()
+                .statusCode(204);
+    }
+
+    @Test
+    @DisplayName("팔로워 목록을 조회한다.")
+    void getFollowerInfo() {
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1
+        );
+
+        FollowInfoResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로워 목록을 조회한다.",
+                        "팔로워 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("follows").description("팔로워 목록"),
+                                fieldWithPath("follows[].username").description("사용자 이름"),
+                                fieldWithPath("follows[].image").description("사용자 이미지"),
+                                fieldWithPath("followCount").description("팔로워 수")
+                        )))
+                .contentType(ContentType.JSON)
+                .when().get("/user/{userId}/follower", 1L)
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(FollowInfoResponse.class);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("팔로잉 목록을 조회한다.")
+    void getFollowInfo() {
+        List<FollowUserInfoResponse> followUserInfoResponse = List.of(
+                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+        );
+        FollowInfoResponse expected = new FollowInfoResponse(
+                followUserInfoResponse,
+                1
+        );
+
+        FollowInfoResponse actual = RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "팔로잉 목록을 조회한다.",
+                        "팔로잉 목록 조회 API",
+                        responseFields(
+                                fieldWithPath("follows").description("팔로잉 목록"),
+                                fieldWithPath("follows[].username").description("사용자 이름"),
+                                fieldWithPath("follows[].image").description("사용자 이미지"),
+                                fieldWithPath("followCount").description("팔로잉 수")
+                        )))
+                .contentType(ContentType.JSON)
+                .when().get("/user/{userId}/following", 1L)
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(FollowInfoResponse.class);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }
