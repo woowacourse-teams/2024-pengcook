@@ -46,7 +46,6 @@
         <action
             android:id="@+id/action_detailRecipeFragment_to_editRecipeFragment"
             app:destination="@id/editRecipeFragment" />
-        />
     </fragment>
 
     <fragment
@@ -200,6 +199,9 @@
         <action
             android:id="@+id/action_settingFragment_to_accountSettingFragment"
             app:destination="@id/accountSettingFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_myCommentFragment"
+            app:destination="@id/myCommentFragment" />
     </fragment>
 
     <fragment
@@ -271,6 +273,20 @@
             app:destination="@id/editRecipeFragment"
             app:popUpTo="@id/editRecipeFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myCommentFragment"
+        android:name="net.pengcook.android.presentation.mycomments.MyCommentsFragment"
+        android:label="fragment_my_comments">
+        <action
+            android:id="@+id/action_myCommentFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:popUpTo="@id/settingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_myCommentFragment_to_detailRecipeFragment"
+            app:destination="@id/detailRecipeFragment" />
     </fragment>
 
 </navigation>

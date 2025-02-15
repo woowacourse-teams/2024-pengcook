@@ -5,6 +5,7 @@ import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
 import net.pengcook.android.data.util.network.NetworkResponseHandler
 import net.pengcook.android.presentation.core.model.Comment
+import net.pengcook.android.presentation.core.model.MyComment
 
 class FakeCommentRepository(
     private val dataSource: CommentDataSource,
@@ -15,6 +16,10 @@ class FakeCommentRepository(
             val response = dataSource.fetchComment("accessToken", recipeId)
             body(response, RESPONSE_CODE_SUCCESS).map { it.toComment() }
         }
+
+    override suspend fun fetchMyComments(): Result<List<MyComment>> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun postComment(
         recipeId: Long,
