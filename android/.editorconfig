@@ -14,3 +14,5 @@ ktlint_standard_multiline-loop = disabled
 ktlint_standard_function-signature = disabled
 ktlint_standard_string-template-indent = disabled
 ktlint_standard_multiline-expression-wrapping = disabled
+compose_use_named_arguments=true
+compose_wrap_expression_body=true

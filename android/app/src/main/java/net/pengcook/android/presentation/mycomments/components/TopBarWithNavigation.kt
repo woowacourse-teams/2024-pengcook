@@ -47,8 +47,8 @@ fun TopBarWithNavigation(
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White
-        )
+            containerColor = Color.White,
+        ),
     )
 }
 
