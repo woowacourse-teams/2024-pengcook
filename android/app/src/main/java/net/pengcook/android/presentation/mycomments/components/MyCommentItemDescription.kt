@@ -43,7 +43,7 @@ private fun PreviewMyCommentItemDescription() {
             recipeTitle = "Delicious Spaghetti",
             createdAt = "2024-12-15",
             recipeImage = "https://source.unsplash.com/random/200x200",
-            message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc  consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc",
+            message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         )
     MyCommentItemDescription(comment = sampleComment)
 }

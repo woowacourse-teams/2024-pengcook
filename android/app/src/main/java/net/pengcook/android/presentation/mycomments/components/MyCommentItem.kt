@@ -46,7 +46,7 @@ fun MyCommentItem(
                         .padding(horizontal = 8.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .width(imageWidth)
-                        .height(imageHeight)
+                        .height(imageHeight),
             )
         }
     }
@@ -55,6 +55,8 @@ fun MyCommentItem(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewMyComment() {
+    val tempMessage = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+
     val sampleComment =
         MyComment(
             commentId = 1,
@@ -62,7 +64,7 @@ private fun PreviewMyComment() {
             recipeTitle = "Delicious Spaghetti",
             createdAt = "2024-12-15",
             recipeImage = "https://source.unsplash.com/random/200x200",
-            message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc  consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc",
+            message = tempMessage,
         )
     MyCommentItem(
         comment = sampleComment,

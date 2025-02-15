@@ -35,10 +35,10 @@ fun MyCommentsScreen(
         content = { paddingValues ->
             LazyColumn(
                 modifier =
-                Modifier
-                    .background(Color.White)
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                    Modifier
+                        .background(Color.White)
+                        .fillMaxSize()
+                        .padding(paddingValues),
             ) {
                 items(comments) { comment ->
                     MyCommentItem(
@@ -59,24 +59,24 @@ fun MyCommentsScreen(
 private fun MyCommentsScreenPreview() {
     MyCommentsScreen(
         comments =
-        listOf(
-            MyComment(
-                commentId = 1,
-                recipeId = 101,
-                recipeTitle = "Delicious Spaghetti",
-                recipeImage = "https://source.unsplash.com/random/200x200",
-                createdAt = "2024-12-15",
-                message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc  consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc",
+            listOf(
+                MyComment(
+                    commentId = 1,
+                    recipeId = 101,
+                    recipeTitle = "Delicious Spaghetti",
+                    recipeImage = "https://source.unsplash.com/random/200x200",
+                    createdAt = "2024-12-15",
+                    message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                ),
+                MyComment(
+                    commentId = 1,
+                    recipeId = 101,
+                    recipeTitle = "Delicious Spaghetti",
+                    recipeImage = "https://source.unsplash.com/random/200x200",
+                    createdAt = "2024-12-15",
+                    message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                ),
             ),
-            MyComment(
-                commentId = 1,
-                recipeId = 101,
-                recipeTitle = "Delicious Spaghetti",
-                recipeImage = "https://source.unsplash.com/random/200x200",
-                createdAt = "2024-12-15",
-                message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc  consectetur adipiscing elit. Nulla  facilisi. Donec nec purus nec nunc",
-            ),
-        ),
         navigationBack = {},
         navigateToDetail = {},
     )
