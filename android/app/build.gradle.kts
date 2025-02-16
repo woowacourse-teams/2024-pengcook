@@ -76,14 +76,16 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
 dependencies {
     val navVersion = "2.7.7"
     val pagingVersion = "3.3.0"
-    val retrofitVersion = "2.11.0"
-    val okHttpVersion = "4.12.0"
     val gsonVersion = "2.11.0"
     val coreKtx = "1.13.1"
     val coroutineVersion = "1.8.1"
@@ -100,18 +102,18 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     // Kotlin
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
 
-    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okHttpVersion")
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation(libs.converter.gson)
     implementation("androidx.core:core-ktx:$coreKtx")
     implementation("androidx.activity:activity-ktx:1.8.2")
 
@@ -137,13 +139,13 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     // splash
-    implementation("androidx.core:core-splashscreen:1.0.0-rc01")
-    implementation("androidx.startup:startup-runtime:1.1.1")
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.startup:startup-runtime:1.2.0")
 
     // room
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    // annotationProcessor("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
 
     testImplementation(libs.junit)
@@ -154,7 +156,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
     testImplementation("io.mockk:mockk:1.12.0")
     testImplementation("org.robolectric:robolectric:4.13")
-    testImplementation("androidx.paging:paging-common:$pagingVersion")
+    testImplementation("androidx.paging:paging-common-ktx:$pagingVersion")
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
@@ -167,4 +169,15 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // compose
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.material:material:1.7.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.activity:activity-compose:1.9.3")
+
+    // coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 }

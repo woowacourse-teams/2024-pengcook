@@ -19,7 +19,9 @@ class ProfileViewModel
     @Inject
     constructor(
         private val profilePagingSourceFactory: ProfilePagingSourceFactory,
-    ) : ViewModel(), DoubleButtonClickListener, ProfileFeedClickListener {
+    ) : ViewModel(),
+        ProfileButtonClickListener,
+        ProfileFeedClickListener {
         private val _uiEvent: MutableLiveData<Event<ProfileUiEvent>> = MutableLiveData()
         val uiEvent: LiveData<Event<ProfileUiEvent>>
             get() = _uiEvent
@@ -55,16 +57,24 @@ class ProfileViewModel
             }
         }
 
-        override fun onLeftButtonClick() {
+        override fun onClick(recipe: RecipeForList) {
+            _uiEvent.value = Event(ProfileUiEvent.NavigateToRecipeDetail(recipe))
+        }
+
+        override fun onProfileEditBtnClick() {
             _uiEvent.value = Event(ProfileUiEvent.NavigateToEditProfile)
         }
 
-        override fun onRightButtonClick() {
+        override fun onSettingBtnClick() {
             _uiEvent.value = Event(ProfileUiEvent.NavigateToSetting)
         }
 
-        override fun onClick(recipe: RecipeForList) {
-            _uiEvent.value = Event(ProfileUiEvent.NavigateToRecipeDetail(recipe))
+        override fun onFollowListBtnClick() {
+            _uiEvent.value = Event(ProfileUiEvent.NavigateToFollowList)
+        }
+
+        override fun onCommentListBtnClick() {
+            _uiEvent.value = Event(ProfileUiEvent.NavigateToCommentList)
         }
 
 //        private val profilePagingSource: ProfilePagingSource by lazy {
@@ -80,5 +90,11 @@ sealed interface ProfileUiEvent {
 
     data object NavigateToSetting : ProfileUiEvent
 
-    data class NavigateToRecipeDetail(val recipe: RecipeForList) : ProfileUiEvent
+    data class NavigateToRecipeDetail(
+        val recipe: RecipeForList,
+    ) : ProfileUiEvent
+
+    data object NavigateToFollowList : ProfileUiEvent
+
+    data object NavigateToCommentList : ProfileUiEvent
 }

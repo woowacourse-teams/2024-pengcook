@@ -2,6 +2,7 @@ package net.pengcook.android.data.remote.api
 
 import net.pengcook.android.data.model.comment.CommentRequest
 import net.pengcook.android.data.model.comment.CommentResponse
+import net.pengcook.android.data.model.comment.MyCommentResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -17,6 +18,12 @@ interface CommentService {
         @Path("recipeId") recipeId: Long,
     ): Response<List<CommentResponse>>
 
+    @GET("/comments/mine")
+    suspend fun fetchMyComments(
+        @Header("Authorization") accessToken: String,
+        @Header("Accept") accept: String = MY_COMMENT_ACCEPT,
+    ): Response<List<MyCommentResponse>>
+
     @POST("/comments")
     suspend fun postComment(
         @Header("Authorization") accessToken: String,
@@ -28,4 +35,8 @@ interface CommentService {
         @Header("Authorization") accessToken: String,
         @Path("commentId") commentId: Long,
     ): Response<Unit>
+
+    companion object {
+        const val MY_COMMENT_ACCEPT = "application/vnd.pengcook.v1+json"
+    }
 }

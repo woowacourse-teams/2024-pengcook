@@ -10,6 +10,7 @@ enum class MenuItem(
 ) {
     LIKES(R.drawable.ic_search_24, R.string.setting_menu_likes),
     COMMENTS(R.drawable.ic_search_24, R.string.setting_menu_comments),
+    MY_COMMENTS(R.drawable.ic_search_24, R.string.setting_menu_my_comments),
     BLOCKED(R.drawable.ic_search_24, R.string.setting_menu_blocked),
     LANGUAGE(R.drawable.ic_search_24, R.string.setting_menu_language),
     PRIVACY_POLICY(R.drawable.ic_search_24, R.string.setting_menu_privacy_policy),
