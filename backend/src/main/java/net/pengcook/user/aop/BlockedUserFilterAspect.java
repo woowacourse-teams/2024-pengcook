@@ -61,12 +61,12 @@ public class BlockedUserFilterAspect {
 
         BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
         if (blockeeGroup.contains(ownable.getOwnerId())) {
-            throw new ForbiddenException("차단한 사용자입니다.");
+            throw new ForbiddenException("내가 차단한 사용자의 게시글을 이용할 수 없습니다.");
         }
 
         BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
         if (blockerGroup.contains(ownable.getOwnerId())) {
-            throw new ForbiddenException("게시글을 이용할 수 없습니다.");
+            throw new ForbiddenException("나를 차단한 사용자의 게시글을 이용할 수 없습니다.");
         }
 
         return ownable;
