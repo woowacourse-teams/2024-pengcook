@@ -43,20 +43,21 @@ public class BlockedUserFilterAspect {
         return filterBlockedUsers(ownables, blockeeGroup, blockerGroup);
     }
 
-    @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningOptionalOwnable() {
+    @Pointcut("within(org.springframework.data.jpa.repository.JpaRepository+)")
+    public void singleOwnableRepositoryMethods() {
     }
 
-    @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
-    public void repositoryMethodsReturningOwnable() {
-    }
-
-    @Around("repositoryMethodsReturningOwnable() || repositoryMethodsReturningOptionalOwnable()")
+    @Around("singleOwnableRepositoryMethods()")
     public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
-        Ownable ownable = getOwnable(joinPoint);
+        Object result = joinPoint.proceed();
+        Ownable ownable = extractOwnable(result);
+        if (ownable == null) {
+            return result;
+        }
+
         UserInfo userInfo = getCurrentUserInfo();
-        if (userInfo == null || ownable == null) {
-            return ownable;
+        if (userInfo == null) {
+            return result;
         }
 
         BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
@@ -69,18 +70,18 @@ public class BlockedUserFilterAspect {
             throw new ForbiddenException("나를 차단한 사용자의 게시글을 이용할 수 없습니다.");
         }
 
-        return ownable;
+        return result;
     }
 
-    private Ownable getOwnable(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object proceed = joinPoint.proceed();
-        if (proceed instanceof Optional<?>) {
-            if (((Optional<?>) proceed).isPresent()) {
-                return ((Optional<Ownable>) proceed).get();
-            }
-            return null;
+    private Ownable extractOwnable(Object result) {
+        if (result instanceof Optional<?>) {
+            return (Ownable) ((Optional<?>) result)
+                    .filter(entity -> entity instanceof Ownable)
+                    .orElse(null);
+        } else if (result instanceof Ownable) {
+            return (Ownable) result;
         }
-        return (Ownable) proceed;
+        return null;
     }
 
     private UserInfo getCurrentUserInfo() {

@@ -2,7 +2,6 @@ package net.pengcook.recipe.repository;
 
 import jakarta.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.RecipeHomeResponse;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-
-    Optional<Recipe> findById(Long id);
 
     @Query("""
             SELECT recipe.id
