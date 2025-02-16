@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.pengcook.android.presentation.core.model.MyComment
-import nextstep.shoppingcart.ui.theme.Notosans
+import net.pengcook.android.ui.theme.Notosans
 
 @Composable
 fun MyCommentItemDescription(

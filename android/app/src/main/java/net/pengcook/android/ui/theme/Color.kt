@@ -1,4 +1,4 @@
-package nextstep.shoppingcart.ui.theme
+package net.pengcook.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
