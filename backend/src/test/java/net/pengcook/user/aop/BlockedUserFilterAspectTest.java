@@ -1,6 +1,7 @@
 package net.pengcook.user.aop;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import io.restassured.RestAssured;
 import java.util.List;
@@ -41,5 +42,29 @@ class BlockedUserFilterAspectTest {
                 .getList("author.authorId", Long.class);
 
         assertThat(authorIds).doesNotContain(2L, 4L, 6L, 8L);
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("레시피를 조회할때 내가 차단한 사용자의 레시피가 보이지 않는다.")
+    void filterBlockeeOwnable() {
+        RestAssured.given().log().all()
+                .when()
+                .get("/recipes/{id}", 2L)
+                .then().log().all()
+                .statusCode(403)
+                .body("detail", equalTo("내가 차단한 사용자의 게시글을 이용할 수 없습니다."));
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("레시피를 조회할때 나를 차단한 사용자의 레시피가 보이지 않는다.")
+    void filterBlockerOwnable() {
+        RestAssured.given().log().all()
+                .when()
+                .get("/recipes/{id}", 1L)
+                .then().log().all()
+                .statusCode(403)
+                .body("detail", equalTo("나를 차단한 사용자의 게시글을 이용할 수 없습니다."));
     }
 }
