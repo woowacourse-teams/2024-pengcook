@@ -47,38 +47,15 @@ public class BlockedUserFilterAspect {
     public void repositoryMethodsReturningOptionalOwnable() {
     }
 
-    @Around("repositoryMethodsReturningOptionalOwnable()")
-    public Object filterBlockedAuthorFromOptional(ProceedingJoinPoint joinPoint) throws Throwable {
-        Optional<Ownable> ownableOptional = (Optional<Ownable>) joinPoint.proceed();
-
-        UserInfo userInfo = getCurrentUserInfo();
-        if (userInfo == null || ownableOptional.isEmpty()) {
-            return ownableOptional;
-        }
-
-        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
-        if (blockeeGroup.contains(ownableOptional.get().getOwnerId())) {
-            throw new ForbiddenException("차단한 사용자입니다.");
-        }
-
-        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
-        if (blockerGroup.contains(ownableOptional.get().getOwnerId())) {
-            throw new ForbiddenException("게시글을 이용할 수 없습니다.");
-        }
-
-        return ownableOptional;
-    }
-
     @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
     public void repositoryMethodsReturningOwnable() {
     }
 
-    @Around("repositoryMethodsReturningOwnable()")
+    @Around("repositoryMethodsReturningOwnable() || repositoryMethodsReturningOptionalOwnable()")
     public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
-        Ownable ownable = (Ownable) joinPoint.proceed();
-
+        Ownable ownable = getOwnable(joinPoint);
         UserInfo userInfo = getCurrentUserInfo();
-        if (userInfo == null) {
+        if (userInfo == null || ownable == null) {
             return ownable;
         }
 
@@ -93,6 +70,17 @@ public class BlockedUserFilterAspect {
         }
 
         return ownable;
+    }
+
+    private Ownable getOwnable(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object proceed = joinPoint.proceed();
+        if (proceed instanceof Optional<?>) {
+            if (((Optional<?>) proceed).isPresent()) {
+                return ((Optional<Ownable>) proceed).get();
+            }
+            return null;
+        }
+        return (Ownable) proceed;
     }
 
     private UserInfo getCurrentUserInfo() {
