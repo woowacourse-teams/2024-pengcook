@@ -26,9 +26,11 @@ public class LoginExtension implements BeforeTestExecutionCallback, AfterTestExe
             UserRepository userRepository = applicationContext.getBean(UserRepository.class);
 
             User user = findOrSaveUser(annotation, userRepository);
-            String accessToken = jwtTokenManager.createToken(new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
+            String accessToken = jwtTokenManager.createToken(
+                    new TokenPayload(user.getId(), user.getEmail(), TokenType.ACCESS));
 
-            RestAssured.requestSpecification = new RequestSpecBuilder().build().header("Authorization", "Bearer " + accessToken);
+            RestAssured.requestSpecification = new RequestSpecBuilder().build()
+                    .header("Authorization", "Bearer " + accessToken);
         }
     }
 
@@ -48,7 +50,8 @@ public class LoginExtension implements BeforeTestExecutionCallback, AfterTestExe
                 annotation.username(),
                 annotation.nickname(),
                 annotation.image(),
-                annotation.region()
+                annotation.region(),
+                null
         );
         return userRepository.save(user);
     }
