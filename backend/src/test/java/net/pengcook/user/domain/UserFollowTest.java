@@ -13,8 +13,8 @@ class UserFollowTest {
     @Test
     @DisplayName("UserFollow 객체를 생성한다")
     void createUserFollow() {
-        User follower = new User(1L, "email1", "user1", "nick1", "image1", "region", 0, 0);
-        User followee = new User(2L, "email2", "user2", "nick2", "image2", "region", 0, 0);
+        User follower = new User(1L, "email1", "user1", "nick1", "image1", "region", null, 0, 0);
+        User followee = new User(2L, "email2", "user2", "nick2", "image2", "region", null, 0, 0);
 
         UserFollow userFollow = new UserFollow(follower, followee);
 
