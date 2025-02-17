@@ -76,7 +76,8 @@ public class UserService {
                 updateProfileRequest.username(),
                 updateProfileRequest.nickname(),
                 userImage,
-                updateProfileRequest.region()
+                updateProfileRequest.region(),
+                updateProfileRequest.introduction()
         );
         return new UpdateProfileResponse(user);
     }

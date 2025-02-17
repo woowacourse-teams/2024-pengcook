@@ -15,6 +15,11 @@ public record ProfileResponse(
         long recipeCount,
         boolean isFollow
 ) {
+    public ProfileResponse {
+        if (introduction == null) {
+            introduction = "";
+        }
+    }
 
     public ProfileResponse(User user, long recipeCount, boolean isFollow) {
         this(
@@ -24,7 +29,7 @@ public record ProfileResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getRegion(),
-                "hello world",
+                user.getIntroduction(),
                 user.getFollowerCount(),
                 user.getFolloweeCount(),
                 recipeCount,

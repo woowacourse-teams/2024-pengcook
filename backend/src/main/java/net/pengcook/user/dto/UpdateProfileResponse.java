@@ -11,6 +11,12 @@ public record UpdateProfileResponse(
         String region,
         String introduction
 ) {
+    public UpdateProfileResponse {
+        if (introduction == null) {
+            introduction = "";
+        }
+    }
+
     public UpdateProfileResponse(User user) {
         this(
                 user.getId(),
@@ -19,7 +25,7 @@ public record UpdateProfileResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getRegion(),
-                "hello world"
+                user.getIntroduction()
         );
     }
 }
