@@ -9,6 +9,7 @@ public record GoogleSignUpResponse(
         String nickname,
         String image,
         String country,
+        String introduction,
         String accessToken,
         String refreshToken
 ) {
@@ -20,6 +21,7 @@ public record GoogleSignUpResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getRegion(),
+                user.getIntroduction(),
                 accessToken,
                 refreshToken
         );
