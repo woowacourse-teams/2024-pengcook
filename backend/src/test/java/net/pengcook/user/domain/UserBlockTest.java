@@ -27,7 +27,7 @@ class UserBlockTest {
     @Test
     @DisplayName("차단자와 차단대상이 같으면 예외가 발생한다.")
     void createWhenBlockerIsBlockee() {
-        User user_loki = new User("loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA");
+        User user_loki = new User("loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA", null);
 
         assertThatThrownBy(() -> new UserBlock(user_loki, user_loki))
                 .isInstanceOf(BadArgumentException.class)

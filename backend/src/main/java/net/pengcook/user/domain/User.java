@@ -56,16 +56,6 @@ public class User {
             String username,
             String nickname,
             String image,
-            String region
-    ) {
-        this(0L, email, username, nickname, image, region, null, 0, 0);
-    }
-
-    public User(
-            String email,
-            String username,
-            String nickname,
-            String image,
             String region,
             String introduction
     ) {
