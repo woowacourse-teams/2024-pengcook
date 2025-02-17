@@ -7,6 +7,7 @@ public record GoogleSignUpRequest(
         @NotBlank String username,
         @NotBlank String nickname,
         @NotBlank String country,
-        String image
+        String image,
+        String introduction
 ) {
 }

@@ -89,7 +89,8 @@ class LoginServiceTest {
                 "new_face",
                 "신입",
                 "KOREA",
-                "new_face.jpg"
+                "new_face.jpg",
+                null
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -113,7 +114,8 @@ class LoginServiceTest {
                 "loki",
                 "로키",
                 "KOREA",
-                "loki.jpg"
+                "loki.jpg",
+                null
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);

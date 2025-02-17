@@ -130,7 +130,8 @@ class LoginControllerTest extends RestDocsSetting {
                 "new_face",
                 "신입",
                 "KOREA",
-                "new_face.jpg"
+                "new_face.jpg",
+                null
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -147,7 +148,8 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("country").description("국가"),
-                                fieldWithPath("image").description("사용자 사진")
+                                fieldWithPath("image").description("사용자 사진"),
+                                fieldWithPath("introduction").description("사용자 소개")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("사용자 ID"),
@@ -156,6 +158,7 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("image").description("사용자 프로필 이미지"),
                                 fieldWithPath("country").description("사용자 국가"),
+                                fieldWithPath("introduction").description("사용자 소개"),
                                 fieldWithPath("accessToken").description("JWT Access Token"),
                                 fieldWithPath("refreshToken").description("JWT Refresh Token")
                         )
@@ -181,7 +184,8 @@ class LoginControllerTest extends RestDocsSetting {
                 "loki",
                 "로키",
                 "KOREA",
-                "loki.jpg"
+                "loki.jpg",
+                null
         );
 
         FirebaseToken firebaseToken = mock(FirebaseToken.class);
@@ -196,7 +200,8 @@ class LoginControllerTest extends RestDocsSetting {
                                 fieldWithPath("username").description("사용자 아이디"),
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("country").description("국가"),
-                                fieldWithPath("image").description("사용자 사진")
+                                fieldWithPath("image").description("사용자 사진"),
+                                fieldWithPath("introduction").description("사용자 소개")
                         )
                 ))
                 .contentType(ContentType.JSON)
