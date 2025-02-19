@@ -17,7 +17,10 @@ class DefaultProfileRemoteDataSource
         private val profileService: ProfileService,
         private val feedService: FeedService,
     ) : ProfileRemoteDataSource {
-        override suspend fun fetchUserInformation(userId: Long): Response<UserProfileResponse> = profileService.fetchUserInformation(userId)
+        override suspend fun fetchUserInformation(
+            accessToken: String,
+            userId: Long,
+        ): Response<UserProfileResponse> = profileService.fetchUserInformation(accessToken, userId)
 
         override suspend fun fetchMyUserInformation(accessToken: String): Response<UserProfileResponse> =
             profileService.fetchMyUserInformation(accessToken)
