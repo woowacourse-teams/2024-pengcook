@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.usercontrol
 
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
@@ -28,4 +29,20 @@ class DefaultUserControlDataSource
             accessToken: String,
             reportUserRequest: ReportUserRequest,
         ): Response<ReportResponse> = userControlService.reportUser(accessToken, reportUserRequest)
+
+        override suspend fun followUser(
+            accessToken: String,
+            followUserRequest: FollowUserRequest,
+        ): Response<Unit> = userControlService.followUser(accessToken, followUserRequest)
+
+        override suspend fun unfollowUser(
+            accessToken: String,
+            followUserRequest: FollowUserRequest,
+        ): Response<Unit> {
+            println("datasource: follow")
+            println("datasource: $accessToken")
+            println("datasource: $followUserRequest")
+
+            return userControlService.unfollowUser(accessToken, followUserRequest)
+        }
     }
