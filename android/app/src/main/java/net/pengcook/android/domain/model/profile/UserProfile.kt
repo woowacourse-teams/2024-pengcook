@@ -11,4 +11,5 @@ data class UserProfile(
     val follower: Int,
     val following: Int,
     val recipeCount: Int,
+    val isFollow: Boolean,
 )

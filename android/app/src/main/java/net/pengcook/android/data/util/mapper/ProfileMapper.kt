@@ -12,7 +12,8 @@ fun UserProfileResponse.toUserProfile(): UserProfile =
         image = image,
         region = region,
         introduction = introduction,
-        follower = follower,
-        following = following,
+        follower = followerCount,
+        following = followingCount,
         recipeCount = recipeCount,
+        isFollow = isFollow,
     )

@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.first
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
@@ -60,6 +61,35 @@ class DefaultUserControlRepository
                 body(response, VALID_POST_CODE)
             }
 
+        override suspend fun followUser(targetId: Long): Result<Unit> =
+            kotlin.runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken
+                        ?: throw RuntimeException()
+                val followUserRequest =
+                    FollowUserRequest(
+                        targetId = targetId,
+                    )
+                val response = userControlDataSource.followUser(accessToken, followUserRequest)
+                body(response, VALID_POST_CODE)
+            }
+
+        override suspend fun unfollowUser(targetId: Long): Result<Unit> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val followUserRequest =
+                    FollowUserRequest(
+                        targetId = targetId,
+                    )
+                println("Repository: follow")
+                println("Repository: $accessToken")
+                println("Repository: $followUserRequest")
+                val response = userControlDataSource.unfollowUser(accessToken, followUserRequest)
+                println("Repository: $response")
+                body(response, RESPONSE_CODE_DELETE_SUCCESS)
+            }
+
         private fun ReportReasonResponse.toReportReason() =
             ReportReason(
                 reason = reason,
@@ -68,6 +98,7 @@ class DefaultUserControlRepository
 
         companion object {
             private const val VALID_POST_CODE = 201
+            private const val RESPONSE_CODE_DELETE_SUCCESS = 204
             private const val RESPONSE_CODE_SUCCESS = 200
         }
     }

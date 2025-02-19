@@ -8,7 +8,8 @@ data class UserProfileResponse(
     val image: String,
     val region: String,
     val introduction: String?,
-    val follower: Int,
-    val following: Int,
+    val followerCount: Int,
+    val followingCount: Int,
     val recipeCount: Int,
+    val isFollow: Boolean = false,
 )
