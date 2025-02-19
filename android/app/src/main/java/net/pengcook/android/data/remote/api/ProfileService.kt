@@ -15,6 +15,7 @@ import retrofit2.http.Query
 interface ProfileService {
     @GET("/user/{userId}")
     suspend fun fetchUserInformation(
+        @Header("Authorization") accessToken: String,
         @Path("userId") userId: Long,
     ): Response<UserProfileResponse>
 
