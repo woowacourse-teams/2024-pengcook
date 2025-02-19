@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.usercontrol
 
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
@@ -42,4 +43,18 @@ class FakeUserControlDataSource : UserControlDataSource {
                 createdAt = System.currentTimeMillis().toString(),
             ),
         )
+
+    override suspend fun followUser(
+        accessToken: String,
+        followUserRequest: FollowUserRequest,
+    ): Response<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun unfollowUser(
+        accessToken: String,
+        followUserRequest: FollowUserRequest,
+    ): Response<Unit> {
+        TODO("Not yet implemented")
+    }
 }
