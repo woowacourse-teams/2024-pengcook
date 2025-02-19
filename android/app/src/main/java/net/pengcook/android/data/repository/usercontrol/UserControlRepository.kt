@@ -15,4 +15,8 @@ interface UserControlRepository {
         targetId: Long,
         details: String?,
     ): Result<ReportResponse>
+
+    suspend fun followUser(targetId: Long): Result<Unit>
+
+    suspend fun unfollowUser(targetId: Long): Result<Unit>
 }
