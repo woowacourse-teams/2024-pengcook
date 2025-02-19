@@ -22,7 +22,10 @@ class DefaultProfileRepository
         ProfileRepository {
         override suspend fun fetchUserInformation(userId: Long): Result<UserProfile> =
             runCatching {
-                val response = profileRemoteDataSource.fetchUserInformation(userId)
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+
+                val response = profileRemoteDataSource.fetchUserInformation(accessToken, userId)
                 body(response, CODE_SUCCESSFUL).toUserProfile()
             }
 

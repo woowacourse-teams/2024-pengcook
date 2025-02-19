@@ -7,7 +7,10 @@ import net.pengcook.android.data.model.profile.UserProfileResponse
 import retrofit2.Response
 
 interface ProfileRemoteDataSource {
-    suspend fun fetchUserInformation(userId: Long): Response<UserProfileResponse>
+    suspend fun fetchUserInformation(
+        accessToken: String,
+        userId: Long,
+    ): Response<UserProfileResponse>
 
     suspend fun fetchMyUserInformation(accessToken: String): Response<UserProfileResponse>
 
