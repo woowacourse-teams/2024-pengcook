@@ -22,7 +22,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private val adapter: FeedRecyclerViewAdapter by lazy {
-        FeedRecyclerViewAdapter(viewModel)
+        FeedRecyclerViewAdapter(viewModel, viewModel)
     }
 
     override fun onCreateView(
@@ -44,6 +44,13 @@ class HomeFragment : Fragment() {
         initBinding()
         observing()
         initSwipeRefreshLayout()
+        binding.mainLogo.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToOldStepMakingFragment(
+                    3,
+                ),
+            )
+        }
     }
 
     private fun initSwipeRefreshLayout() {
@@ -79,6 +86,24 @@ class HomeFragment : Fragment() {
             when (newEvent) {
                 is HomeEvent.NavigateToDetail -> {
                     onRecipeClick(newEvent.recipe)
+                }
+
+                is HomeEvent.NavigateToProfile -> {
+                    val recipe = newEvent.recipe
+                    println("navigation to profile")
+
+                    if (recipe.mine) {
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToProfileFragment()
+                        findNavController().navigate(action)
+                    } else {
+                        val userId = recipe.user.id
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToOtherProfileFragment(
+                                userId = userId,
+                            )
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
