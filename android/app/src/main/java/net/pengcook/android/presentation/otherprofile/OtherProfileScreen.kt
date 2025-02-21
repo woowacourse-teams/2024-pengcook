@@ -16,9 +16,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.pengcook.android.domain.model.profile.UserProfile
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.User
@@ -27,6 +29,31 @@ import net.pengcook.android.presentation.otherprofile.components.ImageGrid
 import net.pengcook.android.presentation.otherprofile.components.OtherProfileHeader
 import net.pengcook.android.ui.theme.Notosans
 import net.pengcook.android.ui.theme.PengCookTheme
+
+@Composable
+fun OtherProfileScreenRoot(
+    viewModel: OtherProfileViewModel,
+    navigateBack: () -> Unit,
+) {
+    PengCookTheme {
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
+        OtherProfileScreen(
+            state = state,
+            onAction = { action ->
+                when (action) {
+                    is OtherProfileAction.OnBackClick -> navigateBack()
+                    is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
+                    is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
+                    is OtherProfileAction.OnBlockClick -> { // TODO
+                    }
+
+                    else -> viewModel.onAction(action)
+                }
+            },
+        )
+    }
+}
 
 @Composable
 fun OtherProfileScreen(
