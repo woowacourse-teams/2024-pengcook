@@ -25,6 +25,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/shape_profile_user"
             android:clipToOutline="true"
+            android:onClick="@{() -> eventHandler.onNavigateToProfile(comment)}"
             android:scaleType="centerCrop"
             android:translationZ="1dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +37,7 @@
             android:layout_height="32dp"
             android:layout_margin="12dp"
             android:background="@drawable/shape_profile_user"
+            android:onClick="@{() -> eventHandler.onNavigateToProfile(comment)}"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             tools:src="@drawable/penguin"
@@ -50,11 +52,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:textStyle="bold"
+            android:onClick="@{() -> eventHandler.onNavigateToProfile(comment)}"
             app:tint="@color/text_color"
             android:translationZ="1dp"
             android:text="@{comment.userName}"
             app:layout_constraintStart_toEndOf="@id/iv_user_profile"
-            app:layout_constraintTop_toTopOf="@id/iv_user_profile"
+            app:layout_constraintTop_toTopOf="@id/iv_user_border"
             tools:text="Crong" />
 
         <TextView
@@ -66,7 +69,7 @@
             android:text="@{comment.message}"
             tools:text="It was great!! I think the cabbage is replaceable with lettuce."
             android:textColor="@color/text_color"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 

@@ -63,6 +63,7 @@ class CommentFragment : Fragment() {
     private fun observeViewModels() {
         observeComments()
         observeQuitCommentEvent()
+        observeNavigateToProfileEvent()
         observeShowCommentMenuEvent()
         observeCommentMenuEvents()
     }
@@ -78,6 +79,22 @@ class CommentFragment : Fragment() {
             val quitComment = event.getContentIfNotHandled() ?: return@observe
             if (quitComment) {
                 navigateBack()
+            }
+        }
+    }
+
+    private fun observeNavigateToProfileEvent() {
+        viewModel.navigateToProfileEvent.observe(viewLifecycleOwner) { event ->
+            val comment = event.getContentIfNotHandled() ?: return@observe
+
+            if (comment.mine) {
+                val action = CommentFragmentDirections.actionCommentFragmentToProfileFragment()
+                findNavController().navigate(action)
+                return@observe
+            } else {
+                val action = CommentFragmentDirections.actionCommentFragmentToOtherProfileFragment(comment.userId)
+                findNavController().navigate(action)
+                return@observe
             }
         }
     }

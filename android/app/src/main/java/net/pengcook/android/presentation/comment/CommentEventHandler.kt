@@ -9,6 +9,8 @@ interface CommentEventHandler :
     AppbarSingleActionEventListener {
     fun onMenuButtonClicked(comment: Comment)
 
+    fun onNavigateToProfile(comment: Comment)
+
     override fun onAction()
 
     override fun onNavigateBack()
