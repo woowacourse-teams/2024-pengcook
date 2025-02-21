@@ -87,6 +87,11 @@ class DetailRecipeViewModel
             _uiEvent.value = Event(DetailRecipeUiEvent.NavigateToComment)
         }
 
+        fun onNavigateToProfile() {
+            val recipe = uiState.value?.recipe ?: return
+            _uiEvent.value = Event(DetailRecipeUiEvent.NavigateToProfile(recipe))
+        }
+
         fun deleteRecipe() {
             viewModelScope.launch {
                 feedRepository

@@ -87,18 +87,20 @@
                             android:clipToOutline="true"
                             android:scaleType="centerCrop"
                             android:src="@drawable/penguin"
+                            android:onClick="@{() -> vm.onNavigateToProfile()}"
                             android:translationZ="2dp"
                             app:imageUrl="@{uiState.recipe.user.profile}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
+                        <net.pengcook.android.ui.components.OutlineTextView
                             android:id="@+id/tv_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:text="@{uiState.recipe.user.username}"
                             android:textSize="16sp"
+                            android:textColor="@color/white"
                             android:translationZ="1dp"
                             app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"
                             app:layout_constraintStart_toEndOf="@id/iv_user_profile"

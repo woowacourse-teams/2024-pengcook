@@ -22,4 +22,6 @@ sealed class DetailRecipeUiEvent {
     data object DeletionError : DetailRecipeUiEvent()
 
     data class OpenMenu(val recipe: RecipeForItem) : DetailRecipeUiEvent()
+
+    data class NavigateToProfile(val recipe: RecipeForItem) : DetailRecipeUiEvent()
 }

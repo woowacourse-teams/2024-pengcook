@@ -82,7 +82,9 @@ class DetailRecipeFragment : Fragment() {
 
                 R.id.action_edit -> {
                     val action =
-                        DetailRecipeFragmentDirections.actionDetailRecipeFragmentToEditRecipeFragment(recipeId)
+                        DetailRecipeFragmentDirections.actionDetailRecipeFragmentToEditRecipeFragment(
+                            recipeId,
+                        )
                     findNavController().navigate(action)
                     true
                 }
@@ -139,6 +141,7 @@ class DetailRecipeFragment : Fragment() {
                             Toast.LENGTH_SHORT,
                         ).show()
                 }
+
                 is DetailRecipeUiEvent.LoadRecipeFailure -> {
                     Toast
                         .makeText(
@@ -151,6 +154,23 @@ class DetailRecipeFragment : Fragment() {
                 is DetailRecipeUiEvent.OpenMenu -> {
                     val recipe = newEvent.recipe
                     showPopupMenu(binding.ivMenu, recipe)
+                }
+
+                is DetailRecipeUiEvent.NavigateToProfile -> {
+                    val recipe = newEvent.recipe
+
+                    if (recipe.mine) {
+                        val action =
+                            DetailRecipeFragmentDirections.actionDetailRecipeFragmentToProfileFragment()
+                        findNavController().navigate(action)
+                    } else {
+                        val userId = recipe.user.id
+                        val action =
+                            DetailRecipeFragmentDirections.actionDetailRecipeFragmentToOtherProfileFragment(
+                                userId = userId,
+                            )
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
