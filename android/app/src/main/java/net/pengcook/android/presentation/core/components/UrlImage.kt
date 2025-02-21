@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.mycomments.components
+package net.pengcook.android.presentation.core.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
