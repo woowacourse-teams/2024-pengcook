@@ -180,4 +180,7 @@ dependencies {
     // coil
     implementation(libs.coil)
     implementation(libs.coil.compose)
+
+    // ktlint for jetpack compose
+    ktlint("com.pinterest:ktlint:0.50.0")
 }
