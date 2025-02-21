@@ -59,6 +59,10 @@ class CommentViewModel
         val deleteCommentEvent: LiveData<Event<Comment>>
             get() = _deleteCommentEvent
 
+        private val _navigateToProfileEvent: MutableLiveData<Event<Comment>> = MutableLiveData()
+        val navigateToProfileEvent: LiveData<Event<Comment>>
+            get() = _navigateToProfileEvent
+
         init {
             initializeComments()
         }
@@ -107,6 +111,10 @@ class CommentViewModel
 
         override fun onMenuButtonClicked(comment: Comment) {
             _showCommentMenuEvent.value = Event(comment)
+        }
+
+        override fun onNavigateToProfile(comment: Comment) {
+            _navigateToProfileEvent.value = Event(comment)
         }
 
         private fun onReportComment(
