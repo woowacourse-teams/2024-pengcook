@@ -23,6 +23,7 @@ class HomeViewModel
     constructor(
         private val feedRepository: FeedRepository,
     ) : ViewModel(),
+        HomeEventListener,
         FeedItemEventListener {
         private val _uiEvent: MutableLiveData<Event<HomeEvent>> = MutableLiveData()
         val uiEvent: LiveData<Event<HomeEvent>>
@@ -59,6 +60,10 @@ class HomeViewModel
             _uiEvent.value = Event(HomeEvent.NavigateToDetail(recipe))
         }
 
+        override fun onNavigateToProfile(recipe: RecipeForList) {
+            _uiEvent.value = Event(HomeEvent.NavigateToProfile(recipe))
+        }
+
         companion object {
             private const val PAGE_SIZE = 10
         }
@@ -66,6 +71,10 @@ class HomeViewModel
 
 sealed interface HomeEvent {
     data class NavigateToDetail(
+        val recipe: RecipeForList,
+    ) : HomeEvent
+
+    data class NavigateToProfile(
         val recipe: RecipeForList,
     ) : HomeEvent
 }

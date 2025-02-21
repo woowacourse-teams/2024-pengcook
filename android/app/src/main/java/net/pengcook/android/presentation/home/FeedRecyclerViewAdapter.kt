@@ -9,7 +9,10 @@ import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.home.holder.FeedViewHolder
 import net.pengcook.android.presentation.home.listener.FeedItemEventListener
 
-class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) :
+class FeedRecyclerViewAdapter(
+    private val homeEventListener: HomeEventListener,
+    private val eventListener: FeedItemEventListener,
+) :
     PagingDataAdapter<RecipeForList, FeedViewHolder>(diffCallback) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -17,7 +20,11 @@ class FeedRecyclerViewAdapter(private val eventListener: FeedItemEventListener) 
     ): FeedViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemFeedBinding.inflate(inflater, parent, false)
-        return FeedViewHolder(binding, eventListener)
+        return FeedViewHolder(
+            binding = binding,
+            homeEventListener = homeEventListener,
+            eventListener = eventListener,
+        )
     }
 
     override fun onBindViewHolder(
