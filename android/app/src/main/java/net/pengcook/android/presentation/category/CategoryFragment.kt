@@ -35,7 +35,7 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        AnalyticsLogging.init(requireContext()) // Firebase Analytics 초기화
+        AnalyticsLogging.init(requireContext())
         AnalyticsLogging.viewLogEvent("Category")
         initializeAdapter()
         setUpCategories()
@@ -49,12 +49,11 @@ class CategoryFragment : Fragment() {
             layoutManager.apply {
                 spanSizeLookup =
                     object : GridLayoutManager.SpanSizeLookup() {
-                        override fun getSpanSize(position: Int): Int {
-                            return when (position) {
+                        override fun getSpanSize(position: Int): Int =
+                            when (position) {
                                 0 -> 3
                                 else -> 1
                             }
-                        }
                     }
             }
     }
