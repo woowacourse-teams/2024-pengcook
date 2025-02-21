@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import net.pengcook.android.presentation.core.components.UrlImage
 import net.pengcook.android.presentation.core.model.MyComment
 
 @Composable
