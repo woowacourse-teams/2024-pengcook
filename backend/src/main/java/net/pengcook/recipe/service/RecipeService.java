@@ -59,27 +59,26 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = pageRecipeRequest.getPageable();
-        List<Long> recipeIds = recipeRepository.findRecipeIdsByCategoryAndKeyword(
+        List<Recipe> recipes = recipeRepository.findAllByCategoryAndKeyword(
                 pageable,
                 pageRecipeRequest.category(),
                 pageRecipeRequest.keyword(),
                 pageRecipeRequest.userId()
         );
 
-        return getRecipeHomeWithMineResponses(userInfo, recipeIds);
+        return getRecipeHomeWithMineResponses(userInfo, recipes);
     }
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readRecipesV1(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
-        List<Long> recipeIds = findRecipeIdsByMultipleCondition(pageRecipeRequest);
-        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(recipeIds);
+        List<Recipe> recipes = findRecipesByMultipleCondition(pageRecipeRequest);
 
         return recipes.stream()
                 .map(recipe -> new RecipeHomeWithMineResponseV1(userInfo, recipe))
                 .toList();
     }
 
-    private List<Long> findRecipeIdsByMultipleCondition(PageRecipeRequest pageRecipeRequest) {
+    private List<Recipe> findRecipesByMultipleCondition(PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = pageRecipeRequest.getPageable();
         long conditionCount = pageRecipeRequest.getConditionCount();
 
@@ -89,15 +88,14 @@ public class RecipeService {
                     pageable.getPageSize(),
                     Sort.by(CREATION_DATE).descending()
             );
-            return recipeRepository.findAll(descPageable).stream()
-                    .map(Recipe::getId)
+            return recipeRepository.findAll(descPageable)
                     .toList();
         }
         if (conditionCount == 1) {
-            return findRecipeIdsBySingleCondition(pageRecipeRequest);
+            return findRecipesBySingleCondition(pageRecipeRequest);
         }
 
-        return recipeRepository.findRecipeIdsByCategoryAndKeyword(
+        return recipeRepository.findAllByCategoryAndKeyword(
                 pageable,
                 pageRecipeRequest.category(),
                 pageRecipeRequest.keyword(),
@@ -105,22 +103,20 @@ public class RecipeService {
         );
     }
 
-    private List<Long> findRecipeIdsBySingleCondition(PageRecipeRequest pageRecipeRequest) {
+    private List<Recipe> findRecipesBySingleCondition(PageRecipeRequest pageRecipeRequest) {
         Pageable pageable = pageRecipeRequest.getPageable();
         String category = pageRecipeRequest.category();
         String keyword = pageRecipeRequest.keyword();
         Long userId = pageRecipeRequest.userId();
 
         if (category != null) {
-            return recipeRepository.findRecipeIdsByCategory(pageable, category);
+            return recipeRepository.findAllByCategory(pageable, category);
         }
         if (keyword != null) {
-            return recipeRepository.findRecipeIdsByKeyword(pageable, keyword);
+            return recipeRepository.findAllByKeyword(pageable, keyword);
         }
         if (userId != null) {
-            return recipeRepository.findRecipeByAuthorIdOrderByCreatedAtDesc(pageable, userId).stream()
-                    .map(Recipe::getId)
-                    .toList();
+            return recipeRepository.findAllByAuthorIdOrderByCreatedAtDesc(pageable, userId);
         }
         // TODO: need to throw illegal state
         return List.of();
@@ -129,8 +125,9 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
         List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
-        return getRecipeHomeWithMineResponses(userInfo, likeRecipeIds);
+        return getRecipeHomeWithMineResponses(userInfo, recipes);
     }
 
     @Transactional(readOnly = true)
@@ -232,8 +229,7 @@ public class RecipeService {
         recipeRepository.delete(recipe);
     }
 
-    private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Long> recipeIds) {
-        List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(recipeIds);
+    private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Recipe> recipes) {
         return recipes.stream()
                 .map(recipe -> {
                     List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);

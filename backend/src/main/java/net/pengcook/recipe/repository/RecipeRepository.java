@@ -11,26 +11,26 @@ import org.springframework.data.repository.query.Param;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("""
-            SELECT recipe.id
+            SELECT recipe
             FROM CategoryRecipe
             WHERE category.name = :category
             ORDER BY recipe.createdAt DESC
             """)
-    List<Long> findRecipeIdsByCategory(Pageable pageable, String category);
+    List<Recipe> findAllByCategory(Pageable pageable, String category);
 
     @Query("""
-            SELECT id
-            FROM Recipe
-            WHERE title LIKE CONCAT('%', :keyword, '%')
-            OR description LIKE CONCAT('%', :keyword, '%')
-            ORDER BY createdAt DESC
+            SELECT r
+            FROM Recipe r
+            WHERE r.title LIKE CONCAT('%', :keyword, '%')
+            OR r.description LIKE CONCAT('%', :keyword, '%')
+            ORDER BY r.createdAt DESC
             """)
-    List<Long> findRecipeIdsByKeyword(Pageable pageable, String keyword);
+    List<Recipe> findAllByKeyword(Pageable pageable, String keyword);
 
-    List<Recipe> findRecipeByAuthorIdOrderByCreatedAtDesc(Pageable pageable, long authorId);
+    List<Recipe> findAllByAuthorIdOrderByCreatedAtDesc(Pageable pageable, long authorId);
 
     @Query("""
-            SELECT r.id
+            SELECT r
             FROM Recipe r
             LEFT JOIN CategoryRecipe cr ON cr.recipe = r
             LEFT JOIN Category c ON cr.category = c
@@ -40,7 +40,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             GROUP BY r.id, r.createdAt
             ORDER BY r.createdAt DESC
             """)
-    List<Long> findRecipeIdsByCategoryAndKeyword(
+    List<Recipe> findAllByCategoryAndKeyword(
             Pageable pageable,
             @Param("category") @Nullable String category,
             @Param("keyword") @Nullable String keyword,
