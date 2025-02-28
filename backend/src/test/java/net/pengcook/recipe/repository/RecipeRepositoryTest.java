@@ -20,49 +20,53 @@ class RecipeRepositoryTest {
     private RecipeRepository repository;
 
     @Test
-    @DisplayName("요청한 페이지에 카테고리 이름으로 레시피 id 목록을 반환한다.")
+    @DisplayName("요청한 페이지에 카테고리 이름으로 레시피 목록을 반환한다.")
     void findRecipeIdsByCategory() {
-        // given
         Pageable pageable = PageRequest.of(0, 3);
         String category = "한식";
 
-        // when
-        List<Long> recipeIds = repository.findRecipeIdsByCategory(pageable, category);
+        List<Recipe> recipes = repository.findAllByCategory(pageable, category);
+        List<Long> recipeIds = recipes.stream()
+                .map(Recipe::getId)
+                .toList();
 
-        // then
         assertThat(recipeIds).contains(15L, 14L, 9L);
     }
 
     @Test
-    @DisplayName("요청한 페이지에 키워드로 레시피 id 목록을 반환한다.")
+    @DisplayName("요청한 페이지에 키워드로 레시피 목록을 반환한다.")
     void findRecipeIdsByKeyword() {
-        // given
         Pageable pageable = PageRequest.of(0, 3);
         String keyword = "이크";
 
-        // when
-        List<Long> recipeIds = repository.findRecipeIdsByKeyword(pageable, keyword);
+        List<Recipe> recipes = repository.findAllByKeyword(pageable, keyword);
+        List<Long> recipeIds = recipes.stream()
+                .map(Recipe::getId)
+                .toList();
 
-        // then
         assertThat(recipeIds).containsExactly(12L, 11L);
     }
 
     @Test
-    @DisplayName("요청한 페이지에 해당하는 레시피 id 목록을 반환한다.")
+    @DisplayName("요청한 페이지에 해당하는 레시피 목록을 반환한다.")
     void findRecipeIdsByCategoryAndKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeIdsByCategoryAndKeyword(pageable, null, null, null);
+        List<Recipe> recipes = repository.findAllByCategoryAndKeyword(pageable, null, null, null);
+        List<Long> recipeIds = recipes.stream()
+                .map(Recipe::getId)
+                .toList();
 
         assertThat(recipeIds).containsExactly(15L, 14L, 13L);
     }
 
     @Test
-    @DisplayName("사용자 id로 작성된 레시피 id 목록을 최신 순으로 반환한다.")
+    @DisplayName("사용자 id로 작성된 레시피 목록을 최신 순으로 반환한다.")
     void findRecipeIdsByUserId() {
         Pageable pageable = PageRequest.of(0, 3);
 
-        List<Long> recipeIds = repository.findRecipeByAuthorIdOrderByCreatedAtDesc(pageable, 1L).stream()
+        List<Recipe> recipes = repository.findAllByAuthorIdOrderByCreatedAtDesc(pageable, 1L);
+        List<Long> recipeIds = recipes.stream()
                 .map(Recipe::getId)
                 .toList();
 
