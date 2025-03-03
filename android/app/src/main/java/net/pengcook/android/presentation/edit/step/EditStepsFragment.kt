@@ -83,18 +83,15 @@ class EditStepsFragment : Fragment() {
                 }
 
                 EditStepsEvent.ExitEvent -> {
-                    // 나가기
                     findNavController().navigateUp()
                 }
 
                 EditStepsEvent.TempSaveEvent -> {
-                    // 임시저장
                     viewModel.saveData()
                     Toast.makeText(requireContext(), "임시저장되었습니다.", Toast.LENGTH_SHORT).show()
                 }
 
                 EditStepsEvent.OnFetchComplete -> {
-                    // 데이터 로딩 완료
                     println("EditStepsFragment : ${args.sequence}")
                     binding.vpStepMaking.setCurrentItem(args.sequence - 1, false)
                 }
@@ -106,7 +103,6 @@ class EditStepsFragment : Fragment() {
         }
 
         viewModel.steps.observe(viewLifecycleOwner) { steps ->
-            println("EditStepsFragment : $steps")
             editStepsAdapter.submitList(steps)
             binding.vpStepMaking.setCurrentItem(args.sequence - 1, false)
         }

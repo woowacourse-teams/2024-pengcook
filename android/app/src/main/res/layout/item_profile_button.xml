@@ -14,21 +14,12 @@
             type="String" />
 
         <variable
-            name="followList"
-            type="String" />
-
-        <variable
-            name="commentList"
-            type="String" />
-
-
-        <variable
             name="profileButtonClickListener"
             type="net.pengcook.android.presentation.profile.ProfileButtonClickListener" />
     </data>
 
     <LinearLayout
-        android:paddingHorizontal="8dp"
+        android:paddingHorizontal="1dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -66,46 +57,6 @@
                 android:onClick="@{() -> profileButtonClickListener.onSettingBtnClick()}"
                 android:paddingVertical="8dp"
                 android:text="@{settings}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Next" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="12dp">
-
-            <TextView
-                android:id="@+id/btn_follows"
-                style="@style/BasicButton.RadiusButton.ThinButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{() -> profileButtonClickListener.onFollowListBtnClick()}"
-                android:paddingVertical="8dp"
-                android:text="@{followList}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Next" />
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="8dp" />
-
-            <TextView
-                android:id="@+id/btn_comments"
-                style="@style/BasicButton.RadiusButton.ThinButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{() -> profileButtonClickListener.onCommentListBtnClick()}"
-                android:paddingVertical="8dp"
-                android:text="@{commentList}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
