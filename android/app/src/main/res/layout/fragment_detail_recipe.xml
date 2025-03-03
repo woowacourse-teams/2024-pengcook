@@ -47,11 +47,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:fillViewport="true"
+                android:visibility="@{!vm.uiState.isLoading &amp;&amp; vm.uiState.isSuccessful ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/abl_detail_recipe"
-                android:visibility="@{!vm.uiState.isLoading &amp;&amp; vm.uiState.isSuccessful ? View.VISIBLE : View.GONE}">
+                app:layout_constraintTop_toBottomOf="@id/abl_detail_recipe">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -68,8 +68,8 @@
 
                         <ImageView
                             android:id="@+id/iv_user_border"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
                             android:layout_margin="16dp"
                             android:background="@drawable/shape_profile_user"
                             android:clipToOutline="true"
@@ -78,20 +78,22 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
+                        <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/iv_user_profile"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:layout_margin="16dp"
-                            android:background="@drawable/shape_profile_user"
-                            android:clipToOutline="true"
+                            android:adjustViewBounds="true"
+                            android:background="@color/white"
+                            android:onClick="@{() -> vm.onNavigateToProfile()}"
                             android:scaleType="centerCrop"
                             android:src="@drawable/penguin"
-                            android:onClick="@{() -> vm.onNavigateToProfile()}"
-                            android:translationZ="2dp"
+                            android:translationZ="1.1dp"
                             app:imageUrl="@{uiState.recipe.user.profile}"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintBottom_toBottomOf="@id/iv_user_border"
+                            app:layout_constraintEnd_toEndOf="@id/iv_user_border"
+                            app:layout_constraintStart_toStartOf="@id/iv_user_border"
+                            app:layout_constraintTop_toTopOf="@id/iv_user_border"
+                            app:shapeAppearanceOverlay="@style/roundImageView" />
 
                         <net.pengcook.android.ui.components.OutlineTextView
                             android:id="@+id/tv_user_name"
@@ -99,8 +101,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:text="@{uiState.recipe.user.username}"
-                            android:textSize="16sp"
                             android:textColor="@color/white"
+                            android:textSize="16sp"
                             android:translationZ="1dp"
                             app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"
                             app:layout_constraintStart_toEndOf="@id/iv_user_profile"
@@ -124,11 +126,11 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_marginTop="16dp"
+                            android:onClick="@{() -> vm.openMenu(uiState.recipe)}"
                             android:src="@drawable/ic_menu_dots"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/icon_color"
-                            android:onClick="@{() -> vm.openMenu(uiState.recipe)}"/>
+                            app:tint="@color/icon_color" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -390,11 +392,11 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{vm.uiState.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="@{vm.uiState.isLoading ? View.VISIBLE : View.GONE}"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

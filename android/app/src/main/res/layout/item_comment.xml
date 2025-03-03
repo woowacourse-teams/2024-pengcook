@@ -31,69 +31,69 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_user_profile"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="12dp"
             android:background="@drawable/shape_profile_user"
             android:onClick="@{() -> eventHandler.onNavigateToProfile(comment)}"
-            android:clipToOutline="true"
             android:scaleType="centerCrop"
-            tools:src="@drawable/penguin"
+            android:translationZ="1.1dp"
             app:imageUrl="@{comment.userImage}"
-            android:translationZ="2dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/roundImageView"
+            tools:src="@drawable/penguin" />
 
         <TextView
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:textStyle="bold"
             android:onClick="@{() -> eventHandler.onNavigateToProfile(comment)}"
-            app:tint="@color/text_color"
-            android:translationZ="1dp"
             android:text="@{comment.userName}"
+            android:textStyle="bold"
+            android:translationZ="1dp"
             app:layout_constraintStart_toEndOf="@id/iv_user_profile"
             app:layout_constraintTop_toTopOf="@id/iv_user_border"
+            app:tint="@color/text_color"
             tools:text="Crong" />
 
         <TextView
             android:id="@+id/tv_mention_comment"
-            app:layout_constraintStart_toStartOf="@id/tv_user_name"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_name"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="20dp"
             android:text="@{comment.message}"
-            tools:text="It was great!! I think the cabbage is replaceable with lettuce."
             android:textColor="@color/text_color"
-            android:layout_marginTop="2dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+            tools:text="It was great!! I think the cabbage is replaceable with lettuce." />
 
         <ImageView
             android:id="@+id/iv_comment_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/icon_color"
-            app:layout_constraintTop_toTopOf="@id/tv_user_name"
-            app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
-            android:src="@drawable/ic_menu_dots"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="12dp"
             android:onClick="@{() -> eventHandler.onMenuButtonClicked(comment)}"
             android:padding="4dp"
-            android:layout_width="24dp"
-            android:layout_height="24dp"/>
+            android:src="@drawable/ic_menu_dots"
+            app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_user_name"
+            app:tint="@color/icon_color" />
 
         <com.google.android.material.divider.MaterialDivider
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_mention_comment"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
             android:layout_marginTop="12dp"
             app:dividerColor="@color/gray_300"
-            android:layout_width="0dp"
-            android:layout_height="1dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mention_comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
