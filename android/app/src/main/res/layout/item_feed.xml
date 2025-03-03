@@ -52,18 +52,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/iv_user_border"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/shape_profile_user"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:translationZ="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <!-- User profile picture -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_image"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_margin="12dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:translationZ="2dp"
+                    android:translationZ="1.1dp"
+                    android:background="@color/white"
                     app:imageUrl="@{recipe.user.profile}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/iv_user_border"
+                    app:layout_constraintTop_toTopOf="@id/iv_user_border"
+                    app:layout_constraintEnd_toEndOf="@id/iv_user_border"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_user_border"
                     app:shapeAppearanceOverlay="@style/roundImageView"
                     tools:src="@drawable/ic_launcher_background" />
 
