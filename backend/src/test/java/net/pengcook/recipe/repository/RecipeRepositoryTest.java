@@ -21,7 +21,7 @@ class RecipeRepositoryTest {
 
     @Test
     @DisplayName("요청한 페이지에 카테고리 이름으로 레시피 목록을 반환한다.")
-    void findRecipeIdsByCategory() {
+    void findRecipesByCategory() {
         Pageable pageable = PageRequest.of(0, 3);
         String category = "한식";
 
@@ -35,7 +35,7 @@ class RecipeRepositoryTest {
 
     @Test
     @DisplayName("요청한 페이지에 키워드로 레시피 목록을 반환한다.")
-    void findRecipeIdsByKeyword() {
+    void findRecipesByKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
         String keyword = "이크";
 
@@ -49,7 +49,7 @@ class RecipeRepositoryTest {
 
     @Test
     @DisplayName("요청한 페이지에 해당하는 레시피 목록을 반환한다.")
-    void findRecipeIdsByCategoryAndKeyword() {
+    void findRecipesByCategoryAndKeyword() {
         Pageable pageable = PageRequest.of(0, 3);
 
         List<Recipe> recipes = repository.findAllByCategoryAndKeyword(pageable, null, null, null);
@@ -62,7 +62,7 @@ class RecipeRepositoryTest {
 
     @Test
     @DisplayName("사용자 id로 작성된 레시피 목록을 최신 순으로 반환한다.")
-    void findRecipeIdsByUserId() {
+    void findRecipesByUserId() {
         Pageable pageable = PageRequest.of(0, 3);
 
         List<Recipe> recipes = repository.findAllByAuthorIdOrderByCreatedAtDesc(pageable, 1L);
