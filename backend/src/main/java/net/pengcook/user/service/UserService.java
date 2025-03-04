@@ -7,6 +7,7 @@ import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
+import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.service.RecipeService;
 import net.pengcook.user.domain.BlockeeGroup;
@@ -143,9 +144,9 @@ public class UserService {
         userReportRepository.deleteByReporterId(userInfo.getId());
         userReportRepository.deleteByReporteeId(userInfo.getId());
 
-        List<Long> userRecipes = recipeRepository.findRecipeIdsByUserId(userInfo.getId());
-        for (Long recipeId : userRecipes) {
-            recipeService.deleteRecipe(userInfo, recipeId);
+        List<Recipe> userRecipes = recipeRepository.findAllByAuthorId(userInfo.getId());
+        for (Recipe recipe : userRecipes) {
+            recipeService.deleteRecipe(userInfo, recipe);
         }
         List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
         for (UserFollow userFollow : followings) {
