@@ -199,7 +199,6 @@ class UserServiceTest {
         assertAll(
                 () -> assertThat(actual).isEqualTo(expected),
                 () -> assertThat(userBlockRepository.existsByBlockerIdAndBlockeeId(1L, 2L)).isTrue()
-
         );
     }
 
