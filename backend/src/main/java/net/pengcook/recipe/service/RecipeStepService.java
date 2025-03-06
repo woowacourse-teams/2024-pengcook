@@ -10,6 +10,7 @@ import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
+import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.InvalidParameterException;
 import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.repository.RecipeRepository;
@@ -41,6 +42,15 @@ public class RecipeStepService {
     @Transactional
     public void deleteRecipeStepsByRecipe(long recipeId) {
         recipeStepRepository.deleteByRecipeId(recipeId);
+    }
+
+    // TODO : 테스트
+    @Transactional
+    public void updateRecipeSteps(long recipeId, RecipeUpdateRequest recipeUpdateRequest) {
+        // TODO : 레시피의 주인인지 여기서도 확인을 해야 할지도...?
+        deleteRecipeStepsByRecipe(recipeId);
+        recipeStepRepository.flush();
+        saveRecipeSteps(recipeId, recipeUpdateRequest.recipeSteps());
     }
 
     private void saveRecipeStep(Recipe savedRecipe, RecipeStepRequest recipeStepRequest) {
