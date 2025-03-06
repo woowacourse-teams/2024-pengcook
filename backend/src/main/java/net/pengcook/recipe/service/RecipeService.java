@@ -170,7 +170,7 @@ public class RecipeService {
         Recipe savedRecipe = recipeRepository.save(recipe);
         categoryService.saveCategories(savedRecipe, recipeRequest.categories());
         ingredientService.register(recipeRequest.ingredients(), savedRecipe);
-        recipeStepService.saveRecipeSteps(savedRecipe.getId(), recipeRequest.recipeSteps());
+        recipeStepService.saveRecipeSteps(savedRecipe, recipeRequest.recipeSteps());
 
         return new RecipeResponse(savedRecipe);
     }
@@ -192,7 +192,7 @@ public class RecipeService {
         ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
         categoryService.deleteCategoryRecipe(recipe);
         categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
-        recipeStepService.updateRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest);
+        recipeStepService.updateRecipeSteps(updatedRecipe, recipeUpdateRequest);
     }
 
     @Transactional(readOnly = true)
