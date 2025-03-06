@@ -163,6 +163,19 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("특정 작성자의 레시피를 삭제한다.")
+    void deleteRecipesByAuthor() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+
+        recipeService.deleteRecipesByAuthor(userInfo);
+
+        assertAll(
+                () -> assertThat(recipeRepository.countByAuthorId(1L)).isZero(),
+                () -> assertThat(recipeRepository.count()).isEqualTo(INITIAL_RECIPE_COUNT - 14)
+        );
+    }
+
+    @Test
     @DisplayName("레시피를 삭제한다.")
     void deleteRecipe() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
