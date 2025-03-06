@@ -74,6 +74,11 @@ public class UserFollowService {
                 .ifPresent((userFollow) -> unfollowUser(blockeeId, blockerId));
     }
 
+    @Transactional(readOnly = true)
+    public List<UserFollow> findUserFollowByFollowerId(long followerId) {
+        return userFollowRepository.findAllByFollowerId(followerId);
+    }
+
     private User getUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("사용자 정보를 조회할 수 없습니다."));

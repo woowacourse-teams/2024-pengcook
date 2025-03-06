@@ -25,11 +25,10 @@ import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserFollow;
-import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserRepository;
+import net.pengcook.user.service.UserFollowService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -43,18 +42,17 @@ public class RecipeService {
     private static final String CREATION_DATE = "createdAt";
 
     private final RecipeRepository recipeRepository;
-    private final UserRepository userRepository;
     private final RecipeLikeRepository likeRepository;
-    private final RecipeStepRepository recipeStepRepository;
-    private final UserFollowRepository userFollowRepository;
+    private final UserRepository userRepository;
 
+    private final RecipeStepService recipeStepService;
+    private final RecipeLikeService recipeLikeService;
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
-    private final ImageClientService imageClientService;
-    private final RecipeStepService recipeStepService;
     private final IngredientRecipeService ingredientRecipeService;
     private final CommentService commentService;
-    private final RecipeLikeService recipeLikeService;
+    private final UserFollowService userFollowService;
+    private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
@@ -143,7 +141,7 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readFollowRecipes(UserInfo userInfo,
                                                                 PageRecipeRequest pageRecipeRequest) {
-        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        List<UserFollow> followings = userFollowService.findUserFollowByFollowerId(userInfo.getId());
         List<Long> followeeIds = followings.stream()
                 .map(userFollow -> userFollow.getFollowee().getId())
                 .toList();
@@ -194,10 +192,7 @@ public class RecipeService {
         ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
         categoryService.deleteCategoryRecipe(recipe);
         categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
-
-        recipeStepService.deleteRecipeStepsByRecipe(updatedRecipe.getId());
-        recipeStepRepository.flush();
-        recipeStepService.saveRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest.recipeSteps());
+        recipeStepService.updateRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest);
     }
 
     @Transactional(readOnly = true)
