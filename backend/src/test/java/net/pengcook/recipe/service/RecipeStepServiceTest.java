@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
@@ -52,7 +53,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("새로운 스텝 이미지2.jpg", "새로운 스텝 설명2", 2, "00:05:00")
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -64,7 +66,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest(null, "새로운 스텝 설명1", 1, "00:05:00")
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -77,7 +80,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest(image, "새로운 스텝 설명1", 1, "00:05:00")
         );
 
-        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(2L, recipeStepRequests))
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(recipe, recipeStepRequests))
                 .isInstanceOf(InvalidParameterException.class);
     }
 
@@ -88,7 +92,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("레시피1 설명1 이미지", "새로운 스텝 설명1", 1, null)
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -101,7 +106,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("image.jpg", "새로운 스텝 설명1", 1, cookingTime)
         );
 
-        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(2L, recipeStepRequests))
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(recipe, recipeStepRequests))
                 .isInstanceOf(InvalidParameterException.class);
     }
 

@@ -12,8 +12,6 @@ import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.InvalidParameterException;
-import net.pengcook.recipe.exception.NotFoundException;
-import net.pengcook.recipe.repository.RecipeRepository;
 import net.pengcook.recipe.repository.RecipeStepRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecipeStepService {
 
     private final RecipeStepRepository recipeStepRepository;
-    private final RecipeRepository recipeRepository;
+
     private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
@@ -33,10 +31,8 @@ public class RecipeStepService {
     }
 
     @Transactional
-    public void saveRecipeSteps(Long savedRecipeId, List<RecipeStepRequest> recipeStepRequests) {
-        Recipe savedRecipe = recipeRepository.findById(savedRecipeId)
-                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
-        recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(savedRecipe, recipeStepRequest));
+    public void saveRecipeSteps(Recipe recipe, List<RecipeStepRequest> recipeStepRequests) {
+        recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(recipe, recipeStepRequest));
     }
 
     @Transactional
@@ -46,11 +42,11 @@ public class RecipeStepService {
 
     // TODO : 테스트
     @Transactional
-    public void updateRecipeSteps(long recipeId, RecipeUpdateRequest recipeUpdateRequest) {
+    public void updateRecipeSteps(Recipe recipe, RecipeUpdateRequest recipeUpdateRequest) {
         // TODO : 레시피의 주인인지 여기서도 확인을 해야 할지도...?
-        deleteRecipeStepsByRecipe(recipeId);
+        deleteRecipeStepsByRecipe(recipe.getId());
         recipeStepRepository.flush();
-        saveRecipeSteps(recipeId, recipeUpdateRequest.recipeSteps());
+        saveRecipeSteps(recipe, recipeUpdateRequest.recipeSteps());
     }
 
     private void saveRecipeStep(Recipe savedRecipe, RecipeStepRequest recipeStepRequest) {
