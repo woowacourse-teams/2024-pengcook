@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.pengcook.ingredient.domain.Ingredient;
 import net.pengcook.ingredient.domain.IngredientRecipe;
 import net.pengcook.ingredient.domain.Requirement;
+import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.ingredient.repository.IngredientRecipeRepository;
 import net.pengcook.recipe.domain.Recipe;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class IngredientRecipeService {
 
     private final IngredientRecipeRepository ingredientRecipeRepository;
+
     private final IngredientSubstitutionService ingredientSubstitutionService;
 
     @Transactional
@@ -31,5 +33,12 @@ public class IngredientRecipeService {
             ingredientRecipeRepository.delete(ingredientRecipe);
         }
     }
-}
 
+    @Transactional(readOnly = true)
+    public List<IngredientResponse> findIngredientByRecipe(Recipe recipe) {
+        return ingredientRecipeRepository.findAllByRecipeId(recipe.getId())
+                .stream()
+                .map(IngredientResponse::new)
+                .toList();
+    }
+}
