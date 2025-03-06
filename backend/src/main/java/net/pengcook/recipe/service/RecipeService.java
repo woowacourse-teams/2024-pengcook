@@ -212,6 +212,14 @@ public class RecipeService {
     }
 
     @Transactional
+    public void deleteRecipesByAuthor(UserInfo userInfo) {
+        List<Recipe> userRecipes = recipeRepository.findAllByAuthorId(userInfo.getId());
+        for (Recipe recipe : userRecipes) {
+            deleteRecipe(userInfo, recipe);
+        }
+    }
+
+    @Transactional
     public void deleteRecipe(UserInfo userInfo, long recipeId) {
         Optional<Recipe> targetRecipe = recipeRepository.findById(recipeId);
 
@@ -227,6 +235,11 @@ public class RecipeService {
         recipeLikeService.deleteLikesByRecipe(recipe.getId());
         recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
         recipeRepository.delete(recipe);
+    }
+
+    @Transactional(readOnly = true)
+    public long countRecipesByAuthorId(long authorId) {
+        return recipeRepository.countByAuthorId(authorId);
     }
 
     private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Recipe> recipes) {
