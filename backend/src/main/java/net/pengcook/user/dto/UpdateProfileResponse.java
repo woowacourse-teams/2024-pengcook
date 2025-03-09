@@ -11,12 +11,6 @@ public record UpdateProfileResponse(
         String region,
         String introduction
 ) {
-    public UpdateProfileResponse {
-        if (introduction == null) {
-            introduction = "";
-        }
-    }
-
     public UpdateProfileResponse(User user) {
         this(
                 user.getId(),
