@@ -75,7 +75,7 @@ class UserFollowServiceTest {
     void getFollowerInfo() {
         long userId = 1L;
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+                new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
         FollowInfoResponse expected = new FollowInfoResponse(
                 followUserInfoResponse,
@@ -92,7 +92,7 @@ class UserFollowServiceTest {
     void getFollowingInfo() {
         long userId = 1L;
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+                new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
         FollowInfoResponse expected = new FollowInfoResponse(
                 followUserInfoResponse,

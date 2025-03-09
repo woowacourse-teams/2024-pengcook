@@ -463,7 +463,7 @@ class UserControllerTest extends RestDocsSetting {
     @DisplayName("팔로워 목록을 조회한다.")
     void getFollowerInfo() {
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+                new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
         FollowInfoResponse expected = new FollowInfoResponse(
                 followUserInfoResponse,
@@ -476,6 +476,7 @@ class UserControllerTest extends RestDocsSetting {
                         "팔로워 목록 조회 API",
                         responseFields(
                                 fieldWithPath("follows").description("팔로워 목록"),
+                                fieldWithPath("follows[].userId").description("사용자 id"),
                                 fieldWithPath("follows[].username").description("사용자 이름"),
                                 fieldWithPath("follows[].image").description("사용자 이미지"),
                                 fieldWithPath("followCount").description("팔로워 수")
@@ -494,7 +495,7 @@ class UserControllerTest extends RestDocsSetting {
     @DisplayName("팔로잉 목록을 조회한다.")
     void getFollowInfo() {
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
-                new FollowUserInfoResponse("birdsheep", "birdsheep.jpg")
+                new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
         FollowInfoResponse expected = new FollowInfoResponse(
                 followUserInfoResponse,
@@ -507,6 +508,7 @@ class UserControllerTest extends RestDocsSetting {
                         "팔로잉 목록 조회 API",
                         responseFields(
                                 fieldWithPath("follows").description("팔로잉 목록"),
+                                fieldWithPath("follows[].userId").description("사용자 id"),
                                 fieldWithPath("follows[].username").description("사용자 이름"),
                                 fieldWithPath("follows[].image").description("사용자 이미지"),
                                 fieldWithPath("followCount").description("팔로잉 수")
