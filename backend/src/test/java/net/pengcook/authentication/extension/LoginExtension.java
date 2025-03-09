@@ -51,7 +51,7 @@ public class LoginExtension implements BeforeTestExecutionCallback, AfterTestExe
                 annotation.nickname(),
                 annotation.image(),
                 annotation.region(),
-                null
+                annotation.introduction()
         );
         return userRepository.save(user);
     }

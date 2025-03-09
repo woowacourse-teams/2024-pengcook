@@ -18,4 +18,6 @@ public @interface WithLoginUser {
     String image() default "tester.jpg";
 
     String region() default "KOREA";
+
+    String introduction() default "";
 }
