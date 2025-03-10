@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.user.domain.BlockeeGroup;
-import net.pengcook.user.domain.BlockerGroup;
 import net.pengcook.user.domain.Ownable;
-import net.pengcook.user.exception.ForbiddenException;
+import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,51 +35,51 @@ public class BlockedUserFilterAspect {
             return ownables;
         }
 
-        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
-        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
 
-        return filterBlockedUsers(ownables, blockeeGroup, blockerGroup);
+        return filterBlockedUsers(ownables, blockedUserGroup);
     }
 
-    @Pointcut("within(org.springframework.data.jpa.repository.JpaRepository+)")
-    public void singleOwnableRepositoryMethods() {
+    @Pointcut("execution(java.util.Optional<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
+    public void repositoryMethodsReturningOptionalOwnable() {
     }
 
-    @Around("singleOwnableRepositoryMethods()")
-    public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = joinPoint.proceed();
-        Ownable ownable = extractOwnable(result);
-        if (ownable == null) {
-            return result;
+    @Around("repositoryMethodsReturningOptionalOwnable()")
+    public Object filterBlockedAuthorFromOptional(ProceedingJoinPoint joinPoint) throws Throwable {
+        Optional<Ownable> ownableOptional = (Optional<Ownable>) joinPoint.proceed();
+
+        UserInfo userInfo = getCurrentUserInfo();
+        if (userInfo == null || ownableOptional.isEmpty()) {
+            return ownableOptional;
         }
+
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
+        if (blockedUserGroup.isBlocked(ownableOptional.get().getOwnerId())) {
+            return Optional.empty();
+        }
+
+        return ownableOptional;
+    }
+
+    @Pointcut("execution(net.pengcook.user.domain.Ownable+ net.pengcook..repository..*(..))")
+    public void repositoryMethodsReturningOwnable() {
+    }
+
+    @Around("repositoryMethodsReturningOwnable()")
+    public Object filterBlockedAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
+        Ownable ownable = (Ownable) joinPoint.proceed();
 
         UserInfo userInfo = getCurrentUserInfo();
         if (userInfo == null) {
-            return result;
+            return ownable;
         }
 
-        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(userInfo.getId());
-        if (blockeeGroup.contains(ownable.getOwnerId())) {
-            throw new ForbiddenException("내가 차단한 사용자의 게시글을 이용할 수 없습니다.");
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(userInfo.getId());
+        if (blockedUserGroup.isBlocked(ownable.getOwnerId())) {
+            return null;
         }
 
-        BlockerGroup blockerGroup = userService.getBlockerGroup(userInfo.getId());
-        if (blockerGroup.contains(ownable.getOwnerId())) {
-            throw new ForbiddenException("나를 차단한 사용자의 게시글을 이용할 수 없습니다.");
-        }
-
-        return result;
-    }
-
-    private Ownable extractOwnable(Object result) {
-        if (result instanceof Optional<?>) {
-            return (Ownable) ((Optional<?>) result)
-                    .filter(entity -> entity instanceof Ownable)
-                    .orElse(null);
-        } else if (result instanceof Ownable) {
-            return (Ownable) result;
-        }
-        return null;
+        return ownable;
     }
 
     private UserInfo getCurrentUserInfo() {
@@ -93,14 +91,9 @@ public class BlockedUserFilterAspect {
         }
     }
 
-    private List<Ownable> filterBlockedUsers(
-            List<Ownable> ownable,
-            BlockeeGroup blockeeGroup,
-            BlockerGroup blockerGroup
-    ) {
-        return ownable.stream()
-                .filter(item -> !blockeeGroup.contains(item.getOwnerId()))
-                .filter(item -> !blockerGroup.contains(item.getOwnerId()))
+    private List<Ownable> filterBlockedUsers(List<Ownable> ownables, BlockedUserGroup blockedUserGroup) {
+        return ownables.stream()
+                .filter(item -> !blockedUserGroup.isBlocked(item.getOwnerId()))
                 .toList();
     }
 }
