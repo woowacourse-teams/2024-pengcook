@@ -9,7 +9,7 @@ import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.user.domain.BlockeeGroup;
+import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.User;
@@ -251,15 +251,15 @@ class UserServiceTest {
 
     @Test
     @DisplayName("차단한 사용자들의 목록을 불러올 수 있다.")
-    void getBlockeeGroup() {
+    void getBlockedUserGroup() {
         long blockerId = 1L;
 
-        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(blockerId);
+        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(blockerId);
 
         assertAll(
-                () -> assertThat(blockeeGroup.contains(2L)).isTrue(),
-                () -> assertThat(blockeeGroup.contains(3L)).isTrue(),
-                () -> assertThat(blockeeGroup.contains(4L)).isFalse()
+                () -> assertThat(blockedUserGroup.isBlocked(2L)).isTrue(),
+                () -> assertThat(blockedUserGroup.isBlocked(3L)).isTrue(),
+                () -> assertThat(blockedUserGroup.isBlocked(4L)).isFalse()
         );
     }
 
