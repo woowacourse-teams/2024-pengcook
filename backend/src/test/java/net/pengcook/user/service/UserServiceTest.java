@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
@@ -195,7 +196,10 @@ class UserServiceTest {
 
         UserBlockResponse actual = userService.blockUser(blockerId, blockeeId);
 
-        assertThat(actual).isEqualTo(expected);
+        assertAll(
+                () -> assertThat(actual).isEqualTo(expected),
+                () -> assertThat(userBlockRepository.existsByBlockerIdAndBlockeeId(1L, 2L)).isTrue()
+        );
     }
 
     @Test
@@ -250,6 +254,58 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("사용자 차단을 해제한다.")
+    void deleteBlock() {
+        long blockerId = 1L;
+        long blockeeId = 3L;
+
+        userService.deleteBlock(blockerId, blockeeId);
+
+        assertThat(userBlockRepository.existsByBlockerIdAndBlockeeId(1L, 3L)).isFalse();
+    }
+
+    @Test
+    @DisplayName("차단을 해제하는 사용자가 존재하지 않으면 예외가 발생한다.")
+    void deleteBlockWhenNotExistBlocker() {
+        long blockerId = 2000L;
+        long blockeeId = 3L;
+
+        assertThatThrownBy(() -> userService.deleteBlock(blockerId, blockeeId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("정상적으로 로그인되지 않았습니다.");
+    }
+
+    @Test
+    @DisplayName("차단당한 사용자가 존재하지 않으면 예외가 발생한다.")
+    void deleteBlockWhenNotExistBlockee() {
+        long blockerId = 1L;
+        long blockeeId = 2000L;
+
+        assertThatThrownBy(() -> userService.deleteBlock(blockerId, blockeeId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("차단한 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("차단 목록을 불러온다.")
+    void getBlockeesOf() {
+        long blockerId = 1L;
+        List<UserBlockResponse> expected = List.of(
+                new UserBlockResponse(
+                        new UserResponse(blockerId, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA"),
+                        new UserResponse(3L, "crocodile@pengcook.net", "crocodile", "악어", "crocodile.jpg", "KOREA")
+                ),
+                new UserBlockResponse(
+                        new UserResponse(blockerId, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA"),
+                        new UserResponse(4L, "birdsheep@pengcook.net", "birdsheep", "새양", "birdsheep.jpg", "KOREA")
+                ));
+
+        List<UserBlockResponse> userBlockResponses = userService.getBlockeesOf(blockerId);
+
+        assertThat(userBlockResponses).containsExactlyElementsOf(expected);
+    }
+
+    @Test
     @DisplayName("차단한 사용자들의 목록을 불러올 수 있다.")
     void getBlockedUserGroup() {
         long blockerId = 1L;
@@ -257,9 +313,9 @@ class UserServiceTest {
         BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(blockerId);
 
         assertAll(
-                () -> assertThat(blockedUserGroup.isBlocked(2L)).isTrue(),
+                () -> assertThat(blockedUserGroup.isBlocked(2L)).isFalse(),
                 () -> assertThat(blockedUserGroup.isBlocked(3L)).isTrue(),
-                () -> assertThat(blockedUserGroup.isBlocked(4L)).isFalse()
+                () -> assertThat(blockedUserGroup.isBlocked(4L)).isTrue()
         );
     }
 

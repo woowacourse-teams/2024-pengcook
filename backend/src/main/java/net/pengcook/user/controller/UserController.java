@@ -90,6 +90,17 @@ public class UserController {
         return userService.blockUser(userInfo.getId(), userBlockRequest.blockeeId());
     }
 
+    @DeleteMapping("/users/me/blockees/{blockeeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBlock(@LoginUser UserInfo userInfo, @PathVariable long blockeeId) {
+        userService.deleteBlock(userInfo.getId(), blockeeId);
+    }
+
+    @GetMapping("/users/me/blockees")
+    public List<UserBlockResponse> getBlockees(@LoginUser UserInfo userInfo) {
+        return userService.getBlockeesOf(userInfo.getId());
+    }
+
     @PostMapping("/user/follow")
     @ResponseStatus(HttpStatus.CREATED)
     public UserFollowResponse followUser(

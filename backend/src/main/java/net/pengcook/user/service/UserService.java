@@ -21,7 +21,6 @@ import net.pengcook.user.dto.ReportResponse;
 import net.pengcook.user.dto.UpdateProfileRequest;
 import net.pengcook.user.dto.UpdateProfileResponse;
 import net.pengcook.user.dto.UserBlockResponse;
-import net.pengcook.user.dto.UserResponse;
 import net.pengcook.user.dto.UsernameCheckResponse;
 import net.pengcook.user.exception.NotFoundException;
 import net.pengcook.user.exception.UserNotFoundException;
@@ -92,8 +91,26 @@ public class UserService {
         userFollowService.blockUserFollow(blockerId, blockeeId);
         UserBlock userBlock = userBlockRepository.save(new UserBlock(blocker, blockee));
 
-        return new UserBlockResponse(new UserResponse(userBlock.getBlocker()),
-                new UserResponse(userBlock.getBlockee()));
+        return new UserBlockResponse(userBlock);
+    }
+
+    @Transactional
+    public void deleteBlock(long blockerId, long blockeeId) {
+        User blocker = userRepository.findById(blockerId)
+                .orElseThrow(() -> new UserNotFoundException("정상적으로 로그인되지 않았습니다."));
+        User blockee = userRepository.findById(blockeeId)
+                .orElseThrow(() -> new UserNotFoundException("차단한 사용자를 찾을 수 없습니다."));
+
+        userBlockRepository.deleteByBlockerAndBlockee(blocker, blockee);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserBlockResponse> getBlockeesOf(long blockerId) {
+        List<UserBlock> userBlocks = userBlockRepository.findAllByBlockerId(blockerId);
+
+        return userBlocks.stream()
+                .map(UserBlockResponse::new)
+                .toList();
     }
 
     @Transactional
