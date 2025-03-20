@@ -354,19 +354,13 @@ class UserControllerTest extends RestDocsSetting {
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("사용자 차단을 해제한다.")
     void deleteBlock() {
-        UserBlockRequest userBlockRequest = new UserBlockRequest(3L);
-
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "사용자 차단을 해제합니다.",
-                        "사용자 차단 해제 API",
-                        requestFields(
-                                fieldWithPath("blockeeId").description("차단한 사용자 ID")
-                        )
+                        "사용자 차단 해제 API"
                 ))
                 .contentType(ContentType.JSON)
-                .body(userBlockRequest)
-                .when().delete("/user/block")
+                .when().delete("/users/me/blockees/{blockeeId}", 3L)
                 .then().log().all()
                 .statusCode(204);
 
@@ -400,7 +394,7 @@ class UserControllerTest extends RestDocsSetting {
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/user/block/list")
+                .when().get("/users/me/blockees")
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].blocker.id", equalTo(1))
