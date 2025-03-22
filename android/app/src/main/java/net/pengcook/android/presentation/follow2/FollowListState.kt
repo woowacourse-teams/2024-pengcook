@@ -14,5 +14,5 @@ data class FollowListState(
     val isLoading: Boolean = true,
     val isMine: Boolean = false,
     val showDialog: Boolean = false,
-    val selectedFollowInfo: FollowInfo? = null
+    val selectedFollowInfo: FollowInfo? = null,
 )

@@ -50,8 +50,8 @@ fun FollowSearchBar(
             colors =
                 TextFieldDefaults.colors(
                     cursorColor = DarkBlue,
-                    unfocusedIndicatorColor = Color.Transparent, // 포커스 해제 시 밑줄 제거
-                    disabledIndicatorColor = Color.Transparent, // 비활성화 시 밑줄 제거
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
                     focusedContainerColor = White50,
                     unfocusedContainerColor = White50,
                     disabledContainerColor = White50,
