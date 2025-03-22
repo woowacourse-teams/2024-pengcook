@@ -6,8 +6,10 @@ import net.pengcook.android.domain.model.profile.UserProfile
 
 class ProfileDescriptionViewHolder(
     private val binding: ItemProfileDescriptionBinding,
+    private val profileButtonClickListener: ProfileButtonClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(profile: UserProfile) {
         binding.profile = profile
+        binding.profileButtonClickListener = profileButtonClickListener
     }
 }
