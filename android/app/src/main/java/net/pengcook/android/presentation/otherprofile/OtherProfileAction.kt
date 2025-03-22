@@ -9,6 +9,8 @@ sealed interface OtherProfileAction {
 
     data object OnBlockClick : OtherProfileAction
 
+    data object OnFollowListClick : OtherProfileAction
+
     // TODO : implement Recipe navigation action
     data class OnRecipeClick(val recipeId: Long) : OtherProfileAction
 }

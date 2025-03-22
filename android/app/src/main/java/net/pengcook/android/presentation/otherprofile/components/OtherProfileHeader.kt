@@ -1,6 +1,7 @@
 package net.pengcook.android.presentation.otherprofile.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import net.pengcook.android.ui.theme.PengCookTheme
 @Composable
 fun OtherProfileHeader(
     userProfile: UserProfile?,
+    onFollowListClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -56,7 +58,10 @@ fun OtherProfileHeader(
                     text = "${userProfile?.follower ?: 0} followers • ${userProfile?.recipeCount ?: 0} recipes",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Notosans.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 4.dp)
+                        .clickable {
+                            onFollowListClick()
+                        },
                 )
             }
 
@@ -94,6 +99,7 @@ private fun PreviewOtherProfileHeader() {
     PengCookTheme {
         OtherProfileHeader(
             userProfile = userProfile,
+            onFollowListClick = {}
         )
     }
 }

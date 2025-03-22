@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -33,11 +34,17 @@ class OtherProfileFragment : Fragment() {
                 OtherProfileScreenRoot(
                     viewModel = viewModel,
                     navigateBack = { navigateBack() },
+                    navigateToFollowList = { navigateToFollowList() }
                 )
             }
         }
 
     private fun navigateBack() {
         requireActivity().onBackPressedDispatcher.onBackPressed()
+    }
+
+    private fun navigateToFollowList() {
+        val action = OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowList2Fragment(userId)
+        findNavController().navigate(action)
     }
 }
