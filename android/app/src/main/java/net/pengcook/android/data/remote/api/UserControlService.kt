@@ -39,4 +39,14 @@ interface UserControlService {
         @Header("Authorization") accessToken: String,
         @Body followUserRequest: FollowUserRequest,
     ): Response<Unit>
+
+    @GET("/user/{userId}/follower")
+    suspend fun fetchFollowers(
+        @Path("userId") userId: Long,
+    ): Response<FollowDataResponse>
+
+    @GET("/user/{userId}/following")
+    suspend fun fetchFollowings(
+        @Path("userId") userId: Long,
+    ): Response<FollowDataResponse>
 }
