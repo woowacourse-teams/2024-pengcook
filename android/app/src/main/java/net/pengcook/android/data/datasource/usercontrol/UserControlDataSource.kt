@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.usercontrol
 
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
@@ -29,4 +30,14 @@ interface UserControlDataSource {
         accessToken: String,
         followUserRequest: FollowUserRequest,
     ): Response<Unit>
+
+    // authorization header
+    // more data, at least userId
+    suspend fun fetchFollowers(
+        userId: Long,
+    ): Response<FollowDataResponse>
+
+    suspend fun fetchFollowings(
+        userId: Long,
+    ): Response<FollowDataResponse>
 }
