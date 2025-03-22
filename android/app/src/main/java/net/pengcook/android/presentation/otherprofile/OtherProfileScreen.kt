@@ -34,6 +34,7 @@ import net.pengcook.android.ui.theme.PengCookTheme
 fun OtherProfileScreenRoot(
     viewModel: OtherProfileViewModel,
     navigateBack: () -> Unit,
+    navigateToFollowList: () -> Unit,
 ) {
     PengCookTheme {
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -47,6 +48,7 @@ fun OtherProfileScreenRoot(
                     is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
                     is OtherProfileAction.OnBlockClick -> { // TODO
                     }
+                    is OtherProfileAction.OnFollowListClick -> navigateToFollowList()
 
                     else -> viewModel.onAction(action)
                 }
@@ -93,7 +95,10 @@ fun OtherProfileScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 12.dp),
         ) {
-            OtherProfileHeader(state.userProfile)
+            OtherProfileHeader(
+                userProfile = state.userProfile,
+                onFollowListClick = { onAction(OtherProfileAction.OnFollowListClick) },
+            )
             ButtonRow(
                 isFollowing = state.isFollowing,
                 onFollowClick = {
