@@ -79,8 +79,13 @@ class ProfileFragment : Fragment() {
                     findNavController().navigate(R.id.action_profileFragment_to_settingFragment)
                 }
 
+                is ProfileUiEvent.NavigateToFollowList -> {
+                    val action = ProfileFragmentDirections.actionProfileFragmentToFollowList2Fragment(
+                        userId = newEvent.userId,
+                    )
+                    findNavController().navigate(action)
+                }
                 ProfileUiEvent.NavigateToCommentList -> {}
-                ProfileUiEvent.NavigateToFollowList -> {}
             }
         }
         initSwipeRefreshLayout()

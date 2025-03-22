@@ -21,7 +21,10 @@ class ProfileAdapter(
         when (viewType) {
             ProfileViewItem.VIEW_TYPE_PROFILE_DESC -> {
                 val binding = ItemProfileDescriptionBinding.inflate(inflater, parent, false)
-                return ProfileDescriptionViewHolder(binding)
+                return ProfileDescriptionViewHolder(
+                    binding = binding,
+                    profileButtonClickListener = profileButtonClickListener,
+                )
             }
 
             ProfileViewItem.VIEW_TYPE_PROFILE_BUTTONS -> {
