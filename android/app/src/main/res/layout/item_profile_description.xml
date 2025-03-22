@@ -9,6 +9,10 @@
         <variable
             name="profile"
             type="net.pengcook.android.domain.model.profile.UserProfile" />
+
+        <variable
+            name="profileButtonClickListener"
+            type="net.pengcook.android.presentation.profile.ProfileButtonClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,6 +57,7 @@
             <TextView
                 android:id="@+id/tv_numeric_status"
                 android:layout_width="0dp"
+                android:onClick="@{() -> profileButtonClickListener.onFollowListBtnClick()}"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv_introduction"
                 app:layout_constraintEnd_toEndOf="parent"
