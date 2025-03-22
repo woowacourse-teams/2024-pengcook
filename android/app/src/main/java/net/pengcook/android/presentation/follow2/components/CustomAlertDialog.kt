@@ -91,7 +91,7 @@ fun CustomAlertDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(IntrinsicSize.Min), // Row의 높이를 내부 컴포넌트에 맞춤
+                        .height(IntrinsicSize.Min),
                 ) {
                     Button(
                         onClick = { onClickCancel() },
@@ -100,10 +100,10 @@ fun CustomAlertDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White, // 버튼 배경색상
-                            contentColor = Color.Black, // 버튼 텍스트 색상
-                            disabledContainerColor = Color.Gray, // 버튼 비활성화 배경 색상
-                            disabledContentColor = Color.White, // 버튼 비활성화 텍스트 색상
+                            containerColor = Color.White,
+                            contentColor = Color.Black,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.White,
                         ),
                     ) {
                         Text(
@@ -130,10 +130,10 @@ fun CustomAlertDialog(
                             .weight(1f)
                             .fillMaxHeight(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White, // 버튼 배경색상
-                            contentColor = Color.Red, // 버튼 텍스트 색상
-                            disabledContainerColor = Color.Gray, // 버튼 비활성화 배경 색상
-                            disabledContentColor = Color.White, // 버튼 비활성화 텍스트 색상
+                            containerColor = Color.White,
+                            contentColor = Color.Red,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.White,
                         ),
                     ) {
                         Text(

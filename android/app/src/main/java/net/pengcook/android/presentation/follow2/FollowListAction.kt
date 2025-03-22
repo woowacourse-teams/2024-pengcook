@@ -7,7 +7,7 @@ sealed interface FollowListAction {
 
     data class ShowDialog(val userId: Long) : FollowListAction
 
-    data object HideDialog: FollowListAction
+    data object HideDialog : FollowListAction
 
     data class OnRemoveFollower(val userId: Long) : FollowListAction
 

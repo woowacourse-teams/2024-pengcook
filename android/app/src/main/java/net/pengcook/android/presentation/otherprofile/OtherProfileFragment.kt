@@ -34,7 +34,7 @@ class OtherProfileFragment : Fragment() {
                 OtherProfileScreenRoot(
                     viewModel = viewModel,
                     navigateBack = { navigateBack() },
-                    navigateToFollowList = { navigateToFollowList() }
+                    navigateToFollowList = { navigateToFollowList() },
                 )
             }
         }
@@ -44,7 +44,8 @@ class OtherProfileFragment : Fragment() {
     }
 
     private fun navigateToFollowList() {
-        val action = OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowList2Fragment(userId)
+        val action =
+            OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowList2Fragment(userId)
         findNavController().navigate(action)
     }
 }
