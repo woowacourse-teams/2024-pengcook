@@ -24,11 +24,11 @@ fun FollowInfoList(
             FollowInfoItem(
                 followInfo = follower,
                 modifier = Modifier.padding(horizontal = 16.dp),
-                actionContent = { followerInfo ->
+                actionContent = {
                     if (isMine) {
-                        ActionButton(
+                        FollowActionButton(
                             onButtonClick = onButtonClick,
-                            follower = followerInfo,
+                            follower = follower,
                             isFollowerInfo = isFollowerInfo,
                         )
                     }
