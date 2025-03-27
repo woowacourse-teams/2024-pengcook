@@ -24,7 +24,7 @@ import net.pengcook.android.presentation.follow2.model.FollowInfo
 fun FollowInfoItem(
     followInfo: FollowInfo,
     modifier: Modifier = Modifier,
-    actionContent: @Composable RowScope.(FollowInfo) -> Unit = {},
+    actionContent: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -50,6 +50,6 @@ fun FollowInfoItem(
                 .padding(start = 12.dp),
         )
 
-        actionContent(followInfo)
+        actionContent()
     }
 }

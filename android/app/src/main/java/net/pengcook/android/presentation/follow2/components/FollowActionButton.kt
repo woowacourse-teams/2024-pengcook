@@ -14,7 +14,7 @@ import net.pengcook.android.R
 import net.pengcook.android.presentation.follow2.model.FollowInfo
 
 @Composable
-fun ActionButton(
+fun FollowActionButton(
     onButtonClick: (Long) -> Unit,
     follower: FollowInfo,
     isFollowerInfo: Boolean,
