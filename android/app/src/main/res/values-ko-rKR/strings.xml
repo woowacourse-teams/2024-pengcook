@@ -162,4 +162,10 @@
     <string name="menu_report">신고하기</string>
     <string name="menu_block">차단하기</string>
 
+    <string name="follower_remove">삭제</string>
+    <string name="follower_unfollow">언팔로우</string>
+
+    <string name="dialog_unfollow">삭제</string>
+    <string name="dialog_cancel">취소</string>
+
 </resources>

@@ -36,25 +36,24 @@ fun OtherProfileScreenRoot(
     navigateBack: () -> Unit,
     navigateToFollowList: () -> Unit,
 ) {
-    PengCookTheme {
-        val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-        OtherProfileScreen(
-            state = state,
-            onAction = { action ->
-                when (action) {
-                    is OtherProfileAction.OnBackClick -> navigateBack()
-                    is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
-                    is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
-                    is OtherProfileAction.OnBlockClick -> { // TODO
-                    }
-                    is OtherProfileAction.OnFollowListClick -> navigateToFollowList()
-
-                    else -> viewModel.onAction(action)
+    OtherProfileScreen(
+        state = state,
+        onAction = { action ->
+            when (action) {
+                is OtherProfileAction.OnBackClick -> navigateBack()
+                is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
+                is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
+                is OtherProfileAction.OnBlockClick -> { // TODO
                 }
-            },
-        )
-    }
+
+                is OtherProfileAction.OnFollowListClick -> navigateToFollowList()
+
+                else -> viewModel.onAction(action)
+            }
+        },
+    )
 }
 
 @Composable

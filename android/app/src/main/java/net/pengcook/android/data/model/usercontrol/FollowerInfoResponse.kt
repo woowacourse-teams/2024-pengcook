@@ -1,6 +1,6 @@
 package net.pengcook.android.data.model.usercontrol
 
-data class FollowerInfo(
+data class FollowerInfoResponse(
     val userId: Long,
     val username: String,
     val image: String,
