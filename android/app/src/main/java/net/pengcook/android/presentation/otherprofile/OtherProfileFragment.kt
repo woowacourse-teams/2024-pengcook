@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import net.pengcook.android.ui.theme.PengCookTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,11 +32,13 @@ class OtherProfileFragment : Fragment() {
     ): View =
         ComposeView(requireContext()).apply {
             setContent {
-                OtherProfileScreenRoot(
-                    viewModel = viewModel,
-                    navigateBack = { navigateBack() },
-                    navigateToFollowList = { navigateToFollowList() },
-                )
+                PengCookTheme {
+                    OtherProfileScreenRoot(
+                        viewModel = viewModel,
+                        navigateBack = { navigateBack() },
+                        navigateToFollowList = { navigateToFollowList() },
+                    )
+                }
             }
         }
 

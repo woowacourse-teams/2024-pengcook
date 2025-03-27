@@ -161,4 +161,10 @@
     <string name="menu_report">Report</string>
     <string name="menu_block">Block</string>
 
+    <string name="follower_remove">Remove</string>
+    <string name="follower_unfollow">Unfollow</string>
+
+    <string name="dialog_unfollow">Unfollow</string>
+    <string name="dialog_cancel">Cancel</string>
+
 </resources>

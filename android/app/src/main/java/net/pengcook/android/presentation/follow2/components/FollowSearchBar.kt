@@ -25,8 +25,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.pengcook.android.ui.theme.DarkBlue
-import net.pengcook.android.ui.theme.SandYellow
+import net.pengcook.android.ui.theme.DarkBlue60
+import net.pengcook.android.ui.theme.SandYellow10
 import net.pengcook.android.ui.theme.White50
 
 @Composable
@@ -39,8 +39,8 @@ fun FollowSearchBar(
     CompositionLocalProvider(
         LocalTextSelectionColors provides
             TextSelectionColors(
-                handleColor = SandYellow,
-                backgroundColor = SandYellow,
+                handleColor = SandYellow10,
+                backgroundColor = SandYellow10,
             ),
     ) {
         TextField(
@@ -49,7 +49,7 @@ fun FollowSearchBar(
             shape = RoundedCornerShape(100),
             colors =
                 TextFieldDefaults.colors(
-                    cursorColor = DarkBlue,
+                    cursorColor = DarkBlue60,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     focusedContainerColor = White50,

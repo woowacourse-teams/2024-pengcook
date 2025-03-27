@@ -6,7 +6,7 @@ import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
 import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
-import net.pengcook.android.data.model.usercontrol.FollowerInfo
+import net.pengcook.android.data.model.usercontrol.FollowerInfoResponse
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
@@ -114,7 +114,7 @@ class DefaultUserControlRepository
                 followCount = this.followCount,
             )
 
-        private fun FollowerInfo.toFollowUserInfo() =
+        private fun FollowerInfoResponse.toFollowUserInfo() =
             FollowUserInfo(
                 userId = this.userId,
                 username = this.username,

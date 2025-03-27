@@ -81,7 +81,10 @@ class ProfileViewModel
         }
 
         override fun onFollowListBtnClick() {
-            _uiEvent.value = Event(ProfileUiEvent.NavigateToFollowList(userId!!))
+            val currentUserId = userId
+            if (currentUserId != null) {
+                _uiEvent.value = Event(ProfileUiEvent.NavigateToFollowList(currentUserId))
+            }
         }
 
         override fun onCommentListBtnClick() {
