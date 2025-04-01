@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -37,7 +39,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 @WithLoginUserTest
 @Sql("/data/users.sql")
-class UserControllerTest extends RestDocsSetting {
+class UserControllerOldTest extends RestDocsSetting {
 
     @Autowired
     UserRepository userRepository;
@@ -49,7 +51,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("로그인된 사용자의 정보를 조회한다.")
-    void getUserProfileWithUserInfo() {
+    void getUserProfileWithUserInfoOld() {
         ProfileResponse expected = new ProfileResponse(
                 1L,
                 "loki@pengcook.net",
@@ -57,7 +59,7 @@ class UserControllerTest extends RestDocsSetting {
                 "로키",
                 "loki.jpg",
                 "KOREA",
-                "",
+                "hello world",
                 1L,
                 1L,
                 15L,
@@ -83,7 +85,7 @@ class UserControllerTest extends RestDocsSetting {
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/users/me")
+                .when().get("/user/me")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -95,7 +97,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser
     @DisplayName("userId로 사용자 정보를 확인한다.")
-    void getUserProfileWithUserId() {
+    void getUserProfileWithUserIdOld() {
         ProfileResponse expected = new ProfileResponse(
                 1L,
                 "loki@pengcook.net",
@@ -103,7 +105,7 @@ class UserControllerTest extends RestDocsSetting {
                 "로키",
                 "loki.jpg",
                 "KOREA",
-                "",
+                "hello world",
                 1L,
                 1L,
                 15L,
@@ -129,7 +131,7 @@ class UserControllerTest extends RestDocsSetting {
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/users/{userId}", 1L)
+                .when().get("/user/{userId}", 1L)
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -141,7 +143,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("로그인된 사용자의 정보를 수정한다.")
-    void updateUserProfile() {
+    void updateUserProfileOld() {
         UpdateProfileRequest request = new UpdateProfileRequest(
                 "loki_changed",
                 "로키_changed",
@@ -184,7 +186,7 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(request)
-                .patch("/users/me")
+                .patch("/user/me")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -195,7 +197,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("username이 중복되는지 확인한다.")
-    void checkUsername() {
+    void checkUsernameOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "username이 중복되는지 확인합니다.",
@@ -205,7 +207,8 @@ class UserControllerTest extends RestDocsSetting {
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/users/username/{username}/available", "new_face")
+                .queryParam("username", "new_face")
+                .when().get("/user/username/check")
                 .then().log().all()
                 .statusCode(200)
                 .body("available", is(true));
@@ -213,17 +216,21 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("username이 중복되는지 확인한다.")
-    void checkUsernameWhenDuplicateUsername() {
+    void checkUsernameWhenDuplicateUsernameOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "username이 중복되는지 확인합니다.",
                         "사용자 이름 중복 체크 API",
+                        queryParameters(
+                                parameterWithName("username").description("사용자 이름")
+                        ),
                         responseFields(
                                 fieldWithPath("available").description("사용 가능 여부")
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/users/username/{username}/available", "loki")
+                .queryParam("username", "loki")
+                .when().get("/user/username/check")
                 .then().log().all()
                 .statusCode(200)
                 .body("available", is(false));
@@ -232,7 +239,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "pond@pengcook.net")
     @DisplayName("레시피 또는 사용자 또는 댓글을 신고한다.")
-    void report() {
+    void reportOld() {
         ReportRequest spamReportRequest = new ReportRequest(
                 1,
                 Reason.SPAM_CONTENT,
@@ -265,7 +272,7 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(spamReportRequest)
-                .post("/reports")
+                .post("/user/report")
                 .then().log().all()
                 .statusCode(201)
                 .body("reportId", is(1))
@@ -279,7 +286,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("신고 사유 목록을 조회한다.")
-    void getReportReasons() {
+    void getReportReasonsOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "신고 사유 목록을 조회합니다.",
@@ -291,7 +298,7 @@ class UserControllerTest extends RestDocsSetting {
                         )
                 ))
                 .contentType(ContentType.JSON)
-                .when().get("/reports/reasons")
+                .when().get("/user/report/reason")
                 .then().log().all()
                 .statusCode(200)
                 .body("[0].reason", equalTo(Reason.INAPPROPRIATE_CONTENT.name()))
@@ -309,7 +316,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("사용자를 차단한다.")
-    void blockUser() {
+    void blockUserOld() {
         UserBlockRequest userBlockRequest = new UserBlockRequest(2L);
 
         RestAssured.given(spec).log().all()
@@ -336,7 +343,7 @@ class UserControllerTest extends RestDocsSetting {
                 ))
                 .contentType(ContentType.JSON)
                 .body(userBlockRequest)
-                .when().post("/users/me/blockees")
+                .when().post("/user/block")
                 .then().log().all()
                 .statusCode(201)
                 .body("blocker.id", is(1))
@@ -344,89 +351,16 @@ class UserControllerTest extends RestDocsSetting {
     }
 
     @Test
-    @WithLoginUser(email = "loki@pengcook.net")
-    @DisplayName("사용자 차단을 해제한다.")
-    void deleteBlock() {
-        RestAssured.given(spec).log().all()
-                .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "사용자 차단을 해제합니다.",
-                        "사용자 차단 해제 API"
-                ))
-                .contentType(ContentType.JSON)
-                .when().delete("/users/me/blockees/{blockeeId}", 3L)
-                .then().log().all()
-                .statusCode(204);
-
-        boolean exists = userBlockRepository.existsByBlockerIdAndBlockeeId(1L, 3L);
-
-        assertThat(exists).isFalse();
-    }
-
-    @Test
-    @WithLoginUser(email = "loki@pengcook.net")
-    @DisplayName("사용자의 차단 목록을 불러온다.")
-    void getBlockeesOf() {
-        RestAssured.given(spec).log().all()
-                .filter(document(DEFAULT_RESTDOCS_PATH,
-                        "로그인한 사용자의 차단 목록을 조회합니다.",
-                        "차단 목록 조회 API",
-                        responseFields(
-                                fieldWithPath("[]").description("차단 목록"),
-                                fieldWithPath("[].blocker.id").description("차단자 ID"),
-                                fieldWithPath("[].blocker.email").description("차단자 이메일"),
-                                fieldWithPath("[].blocker.username").description("차단자 아이디"),
-                                fieldWithPath("[].blocker.nickname").description("차단자 닉네임"),
-                                fieldWithPath("[].blocker.image").description("차단자 프로필 이미지"),
-                                fieldWithPath("[].blocker.region").description("차단자 국가"),
-                                fieldWithPath("[].blockee.id").description("차단대상 ID"),
-                                fieldWithPath("[].blockee.email").description("차단대상 이메일"),
-                                fieldWithPath("[].blockee.username").description("차단대상 아이디"),
-                                fieldWithPath("[].blockee.nickname").description("차단대상 닉네임"),
-                                fieldWithPath("[].blockee.image").description("차단대상 프로필 이미지"),
-                                fieldWithPath("[].blockee.region").description("차단대상 국가")
-                        )
-                ))
-                .contentType(ContentType.JSON)
-                .when().get("/users/me/blockees")
-                .then().log().all()
-                .statusCode(200)
-                .body("[0].blocker.id", equalTo(1))
-                .body("[0].blocker.email", equalTo("loki@pengcook.net"))
-                .body("[0].blocker.username", equalTo("loki"))
-                .body("[0].blocker.nickname", equalTo("로키"))
-                .body("[0].blocker.image", equalTo("loki.jpg"))
-                .body("[0].blocker.region", equalTo("KOREA"))
-                .body("[0].blockee.id", equalTo(3))
-                .body("[0].blockee.email", equalTo("crocodile@pengcook.net"))
-                .body("[0].blockee.username", equalTo("crocodile"))
-                .body("[0].blockee.nickname", equalTo("악어"))
-                .body("[0].blockee.image", equalTo("crocodile.jpg"))
-                .body("[0].blockee.region", equalTo("KOREA"))
-                .body("[1].blocker.id", equalTo(1))
-                .body("[1].blocker.email", equalTo("loki@pengcook.net"))
-                .body("[1].blocker.username", equalTo("loki"))
-                .body("[1].blocker.nickname", equalTo("로키"))
-                .body("[1].blocker.image", equalTo("loki.jpg"))
-                .body("[1].blocker.region", equalTo("KOREA"))
-                .body("[1].blockee.id", equalTo(4))
-                .body("[1].blockee.email", equalTo("birdsheep@pengcook.net"))
-                .body("[1].blockee.username", equalTo("birdsheep"))
-                .body("[1].blockee.nickname", equalTo("새양"))
-                .body("[1].blockee.image", equalTo("birdsheep.jpg"))
-                .body("[1].blockee.region", equalTo("KOREA"));
-    }
-
-    @Test
     @WithLoginUser
     @DisplayName("사용자를 삭제한다.")
-    void deleteUser() {
+    void deleteUserOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "사용자를 삭제합니다.",
                         "사용자 삭제 API"
                 ))
                 .contentType(ContentType.JSON)
-                .when().delete("/users/me")
+                .when().delete("/user/me")
                 .then().log().all()
                 .statusCode(204);
 
@@ -438,7 +372,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "pond@pengcook.net")
     @DisplayName("사용자를 팔로우한다.")
-    void follow() {
+    void followOld() {
         UserFollowRequest userFollowRequest = new UserFollowRequest(3);
 
         RestAssured.given(spec).log().all()
@@ -455,7 +389,7 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
-                .post("/users/me/followees")
+                .post("/user/follow")
                 .then().log().all()
                 .statusCode(201)
                 .body("followerId", is(5))
@@ -466,7 +400,7 @@ class UserControllerTest extends RestDocsSetting {
     @CsvSource(value = {"3", "5"})
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("차단 관계에 있는 사용자를 팔로우하면 예외가 발생한다.")
-    void followUserWhenBlockingOrBlocked(int followeeId) {
+    void followUserWhenBlockingOrBlockedOld(int followeeId) {
         UserFollowRequest userFollowRequest = new UserFollowRequest(followeeId);
 
         RestAssured.given(spec).log().all()
@@ -480,7 +414,7 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
-                .post("/users/me/followees")
+                .post("/user/follow")
                 .then().log().all()
                 .statusCode(403);
     }
@@ -488,7 +422,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("사용자를 언팔로우한다.")
-    void unfollow() {
+    void unfollowOld() {
         UserFollowRequest userFollowRequest = new UserFollowRequest(4);
 
         RestAssured.given(spec).log().all()
@@ -501,7 +435,7 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
-                .delete("/users/me/followees")
+                .delete("/user/follow")
                 .then().log().all()
                 .statusCode(204);
     }
@@ -509,7 +443,7 @@ class UserControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("팔로워를 삭제한다.")
-    void removeFollower() {
+    void removeFollowerOld() {
         UserFollowRequest userFollowRequest = new UserFollowRequest(4);
 
         RestAssured.given(spec).log().all()
@@ -522,14 +456,14 @@ class UserControllerTest extends RestDocsSetting {
                 .contentType(ContentType.JSON)
                 .when()
                 .body(userFollowRequest)
-                .delete("/users/me/followers")
+                .delete("/user/follower")
                 .then().log().all()
                 .statusCode(204);
     }
 
     @Test
     @DisplayName("팔로워 목록을 조회한다.")
-    void getFollowerInfo() {
+    void getFollowerInfoOld() {
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
                 new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
@@ -550,7 +484,7 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("followCount").description("팔로워 수")
                         )))
                 .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/followers", 1L)
+                .when().get("/user/{userId}/follower", 1L)
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -561,7 +495,7 @@ class UserControllerTest extends RestDocsSetting {
 
     @Test
     @DisplayName("팔로잉 목록을 조회한다.")
-    void getFollowInfo() {
+    void getFollowInfoOld() {
         List<FollowUserInfoResponse> followUserInfoResponse = List.of(
                 new FollowUserInfoResponse(4L, "birdsheep", "birdsheep.jpg")
         );
@@ -582,7 +516,7 @@ class UserControllerTest extends RestDocsSetting {
                                 fieldWithPath("followCount").description("팔로잉 수")
                         )))
                 .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/followees", 1L)
+                .when().get("/user/{userId}/following", 1L)
                 .then().log().all()
                 .statusCode(200)
                 .extract()

@@ -1,6 +1,7 @@
 package net.pengcook.user.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
@@ -26,27 +27,28 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserControllerOld {
 
     private final UserService userService;
     private final UserFollowService userFollowService;
 
-    @GetMapping("/users/me")
+    @GetMapping("/user/me")
     public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo) {
         return userService.getProfile(userInfo.getId(), userInfo.getId());
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/user/{userId}")
     public ProfileResponse getUserProfile(@LoginUser UserInfo userInfo, @PathVariable long userId) {
         return userService.getProfile(userInfo.getId(), userId);
     }
 
-    @PatchMapping("/users/me")
+    @PatchMapping("/user/me")
     public UpdateProfileResponse updateUserProfile(
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid UpdateProfileRequest updateProfileRequest
@@ -54,18 +56,18 @@ public class UserController {
         return userService.updateProfile(userInfo.getId(), updateProfileRequest);
     }
 
-    @DeleteMapping("/users/me")
+    @DeleteMapping("/user/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@LoginUser UserInfo userInfo) {
         userService.deleteUser(userInfo);
     }
 
-    @GetMapping("/users/username/{username}/available")
-    public UsernameCheckResponse checkUsername(@PathVariable String username) {
+    @GetMapping("/user/username/check")
+    public UsernameCheckResponse checkUsername(@RequestParam @NotBlank String username) {
         return userService.checkUsername(username);
     }
 
-    @PostMapping("/reports")
+    @PostMapping("/user/report")
     @ResponseStatus(HttpStatus.CREATED)
     public ReportResponse report(
             @LoginUser UserInfo userInfo,
@@ -74,12 +76,12 @@ public class UserController {
         return userService.report(userInfo.getId(), reportRequest);
     }
 
-    @GetMapping("/reports/reasons")
+    @GetMapping("/user/report/reason")
     public List<ReportReasonResponse> getReportReasons() {
         return ReportReasonResponse.REASONS;
     }
 
-    @PostMapping("/users/me/blockees")
+    @PostMapping("/user/block")
     @ResponseStatus(HttpStatus.CREATED)
     public UserBlockResponse blockUser(
             @LoginUser UserInfo userInfo,
@@ -88,18 +90,7 @@ public class UserController {
         return userService.blockUser(userInfo.getId(), userBlockRequest.blockeeId());
     }
 
-    @DeleteMapping("/users/me/blockees/{blockeeId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBlock(@LoginUser UserInfo userInfo, @PathVariable long blockeeId) {
-        userService.deleteBlock(userInfo.getId(), blockeeId);
-    }
-
-    @GetMapping("/users/me/blockees")
-    public List<UserBlockResponse> getBlockees(@LoginUser UserInfo userInfo) {
-        return userService.getBlockeesOf(userInfo.getId());
-    }
-
-    @PostMapping("/users/me/followees")
+    @PostMapping("/user/follow")
     @ResponseStatus(HttpStatus.CREATED)
     public UserFollowResponse followUser(
             @LoginUser UserInfo userInfo,
@@ -108,7 +99,7 @@ public class UserController {
         return userFollowService.followUser(userInfo.getId(), userFollowRequest.targetId());
     }
 
-    @DeleteMapping("/users/me/followees")
+    @DeleteMapping("/user/follow")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unfollowUser(
             @LoginUser UserInfo userInfo,
@@ -117,7 +108,7 @@ public class UserController {
         userFollowService.unfollowUser(userInfo.getId(), userFollowRequest.targetId());
     }
 
-    @DeleteMapping("/users/me/followers")
+    @DeleteMapping("/user/follower")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeFollower(
             @LoginUser UserInfo userInfo,
@@ -126,13 +117,13 @@ public class UserController {
         userFollowService.unfollowUser(userFollowRequest.targetId(), userInfo.getId());
     }
 
-    @GetMapping("/users/{userId}/followers")
+    @GetMapping("/user/{userId}/follower")
     public FollowInfoResponse getFollowerInfo(@PathVariable long userId) {
         return userFollowService.getFollowerInfo(userId);
     }
 
-    @GetMapping("/users/{userId}/followees")
-    public FollowInfoResponse getFolloweeInfo(@PathVariable long userId) {
+    @GetMapping("/user/{userId}/following")
+    public FollowInfoResponse getFollowingInfo(@PathVariable long userId) {
         return userFollowService.getFollowingInfo(userId);
     }
 }
