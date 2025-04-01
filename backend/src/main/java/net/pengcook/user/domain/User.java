@@ -41,6 +41,10 @@ public class User {
     private String region;
 
     @Column(nullable = false)
+    @ColumnDefault("''")
+    private String introduction;
+
+    @Column(nullable = false)
     @ColumnDefault("0")
     private long followerCount;
 
@@ -53,20 +57,22 @@ public class User {
             String username,
             String nickname,
             String image,
-            String region
+            String region,
+            String introduction
     ) {
-        this(0L, email, username, nickname, image, region, 0, 0);
+        this(0L, email, username, nickname, image, region, introduction, 0, 0);
     }
 
     public boolean isSameUser(long userId) {
         return this.id == userId;
     }
 
-    public void update(String username, String nickname, String image, String region) {
+    public void update(String username, String nickname, String image, String region, String introduction) {
         this.username = username;
         this.nickname = nickname;
         this.image = image;
         this.region = region;
+        this.introduction = introduction;
     }
 
     public void increaseFollowerCount() {

@@ -35,7 +35,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("레시피의 카테고리를 저장한다.")
     void saveCategories() {
-        User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
+        User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA", null);
         Recipe recipe = new Recipe(1L, "김치볶음밥", author, LocalTime.of(0, 30, 0), "김치볶음밥이미지.jpg",
                 3, 2, 0, "김치볶음밥 조리법", LocalDateTime.now());
 
@@ -50,7 +50,7 @@ class CategoryServiceTest {
     @Test
     @DisplayName("특정 레시피가 포함된 레시피별 카테고리 정보를 지운다.")
     void deleteCategoryRecipe() {
-        User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA");
+        User author = new User("ela@pengcook.net", "ela", "엘라", "ela.jpg", "KOREA", null);
         Recipe recipe = new Recipe(2L, "김밥", author, LocalTime.of(1, 0, 0), "김밥이미지.jpg",
                 8, 1, 0, "김밥 조리법", LocalDateTime.of(2024, 7, 2, 13, 0, 0));
 

@@ -13,8 +13,8 @@ class UserBlockTest {
     @Test
     @DisplayName("UserBlock 객체를 생성한다.")
     void create() {
-        User user_loki = new User(1L, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA", 0, 0);
-        User user_pond = new User(2L, "pond@pengcook.net", "pond", "폰드", "pond.jpg", "KOREA", 0, 0);
+        User user_loki = new User(1L, "loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA", null, 0, 0);
+        User user_pond = new User(2L, "pond@pengcook.net", "pond", "폰드", "pond.jpg", "KOREA", null, 0, 0);
 
         UserBlock userBlock = new UserBlock(user_loki, user_pond);
 
@@ -27,7 +27,7 @@ class UserBlockTest {
     @Test
     @DisplayName("차단자와 차단대상이 같으면 예외가 발생한다.")
     void createWhenBlockerIsBlockee() {
-        User user_loki = new User("loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA");
+        User user_loki = new User("loki@pengcook.net", "loki", "로키", "loki.jpg", "KOREA", null);
 
         assertThatThrownBy(() -> new UserBlock(user_loki, user_loki))
                 .isInstanceOf(BadArgumentException.class)

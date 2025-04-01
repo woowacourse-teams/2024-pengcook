@@ -15,7 +15,6 @@ public record ProfileResponse(
         long recipeCount,
         boolean isFollow
 ) {
-
     public ProfileResponse(User user, long recipeCount, boolean isFollow) {
         this(
                 user.getId(),
@@ -24,7 +23,7 @@ public record ProfileResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getRegion(),
-                "hello world",
+                user.getIntroduction(),
                 user.getFollowerCount(),
                 user.getFolloweeCount(),
                 recipeCount,

@@ -19,7 +19,7 @@ public record UpdateProfileResponse(
                 user.getNickname(),
                 user.getImage(),
                 user.getRegion(),
-                "hello world"
+                user.getIntroduction()
         );
     }
 }

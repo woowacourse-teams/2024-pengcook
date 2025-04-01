@@ -9,4 +9,9 @@ public record UpdateProfileRequest(
         @NotBlank String region,
         String introduction
 ) {
+    public UpdateProfileRequest {
+        if (introduction == null) {
+            introduction = "";
+        }
+    }
 }

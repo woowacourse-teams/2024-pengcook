@@ -98,7 +98,8 @@ public class LoginService {
                 googleSignUpRequest.username(),
                 googleSignUpRequest.nickname(),
                 userImage,
-                googleSignUpRequest.country()
+                googleSignUpRequest.country(),
+                googleSignUpRequest.introduction()
         );
     }
 
