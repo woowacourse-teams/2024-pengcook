@@ -10,4 +10,9 @@ public record GoogleSignUpRequest(
         String image,
         String introduction
 ) {
+    public GoogleSignUpRequest {
+        if (introduction == null) {
+            introduction = "";
+        }
+    }
 }
