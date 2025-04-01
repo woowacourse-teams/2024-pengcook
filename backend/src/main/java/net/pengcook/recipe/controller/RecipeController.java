@@ -23,19 +23,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/recipes")
 public class RecipeController {
 
     private final RecipeService recipeService;
     private final RecipeStepService recipeStepService;
 
-    @GetMapping
+    @GetMapping("/recipes")
     public List<RecipeHomeWithMineResponse> readRecipes(
             @LoginUser UserInfo userInfo,
             @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
@@ -43,7 +41,7 @@ public class RecipeController {
         return recipeService.readRecipes(userInfo, pageRecipeRequest);
     }
 
-    @GetMapping(produces = "application/vnd.pengcook.v1+json")
+    @GetMapping(value = "/recipes", produces = "application/vnd.pengcook.v1+json")
     public List<RecipeHomeWithMineResponseV1> readRecipesV1(
             @LoginUser UserInfo userInfo,
             @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
@@ -51,17 +49,38 @@ public class RecipeController {
         return recipeService.readRecipesV1(userInfo, pageRecipeRequest);
     }
 
-    @GetMapping("/likes")
+    // TODO : 배포 후 삭제
+    @GetMapping("/recipes/likes")
+    public List<RecipeHomeWithMineResponse> readLikeRecipesOld(@LoginUser UserInfo userInfo) {
+        return recipeService.readLikeRecipes(userInfo);
+    }
+
+    @GetMapping("/users/me/likes/recipes")
     public List<RecipeHomeWithMineResponse> readLikeRecipes(@LoginUser UserInfo userInfo) {
         return recipeService.readLikeRecipes(userInfo);
     }
 
-    @GetMapping(value = "/likes", produces = "application/vnd.pengcook.v1+json")
+    // TODO : 배포 후 삭제
+    @GetMapping(value = "/recipes/likes", produces = "application/vnd.pengcook.v1+json")
+    public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1Old(@LoginUser UserInfo userInfo) {
+        return recipeService.readLikeRecipesV1(userInfo);
+    }
+
+    @GetMapping(value = "/users/me/likes/recipes", produces = "application/vnd.pengcook.v1+json")
     public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(@LoginUser UserInfo userInfo) {
         return recipeService.readLikeRecipesV1(userInfo);
     }
 
-    @GetMapping("/follows")
+    // TODO : 배포 후 삭제
+    @GetMapping("/recipes/follows")
+    public List<RecipeHomeWithMineResponseV1> readFollowRecipesOld(
+            @LoginUser UserInfo userInfo,
+            @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
+    ) {
+        return recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
+    }
+
+    @GetMapping("/users/me/followings/recipes")
     public List<RecipeHomeWithMineResponseV1> readFollowRecipes(
             @LoginUser UserInfo userInfo,
             @ModelAttribute @Valid PageRecipeRequest pageRecipeRequest
@@ -69,13 +88,13 @@ public class RecipeController {
         return recipeService.readFollowRecipes(userInfo, pageRecipeRequest);
     }
 
-    @PostMapping
+    @PostMapping("/recipes")
     @ResponseStatus(HttpStatus.CREATED)
     public RecipeResponse createRecipe(@LoginUser UserInfo userInfo, @RequestBody @Valid RecipeRequest recipeRequest) {
         return recipeService.createRecipe(userInfo, recipeRequest);
     }
 
-    @PutMapping("/{recipeId}")
+    @PutMapping("/recipes/{recipeId}")
     public void updateRecipe(
             @LoginUser UserInfo userInfo,
             @PathVariable Long recipeId,
@@ -84,18 +103,18 @@ public class RecipeController {
         recipeService.updateRecipe(userInfo, recipeId, recipeUpdateRequest);
     }
 
-    @GetMapping("/{recipeId}")
+    @GetMapping("/recipes/{recipeId}")
     public RecipeDescriptionResponse readRecipeDescription(@LoginUser UserInfo userInfo, @PathVariable long recipeId) {
         return recipeService.readRecipeDescription(userInfo, recipeId);
     }
 
-    @DeleteMapping("/{recipeId}")
+    @DeleteMapping("/recipes/{recipeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRecipe(@LoginUser UserInfo userInfo, @PathVariable long recipeId) {
         recipeService.deleteRecipe(userInfo, recipeId);
     }
 
-    @GetMapping("/{recipeId}/steps")
+    @GetMapping("/recipes/{recipeId}/steps")
     public List<RecipeStepResponse> readRecipeSteps(@PathVariable long recipeId) {
         return recipeStepService.readRecipeSteps(recipeId);
     }
