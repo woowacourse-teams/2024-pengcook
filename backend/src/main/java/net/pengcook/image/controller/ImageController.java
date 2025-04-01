@@ -15,6 +15,7 @@ public class ImageController {
 
     private final ImageClientService imageClientService;
 
+    // TODO : 논의 필요
     @GetMapping
     public UploadUrlResponse getUploadURL(@RequestParam String fileName) {
         return imageClientService.generateUploadUrl(fileName);
