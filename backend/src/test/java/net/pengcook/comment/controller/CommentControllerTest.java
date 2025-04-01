@@ -31,7 +31,7 @@ class CommentControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "ela@pengcook.net")
     @DisplayName("레시피의 댓글을 조회한다.")
-    void readComments() {
+    void readCommentsOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "특정 레시피의 댓글을 조회합니다.",
@@ -50,6 +50,32 @@ class CommentControllerTest extends RestDocsSetting {
                                 fieldWithPath("[].mine").description("소유 여부")
                         )))
                 .when().get("/comments/{recipeId}", 1L)
+                .then().log().all()
+                .body("size()", is(COMMENT_COUNT_OF_FIRST_RECIPE));
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("레시피의 댓글을 조회한다.")
+    void readComments() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 댓글을 조회합니다.",
+                        "레시피별 댓글 조회 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("댓글 목록"),
+                                fieldWithPath("[].commentId").description("댓글 아이디"),
+                                fieldWithPath("[].userId").description("작성자 아이디"),
+                                fieldWithPath("[].userImage").description("작성자 이미지"),
+                                fieldWithPath("[].userName").description("작성자 이름"),
+                                fieldWithPath("[].createdAt").description("작성 시간"),
+                                fieldWithPath("[].message").description("내용"),
+                                fieldWithPath("[].mine").description("소유 여부")
+                        )))
+                .when().get("/recipes/{recipeId}/comments", 1L)
                 .then().log().all()
                 .body("size()", is(COMMENT_COUNT_OF_FIRST_RECIPE));
     }
