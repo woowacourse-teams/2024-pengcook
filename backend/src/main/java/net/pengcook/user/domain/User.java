@@ -61,7 +61,6 @@ public class User {
             String introduction
     ) {
         this(0L, email, username, nickname, image, region, introduction, 0, 0);
-        validate();
     }
 
     public boolean isSameUser(long userId) {
@@ -74,7 +73,6 @@ public class User {
         this.image = image;
         this.region = region;
         this.introduction = introduction;
-        validate();
     }
 
     public void increaseFollowerCount() {
@@ -91,11 +89,5 @@ public class User {
 
     public void decreaseFolloweeCount() {
         followeeCount--;
-    }
-
-    private void validate() {
-        if (introduction == null) {
-            this.introduction = "";
-        }
     }
 }
