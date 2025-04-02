@@ -8,10 +8,10 @@ val White50 = Color(0XFFF7F7FB)
 
 val Black100 = Color(0xFF111111)
 
-val Gray = Color(0xFF767676)
+val Gray30 = Color(0xFF767676)
 val Gray70 = Color(0xFF222222)
 val Gray50 = Color(0xFF555555)
 val Gray10 = Color(0xFFD4D4DA)
 
-val SandYellow = Color(0xFFFFBD64)
-val DarkBlue = Color(0xFF0B405E)
+val SandYellow10 = Color(0xFFFFBD64)
+val DarkBlue60 = Color(0xFF0B405E)

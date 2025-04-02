@@ -12,15 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import net.pengcook.android.R
 
 @Composable
 fun CustomAlertDialog(
@@ -49,7 +49,7 @@ fun CustomAlertDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .width(300.dp)
+                    .fillMaxWidth()
                     .wrapContentHeight()
                     .background(
                         color = Color.White,
@@ -91,60 +91,27 @@ fun CustomAlertDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(IntrinsicSize.Min), // Row의 높이를 내부 컴포넌트에 맞춤
+                        .height(IntrinsicSize.Min),
                 ) {
-                    Button(
-                        onClick = { onClickCancel() },
-                        shape = RectangleShape,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White, // 버튼 배경색상
-                            contentColor = Color.Black, // 버튼 텍스트 색상
-                            disabledContainerColor = Color.Gray, // 버튼 비활성화 배경 색상
-                            disabledContentColor = Color.White, // 버튼 비활성화 텍스트 색상
-                        ),
-                    ) {
-                        Text(
-                            text = "취소",
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal,
-                            ),
-                        )
-                    }
+                    DialogActionButton(
+                        text = stringResource(R.string.dialog_cancel),
+                        onClick = onClickCancel,
+                        color = Color.Black,
+                    )
 
-                    Box(
+                    VerticalDivider(
                         modifier = Modifier
                             .fillMaxHeight()
                             .width(1.dp)
                             .background(color = Color.LightGray),
                     )
 
-                    Button(
-                        onClick = { onClickConfirm() },
-                        shape = RectangleShape,
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White, // 버튼 배경색상
-                            contentColor = Color.Red, // 버튼 텍스트 색상
-                            disabledContainerColor = Color.Gray, // 버튼 비활성화 배경 색상
-                            disabledContentColor = Color.White, // 버튼 비활성화 텍스트 색상
-                        ),
-                    ) {
-                        Text(
-                            text = "삭제",
-                            textAlign = TextAlign.Center,
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                            ),
-                        )
-                    }
+                    DialogActionButton(
+                        text = stringResource(R.string.dialog_unfollow),
+                        onClick = onClickConfirm,
+                        color = Color.Red,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             }
         }
