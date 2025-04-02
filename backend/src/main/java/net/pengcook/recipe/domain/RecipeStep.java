@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"recipe_id", "sequence"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class RecipeStep {
 
     @Id
@@ -43,13 +43,5 @@ public class RecipeStep {
 
     public long recipeId() {
         return recipe.getId();
-    }
-
-    public RecipeStep update(String imageUrl, String description, LocalTime cookingTime) {
-        this.image = imageUrl;
-        this.description = description;
-        this.cookingTime = cookingTime;
-
-        return this;
     }
 }

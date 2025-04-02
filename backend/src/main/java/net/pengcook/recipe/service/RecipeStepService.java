@@ -5,14 +5,16 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
-import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.InvalidParameterException;
+import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeStepRepository;
+import net.pengcook.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +42,13 @@ public class RecipeStepService {
         recipeStepRepository.deleteByRecipeId(recipeId);
     }
 
-    // TODO : 테스트
     @Transactional
-    public void updateRecipeSteps(Recipe recipe, RecipeUpdateRequest recipeUpdateRequest) {
-        // TODO : 레시피의 주인인지 여기서도 확인을 해야 할지도...?
+    public void updateRecipeSteps(UserInfo userInfo, Recipe recipe, List<RecipeStepRequest> recipeStepRequests) {
+        verifyRecipeOwner(userInfo, recipe);
+
         deleteRecipeStepsByRecipe(recipe.getId());
         recipeStepRepository.flush();
-        saveRecipeSteps(recipe, recipeUpdateRequest.recipeSteps());
+        saveRecipeSteps(recipe, recipeStepRequests);
     }
 
     private void saveRecipeStep(Recipe savedRecipe, RecipeStepRequest recipeStepRequest) {
@@ -87,6 +89,14 @@ public class RecipeStepService {
                     .orElse(null);
         } catch (DateTimeParseException exception) {
             throw new InvalidParameterException("적절하지 않은 조리시간입니다.");
+        }
+    }
+
+    private void verifyRecipeOwner(UserInfo userInfo, Recipe recipe) {
+        User author = recipe.getAuthor();
+        long authorId = author.getId();
+        if (!userInfo.isSameUser(authorId)) {
+            throw new UnauthorizedException("레시피에 대한 권한이 없습니다.");
         }
     }
 }
