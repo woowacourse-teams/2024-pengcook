@@ -1,5 +1,6 @@
 package net.pengcook.like.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.like.domain.RecipeLike;
@@ -69,5 +70,15 @@ public class RecipeLikeService {
     @Transactional
     public void deleteLikesByUser(long userId) {
         likeRepository.deleteByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> readLikedRecipeIdsByUser(long userId) {
+        return likeRepository.findRecipeIdsByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isLike(long recipeId, long userId) {
+        return likeRepository.existsByUserIdAndRecipeId(userId, recipeId);
     }
 }
