@@ -12,7 +12,6 @@ import net.pengcook.image.service.ImageClientService;
 import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
-import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.PageRecipeRequest;
@@ -42,7 +41,6 @@ public class RecipeService {
     private static final String CREATION_DATE = "createdAt";
 
     private final RecipeRepository recipeRepository;
-    private final RecipeLikeRepository likeRepository;
     private final UserRepository userRepository;
 
     private final RecipeStepService recipeStepService;
@@ -122,7 +120,7 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
-        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<Long> likeRecipeIds = recipeLikeService.readLikedRecipeIdsByUser(userInfo.getId());
         List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
         return getRecipeHomeWithMineResponses(userInfo, recipes);
@@ -130,7 +128,7 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(UserInfo userInfo) {
-        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<Long> likeRecipeIds = recipeLikeService.readLikedRecipeIdsByUser(userInfo.getId());
         List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
         return recipes.stream()
@@ -201,7 +199,7 @@ public class RecipeService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 레시피입니다."));
         List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
         List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
-        boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean isLike = recipeLikeService.isLike(recipeId, userInfo.getId());
 
         return new RecipeDescriptionResponse(userInfo, recipe, categories, ingredients, isLike);
     }

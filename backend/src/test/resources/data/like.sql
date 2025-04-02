@@ -156,4 +156,5 @@ VALUES (1, '레시피1 설명1 이미지', '레시피1 설명1', 1, '00:10:00'),
 
 INSERT INTO recipe_like (recipe_id, user_id)
 VALUES (2, 1),
-       (2, 2);
+       (2, 2),
+       (5, 2);
