@@ -24,7 +24,8 @@ class DefaultUserControlDataSource
             blockUserRequest: BlockUserRequest,
         ): Response<Unit> = userControlService.blockUser(accessToken, blockUserRequest)
 
-        override suspend fun fetchReportReasons(): Response<List<ReportReasonResponse>> = userControlService.fetchReportReasons()
+        override suspend fun fetchReportReasons(): Response<List<ReportReasonResponse>> =
+            userControlService.fetchReportReasons()
 
         override suspend fun reportUser(
             accessToken: String,
@@ -54,4 +55,11 @@ class DefaultUserControlDataSource
         override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> {
             return userControlService.fetchFollowings(userId)
         }
+        ): Response<Unit> = userControlService.unfollowUser(accessToken, followUserRequest)
+
+        override suspend fun fetchFollowers(userId: Long): Response<FollowDataResponse> =
+            userControlService.fetchFollowers(userId)
+
+        override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> =
+            userControlService.fetchFollowings(userId)
     }
