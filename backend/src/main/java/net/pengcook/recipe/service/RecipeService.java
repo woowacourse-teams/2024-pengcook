@@ -190,7 +190,7 @@ public class RecipeService {
         ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
         categoryService.deleteCategoryRecipe(recipe);
         categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
-        recipeStepService.updateRecipeSteps(updatedRecipe, recipeUpdateRequest);
+        recipeStepService.updateRecipeSteps(userInfo, updatedRecipe, recipeUpdateRequest.recipeSteps());
     }
 
     @Transactional(readOnly = true)
