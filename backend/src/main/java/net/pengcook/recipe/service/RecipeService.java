@@ -12,7 +12,6 @@ import net.pengcook.image.service.ImageClientService;
 import net.pengcook.ingredient.dto.IngredientResponse;
 import net.pengcook.ingredient.service.IngredientRecipeService;
 import net.pengcook.ingredient.service.IngredientService;
-import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.dto.PageRecipeRequest;
@@ -25,11 +24,10 @@ import net.pengcook.recipe.dto.RecipeUpdateRequest;
 import net.pengcook.recipe.exception.NotFoundException;
 import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.recipe.repository.RecipeStepRepository;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserFollow;
-import net.pengcook.user.repository.UserFollowRepository;
 import net.pengcook.user.repository.UserRepository;
+import net.pengcook.user.service.UserFollowService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -44,17 +42,15 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
-    private final RecipeLikeRepository likeRepository;
-    private final RecipeStepRepository recipeStepRepository;
-    private final UserFollowRepository userFollowRepository;
 
+    private final RecipeStepService recipeStepService;
+    private final RecipeLikeService recipeLikeService;
     private final CategoryService categoryService;
     private final IngredientService ingredientService;
-    private final ImageClientService imageClientService;
-    private final RecipeStepService recipeStepService;
     private final IngredientRecipeService ingredientRecipeService;
     private final CommentService commentService;
-    private final RecipeLikeService recipeLikeService;
+    private final UserFollowService userFollowService;
+    private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readRecipes(UserInfo userInfo, PageRecipeRequest pageRecipeRequest) {
@@ -124,7 +120,7 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponse> readLikeRecipes(UserInfo userInfo) {
-        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<Long> likeRecipeIds = recipeLikeService.readLikedRecipeIdsByUser(userInfo.getId());
         List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
         return getRecipeHomeWithMineResponses(userInfo, recipes);
@@ -132,7 +128,7 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readLikeRecipesV1(UserInfo userInfo) {
-        List<Long> likeRecipeIds = likeRepository.findRecipeIdsByUserId(userInfo.getId());
+        List<Long> likeRecipeIds = recipeLikeService.readLikedRecipeIdsByUser(userInfo.getId());
         List<Recipe> recipes = recipeRepository.findAllByIdInOrderByCreatedAtDesc(likeRecipeIds);
 
         return recipes.stream()
@@ -143,7 +139,7 @@ public class RecipeService {
     @Transactional(readOnly = true)
     public List<RecipeHomeWithMineResponseV1> readFollowRecipes(UserInfo userInfo,
                                                                 PageRecipeRequest pageRecipeRequest) {
-        List<UserFollow> followings = userFollowRepository.findAllByFollowerId(userInfo.getId());
+        List<UserFollow> followings = userFollowService.findUserFollowByFollowerId(userInfo.getId());
         List<Long> followeeIds = followings.stream()
                 .map(userFollow -> userFollow.getFollowee().getId())
                 .toList();
@@ -172,7 +168,7 @@ public class RecipeService {
         Recipe savedRecipe = recipeRepository.save(recipe);
         categoryService.saveCategories(savedRecipe, recipeRequest.categories());
         ingredientService.register(recipeRequest.ingredients(), savedRecipe);
-        recipeStepService.saveRecipeSteps(savedRecipe.getId(), recipeRequest.recipeSteps());
+        recipeStepService.saveRecipeSteps(savedRecipe, recipeRequest.recipeSteps());
 
         return new RecipeResponse(savedRecipe);
     }
@@ -194,10 +190,7 @@ public class RecipeService {
         ingredientService.register(recipeUpdateRequest.ingredients(), updatedRecipe);
         categoryService.deleteCategoryRecipe(recipe);
         categoryService.saveCategories(updatedRecipe, recipeUpdateRequest.categories());
-
-        recipeStepService.deleteRecipeStepsByRecipe(updatedRecipe.getId());
-        recipeStepRepository.flush();
-        recipeStepService.saveRecipeSteps(updatedRecipe.getId(), recipeUpdateRequest.recipeSteps());
+        recipeStepService.updateRecipeSteps(userInfo, updatedRecipe, recipeUpdateRequest.recipeSteps());
     }
 
     @Transactional(readOnly = true)
@@ -206,9 +199,17 @@ public class RecipeService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 레시피입니다."));
         List<CategoryResponse> categories = categoryService.findCategoryByRecipe(recipe);
         List<IngredientResponse> ingredients = ingredientService.findIngredientByRecipe(recipe);
-        boolean isLike = likeRepository.existsByUserIdAndRecipeId(userInfo.getId(), recipeId);
+        boolean isLike = recipeLikeService.isLike(recipeId, userInfo.getId());
 
         return new RecipeDescriptionResponse(userInfo, recipe, categories, ingredients, isLike);
+    }
+
+    @Transactional
+    public void deleteRecipesByAuthor(UserInfo userInfo) {
+        List<Recipe> userRecipes = recipeRepository.findAllByAuthorId(userInfo.getId());
+        for (Recipe recipe : userRecipes) {
+            deleteRecipe(userInfo, recipe);
+        }
     }
 
     @Transactional
@@ -227,6 +228,11 @@ public class RecipeService {
         recipeLikeService.deleteLikesByRecipe(recipe.getId());
         recipeStepService.deleteRecipeStepsByRecipe(recipe.getId());
         recipeRepository.delete(recipe);
+    }
+
+    @Transactional(readOnly = true)
+    public long countRecipesByAuthorId(long authorId) {
+        return recipeRepository.countByAuthorId(authorId);
     }
 
     private List<RecipeHomeWithMineResponse> getRecipeHomeWithMineResponses(UserInfo userInfo, List<Recipe> recipes) {

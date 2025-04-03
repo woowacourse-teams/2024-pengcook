@@ -5,15 +5,16 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.recipe.domain.Recipe;
 import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
-import net.pengcook.recipe.exception.NotFoundException;
-import net.pengcook.recipe.repository.RecipeRepository;
+import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeStepRepository;
+import net.pengcook.user.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecipeStepService {
 
     private final RecipeStepRepository recipeStepRepository;
-    private final RecipeRepository recipeRepository;
+
     private final ImageClientService imageClientService;
 
     @Transactional(readOnly = true)
@@ -32,15 +33,22 @@ public class RecipeStepService {
     }
 
     @Transactional
-    public void saveRecipeSteps(Long savedRecipeId, List<RecipeStepRequest> recipeStepRequests) {
-        Recipe savedRecipe = recipeRepository.findById(savedRecipeId)
-                .orElseThrow(() -> new NotFoundException("해당되는 레시피가 없습니다."));
-        recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(savedRecipe, recipeStepRequest));
+    public void saveRecipeSteps(Recipe recipe, List<RecipeStepRequest> recipeStepRequests) {
+        recipeStepRequests.forEach(recipeStepRequest -> saveRecipeStep(recipe, recipeStepRequest));
     }
 
     @Transactional
     public void deleteRecipeStepsByRecipe(long recipeId) {
         recipeStepRepository.deleteByRecipeId(recipeId);
+    }
+
+    @Transactional
+    public void updateRecipeSteps(UserInfo userInfo, Recipe recipe, List<RecipeStepRequest> recipeStepRequests) {
+        verifyRecipeOwner(userInfo, recipe);
+
+        deleteRecipeStepsByRecipe(recipe.getId());
+        recipeStepRepository.flush();
+        saveRecipeSteps(recipe, recipeStepRequests);
     }
 
     private void saveRecipeStep(Recipe savedRecipe, RecipeStepRequest recipeStepRequest) {
@@ -81,6 +89,14 @@ public class RecipeStepService {
                     .orElse(null);
         } catch (DateTimeParseException exception) {
             throw new InvalidParameterException("적절하지 않은 조리시간입니다.");
+        }
+    }
+
+    private void verifyRecipeOwner(UserInfo userInfo, Recipe recipe) {
+        User author = recipe.getAuthor();
+        long authorId = author.getId();
+        if (!userInfo.isSameUser(authorId)) {
+            throw new UnauthorizedException("레시피에 대한 권한이 없습니다.");
         }
     }
 }

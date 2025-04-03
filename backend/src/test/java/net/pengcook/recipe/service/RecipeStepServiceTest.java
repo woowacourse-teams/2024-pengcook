@@ -6,10 +6,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.recipe.domain.Recipe;
+import net.pengcook.recipe.domain.RecipeStep;
 import net.pengcook.recipe.dto.RecipeStepRequest;
 import net.pengcook.recipe.dto.RecipeStepResponse;
 import net.pengcook.recipe.exception.InvalidParameterException;
+import net.pengcook.recipe.exception.UnauthorizedException;
 import net.pengcook.recipe.repository.RecipeStepRepository;
+import net.pengcook.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,7 +57,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("새로운 스텝 이미지2.jpg", "새로운 스텝 설명2", 2, "00:05:00")
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -64,7 +70,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest(null, "새로운 스텝 설명1", 1, "00:05:00")
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -77,7 +84,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest(image, "새로운 스텝 설명1", 1, "00:05:00")
         );
 
-        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(2L, recipeStepRequests))
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(recipe, recipeStepRequests))
                 .isInstanceOf(InvalidParameterException.class);
     }
 
@@ -88,7 +96,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("레시피1 설명1 이미지", "새로운 스텝 설명1", 1, null)
         );
 
-        recipeStepService.saveRecipeSteps(2L, recipeStepRequests);
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        recipeStepService.saveRecipeSteps(recipe, recipeStepRequests);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT + recipeStepRequests.size());
     }
@@ -101,7 +110,8 @@ class RecipeStepServiceTest {
                 new RecipeStepRequest("image.jpg", "새로운 스텝 설명1", 1, cookingTime)
         );
 
-        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(2L, recipeStepRequests))
+        Recipe recipe = new Recipe(2L, null, null, null, null, 0, 0, 0, null, null);
+        assertThatThrownBy(() -> recipeStepService.saveRecipeSteps(recipe, recipeStepRequests))
                 .isInstanceOf(InvalidParameterException.class);
     }
 
@@ -111,5 +121,42 @@ class RecipeStepServiceTest {
         recipeStepService.deleteRecipeStepsByRecipe(1L);
 
         assertThat(recipeStepRepository.count()).isEqualTo(INITIAL_RECIPE_STEP_COUNT - 3);
+    }
+
+    @Test
+    @DisplayName("레시피 스텝을 수정한다.")
+    void updateRecipeSteps() {
+        UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
+        User author = new User(1L, null, null, null, null, null, null, 0, 0);
+        Recipe recipe = new Recipe(1L, null, author, null, null, 0, 0, 0, null, null);
+        List<RecipeStepRequest> recipeStepRequests = List.of(
+                new RecipeStepRequest(null, "변경된 스텝1 설명", 1, "00:20:00"),
+                new RecipeStepRequest(null, "변경된 스텝2 설명", 2, "00:30:00")
+        );
+        List<Long> expected = List.of(4L, 5L);
+
+        recipeStepService.updateRecipeSteps(userInfo, recipe, recipeStepRequests);
+        List<Long> actual = recipeStepRepository.findAllByRecipeIdOrderBySequence(recipe.getId())
+                .stream()
+                .map(RecipeStep::getId)
+                .toList();
+
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
+    }
+
+    @Test
+    @DisplayName("작성자가 아닌 사람이 레시피 스텝을 수정하려고 하면 예외가 발생한다.")
+    void updateRecipeStepWhenNotAuthor() {
+        UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
+        User author = new User(1L, null, null, null, null, null, null, 0, 0);
+        Recipe recipe = new Recipe(1L, null, author, null, null, 0, 0, 0, null, null);
+        List<RecipeStepRequest> recipeStepRequests = List.of(
+                new RecipeStepRequest(null, "변경된 스텝1 설명", 1, "00:20:00"),
+                new RecipeStepRequest(null, "변경된 스텝2 설명", 2, "00:30:00")
+        );
+
+        assertThatThrownBy(() -> recipeStepService.updateRecipeSteps(userInfo, recipe, recipeStepRequests))
+                .isInstanceOf(UnauthorizedException.class)
+                .hasMessage("레시피에 대한 권한이 없습니다.");
     }
 }
