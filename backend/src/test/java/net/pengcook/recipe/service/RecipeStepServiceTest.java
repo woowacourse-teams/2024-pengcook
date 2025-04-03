@@ -127,7 +127,7 @@ class RecipeStepServiceTest {
     @DisplayName("레시피 스텝을 수정한다.")
     void updateRecipeSteps() {
         UserInfo userInfo = new UserInfo(1L, "loki@pengcook.net");
-        User author = new User(1L, null, null, null, null, null, 0, 0);
+        User author = new User(1L, null, null, null, null, null, null, 0, 0);
         Recipe recipe = new Recipe(1L, null, author, null, null, 0, 0, 0, null, null);
         List<RecipeStepRequest> recipeStepRequests = List.of(
                 new RecipeStepRequest(null, "변경된 스텝1 설명", 1, "00:20:00"),
@@ -148,7 +148,7 @@ class RecipeStepServiceTest {
     @DisplayName("작성자가 아닌 사람이 레시피 스텝을 수정하려고 하면 예외가 발생한다.")
     void updateRecipeStepWhenNotAuthor() {
         UserInfo userInfo = new UserInfo(2L, "ela@pengcook.net");
-        User author = new User(1L, null, null, null, null, null, 0, 0);
+        User author = new User(1L, null, null, null, null, null, null, 0, 0);
         Recipe recipe = new Recipe(1L, null, author, null, null, 0, 0, 0, null, null);
         List<RecipeStepRequest> recipeStepRequests = List.of(
                 new RecipeStepRequest(null, "변경된 스텝1 설명", 1, "00:20:00"),
