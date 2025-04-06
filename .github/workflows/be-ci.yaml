@@ -15,6 +15,7 @@ jobs:
     environment: test
     permissions:
       pull-requests: write
+      checks: write
 
     steps:
       - name: Checkout repository
@@ -41,7 +42,7 @@ jobs:
           name: html-test-report
           path: backend/build/reports/tests/test/
 
-      - name: Publish test results as PR comment
+      - name: Add comment to PR with test results
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
