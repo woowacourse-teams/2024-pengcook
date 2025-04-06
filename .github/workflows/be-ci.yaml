@@ -34,6 +34,13 @@ jobs:
           chmod +x ./gradlew
           ./gradlew jacocoTestReport
 
+      - name: Upload HTML Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-test-report
+          path: backend/build/reports/tests/test/
+
       - name: Add comment to PR with test coverage
         uses: madrapps/jacoco-report@v1.6.1
         with:
