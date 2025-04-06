@@ -41,6 +41,12 @@ jobs:
           name: html-test-report
           path: backend/build/reports/tests/test/
 
+      - name: Publish test results as PR comment
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: '**/build/test-results/test/TEST-*.xml'
+
       - name: Add comment to PR with test coverage
         uses: madrapps/jacoco-report@v1.6.1
         with:
