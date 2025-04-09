@@ -41,10 +41,18 @@
     <style name="Body.Regular.B3" parent="Body.Regular">
         <item name="android:textSize">12sp</item>
     </style>
+    <style name="Body.Small" parent="Body.Regular">
+        <item name="android:textSize">15sp</item>
+        <item name="lineHeight">20sp</item>
+    </style>
     <style name="Body.Medium.B1" parent="Body.Medium">
         <item name="android:textSize">18sp</item>
     </style>
     <style name="Body.Medium.B2" parent="Body.Medium">
         <item name="android:textSize">16sp</item>
+    </style>
+    <style name="Title.Medium" parent="Body.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="lineHeight">26sp</item>
     </style>
 </resources>
