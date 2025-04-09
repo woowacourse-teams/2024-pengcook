@@ -107,7 +107,7 @@ fun FollowListScreen(
 
             if (state.showDialog && state.selectedFollowInfo != null) {
                 println("show dialog : ${state.selectedTabIndex}")
-                if(state.selectedTabIndex == 0) {
+                if (state.selectedTabIndex == 0) {
                     CustomAlertDialog(
                         title = stringResource(R.string.alert_title_remove_follower),
                         description = stringResource(R.string.alert_description_remove_follower),

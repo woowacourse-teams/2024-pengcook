@@ -97,7 +97,7 @@ fun OtherProfileScreen(
             OtherProfileHeader(
                 userProfile = state.userProfile,
                 onFollowListClick = { onAction(OtherProfileAction.OnFollowListClick) },
-                modifier = Modifier.padding(start = 4.dp)
+                modifier = Modifier.padding(start = 4.dp),
             )
             ButtonRow(
                 isFollowing = state.isFollowing,

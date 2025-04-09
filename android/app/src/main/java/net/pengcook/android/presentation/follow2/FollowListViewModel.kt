@@ -72,15 +72,15 @@ class FollowListViewModel
                         it.copy(
                             showDialog = true,
                             selectedFollowInfo =
-                            if(state.value.selectedTabIndex == 0 ) {
-                                it.followers.find { followInfo ->
-                                    followInfo.userId == action.userId
-                                }
-                            } else {
-                                it.followings.find { followInfo ->
-                                    followInfo.userId == action.userId
-                                }
-                            },
+                                if (state.value.selectedTabIndex == 0) {
+                                    it.followers.find { followInfo ->
+                                        followInfo.userId == action.userId
+                                    }
+                                } else {
+                                    it.followings.find { followInfo ->
+                                        followInfo.userId == action.userId
+                                    }
+                                },
                         )
                     }
                 }
@@ -139,22 +139,22 @@ class FollowListViewModel
             }
         }
 
-    private fun deleteFollower(userId: Long) {
-        viewModelScope.launch {
-            userControlRepository.deleteFollower(userId).onSuccess {
-                _state.update {
-                    it.copy(
-                        followers = it.followers.filter { followInfo ->
-                            followInfo.userId != userId
-                        },
-                        followerCount = it.followerCount - 1,
-                        showDialog = false,
-                        selectedFollowInfo = null,
-                    )
+        private fun deleteFollower(userId: Long) {
+            viewModelScope.launch {
+                userControlRepository.deleteFollower(userId).onSuccess {
+                    _state.update {
+                        it.copy(
+                            followers = it.followers.filter { followInfo ->
+                                followInfo.userId != userId
+                            },
+                            followerCount = it.followerCount - 1,
+                            showDialog = false,
+                            selectedFollowInfo = null,
+                        )
+                    }
                 }
             }
         }
-    }
 
         private fun checkIsMyUserId() {
             viewModelScope.launch {
