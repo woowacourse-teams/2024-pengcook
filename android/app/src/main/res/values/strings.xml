@@ -167,4 +167,9 @@
     <string name="dialog_unfollow">Unfollow</string>
     <string name="dialog_cancel">Cancel</string>
 
+    <string name="alert_title_unfollow">Unfollow</string>
+    <string name="alert_description_unfollow">Would you like to unfollow?</string>
+    <string name="alert_title_remove_follower">Remove follower</string>
+    <string name="alert_description_remove_follower">Would you like to remove this follower?</string>
+
 </resources>
