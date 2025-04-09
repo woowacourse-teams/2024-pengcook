@@ -66,4 +66,11 @@ class FakeUserControlDataSource : UserControlDataSource {
     override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun deleteFollower(
+        accessToken: String,
+        followUserRequest: FollowUserRequest,
+    ): Response<Unit> {
+        TODO("Not yet implemented")
+    }
 }
