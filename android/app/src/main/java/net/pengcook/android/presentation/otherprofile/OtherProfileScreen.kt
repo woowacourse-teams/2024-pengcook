@@ -97,6 +97,7 @@ fun OtherProfileScreen(
             OtherProfileHeader(
                 userProfile = state.userProfile,
                 onFollowListClick = { onAction(OtherProfileAction.OnFollowListClick) },
+                modifier = Modifier.padding(start = 4.dp)
             )
             ButtonRow(
                 isFollowing = state.isFollowing,
@@ -108,7 +109,7 @@ fun OtherProfileScreen(
                     }
                 },
                 onBlockClick = { onAction(OtherProfileAction.OnBlockClick) },
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier.padding(top = 14.dp),
             )
             ImageGrid(state.recipes)
         }
