@@ -45,21 +45,23 @@ fun OtherProfileHeader(
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
 
-                Text(
-                    text = userProfile?.introduction ?: "",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = Notosans.displayMedium,
-                    modifier = Modifier.padding(top = 2.dp),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                if (userProfile?.introduction != null && userProfile.introduction.isNotEmpty()) {
+                    Text(
+                        text = userProfile.introduction,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = Notosans.displayMedium,
+                        modifier = Modifier.padding(top = 2.dp),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
 
                 Text(
-                    text = "${userProfile?.follower ?: 0} followers • ${userProfile?.recipeCount ?: 0} recipes",
+                    text = "${userProfile?.follower ?: 0} followers ・ ${userProfile?.recipeCount ?: 0} recipes",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Notosans.bodySmall,
                     modifier = Modifier
-                        .padding(top = 4.dp)
+                        .padding(top = 8.dp)
                         .clickable {
                             onFollowListClick()
                         },
