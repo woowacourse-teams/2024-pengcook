@@ -40,21 +40,6 @@ class DefaultUserControlDataSource
         override suspend fun unfollowUser(
             accessToken: String,
             followUserRequest: FollowUserRequest,
-        ): Response<Unit> {
-            println("datasource: follow")
-            println("datasource: $accessToken")
-            println("datasource: $followUserRequest")
-
-            return userControlService.unfollowUser(accessToken, followUserRequest)
-        }
-
-        override suspend fun fetchFollowers(userId: Long): Response<FollowDataResponse> {
-            return userControlService.fetchFollowers(userId)
-        }
-
-        override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> {
-            return userControlService.fetchFollowings(userId)
-        }
         ): Response<Unit> = userControlService.unfollowUser(accessToken, followUserRequest)
 
         override suspend fun fetchFollowers(userId: Long): Response<FollowDataResponse> =
@@ -62,4 +47,9 @@ class DefaultUserControlDataSource
 
         override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> =
             userControlService.fetchFollowings(userId)
+
+        override suspend fun deleteFollower(
+            accessToken: String,
+            followUserRequest: FollowUserRequest,
+        ): Response<Unit> = userControlService.deleteFollower(accessToken, followUserRequest)
     }

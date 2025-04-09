@@ -40,4 +40,9 @@ interface UserControlDataSource {
     suspend fun fetchFollowings(
         userId: Long,
     ): Response<FollowDataResponse>
+
+    suspend fun deleteFollower(
+        accessToken: String,
+        followUserRequest: FollowUserRequest,
+    ): Response<Unit>
 }

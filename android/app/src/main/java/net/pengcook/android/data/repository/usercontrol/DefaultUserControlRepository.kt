@@ -102,6 +102,13 @@ class DefaultUserControlRepository
                 body(response, RESPONSE_CODE_SUCCESS).toFollowInfo()
             }
 
+        override suspend fun deleteFollower(targetId: Long): Result<Unit> = runCatching {
+            val accessToken = sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+            val followUserRequest = FollowUserRequest(targetId = targetId)
+            val response = userControlDataSource.deleteFollower(accessToken, followUserRequest)
+            body(response, RESPONSE_CODE_DELETE_SUCCESS)
+        }
+
         private fun ReportReasonResponse.toReportReason() =
             ReportReason(
                 reason = reason,
