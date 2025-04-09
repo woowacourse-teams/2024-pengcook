@@ -12,9 +12,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.pengcook.android.R
 import net.pengcook.android.presentation.follow2.components.CustomAlertDialog
 import net.pengcook.android.presentation.follow2.components.FollowInfoList
 import net.pengcook.android.presentation.follow2.components.FollowSearchBar
@@ -90,7 +92,7 @@ fun FollowListScreen(
             if (state.selectedTabIndex == 0) {
                 FollowInfoList(
                     followers = state.followers,
-                    onButtonClick = { onAction(FollowListAction.OnRemoveFollower(it)) },
+                    onButtonClick = { onAction(FollowListAction.ShowDialog(it)) },
                     isMine = state.isMine,
                     isFollowerInfo = true,
                 )
@@ -104,14 +106,26 @@ fun FollowListScreen(
             }
 
             if (state.showDialog && state.selectedFollowInfo != null) {
-                CustomAlertDialog(
-                    title = "언팔로우",
-                    description = "언팔로우 하시겠습니까?",
-                    onClickCancel = { onAction(FollowListAction.HideDialog) },
-                    onClickConfirm = {
-                        onAction(FollowListAction.OnUnfollow(state.selectedFollowInfo.userId))
-                    },
-                )
+                println("show dialog : ${state.selectedTabIndex}")
+                if(state.selectedTabIndex == 0) {
+                    CustomAlertDialog(
+                        title = stringResource(R.string.alert_title_remove_follower),
+                        description = stringResource(R.string.alert_description_remove_follower),
+                        onClickCancel = { onAction(FollowListAction.HideDialog) },
+                        onClickConfirm = {
+                            onAction(FollowListAction.OnDeleteFollower(state.selectedFollowInfo.userId))
+                        },
+                    )
+                } else {
+                    CustomAlertDialog(
+                        title = stringResource(R.string.alert_title_unfollow),
+                        description = stringResource(R.string.alert_description_unfollow),
+                        onClickCancel = { onAction(FollowListAction.HideDialog) },
+                        onClickConfirm = {
+                            onAction(FollowListAction.OnUnfollow(state.selectedFollowInfo.userId))
+                        },
+                    )
+                }
             }
         }
     }
