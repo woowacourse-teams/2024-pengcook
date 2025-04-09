@@ -24,4 +24,6 @@ interface UserControlRepository {
     suspend fun fetchFollowers(userId: Long): Result<FollowInfo>
 
     suspend fun fetchFollowings(userId: Long): Result<FollowInfo>
+
+    suspend fun deleteFollower(targetId: Long): Result<Unit>
 }

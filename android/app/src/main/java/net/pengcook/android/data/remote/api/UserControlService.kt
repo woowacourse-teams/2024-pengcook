@@ -51,4 +51,10 @@ interface UserControlService {
     suspend fun fetchFollowings(
         @Path("userId") userId: Long,
     ): Response<FollowDataResponse>
+
+    @HTTP(method = "DELETE", path = "/user/follower", hasBody = true)
+    suspend fun deleteFollower(
+        @Header("Authorization") accessToken: String,
+        @Body followUserRequest: FollowUserRequest,
+    ): Response<Unit>
 }
