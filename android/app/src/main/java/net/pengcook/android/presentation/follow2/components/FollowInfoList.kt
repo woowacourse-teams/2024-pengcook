@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.pengcook.android.presentation.follow2.model.FollowInfo
+import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
 fun FollowInfoList(
@@ -48,10 +49,32 @@ private fun FollowersListPreview() {
             username = "Username",
         )
     }
-    FollowInfoList(
-        followers = followers,
-        onButtonClick = {},
-        isMine = true,
-        isFollowerInfo = true,
-    )
+    PengCookTheme {
+        FollowInfoList(
+            followers = followers,
+            onButtonClick = {},
+            isMine = true,
+            isFollowerInfo = true,
+        )
+    }
+}
+
+@Preview(showBackground = true, uiMode = 32)
+@Composable
+private fun FollowersListPreviewDarkMode() {
+    val followers = List(10) {
+        FollowInfo(
+            userId = it.toLong(),
+            profileImageUrl = "https://randomuser.me/api/portraits",
+            username = "Username",
+        )
+    }
+    PengCookTheme {
+        FollowInfoList(
+            followers = followers,
+            onButtonClick = {},
+            isMine = true,
+            isFollowerInfo = true,
+        )
+    }
 }
