@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.mycomments.components
+package net.pengcook.android.presentation.core.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
@@ -7,35 +7,30 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import net.pengcook.android.ui.theme.Notosans
+import net.pengcook.android.ui.theme.PengCookTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarWithNavigation(
     name: String,
-    navigation: () -> Unit = {},
+    navigation: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = name,
-                style =
-                    TextStyle(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
+                style = Notosans.headlineMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         },
-        modifier = modifier,
         navigationIcon = {
             IconButton(
                 onClick = { navigation() },
@@ -43,19 +38,31 @@ fun TopBarWithNavigation(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.primary,
         ),
+        modifier = modifier,
     )
 }
 
-@Preview
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun BarLayoutPreview() {
-    Column {
-        TopBarWithNavigation(name = "내 댓글 목록")
+    PengCookTheme {
+        Column {
+            TopBarWithNavigation(
+                name = "내 댓글 목록",
+                navigation = { },
+            )
+
+            TopBarWithNavigation(
+                name = "PengCook",
+                navigation = { },
+            )
+        }
     }
 }
