@@ -11,19 +11,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.pengcook.android.R
+import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.presentation.follow2.components.CustomAlertDialog
 import net.pengcook.android.presentation.follow2.components.FollowInfoList
 import net.pengcook.android.presentation.follow2.components.FollowSearchBar
 import net.pengcook.android.presentation.follow2.components.SelectTabRow
 import net.pengcook.android.presentation.follow2.model.FollowInfo
-import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
