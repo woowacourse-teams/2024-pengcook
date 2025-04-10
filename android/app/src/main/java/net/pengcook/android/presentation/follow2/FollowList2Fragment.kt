@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import net.pengcook.android.ui.theme.PengCookTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,10 +31,12 @@ class FollowList2Fragment : Fragment() {
     ): View =
         ComposeView(requireContext()).apply {
             setContent {
-                FollowListScreenRoot(
-                    viewModel = viewModel,
-                    navigateBack = { navigateBack() },
-                )
+                PengCookTheme {
+                    FollowListScreenRoot(
+                        viewModel = viewModel,
+                        navigateBack = { navigateBack() },
+                    )
+                }
             }
         }
 
