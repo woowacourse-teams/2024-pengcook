@@ -17,12 +17,6 @@
             android:id="@+id/action_homeFragment_to_recipeMakingFragment"
             app:destination="@id/recipeMakingFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_oldRecipeMakingFragment"
-            app:destination="@id/oldRecipeMakingFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_oldStepMakingFragment"
-            app:destination="@id/oldStepMakingFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_otherProfileFragment"
             app:destination="@id/otherProfileFragment" />
         <action
@@ -158,34 +152,6 @@
     <fragment
         android:id="@+id/stepMakingFragment"
         android:name="net.pengcook.android.presentation.making.newstep.NewStepMakingFragment"
-        android:label="NewStepMakingFragment">
-        <argument
-            android:name="sequence"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_stepMakingFragment_to_recipeMakingFragment"
-            app:popUpTo="@id/stepMakingFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_stepMakingFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/oldRecipeMakingFragment"
-        android:name="net.pengcook.android.presentation.making.RecipeMakingFragment"
-        android:label="RecipeMakingFragment">
-        \
-        <action
-            android:id="@+id/action_oldRecipeMakingFragment_to_oldStepMakingFragment"
-            app:destination="@id/oldStepMakingFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/oldStepMakingFragment"
-        android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"
         android:label="NewStepMakingFragment">
         <argument
             android:name="sequence"
