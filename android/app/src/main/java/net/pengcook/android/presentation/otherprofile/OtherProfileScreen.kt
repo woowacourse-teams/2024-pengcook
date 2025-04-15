@@ -143,7 +143,54 @@ private fun OtherProfileScreenPreview() {
         nickname = "Nickname",
         image = "https://source.unsplash.com/random/200x200",
         region = "Seoul",
-        introduction = "I wish to be the greatest chef in the world!",
+        introduction = "",
+        follower = 1323,
+        following = 100,
+        recipeCount = 100,
+        isFollow = true,
+    )
+
+    PengCookTheme {
+        OtherProfileScreen(
+            state = OtherProfileState(
+                isLoading = false,
+                userProfile = userProfile,
+                isFollowing = true,
+                recipes = recipes,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OtherProfileScreenPreviewDescription() {
+    val recipes = List(12) {
+        RecipeForList(
+            recipeId = it.toLong(),
+            title = "Recipe $it",
+            thumbnail = "https://source.unsplash.com/random/200x200",
+            user = User(
+                id = it.toLong(),
+                username = "User $it",
+                profile = "https://source.unsplash.com/random/200x200",
+            ),
+            likeCount = 100,
+            commentCount = 10,
+            mine = true,
+            createdAt = "2021-09-01",
+        )
+    }
+
+    val userProfile = UserProfile(
+        id = 1,
+        email = "",
+        username = "Username",
+        nickname = "Nickname",
+        image = "https://source.unsplash.com/random/200x200",
+        region = "Seoul",
+        introduction = "Hello World!",
         follower = 1323,
         following = 100,
         recipeCount = 100,

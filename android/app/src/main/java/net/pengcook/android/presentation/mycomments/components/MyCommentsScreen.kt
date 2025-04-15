@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.presentation.core.model.MyComment
 
 @Composable
@@ -29,7 +30,6 @@ fun MyCommentsScreen(
             TopBarWithNavigation(
                 name = "내 댓글 목록",
                 navigation = navigationBack,
-                modifier = Modifier.background(Color.White),
             )
         },
         content = { paddingValues ->

@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +26,8 @@ fun FollowInfoItem(
     modifier: Modifier = Modifier,
     actionContent: @Composable RowScope.() -> Unit = {},
 ) {
+    val theme = MaterialTheme.colorScheme
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -38,8 +40,12 @@ fun FollowInfoItem(
             modifier = Modifier
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(Color.White, shape = CircleShape)
-                .border(0.5.dp, Color.Black, shape = CircleShape),
+                .background(color = theme.background, shape = CircleShape)
+                .border(
+                    0.5.dp,
+                    color = theme.onPrimary,
+                    shape = CircleShape,
+                ),
         )
         Text(
             followInfo.username,

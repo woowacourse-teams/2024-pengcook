@@ -6,23 +6,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.pengcook.android.R
+import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.presentation.follow2.components.CustomAlertDialog
 import net.pengcook.android.presentation.follow2.components.FollowInfoList
 import net.pengcook.android.presentation.follow2.components.FollowSearchBar
 import net.pengcook.android.presentation.follow2.components.SelectTabRow
 import net.pengcook.android.presentation.follow2.model.FollowInfo
-import net.pengcook.android.presentation.mycomments.components.TopBarWithNavigation
+import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
 fun FollowListScreenRoot(
@@ -68,7 +69,7 @@ fun FollowListScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
         ) {
             SelectTabRow(
                 selectedTabIndex = state.selectedTabIndex,
@@ -141,11 +142,59 @@ private fun FollowListScreenPreview() {
             username = "Username",
         )
     }
+    PengCookTheme {
+        FollowListScreen(
+            state = FollowListState(
+                isMine = true,
+                username = "Username",
+                followers = followers,
+            ),
+            onAction = {},
+        )
+    }
+}
 
-    FollowListScreen(
-        state = FollowListState(
-            followers = followers,
-        ),
-        onAction = {},
-    )
+@Preview
+@Composable
+private fun FollowListScreenPreviewNotMine() {
+    val followers = List(20) {
+        FollowInfo(
+            userId = it.toLong(),
+            profileImageUrl = "https://randomuser.me/api/portraits",
+            username = "Username",
+        )
+    }
+    PengCookTheme {
+        FollowListScreen(
+            state = FollowListState(
+                isMine = false,
+                username = "Username",
+                followers = followers,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun FollowListScreenPreviewDarkMode() {
+    val followers = List(20) {
+        FollowInfo(
+            userId = it.toLong(),
+            profileImageUrl = "https://randomuser.me/api/portraits",
+            username = "Username",
+        )
+    }
+
+    PengCookTheme {
+        FollowListScreen(
+            state = FollowListState(
+                isMine = true,
+                username = "Username",
+                followers = followers,
+            ),
+            onAction = {},
+        )
+    }
 }

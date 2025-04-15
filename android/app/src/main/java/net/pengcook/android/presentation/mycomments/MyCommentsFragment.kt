@@ -15,6 +15,7 @@ import net.pengcook.android.R
 import net.pengcook.android.data.repository.comment.CommentRepository
 import net.pengcook.android.presentation.core.model.MyComment
 import net.pengcook.android.presentation.mycomments.components.MyCommentsScreen
+import net.pengcook.android.ui.theme.PengCookTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,11 +31,13 @@ class MyCommentsFragment : Fragment() {
         ComposeView(requireContext()).apply {
             val comments = fetchComments()
             setContent {
-                MyCommentsScreen(
-                    comments = comments,
-                    navigateToDetail = { recipeId -> navigateToDetailRecipe(recipeId) },
-                    navigationBack = { navigationBack() },
-                )
+                PengCookTheme {
+                    MyCommentsScreen(
+                        comments = comments,
+                        navigateToDetail = { recipeId -> navigateToDetailRecipe(recipeId) },
+                        navigationBack = { navigationBack() },
+                    )
+                }
             }
         }
 
