@@ -154,6 +154,28 @@ private fun FollowListScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun FollowListScreenPreviewNotMine() {
+    val followers = List(20) {
+        FollowInfo(
+            userId = it.toLong(),
+            profileImageUrl = "https://randomuser.me/api/portraits",
+            username = "Username",
+        )
+    }
+    PengCookTheme {
+        FollowListScreen(
+            state = FollowListState(
+                isMine = false,
+                username = "Username",
+                followers = followers,
+            ),
+            onAction = {},
+        )
+    }
+}
+
 @Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun FollowListScreenPreviewDarkMode() {
