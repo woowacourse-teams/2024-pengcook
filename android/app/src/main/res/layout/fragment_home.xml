@@ -17,7 +17,6 @@
         android:backgroundTint="@color/white"
         tools:context=".presentation.main.MainActivity">
 
-        <!-- Logo and Recipe Input -->
         <ImageView
             android:id="@+id/main_logo"
             android:layout_width="130dp"
