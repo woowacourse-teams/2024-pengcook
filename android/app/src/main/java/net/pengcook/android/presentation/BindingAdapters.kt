@@ -34,7 +34,6 @@ fun loadImage(
     view: ImageView,
     uri: Uri?,
 ) {
-    println("uri: $uri")
     Glide
         .with(view.context)
         .load(uri)

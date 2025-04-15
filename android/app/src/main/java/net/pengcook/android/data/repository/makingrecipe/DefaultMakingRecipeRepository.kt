@@ -42,7 +42,6 @@ class DefaultMakingRecipeRepository
             runCatching {
                 val recipeCreation =
                     makingRecipeLocalDataSource.fetchTotalRecipeData()?.toRecipeCreation()
-                println(recipeCreation)
                 recipeCreation
             }
 

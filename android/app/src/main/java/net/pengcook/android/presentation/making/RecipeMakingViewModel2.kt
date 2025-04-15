@@ -100,7 +100,6 @@ class RecipeMakingViewModel2
                     .fetchRecipeSteps()
                     .onSuccess { steps ->
                         _currentStepImages.value = steps?.map { it.toRecipeStepImage() } ?: emptyList()
-                        println("currentStepImages: ${currentStepImages.value}")
                     }.onFailure {
                         _currentStepImages.value = emptyList()
                     }
@@ -243,7 +242,6 @@ class RecipeMakingViewModel2
             currentStepImages.value?.forEach { stepImage ->
                 viewModelScope.launch(coroutineExceptionHandler) {
                     if (!stepImage.uploaded) {
-                        println("uploaded : ${stepImage.uploaded}")
                         uploadStepImage(stepImage)
                         recipeId?.let { id ->
                             saveRecipeDescription()
@@ -465,7 +463,6 @@ class RecipeMakingViewModel2
             viewModelScope.launch(coroutineExceptionHandler) {
                 val recipeId = recipeId
                 if (recipeId != null) {
-                    println("recipeId : $recipeId")
                     saveRecipeSteps(recipeId)
                 }
                 _uiEvent.value =

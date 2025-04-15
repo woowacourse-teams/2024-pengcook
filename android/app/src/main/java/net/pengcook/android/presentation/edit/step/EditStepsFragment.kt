@@ -92,7 +92,6 @@ class EditStepsFragment : Fragment() {
                 }
 
                 EditStepsEvent.OnFetchComplete -> {
-                    println("EditStepsFragment : ${args.sequence}")
                     binding.vpStepMaking.setCurrentItem(args.sequence - 1, false)
                 }
 

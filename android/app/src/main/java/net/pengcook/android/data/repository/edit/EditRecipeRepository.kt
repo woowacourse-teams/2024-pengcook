@@ -29,8 +29,6 @@ object EditRecipeRepository {
         runCatching {
             val description = EditRecipeCacheDataSource.fetchSavedRecipeDescription()
             val steps = EditRecipeCacheDataSource.savedRecipeSteps
-            println("description: $description")
-            println("steps: $steps")
             RecipeCreation(
                 title = description.title,
                 introduction = description.description,
