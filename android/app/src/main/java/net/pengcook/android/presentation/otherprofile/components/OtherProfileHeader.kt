@@ -106,3 +106,28 @@ private fun PreviewOtherProfileHeader() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewOtherProfileHeaderNoIntroduction() {
+    val userProfile = UserProfile(
+        id = 1,
+        email = "",
+        username = "Username",
+        nickname = "Nickname",
+        image = "https://source.unsplash.com/random/200x200",
+        region = "Seoul",
+        introduction = "",
+        follower = 1323,
+        following = 100,
+        recipeCount = 100,
+        isFollow = true,
+    )
+
+    PengCookTheme {
+        OtherProfileHeader(
+            userProfile = userProfile,
+            onFollowListClick = {},
+        )
+    }
+}
