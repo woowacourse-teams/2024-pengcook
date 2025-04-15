@@ -23,7 +23,7 @@ class DefaultFeedRemoteDataSource
             keyword: String?,
             userId: Long?,
         ): Response<List<FeedItemResponseForList>> =
-            feedService.fetchRecipes2(
+            feedService.fetchRecipes(
                 accessToken = accessToken,
                 accept = "application/vnd.pengcook.v1+json",
                 pageNumber = pageNumber,
