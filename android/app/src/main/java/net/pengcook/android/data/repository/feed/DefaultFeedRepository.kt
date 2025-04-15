@@ -37,12 +37,12 @@ class DefaultFeedRepository
                     sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
                 val response =
                     feedRemoteDataSource.fetchRecipes(
-                        accessToken,
-                        pageNumber,
-                        pageSize,
-                        category,
-                        keyword,
-                        userId,
+                        accessToken = accessToken,
+                        pageNumber = pageNumber,
+                        pageSize = pageSize,
+                        category = category,
+                        keyword = keyword,
+                        userId = userId,
                     )
                 body(response, RESPONSE_CODE_SUCCESS).map(FeedItemResponseForList::toRecipeForList)
             }
