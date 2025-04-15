@@ -36,7 +36,7 @@ class DefaultProfileRemoteDataSource
             pageNumber: Int,
             pageSize: Int,
         ): Response<List<FeedItemResponseForList>> =
-            feedService.fetchRecipes2(
+            feedService.fetchRecipes(
                 accessToken = accessToken,
                 accept = "application/vnd.pengcook.v1+json",
                 pageNumber = pageNumber,
