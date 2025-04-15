@@ -72,13 +72,3 @@ class HomeViewModel
             private const val PAGE_SIZE = 10
         }
     }
-
-sealed interface HomeEvent {
-    data class NavigateToDetail(
-        val recipe: RecipeForList,
-    ) : HomeEvent
-
-    data class NavigateToProfile(
-        val recipe: RecipeForList,
-    ) : HomeEvent
-}
