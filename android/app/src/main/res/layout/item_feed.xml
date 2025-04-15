@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:background="@color/home_item_background">
 
-            <!-- Recipe image -->
             <ImageView
                 android:id="@+id/iv_recipe_image"
                 android:layout_width="0dp"
@@ -64,7 +63,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- User profile picture -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_image"
                     android:layout_width="28dp"
@@ -81,7 +79,6 @@
                     app:shapeAppearanceOverlay="@style/roundImageView"
                     tools:src="@drawable/ic_launcher_background" />
 
-                <!-- Username -->
                 <net.pengcook.android.ui.components.OutlineTextView
                     android:id="@+id/username"
                     style="@style/Body.Medium.B2"
@@ -122,7 +119,6 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_recipe_image"
                 android:layout_height="wrap_content">
 
-                <!-- Recipe title -->
                 <TextView
                     android:id="@+id/recipe_title"
                     style="@style/Headline.H4"
@@ -135,7 +131,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Homemade Gimbap" />
 
-                <!-- Like icon and count -->
                 <ImageView
                     android:id="@+id/like_icon"
                     android:layout_width="24dp"
@@ -160,7 +155,6 @@
                     app:layout_constraintTop_toTopOf="@id/like_icon"
                     tools:text="1.2k" />
 
-                <!-- Comment icon and count -->
                 <ImageView
                     android:id="@+id/comment_icon"
                     android:layout_width="24dp"
