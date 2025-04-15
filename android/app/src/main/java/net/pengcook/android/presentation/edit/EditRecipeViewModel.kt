@@ -106,7 +106,6 @@ class EditRecipeViewModel
         fun initRecipeSteps() {
             viewModelScope.launch {
                 feedRepository.fetchRecipeSteps(recipeId).onSuccess { steps ->
-                    println("steps$steps")
                     _currentStepImages.value =
                         steps.map {
                             RecipeStepImage(
@@ -338,7 +337,6 @@ class EditRecipeViewModel
             }
 
             val entireData = EditRecipeRepository.fetchAllSavedRecipeData().getOrNull() ?: return
-            println(entireData.steps)
             val changedRecipe =
                 ChangedRecipe(
                     title = entireData.title,
@@ -516,7 +514,6 @@ class EditRecipeViewModel
                         imageUploaded = it.uploaded,
                     )
                 }
-            println("tmp$tmp")
             EditRecipeRepository.saveRecipeSteps(
                 tmp ?: emptyList(),
             )
@@ -543,7 +540,6 @@ class EditRecipeViewModel
 
         override fun onDelete(id: Int) {
             _currentStepImages.value = currentStepImages.value?.filter { it.itemId != id }
-            println("currentStepImages.value${currentStepImages.value}")
 
             saveRecipeSteps(recipeId)
             _uiEvent.value = Event(EditRecipeEvent.ImageDeletionSuccessful(id))
@@ -556,8 +552,6 @@ class EditRecipeViewModel
         override fun onStepImageClick(item: RecipeStepImage) {
             saveRecipeDescription()
             saveRecipeSteps(recipeId)
-            println("currentStepImages.value${currentStepImages.value}")
-            println(currentStepImages.value?.indexOf(item)?.plus(1))
             _uiEvent.value =
                 Event(
                     EditRecipeEvent.NavigateToEditStep(
