@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2
+package net.pengcook.android.presentation.follow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.data.repository.profile.ProfileRepository
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
-import net.pengcook.android.presentation.follow2.model.toPresentationModel
+import net.pengcook.android.presentation.follow.model.toPresentationModel
 
 class FollowListViewModel
     @AssistedInject

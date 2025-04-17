@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2.model
+package net.pengcook.android.presentation.follow.model
 
 import net.pengcook.android.domain.model.usercontrol.FollowUserInfo
 

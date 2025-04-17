@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2.components
+package net.pengcook.android.presentation.follow.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.pengcook.android.presentation.core.components.UrlImage
-import net.pengcook.android.presentation.follow2.model.FollowInfo
+import net.pengcook.android.presentation.follow.model.FollowInfo
 
 @Composable
 fun FollowInfoItem(

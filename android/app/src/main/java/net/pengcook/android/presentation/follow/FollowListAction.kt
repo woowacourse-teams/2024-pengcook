@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2
+package net.pengcook.android.presentation.follow
 
 sealed interface FollowListAction {
     data object NavigateBack : FollowListAction

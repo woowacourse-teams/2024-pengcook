@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2
+package net.pengcook.android.presentation.follow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.pengcook.android.R
 import net.pengcook.android.presentation.core.components.TopBarWithNavigation
-import net.pengcook.android.presentation.follow2.components.CustomAlertDialog
-import net.pengcook.android.presentation.follow2.components.FollowInfoList
-import net.pengcook.android.presentation.follow2.components.FollowSearchBar
-import net.pengcook.android.presentation.follow2.components.SelectTabRow
-import net.pengcook.android.presentation.follow2.model.FollowInfo
+import net.pengcook.android.presentation.follow.components.CustomAlertDialog
+import net.pengcook.android.presentation.follow.components.FollowInfoList
+import net.pengcook.android.presentation.follow.components.FollowSearchBar
+import net.pengcook.android.presentation.follow.components.SelectTabRow
+import net.pengcook.android.presentation.follow.model.FollowInfo
 import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
