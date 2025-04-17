@@ -49,7 +49,6 @@ class StepImageAdapter(
             binding.stepItemEventListener = stepItemEventListener
             binding.root.setOnClickListener {
                 binding.stepImage?.let {
-                    println("stepImage.itemId : ${it.itemId}")
                     stepItemEventListener.onStepImageClick(it)
                 }
             }

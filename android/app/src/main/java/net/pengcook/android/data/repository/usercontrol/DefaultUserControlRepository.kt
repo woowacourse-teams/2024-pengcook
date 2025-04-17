@@ -4,11 +4,15 @@ import kotlinx.coroutines.flow.first
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowerInfoResponse
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
 import net.pengcook.android.data.util.network.NetworkResponseHandler
+import net.pengcook.android.domain.model.usercontrol.FollowInfo
+import net.pengcook.android.domain.model.usercontrol.FollowUserInfo
 import net.pengcook.android.presentation.core.model.ReportReason
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -82,18 +86,46 @@ class DefaultUserControlRepository
                     FollowUserRequest(
                         targetId = targetId,
                     )
-                println("Repository: follow")
-                println("Repository: $accessToken")
-                println("Repository: $followUserRequest")
                 val response = userControlDataSource.unfollowUser(accessToken, followUserRequest)
-                println("Repository: $response")
                 body(response, RESPONSE_CODE_DELETE_SUCCESS)
             }
+
+        override suspend fun fetchFollowers(userId: Long): Result<FollowInfo> =
+            runCatching {
+                val response = userControlDataSource.fetchFollowers(userId)
+                body(response, RESPONSE_CODE_SUCCESS).toFollowInfo()
+            }
+
+        override suspend fun fetchFollowings(userId: Long): Result<FollowInfo> =
+            runCatching {
+                val response = userControlDataSource.fetchFollowings(userId)
+                body(response, RESPONSE_CODE_SUCCESS).toFollowInfo()
+            }
+
+        override suspend fun deleteFollower(targetId: Long): Result<Unit> = runCatching {
+            val accessToken = sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+            val followUserRequest = FollowUserRequest(targetId = targetId)
+            val response = userControlDataSource.deleteFollower(accessToken, followUserRequest)
+            body(response, RESPONSE_CODE_DELETE_SUCCESS)
+        }
 
         private fun ReportReasonResponse.toReportReason() =
             ReportReason(
                 reason = reason,
                 message = message,
+            )
+
+        private fun FollowDataResponse.toFollowInfo() =
+            FollowInfo(
+                follows = this.follows.map { it.toFollowUserInfo() },
+                followCount = this.followCount,
+            )
+
+        private fun FollowerInfoResponse.toFollowUserInfo() =
+            FollowUserInfo(
+                userId = this.userId,
+                username = this.username,
+                profileImage = this.image,
             )
 
         companion object {

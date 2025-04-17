@@ -61,7 +61,6 @@ class OtherProfileViewModel
 
                 is OtherProfileAction.OnUnfollowClick -> {
                     viewModelScope.launch {
-                        println("viewmodel: follow")
                         userControlRepository.unfollowUser(userId).onSuccess {
                             _state.value = state.value.copy(isFollowing = false)
                         }

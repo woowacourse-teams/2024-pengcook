@@ -124,7 +124,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <!-- Back Button -->
             <TextView
                 android:id="@+id/btn_back_step_making_recipe"
                 android:layout_width="0dp"
@@ -146,7 +145,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 bind:visibility="@{vm.stepNumber != 1}" />
 
-            <!-- Next Button -->
             <TextView
                 android:id="@+id/btn_next_making_recipe"
                 android:layout_width="0dp"

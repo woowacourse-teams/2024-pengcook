@@ -206,7 +206,6 @@ class RecipeMakingViewModel
                 .onSuccess { recipeId ->
                     _uiEvent.value = Event(RecipeMakingEvent.NavigateToMakingStep(recipeId))
                 }.onFailure {
-                    println(it.message)
                     _uiEvent.value = Event(RecipeMakingEvent.PostRecipeFailure)
                 }
         }

@@ -15,7 +15,13 @@ class FeedPagingSource(
         val pageNumber = params.key ?: initialPageNumber
         return runCatching {
             val feeds =
-                feedRepository.fetchRecipes(pageNumber, params.loadSize, category, null, userId)
+                feedRepository.fetchRecipes(
+                    pageNumber = pageNumber,
+                    pageSize = params.loadSize,
+                    category = category,
+                    keyword = null,
+                    userId = userId,
+                )
             val pageData = feeds.getOrNull() ?: emptyList()
             val nextKey = if (pageData.size < params.loadSize) null else pageNumber + 1
             LoadResult.Page(

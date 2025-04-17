@@ -39,7 +39,11 @@ class HomeViewModel
         private fun loadFeedData() {
             val pager =
                 Pager(
-                    config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
+                    config = PagingConfig(
+                        pageSize = PAGE_SIZE,
+                        initialLoadSize = PAGE_SIZE,
+                        enablePlaceholders = false,
+                    ),
                     pagingSourceFactory = { FeedPagingSource(feedRepository) },
                 )
 
@@ -68,13 +72,3 @@ class HomeViewModel
             private const val PAGE_SIZE = 10
         }
     }
-
-sealed interface HomeEvent {
-    data class NavigateToDetail(
-        val recipe: RecipeForList,
-    ) : HomeEvent
-
-    data class NavigateToProfile(
-        val recipe: RecipeForList,
-    ) : HomeEvent
-}

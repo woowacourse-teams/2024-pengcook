@@ -1,6 +1,7 @@
 package net.pengcook.android.data.repository.usercontrol
 
 import net.pengcook.android.data.model.usercontrol.ReportResponse
+import net.pengcook.android.domain.model.usercontrol.FollowInfo
 import net.pengcook.android.presentation.core.model.ReportReason
 
 interface UserControlRepository {
@@ -19,4 +20,10 @@ interface UserControlRepository {
     suspend fun followUser(targetId: Long): Result<Unit>
 
     suspend fun unfollowUser(targetId: Long): Result<Unit>
+
+    suspend fun fetchFollowers(userId: Long): Result<FollowInfo>
+
+    suspend fun fetchFollowings(userId: Long): Result<FollowInfo>
+
+    suspend fun deleteFollower(targetId: Long): Result<Unit>
 }

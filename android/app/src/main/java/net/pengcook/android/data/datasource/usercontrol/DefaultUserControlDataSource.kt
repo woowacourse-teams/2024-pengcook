@@ -1,6 +1,7 @@
 package net.pengcook.android.data.datasource.usercontrol
 
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
@@ -23,7 +24,8 @@ class DefaultUserControlDataSource
             blockUserRequest: BlockUserRequest,
         ): Response<Unit> = userControlService.blockUser(accessToken, blockUserRequest)
 
-        override suspend fun fetchReportReasons(): Response<List<ReportReasonResponse>> = userControlService.fetchReportReasons()
+        override suspend fun fetchReportReasons(): Response<List<ReportReasonResponse>> =
+            userControlService.fetchReportReasons()
 
         override suspend fun reportUser(
             accessToken: String,
@@ -38,11 +40,16 @@ class DefaultUserControlDataSource
         override suspend fun unfollowUser(
             accessToken: String,
             followUserRequest: FollowUserRequest,
-        ): Response<Unit> {
-            println("datasource: follow")
-            println("datasource: $accessToken")
-            println("datasource: $followUserRequest")
+        ): Response<Unit> = userControlService.unfollowUser(accessToken, followUserRequest)
 
-            return userControlService.unfollowUser(accessToken, followUserRequest)
-        }
+        override suspend fun fetchFollowers(userId: Long): Response<FollowDataResponse> =
+            userControlService.fetchFollowers(userId)
+
+        override suspend fun fetchFollowings(userId: Long): Response<FollowDataResponse> =
+            userControlService.fetchFollowings(userId)
+
+        override suspend fun deleteFollower(
+            accessToken: String,
+            followUserRequest: FollowUserRequest,
+        ): Response<Unit> = userControlService.deleteFollower(accessToken, followUserRequest)
     }

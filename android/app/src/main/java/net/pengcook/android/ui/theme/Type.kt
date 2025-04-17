@@ -53,7 +53,7 @@ val Notosans =
         headlineMedium = TextStyle(
             fontFamily = NotoSansFontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             lineHeight = 28.sp,
             letterSpacing = 0.sp,
         ),

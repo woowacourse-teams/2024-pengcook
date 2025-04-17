@@ -34,25 +34,26 @@ import net.pengcook.android.ui.theme.PengCookTheme
 fun OtherProfileScreenRoot(
     viewModel: OtherProfileViewModel,
     navigateBack: () -> Unit,
+    navigateToFollowList: () -> Unit,
 ) {
-    PengCookTheme {
-        val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-        OtherProfileScreen(
-            state = state,
-            onAction = { action ->
-                when (action) {
-                    is OtherProfileAction.OnBackClick -> navigateBack()
-                    is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
-                    is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
-                    is OtherProfileAction.OnBlockClick -> { // TODO
-                    }
-
-                    else -> viewModel.onAction(action)
+    OtherProfileScreen(
+        state = state,
+        onAction = { action ->
+            when (action) {
+                is OtherProfileAction.OnBackClick -> navigateBack()
+                is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
+                is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
+                is OtherProfileAction.OnBlockClick -> { // TODO
                 }
-            },
-        )
-    }
+
+                is OtherProfileAction.OnFollowListClick -> navigateToFollowList()
+
+                else -> viewModel.onAction(action)
+            }
+        },
+    )
 }
 
 @Composable
@@ -93,7 +94,11 @@ fun OtherProfileScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 12.dp),
         ) {
-            OtherProfileHeader(state.userProfile)
+            OtherProfileHeader(
+                userProfile = state.userProfile,
+                onFollowListClick = { onAction(OtherProfileAction.OnFollowListClick) },
+                modifier = Modifier.padding(start = 4.dp),
+            )
             ButtonRow(
                 isFollowing = state.isFollowing,
                 onFollowClick = {
@@ -104,7 +109,7 @@ fun OtherProfileScreen(
                     }
                 },
                 onBlockClick = { onAction(OtherProfileAction.OnBlockClick) },
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier.padding(top = 14.dp),
             )
             ImageGrid(state.recipes)
         }
@@ -138,7 +143,54 @@ private fun OtherProfileScreenPreview() {
         nickname = "Nickname",
         image = "https://source.unsplash.com/random/200x200",
         region = "Seoul",
-        introduction = "I wish to be the greatest chef in the world!",
+        introduction = "",
+        follower = 1323,
+        following = 100,
+        recipeCount = 100,
+        isFollow = true,
+    )
+
+    PengCookTheme {
+        OtherProfileScreen(
+            state = OtherProfileState(
+                isLoading = false,
+                userProfile = userProfile,
+                isFollowing = true,
+                recipes = recipes,
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OtherProfileScreenPreviewDescription() {
+    val recipes = List(12) {
+        RecipeForList(
+            recipeId = it.toLong(),
+            title = "Recipe $it",
+            thumbnail = "https://source.unsplash.com/random/200x200",
+            user = User(
+                id = it.toLong(),
+                username = "User $it",
+                profile = "https://source.unsplash.com/random/200x200",
+            ),
+            likeCount = 100,
+            commentCount = 10,
+            mine = true,
+            createdAt = "2021-09-01",
+        )
+    }
+
+    val userProfile = UserProfile(
+        id = 1,
+        email = "",
+        username = "Username",
+        nickname = "Nickname",
+        image = "https://source.unsplash.com/random/200x200",
+        region = "Seoul",
+        introduction = "Hello World!",
         follower = 1323,
         following = 100,
         recipeCount = 100,

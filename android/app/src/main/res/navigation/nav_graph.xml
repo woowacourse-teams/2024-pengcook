@@ -17,12 +17,6 @@
             android:id="@+id/action_homeFragment_to_recipeMakingFragment"
             app:destination="@id/recipeMakingFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_oldRecipeMakingFragment"
-            app:destination="@id/oldRecipeMakingFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_oldStepMakingFragment"
-            app:destination="@id/oldStepMakingFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_otherProfileFragment"
             app:destination="@id/otherProfileFragment" />
         <action
@@ -36,12 +30,12 @@
         android:name="net.pengcook.android.presentation.detail.DetailRecipeFragment"
         android:label="fragment_detail_recipe"
         tools:layout="@layout/fragment_detail_recipe">
-        <action
-            android:id="@+id/action_detailRecipeFragment_to_recipeStepFragment"
-            app:destination="@id/recipeStepFragment" />
         <argument
             android:name="recipeId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_detailRecipeFragment_to_recipeStepFragment"
+            app:destination="@id/recipeStepFragment" />
         <action
             android:id="@+id/action_detailRecipeFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
@@ -173,34 +167,6 @@
             app:popUpToInclusive="true" />
     </fragment>
 
-    <fragment
-        android:id="@+id/oldRecipeMakingFragment"
-        android:name="net.pengcook.android.presentation.making.RecipeMakingFragment"
-        android:label="RecipeMakingFragment">
-        \
-        <action
-            android:id="@+id/action_oldRecipeMakingFragment_to_oldStepMakingFragment"
-            app:destination="@id/oldStepMakingFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/oldStepMakingFragment"
-        android:name="net.pengcook.android.presentation.making.step.StepMakingFragment"
-        android:label="NewStepMakingFragment">
-        <argument
-            android:name="sequence"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_stepMakingFragment_to_recipeMakingFragment"
-            app:popUpTo="@id/stepMakingFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_stepMakingFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-
 
     <fragment
         android:id="@+id/categoryFeedListFragment"
@@ -243,6 +209,9 @@
             app:destination="@id/commentFragment"
             app:popUpTo="@id/commentFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_FollowList2Fragment"
+            app:destination="@id/FollowList2Fragment" />
     </fragment>
 
     <fragment
@@ -258,11 +227,7 @@
             app:destination="@id/myCommentFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/followListFragment"
-        android:name="net.pengcook.android.presentation.follow.FollowListFragment"
-        android:label="fragment_follow_list"
-        tools:layout="@layout/fragment_follow_list" />
+
     <fragment
         android:id="@+id/commentFragment"
         android:name="net.pengcook.android.presentation.comment.CommentFragment"
@@ -368,8 +333,28 @@
             android:id="@+id/action_otherProfileFragment_to_commentFragment"
             app:destination="@id/commentFragment"
             app:popUpTo="@id/commentFragment"
-            app:popUpToInclusive="true"
-            />
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_otherProfileFragment_to_FollowList2Fragment"
+            app:destination="@id/FollowList2Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/FollowList2Fragment"
+        android:name="net.pengcook.android.presentation.follow2.FollowList2Fragment"
+        android:label="fragment_follow_list"
+        tools:layout="@layout/fragment_follow_list">
+
+        <argument
+            android:name="userId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_FollowList2Fragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_FollowList2Fragment_to_otherProfileFragment"
+            app:destination="@id/otherProfileFragment" />
+
     </fragment>
 
 

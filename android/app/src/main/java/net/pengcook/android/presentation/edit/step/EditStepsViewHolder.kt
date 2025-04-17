@@ -22,7 +22,6 @@ class EditStepsViewHolder(
     }
 
     fun bind(recipeStepMaking: RecipeStepMaking) {
-        println("viewholder: $recipeStepMaking")
         binding.recipeStepMaking = recipeStepMaking
 
         binding.etTimeAmount.etTimeAmountPicker.etSecond.addTextChangedListener {

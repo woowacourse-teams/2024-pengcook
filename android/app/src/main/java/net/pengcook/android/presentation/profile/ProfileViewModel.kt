@@ -10,6 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import net.pengcook.android.data.repository.auth.AuthorizationRepository
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.util.Event
 import javax.inject.Inject
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ProfileViewModel
     @Inject
     constructor(
+        private val authorizationRepository: AuthorizationRepository,
         private val profilePagingSourceFactory: ProfilePagingSourceFactory,
     ) : ViewModel(),
         ProfileButtonClickListener,
@@ -30,12 +32,14 @@ class ProfileViewModel
         val items: LiveData<PagingData<ProfileViewItem>>
             get() = _items
 
+        private var userId: Long? = null
+
         init {
             loadData()
+            fetchUserId()
         }
 
         fun loadData() {
-            println("loadData")
             val pager =
                 Pager(
                     config = PagingConfig(pageSize = 30, initialLoadSize = 30),
@@ -51,9 +55,16 @@ class ProfileViewModel
                 pager.flow
                     .cachedIn(viewModelScope)
                     .collect { pagingData ->
-                        println("collected")
                         _items.value = pagingData
                     }
+            }
+        }
+
+        private fun fetchUserId() {
+            viewModelScope.launch {
+                authorizationRepository.fetchUserInformation().onSuccess { userInfo ->
+                    userId = userInfo.id
+                }
             }
         }
 
@@ -70,7 +81,10 @@ class ProfileViewModel
         }
 
         override fun onFollowListBtnClick() {
-            _uiEvent.value = Event(ProfileUiEvent.NavigateToFollowList)
+            val currentUserId = userId
+            if (currentUserId != null) {
+                _uiEvent.value = Event(ProfileUiEvent.NavigateToFollowList(currentUserId))
+            }
         }
 
         override fun onCommentListBtnClick() {
@@ -94,7 +108,9 @@ sealed interface ProfileUiEvent {
         val recipe: RecipeForList,
     ) : ProfileUiEvent
 
-    data object NavigateToFollowList : ProfileUiEvent
+    data class NavigateToFollowList(
+        val userId: Long,
+    ) : ProfileUiEvent
 
     data object NavigateToCommentList : ProfileUiEvent
 }

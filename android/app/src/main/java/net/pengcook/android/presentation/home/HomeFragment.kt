@@ -44,13 +44,6 @@ class HomeFragment : Fragment() {
         initBinding()
         observing()
         initSwipeRefreshLayout()
-        binding.mainLogo.setOnClickListener {
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToOldStepMakingFragment(
-                    3,
-                ),
-            )
-        }
     }
 
     private fun initSwipeRefreshLayout() {
@@ -61,7 +54,6 @@ class HomeFragment : Fragment() {
 
     private fun refreshData() {
         viewModel.refreshFeed()
-
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
@@ -90,7 +82,6 @@ class HomeFragment : Fragment() {
 
                 is HomeEvent.NavigateToProfile -> {
                     val recipe = newEvent.recipe
-                    println("navigation to profile")
 
                     if (recipe.mine) {
                         val action =

@@ -1,6 +1,7 @@
 package net.pengcook.android.presentation.otherprofile.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import net.pengcook.android.ui.theme.PengCookTheme
 @Composable
 fun OtherProfileHeader(
     userProfile: UserProfile?,
+    onFollowListClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -43,20 +45,26 @@ fun OtherProfileHeader(
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
 
-                Text(
-                    text = userProfile?.introduction ?: "",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = Notosans.displayMedium,
-                    modifier = Modifier.padding(top = 2.dp),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                if (userProfile?.introduction != null && userProfile.introduction.isNotEmpty()) {
+                    Text(
+                        text = userProfile.introduction,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = Notosans.displayMedium,
+                        modifier = Modifier.padding(top = 2.dp),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
 
                 Text(
-                    text = "${userProfile?.follower ?: 0} followers • ${userProfile?.recipeCount ?: 0} recipes",
+                    text = "${userProfile?.follower ?: 0} followers ・ ${userProfile?.recipeCount ?: 0} recipes",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Notosans.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .clickable {
+                            onFollowListClick()
+                        },
                 )
             }
 
@@ -94,6 +102,32 @@ private fun PreviewOtherProfileHeader() {
     PengCookTheme {
         OtherProfileHeader(
             userProfile = userProfile,
+            onFollowListClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewOtherProfileHeaderNoIntroduction() {
+    val userProfile = UserProfile(
+        id = 1,
+        email = "",
+        username = "Username",
+        nickname = "Nickname",
+        image = "https://source.unsplash.com/random/200x200",
+        region = "Seoul",
+        introduction = "",
+        follower = 1323,
+        following = 100,
+        recipeCount = 100,
+        isFollow = true,
+    )
+
+    PengCookTheme {
+        OtherProfileHeader(
+            userProfile = userProfile,
+            onFollowListClick = {},
         )
     }
 }

@@ -36,10 +36,8 @@ class NewStepMakingViewModel
             viewModelScope.launch {
                 val response = recipeStepMakingRepository.fetchRecipeSteps()
                 response.onSuccess { recipeSteps ->
-                    println(recipeSteps)
                     _steps.value = (recipeSteps ?: emptyList()) as MutableList<RecipeStepMaking>?
                     _recipeId = recipeSteps?.get(0)?.recipeId ?: 0L
-                    println("recipeId on new : $recipeId")
                     _newStepMakingEvent.value = NewStepMakingEvent.OnFetchComplete
                 }
             }
