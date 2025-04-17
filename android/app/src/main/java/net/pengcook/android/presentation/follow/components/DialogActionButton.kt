@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2.components
+package net.pengcook.android.presentation.follow.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight

@@ -1,6 +1,6 @@
-package net.pengcook.android.presentation.follow2
+package net.pengcook.android.presentation.follow
 
-import net.pengcook.android.presentation.follow2.model.FollowInfo
+import net.pengcook.android.presentation.follow.model.FollowInfo
 
 data class FollowListState(
     val userId: Long = 0L,

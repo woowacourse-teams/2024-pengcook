@@ -341,7 +341,7 @@
 
     <fragment
         android:id="@+id/FollowList2Fragment"
-        android:name="net.pengcook.android.presentation.follow2.FollowList2Fragment"
+        android:name="net.pengcook.android.presentation.follow.FollowListFragment"
         android:label="fragment_follow_list"
         tools:layout="@layout/fragment_follow_list">
 

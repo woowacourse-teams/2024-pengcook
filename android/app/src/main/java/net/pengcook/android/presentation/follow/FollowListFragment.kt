@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2
+package net.pengcook.android.presentation.follow
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,8 @@ import net.pengcook.android.ui.theme.PengCookTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FollowList2Fragment : Fragment() {
-    private val args: FollowList2FragmentArgs by navArgs()
+class FollowListFragment : Fragment() {
+    private val args: FollowListFragmentArgs by navArgs()
     private val userId: Long by lazy { args.userId }
 
     @Inject
