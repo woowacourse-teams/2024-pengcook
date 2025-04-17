@@ -50,7 +50,6 @@ class RecipeMakingViewModel2
             get() = _thumbnailUri
         private var thumbnailTitle: String? = null
 
-        // step
         private val _currentStepImages: MutableLiveData<List<RecipeStepImage>> =
             MutableLiveData(
                 emptyList(),

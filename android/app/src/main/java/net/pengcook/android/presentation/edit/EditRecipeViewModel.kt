@@ -51,13 +51,11 @@ class EditRecipeViewModel
                 _uiEvent.value = Event(EditRecipeEvent.UnexpectedError)
             }
 
-        // thumbnail
         private val _thumbnailUri: MutableLiveData<Uri?> = MutableLiveData(null)
         val thumbnailUri: LiveData<Uri?>
             get() = _thumbnailUri
         private var thumbnailTitle: String? = null
 
-        // step
         private val _currentStepImages: MutableLiveData<List<RecipeStepImage>> =
             MutableLiveData(
                 emptyList(),

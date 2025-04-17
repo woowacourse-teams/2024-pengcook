@@ -54,7 +54,6 @@ class HomeFragment : Fragment() {
 
     private fun refreshData() {
         viewModel.refreshFeed()
-
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
