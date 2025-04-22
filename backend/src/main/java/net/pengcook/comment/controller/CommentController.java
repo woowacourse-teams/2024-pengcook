@@ -47,7 +47,13 @@ public class CommentController {
         commentService.deleteComment(commentId, userInfo);
     }
 
+    // TODO : 배포 후 삭제
     @GetMapping(value = "/comments/mine", produces = "application/vnd.pengcook.v1+json")
+    public List<CommentOfUserResponse> readCommentsOfMeV1Old(@LoginUser UserInfo userInfo) {
+        return commentService.readCommentsOfUserV1(userInfo);
+    }
+
+    @GetMapping(value = "/users/me/comments", produces = "application/vnd.pengcook.v1+json")
     public List<CommentOfUserResponse> readCommentsOfMeV1(@LoginUser UserInfo userInfo) {
         return commentService.readCommentsOfUserV1(userInfo);
     }

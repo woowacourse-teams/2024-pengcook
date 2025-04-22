@@ -203,7 +203,7 @@ class CommentControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "loki@pengcook.net")
     @DisplayName("로그인한 사용자의 댓글을 조회한다.")
-    void readCommentsOfUserV1() {
+    void readCommentsOfUserV1Old() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "로그인한 사용자의 댓글을 조회합니다.",
@@ -219,6 +219,29 @@ class CommentControllerTest extends RestDocsSetting {
                         )))
                 .accept("application/vnd.pengcook.v1+json")
                 .when().get("/comments/mine")
+                .then().log().all()
+                .body("size()", is(COMMENT_COUNT_OF_LOKI));
+    }
+
+    @Test
+    @WithLoginUser(email = "loki@pengcook.net")
+    @DisplayName("로그인한 사용자의 댓글을 조회한다.")
+    void readCommentsOfUserV1() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "로그인한 사용자의 댓글을 조회합니다.",
+                        "내 댓글 조회 API",
+                        responseFields(
+                                fieldWithPath("[]").description("댓글 목록"),
+                                fieldWithPath("[].commentId").description("댓글 아이디"),
+                                fieldWithPath("[].recipeId").description("레시피 아이디"),
+                                fieldWithPath("[].recipeTitle").description("레시피 제목"),
+                                fieldWithPath("[].recipeThumbnail").description("레시피 썸네일"),
+                                fieldWithPath("[].createdAt").description("작성 시간"),
+                                fieldWithPath("[].message").description("내용")
+                        )))
+                .accept("application/vnd.pengcook.v1+json")
+                .when().get("/users/me/comments")
                 .then().log().all()
                 .body("size()", is(COMMENT_COUNT_OF_LOKI));
     }
