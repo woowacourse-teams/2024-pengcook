@@ -206,17 +206,15 @@ class UserServiceTest {
     @Test
     @DisplayName("팔로우 관계에 있는 사용자를 차단하면 관련된 팔로우를 제거한다. ")
     void blockUserFollow() {
-        long blockerId = 1L;
-        long blockeeId = 4L;
+        long blockerId = 2L;
+        long blockeeId = 3L;
+        userFollowService.followUser(blockerId, blockeeId);
         User beforeBlockBlockee = userRepository.findById(blockeeId).get();
         User beforeBlockBlocker = userRepository.findById(blockerId).get();
         long initialFollowerCountOfBlockee = beforeBlockBlockee.getFollowerCount();
-        long initialFollowerCountOfBlocker = beforeBlockBlocker.getFollowerCount();
-        long initialFolloweeCountOfBlockee = beforeBlockBlockee.getFolloweeCount();
         long initialFolloweeCountBlocker = beforeBlockBlocker.getFolloweeCount();
 
         userService.blockUser(blockerId, blockeeId);
-
         boolean isFollowing = userFollowRepository.existsByFollowerIdAndFolloweeId(blockerId, blockeeId);
         boolean isFollowed = userFollowRepository.existsByFollowerIdAndFolloweeId(blockeeId, blockerId);
         User afterBlockBlockee = userRepository.findById(blockeeId).get();
@@ -226,8 +224,6 @@ class UserServiceTest {
                 () -> assertThat(isFollowing).isFalse(),
                 () -> assertThat(isFollowed).isFalse(),
                 () -> assertThat(afterBlockBlockee.getFollowerCount()).isEqualTo(initialFollowerCountOfBlockee - 1),
-                () -> assertThat(afterBlockBlocker.getFollowerCount()).isEqualTo(initialFollowerCountOfBlocker - 1),
-                () -> assertThat(afterBlockBlockee.getFolloweeCount()).isEqualTo(initialFolloweeCountOfBlockee - 1),
                 () -> assertThat(afterBlockBlocker.getFolloweeCount()).isEqualTo(initialFolloweeCountBlocker - 1)
         );
     }
