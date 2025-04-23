@@ -3,6 +3,7 @@ package net.pengcook.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
@@ -251,6 +252,17 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("차단할 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("중복된 사용자 차단을 허용하지 않는다")
+    void preventDuplicateUserBlock() {
+        long blockerId = 1L;
+        long blockeeId = 3L;
+        int blockCount = userBlockRepository.findAllByBlockerId(blockerId).size();
+
+        assertDoesNotThrow(() -> userService.blockUser(blockerId, blockeeId));
+        assertThat(userBlockRepository.findAllByBlockerId(blockerId).size()).isEqualTo(blockCount);
     }
 
     @Test

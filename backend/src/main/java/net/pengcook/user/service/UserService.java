@@ -3,6 +3,7 @@ package net.pengcook.user.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.ImageClientService;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -86,6 +88,10 @@ public class UserService {
         User blockee = userRepository.findById(blockeeId)
                 .orElseThrow(() -> new UserNotFoundException("차단할 사용자를 찾을 수 없습니다."));
 
+        if (userBlockRepository.existsByBlockerIdAndBlockeeId(blockerId, blockeeId)) {
+            log.info("중복된 차단 요청입니다. blocker: {} blockee: {}", blockerId, blockeeId);
+            return new UserBlockResponse(blocker, blockee);
+        }
         userFollowService.blockUserFollow(blockerId, blockeeId);
         UserBlock userBlock = userBlockRepository.save(new UserBlock(blocker, blockee));
 
