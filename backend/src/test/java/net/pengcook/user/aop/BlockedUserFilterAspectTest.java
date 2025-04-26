@@ -52,8 +52,8 @@ class BlockedUserFilterAspectTest {
                 .when()
                 .get("/recipes/{id}", 2L)
                 .then().log().all()
-                .statusCode(403)
-                .body("detail", equalTo("내가 차단한 사용자의 게시글을 이용할 수 없습니다."));
+                .statusCode(404)
+                .body("detail", equalTo("존재하지 않는 레시피입니다."));
     }
 
     @Test
@@ -64,7 +64,7 @@ class BlockedUserFilterAspectTest {
                 .when()
                 .get("/recipes/{id}", 1L)
                 .then().log().all()
-                .statusCode(403)
-                .body("detail", equalTo("나를 차단한 사용자의 게시글을 이용할 수 없습니다."));
+                .statusCode(404)
+                .body("detail", equalTo("존재하지 않는 레시피입니다."));
     }
 }

@@ -13,6 +13,8 @@ public class TestOwnable implements Ownable {
     @GeneratedValue
     private Long ownerId;
 
+    private String name;
+
     protected TestOwnable() {
     }
 
