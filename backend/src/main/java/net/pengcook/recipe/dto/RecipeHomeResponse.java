@@ -1,7 +1,7 @@
 package net.pengcook.recipe.dto;
 
 import java.time.LocalDateTime;
-import net.pengcook.user.domain.Ownable;
+import net.pengcook.block.domain.Ownable;
 
 public record RecipeHomeResponse(
         long recipeId,

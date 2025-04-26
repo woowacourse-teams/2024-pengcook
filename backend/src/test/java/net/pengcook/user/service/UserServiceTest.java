@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.block.domain.BlockeeGroup;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.user.domain.BlockeeGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.User;

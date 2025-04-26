@@ -1,12 +1,12 @@
-package net.pengcook.user.aop;
+package net.pengcook.block.aop;
 
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.user.domain.BlockeeGroup;
-import net.pengcook.user.domain.BlockerGroup;
-import net.pengcook.user.domain.Ownable;
+import net.pengcook.block.domain.BlockeeGroup;
+import net.pengcook.block.domain.BlockerGroup;
+import net.pengcook.block.domain.Ownable;
 import net.pengcook.user.exception.ForbiddenException;
 import net.pengcook.user.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,7 +24,7 @@ public class BlockedUserFilterAspect {
 
     private final UserService userService;
 
-    @Pointcut("execution(java.util.List<net.pengcook.user.domain.Ownable+> net.pengcook..repository..*(..))")
+    @Pointcut("execution(java.util.List<net.pengcook.block.domain.Ownable+> net.pengcook..repository..*(..))")
     public void repositoryMethodsReturningOwnableList() {
     }
 

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Set;
+import net.pengcook.block.domain.BlockeeGroup;
 import org.junit.jupiter.api.Test;
 
 class BlockeeGroupTest {

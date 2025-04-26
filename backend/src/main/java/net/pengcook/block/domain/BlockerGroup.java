@@ -1,10 +1,11 @@
-package net.pengcook.user.domain;
+package net.pengcook.block.domain;
 
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import net.pengcook.user.domain.User;
 
 @AllArgsConstructor
-public class BlockeeGroup {
+public class BlockerGroup {
 
     private final Set<User> users;
 
