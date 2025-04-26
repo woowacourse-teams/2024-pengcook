@@ -1,9 +1,12 @@
 package net.pengcook.user.service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.block.domain.BlackList;
 import net.pengcook.block.domain.BlockeeGroup;
 import net.pengcook.block.domain.BlockerGroup;
 import net.pengcook.comment.service.CommentService;
@@ -129,6 +132,18 @@ public class UserService {
 
         UserReport savedUserReport = userReportRepository.save(userReport);
         return new ReportResponse(savedUserReport);
+    }
+
+    @Transactional(readOnly = true)
+    public BlackList getBlackList(long blockerId) {
+        Stream<User> blockers = userBlockRepository.findAllByBlockerId(blockerId).stream()
+                .map(UserBlock::getBlockee);
+        Stream<User> blockees = userBlockRepository.findAllByBlockeeId(blockerId).stream()
+                .map(UserBlock::getBlocker);
+
+        return Stream.of(blockers, blockees)
+                .flatMap(Function.identity())
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlackList::new));
     }
 
     @Transactional(readOnly = true)
