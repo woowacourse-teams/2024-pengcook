@@ -7,8 +7,6 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.block.domain.BlackList;
-import net.pengcook.block.domain.BlockeeGroup;
-import net.pengcook.block.domain.BlockerGroup;
 import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.service.RecipeLikeService;
@@ -144,22 +142,6 @@ public class UserService {
         return Stream.of(blockers, blockees)
                 .flatMap(Function.identity())
                 .collect(Collectors.collectingAndThen(Collectors.toSet(), BlackList::new));
-    }
-
-    @Transactional(readOnly = true)
-    public BlockeeGroup getBlockeeGroup(long blockerId) {
-
-        return userBlockRepository.findAllByBlockerId(blockerId).stream()
-                .map(UserBlock::getBlockee)
-                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockeeGroup::new));
-    }
-
-    @Transactional(readOnly = true)
-    public BlockerGroup getBlockerGroup(long blockeeId) {
-
-        return userBlockRepository.findAllByBlockeeId(blockeeId).stream()
-                .map(UserBlock::getBlocker)
-                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockerGroup::new));
     }
 
     @Transactional

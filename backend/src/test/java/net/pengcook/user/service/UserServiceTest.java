@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
-import net.pengcook.block.domain.BlockeeGroup;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
@@ -303,20 +302,6 @@ class UserServiceTest {
         List<UserBlockResponse> userBlockResponses = userService.getBlockeesOf(blockerId);
 
         assertThat(userBlockResponses).containsExactlyElementsOf(expected);
-    }
-
-    @Test
-    @DisplayName("차단한 사용자들의 목록을 불러올 수 있다.")
-    void getBlockeeGroup() {
-        long blockerId = 1L;
-
-        BlockeeGroup blockeeGroup = userService.getBlockeeGroup(blockerId);
-
-        assertAll(
-                () -> assertThat(blockeeGroup.contains(2L)).isFalse(),
-                () -> assertThat(blockeeGroup.contains(3L)).isTrue(),
-                () -> assertThat(blockeeGroup.contains(4L)).isTrue()
-        );
     }
 
     @Test
