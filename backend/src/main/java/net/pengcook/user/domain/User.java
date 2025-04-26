@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
+@Builder
 public class User {
 
     @Id
