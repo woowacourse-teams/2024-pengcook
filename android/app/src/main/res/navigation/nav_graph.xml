@@ -357,6 +357,7 @@
         <action
             android:id="@+id/action_FollowList2Fragment_to_otherProfileFragment"
             app:destination="@id/otherProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/blockFragment"
