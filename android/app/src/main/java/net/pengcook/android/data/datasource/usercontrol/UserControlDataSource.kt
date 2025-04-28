@@ -1,5 +1,6 @@
 package net.pengcook.android.data.datasource.usercontrol
 
+import net.pengcook.android.data.model.usercontrol.BlockDataResponse
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
 import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
@@ -44,5 +45,14 @@ interface UserControlDataSource {
     suspend fun deleteFollower(
         accessToken: String,
         followUserRequest: FollowUserRequest,
+    ): Response<Unit>
+
+    suspend fun fetchBlockees(
+        accessToken: String,
+    ): Response<List<BlockDataResponse>>
+
+    suspend fun unblockUser(
+        accessToken: String,
+        blockeeId: Long,
     ): Response<Unit>
 }
