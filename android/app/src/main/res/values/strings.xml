@@ -108,7 +108,7 @@
     <string name="setting_menu_likes">Likes</string>
     <string name="setting_menu_comments">Comments</string>
     <string name="setting_menu_my_comments">My Comments</string>
-    <string name="setting_menu_blocked">Blocked</string>
+    <string name="setting_menu_blocked">Blocked List</string>
     <string name="setting_menu_language">Language</string>
     <string name="setting_menu_privacy_policy">Privacy Policy</string>
     <string name="setting_menu_privacy_terms">Terms of Use</string>
@@ -171,5 +171,7 @@
     <string name="alert_description_unfollow">Would you like to unfollow?</string>
     <string name="alert_title_remove_follower">Remove follower</string>
     <string name="alert_description_remove_follower">Would you like to remove this follower?</string>
+
+    <string name="block_unblock">Unblock</string>
 
 </resources>

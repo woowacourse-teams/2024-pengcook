@@ -173,4 +173,6 @@
     <string name="alert_title_remove_follower">팔로워 삭제</string>
     <string name="alert_description_remove_follower">팔로워를 삭제하시겠습니까?</string>
 
+    <string name="block_unblock">차단 해제</string>
+
 </resources>
