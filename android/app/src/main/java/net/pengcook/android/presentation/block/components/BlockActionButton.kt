@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.pengcook.android.R
 import net.pengcook.android.presentation.block.model.BlockeeInfo
-import net.pengcook.android.presentation.follow2.model.FollowInfo
 
 @Composable
 fun BlockActionButton(
