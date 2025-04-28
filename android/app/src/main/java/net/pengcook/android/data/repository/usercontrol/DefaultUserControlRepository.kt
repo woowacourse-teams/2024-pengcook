@@ -3,7 +3,10 @@ package net.pengcook.android.data.repository.usercontrol
 import kotlinx.coroutines.flow.first
 import net.pengcook.android.data.datasource.auth.SessionLocalDataSource
 import net.pengcook.android.data.datasource.usercontrol.UserControlDataSource
+import net.pengcook.android.data.model.usercontrol.BlockDataResponse
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
+import net.pengcook.android.data.model.usercontrol.BlockeeResponse
+import net.pengcook.android.data.model.usercontrol.BlockerResponse
 import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
 import net.pengcook.android.data.model.usercontrol.FollowerInfoResponse
@@ -11,6 +14,9 @@ import net.pengcook.android.data.model.usercontrol.ReportReasonResponse
 import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
 import net.pengcook.android.data.util.network.NetworkResponseHandler
+import net.pengcook.android.domain.model.usercontrol.BlockInfo
+import net.pengcook.android.domain.model.usercontrol.Blockee
+import net.pengcook.android.domain.model.usercontrol.Blocker
 import net.pengcook.android.domain.model.usercontrol.FollowInfo
 import net.pengcook.android.domain.model.usercontrol.FollowUserInfo
 import net.pengcook.android.presentation.core.model.ReportReason
@@ -109,6 +115,25 @@ class DefaultUserControlRepository
             body(response, RESPONSE_CODE_DELETE_SUCCESS)
         }
 
+        override suspend fun fetchBlockees(): Result<List<BlockInfo>> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = userControlDataSource.fetchBlockees(accessToken)
+                body(response, RESPONSE_CODE_SUCCESS).map { it.toBlockInfo() }
+            }
+
+        override suspend fun unblockUser(blockeeId: Long): Result<Unit> =
+            runCatching {
+                val accessToken =
+                    sessionLocalDataSource.sessionData.first().accessToken ?: throw RuntimeException()
+                val response = userControlDataSource.unblockUser(
+                    accessToken = accessToken,
+                    blockeeId = blockeeId,
+                )
+                body(response, RESPONSE_CODE_DELETE_SUCCESS)
+            }
+
         private fun ReportReasonResponse.toReportReason() =
             ReportReason(
                 reason = reason,
@@ -126,6 +151,32 @@ class DefaultUserControlRepository
                 userId = this.userId,
                 username = this.username,
                 profileImage = this.image,
+            )
+
+        private fun BlockDataResponse.toBlockInfo() =
+            BlockInfo(
+                blocker = this.blocker.toBlocker(),
+                blockee = this.blockee.toBlockee(),
+            )
+
+        private fun BlockerResponse.toBlocker() =
+            Blocker(
+                id = this.id,
+                email = this.email,
+                username = this.username,
+                nickname = this.nickname,
+                image = this.image,
+                region = this.region,
+            )
+
+        private fun BlockeeResponse.toBlockee() =
+            Blockee(
+                id = this.id,
+                email = this.email,
+                username = this.username,
+                nickname = this.nickname,
+                image = this.image,
+                region = this.region,
             )
 
         companion object {
