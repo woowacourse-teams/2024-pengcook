@@ -24,7 +24,7 @@ fun RoundedButton(
 ) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surfaceTint,
             contentColor = MaterialTheme.colorScheme.onPrimary,
