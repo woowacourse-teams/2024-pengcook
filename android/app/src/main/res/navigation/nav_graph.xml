@@ -210,8 +210,8 @@
             app:popUpTo="@id/commentFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_profileFragment_to_FollowList2Fragment"
-            app:destination="@id/FollowList2Fragment" />
+            android:id="@+id/action_profileFragment_to_FollowListFragment"
+            app:destination="@id/FollowListFragment" />
     </fragment>
 
     <fragment
@@ -338,12 +338,12 @@
             app:popUpTo="@id/commentFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_otherProfileFragment_to_FollowList2Fragment"
-            app:destination="@id/FollowList2Fragment" />
+            android:id="@+id/action_otherProfileFragment_to_FollowListFragment"
+            app:destination="@id/FollowListFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/FollowList2Fragment"
+        android:id="@+id/FollowListFragment"
         android:name="net.pengcook.android.presentation.follow.FollowListFragment"
         android:label="fragment_follow_list"
         tools:layout="@layout/fragment_follow_list">
@@ -352,11 +352,15 @@
             android:name="userId"
             app:argType="long" />
         <action
-            android:id="@+id/action_FollowList2Fragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            android:id="@+id/action_FollowListFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_FollowList2Fragment_to_otherProfileFragment"
-            app:destination="@id/otherProfileFragment" />
+            android:id="@+id/action_FollowListFragment_to_otherProfileFragment"
+            app:destination="@id/otherProfileFragment"
+            app:popUpTo="@id/otherProfileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

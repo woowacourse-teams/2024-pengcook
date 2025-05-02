@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.presentation.core.model.MyComment
+import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
 fun MyCommentsScreen(
@@ -57,27 +58,29 @@ fun MyCommentsScreen(
 @Preview
 @Composable
 private fun MyCommentsScreenPreview() {
-    MyCommentsScreen(
-        comments =
-            listOf(
-                MyComment(
-                    commentId = 1,
-                    recipeId = 101,
-                    recipeTitle = "Delicious Spaghetti",
-                    recipeImage = "https://source.unsplash.com/random/200x200",
-                    createdAt = "2024-12-15",
-                    message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    PengCookTheme {
+        MyCommentsScreen(
+            comments =
+                listOf(
+                    MyComment(
+                        commentId = 1,
+                        recipeId = 101,
+                        recipeTitle = "Delicious Spaghetti",
+                        recipeImage = "https://source.unsplash.com/random/200x200",
+                        createdAt = "2024-12-15",
+                        message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    ),
+                    MyComment(
+                        commentId = 1,
+                        recipeId = 101,
+                        recipeTitle = "Delicious Spaghetti",
+                        recipeImage = "https://source.unsplash.com/random/200x200",
+                        createdAt = "2024-12-15",
+                        message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                    ),
                 ),
-                MyComment(
-                    commentId = 1,
-                    recipeId = 101,
-                    recipeTitle = "Delicious Spaghetti",
-                    recipeImage = "https://source.unsplash.com/random/200x200",
-                    createdAt = "2024-12-15",
-                    message = "This recipe is amazing! I loved it. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                ),
-            ),
-        navigationBack = {},
-        navigateToDetail = {},
-    )
+            navigationBack = {},
+            navigateToDetail = {},
+        )
+    }
 }

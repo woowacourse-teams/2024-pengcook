@@ -80,7 +80,7 @@ class ProfileFragment : Fragment() {
                 }
 
                 is ProfileUiEvent.NavigateToFollowList -> {
-                    val action = ProfileFragmentDirections.actionProfileFragmentToFollowList2Fragment(
+                    val action = ProfileFragmentDirections.actionProfileFragmentToFollowListFragment(
                         userId = newEvent.userId,
                     )
                     findNavController().navigate(action)
