@@ -1,5 +1,6 @@
 package net.pengcook.android.data.remote.api
 
+import net.pengcook.android.data.model.usercontrol.BlockDataResponse
 import net.pengcook.android.data.model.usercontrol.BlockUserRequest
 import net.pengcook.android.data.model.usercontrol.FollowDataResponse
 import net.pengcook.android.data.model.usercontrol.FollowUserRequest
@@ -8,6 +9,7 @@ import net.pengcook.android.data.model.usercontrol.ReportResponse
 import net.pengcook.android.data.model.usercontrol.ReportUserRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.Header
@@ -51,6 +53,17 @@ interface UserControlService {
     suspend fun fetchFollowings(
         @Path("userId") userId: Long,
     ): Response<FollowDataResponse>
+
+    @GET("/users/me/blockees")
+    suspend fun fetchBlockees(
+        @Header("Authorization") accessToken: String,
+    ): Response<List<BlockDataResponse>>
+
+    @DELETE("/users/me/blockees/{blockeeId}")
+    suspend fun unblockUser(
+        @Header("Authorization") accessToken: String,
+        @Path("blockeeId") blockeeId: Long,
+    ): Response<Unit>
 
     @HTTP(method = "DELETE", path = "/user/follower", hasBody = true)
     suspend fun deleteFollower(

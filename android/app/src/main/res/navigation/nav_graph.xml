@@ -225,6 +225,9 @@
         <action
             android:id="@+id/action_settingFragment_to_myCommentFragment"
             app:destination="@id/myCommentFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_blockFragment"
+            app:destination="@id/blockFragment" />
     </fragment>
 
 
@@ -354,7 +357,18 @@
         <action
             android:id="@+id/action_FollowList2Fragment_to_otherProfileFragment"
             app:destination="@id/otherProfileFragment" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/blockFragment"
+        android:name="net.pengcook.android.presentation.block.BlockFragment"
+        android:label="fragment_block">
+
+        <action
+            android:id="@+id/action_blockFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:popUpTo="@id/settingFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 
