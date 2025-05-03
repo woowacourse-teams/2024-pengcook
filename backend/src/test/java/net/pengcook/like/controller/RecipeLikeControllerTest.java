@@ -26,7 +26,7 @@ class RecipeLikeControllerTest extends RestDocsSetting {
     @Test
     @WithLoginUser(email = "ela@pengcook.net")
     @DisplayName("게시글의 좋아요 여부를 조회한다.")
-    void readLike() {
+    void readLikeOld() {
         RestAssured.given(spec).log().all()
                 .filter(document(DEFAULT_RESTDOCS_PATH,
                         "특정 레시피의 좋아요 여부를 조회합니다.",
@@ -38,6 +38,26 @@ class RecipeLikeControllerTest extends RestDocsSetting {
                                 fieldWithPath("isLike").description("나의 좋아요 여부")
                         )))
                 .when().get("/likes/{recipeId}", 2L)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("isLike", is(true));
+    }
+
+    @Test
+    @WithLoginUser(email = "ela@pengcook.net")
+    @DisplayName("게시글의 좋아요 여부를 조회한다.")
+    void readLike() {
+        RestAssured.given(spec).log().all()
+                .filter(document(DEFAULT_RESTDOCS_PATH,
+                        "특정 레시피의 좋아요 여부를 조회합니다.",
+                        "레시피별 좋아요 여부 조회 API",
+                        pathParameters(
+                                parameterWithName("recipeId").description("레시피 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("isLike").description("나의 좋아요 여부")
+                        )))
+                .when().get("/users/me/likes/recipes/{recipeId}", 2L)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("isLike", is(true));

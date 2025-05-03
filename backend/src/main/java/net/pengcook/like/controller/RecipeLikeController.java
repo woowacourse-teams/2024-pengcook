@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/likes")
 @RequiredArgsConstructor
 public class RecipeLikeController {
 
     private final RecipeLikeService likeService;
 
-    @PostMapping
+    @PostMapping("/likes")
     public void updateLike(
             @LoginUser UserInfo userInfo,
             @RequestBody @Valid RecipeLikeRequest likeRequest
@@ -33,7 +31,16 @@ public class RecipeLikeController {
         likeService.deleteLike(userInfo, likeRequest.recipeId());
     }
 
-    @GetMapping("/{recipeId}")
+    // TODO : 베포 후 삭제
+    @GetMapping("/likes/{recipeId}")
+    public RecipeLikeResponse readLikeOld(
+            @LoginUser UserInfo userInfo,
+            @PathVariable("recipeId") long recipeId
+    ) {
+        return likeService.readLike(userInfo, recipeId);
+    }
+
+    @GetMapping("/users/me/likes/recipes/{recipeId}")
     public RecipeLikeResponse readLike(
             @LoginUser UserInfo userInfo,
             @PathVariable("recipeId") long recipeId
