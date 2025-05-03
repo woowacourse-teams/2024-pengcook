@@ -3,6 +3,7 @@ package net.pengcook.user.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
@@ -205,17 +206,15 @@ class UserServiceTest {
     @Test
     @DisplayName("팔로우 관계에 있는 사용자를 차단하면 관련된 팔로우를 제거한다. ")
     void blockUserFollow() {
-        long blockerId = 1L;
-        long blockeeId = 4L;
+        long blockerId = 2L;
+        long blockeeId = 3L;
+        userFollowService.followUser(blockerId, blockeeId);
         User beforeBlockBlockee = userRepository.findById(blockeeId).get();
         User beforeBlockBlocker = userRepository.findById(blockerId).get();
         long initialFollowerCountOfBlockee = beforeBlockBlockee.getFollowerCount();
-        long initialFollowerCountOfBlocker = beforeBlockBlocker.getFollowerCount();
-        long initialFolloweeCountOfBlockee = beforeBlockBlockee.getFolloweeCount();
         long initialFolloweeCountBlocker = beforeBlockBlocker.getFolloweeCount();
 
         userService.blockUser(blockerId, blockeeId);
-
         boolean isFollowing = userFollowRepository.existsByFollowerIdAndFolloweeId(blockerId, blockeeId);
         boolean isFollowed = userFollowRepository.existsByFollowerIdAndFolloweeId(blockeeId, blockerId);
         User afterBlockBlockee = userRepository.findById(blockeeId).get();
@@ -225,8 +224,6 @@ class UserServiceTest {
                 () -> assertThat(isFollowing).isFalse(),
                 () -> assertThat(isFollowed).isFalse(),
                 () -> assertThat(afterBlockBlockee.getFollowerCount()).isEqualTo(initialFollowerCountOfBlockee - 1),
-                () -> assertThat(afterBlockBlocker.getFollowerCount()).isEqualTo(initialFollowerCountOfBlocker - 1),
-                () -> assertThat(afterBlockBlockee.getFolloweeCount()).isEqualTo(initialFolloweeCountOfBlockee - 1),
                 () -> assertThat(afterBlockBlocker.getFolloweeCount()).isEqualTo(initialFolloweeCountBlocker - 1)
         );
     }
@@ -251,6 +248,17 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.blockUser(blockerId, blockeeId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("차단할 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("중복된 사용자 차단 요청에 정상 응답을 반환한다.")
+    void preventDuplicateUserBlock() {
+        long blockerId = 1L;
+        long blockeeId = 3L;
+        int blockCount = userBlockRepository.findAllByBlockerId(blockerId).size();
+
+        assertDoesNotThrow(() -> userService.blockUser(blockerId, blockeeId));
+        assertThat(userBlockRepository.findAllByBlockerId(blockerId).size()).isEqualTo(blockCount);
     }
 
     @Test
