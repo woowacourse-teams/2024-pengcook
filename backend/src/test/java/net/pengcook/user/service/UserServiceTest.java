@@ -251,7 +251,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("중복된 사용자 차단을 허용하지 않는다")
+    @DisplayName("중복된 사용자 차단 요청에 정상 응답을 반환한다.")
     void preventDuplicateUserBlock() {
         long blockerId = 1L;
         long blockeeId = 3L;
