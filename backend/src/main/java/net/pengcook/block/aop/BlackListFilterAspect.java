@@ -23,10 +23,10 @@ public class BlackListFilterAspect {
     private final UserService userService;
 
     @Pointcut("within(net.pengcook.block.repository.OwnableRepository+)")
-    public void OwnableRepositoryMethods() {
+    public void ownableRepositoryMethods() {
     }
 
-    @Around("OwnableRepositoryMethods()")
+    @Around("ownableRepositoryMethods()")
     public Object filterBlackList(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Object object = joinPoint.proceed();
