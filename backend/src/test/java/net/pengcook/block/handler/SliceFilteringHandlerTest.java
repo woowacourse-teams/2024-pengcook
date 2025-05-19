@@ -59,7 +59,9 @@ class SliceFilteringHandlerTest {
                 PageRequest.of(0, 2),
                 true
         );
-        User blocked = User.builder().id(1L).build();
+        User blocked = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blocked));
 
         Slice<Ownable> result = handler.handleFiltering(slice, blackList);
@@ -75,7 +77,9 @@ class SliceFilteringHandlerTest {
                 PageRequest.of(0, 2),
                 2
         );
-        User blocked = User.builder().id(1L).build();
+        User blocked = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blocked));
 
         Slice<Ownable> result = handler.handleFiltering(page, blackList);
@@ -91,7 +95,9 @@ class SliceFilteringHandlerTest {
                 PageRequest.of(0, 2),
                 false
         );
-        User blocked = User.builder().id(3L).build();
+        User blocked = User.builder()
+                .id(3L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blocked));
 
         Slice<Ownable> result = handler.handleFiltering(slice, blackList);
@@ -107,7 +113,9 @@ class SliceFilteringHandlerTest {
                 PageRequest.of(0, 2),
                 2
         );
-        User blocked = User.builder().id(3L).build();
+        User blocked = User.builder()
+                .id(3L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blocked));
 
         Slice<Ownable> result = handler.handleFiltering(page, blackList);

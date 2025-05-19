@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.pengcook.block.domain.BlackList;
+import net.pengcook.block.domain.Ownable;
 import net.pengcook.block.test.TestOwnable;
 import net.pengcook.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +43,10 @@ class CollectionFilteringHandlerTest {
     @Test
     @DisplayName("차단된 Ownable이 포함된 List는 필터링 한다")
     void handleFilteringWithListWhenBlocked() {
-        List<Object> list = new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L)));
-        User blockedUser = User.builder().id(1L).build();
+        List<Ownable> list = new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L)));
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(list, blackList);
@@ -58,7 +61,9 @@ class CollectionFilteringHandlerTest {
     @DisplayName("차단되지 않은 Ownable만 포함된 List는 필터링하지 않는다")
     void handleFilteringWithListWhenNotBlocked() {
         List<Object> list = new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L)));
-        User blockedUser = User.builder().id(3L).build();
+        User blockedUser = User.builder()
+                .id(3L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(list, blackList);
@@ -73,7 +78,9 @@ class CollectionFilteringHandlerTest {
     @DisplayName("차단된 Ownable이 포함된 Set은 필터링 한다")
     void handleFilteringWithSetWhenBlocked() {
         Set<Object> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
-        User blockedUser = User.builder().id(1L).build();
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(set, blackList);
@@ -88,7 +95,9 @@ class CollectionFilteringHandlerTest {
     @DisplayName("차단되지 않은 Ownable만 포함된 Set은 필터링하지 않는다")
     void handleFilteringWithSetWhenNotBlocked() {
         Set<Object> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
-        User blockedUser = User.builder().id(3L).build();
+        User blockedUser = User.builder()
+                .id(3L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(set, blackList);

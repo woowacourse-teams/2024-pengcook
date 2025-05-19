@@ -50,7 +50,9 @@ class OptionalFilteringHandlerTest {
     @DisplayName("Ownable이 아닌 값이 담긴 Optional은 그대로 반환한다")
     void handleFilteringWhenNonOwnableOptional() {
         Optional<String> notOwnableOptional = Optional.of("test");
-        User blockedUser = User.builder().id(1L).build();
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(notOwnableOptional, blackList);
@@ -62,7 +64,9 @@ class OptionalFilteringHandlerTest {
     @DisplayName("차단된 Ownable이 담긴 Optional은 빈 Optional로 반환한다")
     void handleFilteringWhenBlockedOwnable() {
         Optional<TestOwnable> optional = Optional.of(new TestOwnable(1L));
-        User blockedUser = User.builder().id(1L).build();
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(optional, blackList);
@@ -74,7 +78,9 @@ class OptionalFilteringHandlerTest {
     @DisplayName("차단되지 않은 Ownable이 담긴 Optional은 원본 Optional로 반환한다")
     void handleFilteringWhenAllowedOwnable() {
         Optional<TestOwnable> optional = Optional.of(new TestOwnable(2L));
-        User blockedUser = User.builder().id(1L).build();
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object result = handler.handleFiltering(optional, blackList);

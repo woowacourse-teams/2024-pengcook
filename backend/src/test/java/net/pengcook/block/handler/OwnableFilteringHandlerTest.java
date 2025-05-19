@@ -38,7 +38,9 @@ class OwnableFilteringHandlerTest {
     @DisplayName("차단한 사용자의 컨텐츠는 필터링 한다.")
     void handleFiltering() {
         TestOwnable ownable = new TestOwnable(1L);
-        User blockedUser = User.builder().id(1L).build();
+        User blockedUser = User.builder()
+                .id(1L)
+                .build();
         BlackList blackList = new BlackList(Set.of(blockedUser));
 
         Object actual = handler.handleFiltering(ownable, blackList);
