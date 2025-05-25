@@ -22,7 +22,6 @@ public class TestOwnable implements Ownable {
         this.ownerId = ownerId;
     }
 
-
     @Override
     public long getOwnerId() {
         return ownerId;

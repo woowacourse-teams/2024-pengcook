@@ -11,9 +11,15 @@ class BlackListTest {
 
     @Test
     void contains() {
-        User user1 = User.builder().id(1L).build();
-        User user2 = User.builder().id(2L).build();
-        User user3 = User.builder().id(3L).build();
+        User user1 = User.builder()
+                .id(1L)
+                .build();
+        User user2 = User.builder()
+                .id(2L)
+                .build();
+        User user3 = User.builder()
+                .id(3L)
+                .build();
 
         BlackList blackList = new BlackList(Set.of(user1, user2));
 
@@ -23,6 +29,4 @@ class BlackListTest {
                 () -> assertThat(blackList.contains(user3.getId())).isFalse()
         );
     }
-
-
 }
