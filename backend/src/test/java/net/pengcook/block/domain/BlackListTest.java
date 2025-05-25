@@ -5,11 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Set;
 import net.pengcook.user.domain.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class BlackListTest {
 
     @Test
+    @DisplayName("사용자가 차단 목록에 포함되어 있는지 여부를 알 수 있다.")
     void contains() {
         User user1 = User.builder()
                 .id(1L)
