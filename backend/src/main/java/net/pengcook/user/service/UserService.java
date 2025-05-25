@@ -133,10 +133,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public BlackList getBlackList(long blockerId) {
-        Stream<User> blockers = userBlockRepository.findAllByBlockerId(blockerId).stream()
+    public BlackList getBlackList(long userId) {
+        Stream<User> blockees = userBlockRepository.findAllByBlockerId(userId).stream()
                 .map(UserBlock::getBlockee);
-        Stream<User> blockees = userBlockRepository.findAllByBlockeeId(blockerId).stream()
+        Stream<User> blockers = userBlockRepository.findAllByBlockeeId(userId).stream()
                 .map(UserBlock::getBlocker);
 
         return Stream.of(blockers, blockees)
