@@ -21,8 +21,8 @@ class CollectionFilteringHandlerTest {
     @Test
     @DisplayName("Collection 타입을 지원한다")
     void canHandle() {
-        List<TestOwnable> list = new ArrayList<>(List.of(new TestOwnable(1L)));
-        Set<TestOwnable> set = new HashSet<>(Set.of(new TestOwnable(1L)));
+        List<Ownable> list = new ArrayList<>(List.of(new TestOwnable(1L)));
+        Set<Ownable> set = new HashSet<>(Set.of(new TestOwnable(1L)));
 
         assertAll(
                 () -> assertThat(handler.canHandle(list)).isTrue(),
@@ -60,7 +60,7 @@ class CollectionFilteringHandlerTest {
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 List는 필터링하지 않는다")
     void handleFilteringWithListWhenNotBlocked() {
-        List<Object> list = new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L)));
+        List<Ownable> list = new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L)));
         User blockedUser = User.builder()
                 .id(3L)
                 .build();
@@ -77,7 +77,7 @@ class CollectionFilteringHandlerTest {
     @Test
     @DisplayName("차단된 Ownable이 포함된 Set은 필터링 한다")
     void handleFilteringWithSetWhenBlocked() {
-        Set<Object> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
+        Set<Ownable> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
         User blockedUser = User.builder()
                 .id(1L)
                 .build();
@@ -94,7 +94,7 @@ class CollectionFilteringHandlerTest {
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 Set은 필터링하지 않는다")
     void handleFilteringWithSetWhenNotBlocked() {
-        Set<Object> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
+        Set<Ownable> set = new HashSet<>(Set.of(new TestOwnable(1L), new TestOwnable(2L)));
         User blockedUser = User.builder()
                 .id(3L)
                 .build();

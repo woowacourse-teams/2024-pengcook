@@ -25,12 +25,12 @@ class SliceFilteringHandlerTest {
     @Test
     @DisplayName("Slice와 Page를 처리한다")
     void canHandleSliceAndPage() {
-        Slice<TestOwnable> slice = new SliceImpl<>(
+        Slice<Ownable> slice = new SliceImpl<>(
                 List.of(new TestOwnable(1L)),
                 PageRequest.of(0, 1),
                 false
         );
-        PageImpl<TestOwnable> page = new PageImpl<>(
+        PageImpl<Ownable> page = new PageImpl<>(
                 List.of(new TestOwnable(1L)),
                 PageRequest.of(0, 1),
                 1
@@ -54,7 +54,7 @@ class SliceFilteringHandlerTest {
     @Test
     @DisplayName("차단된 Ownable이 포함된 Slice는 필터링 한다")
     void handleFilteringWithSliceWhenBlocked() {
-        Slice<TestOwnable> slice = new SliceImpl<>(
+        Slice<Ownable> slice = new SliceImpl<>(
                 new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
                 PageRequest.of(0, 2),
                 true
@@ -72,7 +72,7 @@ class SliceFilteringHandlerTest {
     @Test
     @DisplayName("차단된 Ownable이 포함된 Page는 필터링 한다")
     void handleFilteringWithPageWhenBlocked() {
-        Page<TestOwnable> page = new PageImpl<>(
+        Page<Ownable> page = new PageImpl<>(
                 new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
                 PageRequest.of(0, 2),
                 2
@@ -90,7 +90,7 @@ class SliceFilteringHandlerTest {
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 Slice는 필터링하지 않는다")
     void handleFilteringWithSliceWhenNotBlocked() {
-        Slice<TestOwnable> slice = new SliceImpl<>(
+        Slice<Ownable> slice = new SliceImpl<>(
                 new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
                 PageRequest.of(0, 2),
                 false
@@ -108,7 +108,7 @@ class SliceFilteringHandlerTest {
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 Page는 필터링하지 않는다")
     void handleFilteringWithPageWhenNotBlocked() {
-        PageImpl<TestOwnable> page = new PageImpl<>(
+        PageImpl<Ownable> page = new PageImpl<>(
                 new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
                 PageRequest.of(0, 2),
                 2

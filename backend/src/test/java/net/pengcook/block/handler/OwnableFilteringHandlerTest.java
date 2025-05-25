@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.Set;
 import net.pengcook.block.domain.BlackList;
+import net.pengcook.block.domain.Ownable;
 import net.pengcook.block.test.TestOwnable;
 import net.pengcook.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ class OwnableFilteringHandlerTest {
     @Test
     @DisplayName("Ownable 타입을 지원한다.")
     void canHandle() {
-        TestOwnable ownable = new TestOwnable(1L);
+        Ownable ownable = new TestOwnable(1L);
 
         boolean canHandle = handler.canHandle(ownable);
 
@@ -37,7 +38,7 @@ class OwnableFilteringHandlerTest {
     @Test
     @DisplayName("차단한 사용자의 컨텐츠는 필터링 한다.")
     void handleFiltering() {
-        TestOwnable ownable = new TestOwnable(1L);
+        Ownable ownable = new TestOwnable(1L);
         User blockedUser = User.builder()
                 .id(1L)
                 .build();
@@ -51,7 +52,7 @@ class OwnableFilteringHandlerTest {
     @Test
     @DisplayName("차단하지 않은 사용자의 컨텐츠는 필터링하지 않는다.")
     void handleFilteringNotBlocked() {
-        TestOwnable ownable = new TestOwnable(2L);
+        Ownable ownable = new TestOwnable(2L);
         User blockedUser = User.builder()
                 .id(1L)
                 .build();
