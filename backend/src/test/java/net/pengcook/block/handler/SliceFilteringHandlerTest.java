@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import net.pengcook.block.domain.BlackList;
 import net.pengcook.block.domain.Ownable;
-import net.pengcook.block.test.TestOwnable;
+import net.pengcook.block.test.BlockingTestEntity;
 import net.pengcook.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,12 @@ class SliceFilteringHandlerTest {
     @DisplayName("Slice와 Page를 처리한다")
     void canHandleSliceAndPage() {
         Slice<Ownable> slice = new SliceImpl<>(
-                List.of(new TestOwnable(1L)),
+                List.of(new BlockingTestEntity(1L)),
                 PageRequest.of(0, 1),
                 false
         );
         PageImpl<Ownable> page = new PageImpl<>(
-                List.of(new TestOwnable(1L)),
+                List.of(new BlockingTestEntity(1L)),
                 PageRequest.of(0, 1),
                 1
         );
@@ -55,7 +55,7 @@ class SliceFilteringHandlerTest {
     @DisplayName("차단된 Ownable이 포함된 Slice는 필터링 한다")
     void handleFilteringWithSliceWhenBlocked() {
         Slice<Ownable> slice = new SliceImpl<>(
-                new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
+                new ArrayList<>(List.of(new BlockingTestEntity(1L), new BlockingTestEntity(2L))),
                 PageRequest.of(0, 2),
                 true
         );
@@ -66,14 +66,14 @@ class SliceFilteringHandlerTest {
 
         Slice<Ownable> result = handler.handleFiltering(slice, blackList);
 
-        assertThat(result.getContent()).containsExactly(new TestOwnable(2L));
+        assertThat(result.getContent()).containsExactly(new BlockingTestEntity(2L));
     }
 
     @Test
     @DisplayName("차단된 Ownable이 포함된 Page는 필터링 한다")
     void handleFilteringWithPageWhenBlocked() {
         Page<Ownable> page = new PageImpl<>(
-                new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
+                new ArrayList<>(List.of(new BlockingTestEntity(1L), new BlockingTestEntity(2L))),
                 PageRequest.of(0, 2),
                 2
         );
@@ -84,14 +84,14 @@ class SliceFilteringHandlerTest {
 
         Slice<Ownable> result = handler.handleFiltering(page, blackList);
 
-        assertThat(result.getContent()).containsExactly(new TestOwnable(2L));
+        assertThat(result.getContent()).containsExactly(new BlockingTestEntity(2L));
     }
 
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 Slice는 필터링하지 않는다")
     void handleFilteringWithSliceWhenNotBlocked() {
         Slice<Ownable> slice = new SliceImpl<>(
-                new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
+                new ArrayList<>(List.of(new BlockingTestEntity(1L), new BlockingTestEntity(2L))),
                 PageRequest.of(0, 2),
                 false
         );
@@ -102,14 +102,14 @@ class SliceFilteringHandlerTest {
 
         Slice<Ownable> result = handler.handleFiltering(slice, blackList);
 
-        assertThat(slice.getContent()).containsExactly(new TestOwnable(1L), new TestOwnable(2L));
+        assertThat(slice.getContent()).containsExactly(new BlockingTestEntity(1L), new BlockingTestEntity(2L));
     }
 
     @Test
     @DisplayName("차단되지 않은 Ownable만 포함된 Page는 필터링하지 않는다")
     void handleFilteringWithPageWhenNotBlocked() {
         PageImpl<Ownable> page = new PageImpl<>(
-                new ArrayList<>(List.of(new TestOwnable(1L), new TestOwnable(2L))),
+                new ArrayList<>(List.of(new BlockingTestEntity(1L), new BlockingTestEntity(2L))),
                 PageRequest.of(0, 2),
                 2
         );
@@ -120,6 +120,6 @@ class SliceFilteringHandlerTest {
 
         Slice<Ownable> result = handler.handleFiltering(page, blackList);
 
-        assertThat(page.getContent()).containsExactly(new TestOwnable(1L), new TestOwnable(2L));
+        assertThat(page.getContent()).containsExactly(new BlockingTestEntity(1L), new BlockingTestEntity(2L));
     }
 }

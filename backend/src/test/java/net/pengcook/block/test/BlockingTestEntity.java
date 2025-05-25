@@ -7,7 +7,7 @@ import java.util.Objects;
 import net.pengcook.block.domain.Ownable;
 
 @Entity
-public class TestOwnable implements Ownable {
+public class BlockingTestEntity implements Ownable {
 
     @Id
     @GeneratedValue
@@ -15,10 +15,10 @@ public class TestOwnable implements Ownable {
 
     private String name;
 
-    protected TestOwnable() {
+    protected BlockingTestEntity() {
     }
 
-    public TestOwnable(Long ownerId) {
+    public BlockingTestEntity(Long ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -35,7 +35,7 @@ public class TestOwnable implements Ownable {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        TestOwnable ownable = (TestOwnable) object;
+        BlockingTestEntity ownable = (BlockingTestEntity) object;
         return Objects.equals(ownerId, ownable.ownerId);
     }
 

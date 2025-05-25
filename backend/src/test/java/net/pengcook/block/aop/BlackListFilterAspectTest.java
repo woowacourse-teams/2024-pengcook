@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.Set;
 import net.pengcook.authentication.annotation.WithLoginUser;
 import net.pengcook.authentication.annotation.WithLoginUserTest;
-import net.pengcook.block.test.TestOwnable;
-import net.pengcook.block.test.TestOwnableRepository;
+import net.pengcook.block.test.BlockingTestEntity;
+import net.pengcook.block.test.BlockingTestEntityRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +40,7 @@ class BlackListFilterAspectTest {
     private BlackListFilterAspect filterAspect;
 
     @Autowired
-    private TestOwnableRepository ownableRepository;
+    private BlockingTestEntityRepository blockingTestEntityRepository;
 
     @BeforeEach
     void setUp() {
@@ -100,7 +100,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("List<TestOwnable> findAll()")
         void findAll() throws Throwable {
-            List<TestOwnable> list = ownableRepository.findAll();
+            List<BlockingTestEntity> list = blockingTestEntityRepository.findAll();
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -109,7 +109,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Optional<TestOwnable> findById(Long id)")
         void findById() throws Throwable {
-            Optional<TestOwnable> optional = ownableRepository.findById(1L);
+            Optional<BlockingTestEntity> optional = blockingTestEntityRepository.findById(1L);
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -118,7 +118,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("List<TestOwnable> findAllById(Iterable<Long> ids)")
         void findAllById() throws Throwable {
-            List<TestOwnable> list = ownableRepository.findAllById(List.of(1L, 2L));
+            List<BlockingTestEntity> list = blockingTestEntityRepository.findAllById(List.of(1L, 2L));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -127,7 +127,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Page<TestOwnable> findAll(Pageable pageable)")
         void findAllWithPageable() throws Throwable {
-            Page<TestOwnable> page = ownableRepository.findAll(PageRequest.of(0, 10));
+            Page<BlockingTestEntity> page = blockingTestEntityRepository.findAll(PageRequest.of(0, 10));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -136,7 +136,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("List<TestOwnable> findAll(Sort sort)")
         void findAllWithSort() throws Throwable {
-            List<TestOwnable> list = ownableRepository.findAll(Sort.by("name"));
+            List<BlockingTestEntity> list = blockingTestEntityRepository.findAll(Sort.by("name"));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -150,7 +150,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("List<TestOwnable> findAllByOwnerIdInOrderByName(List<Long> ids)")
         void findAllByOwnerIdInOrderByName() throws Throwable {
-            List<TestOwnable> list = ownableRepository.findAllByOwnerIdInOrderByName(List.of(1L, 2L));
+            List<BlockingTestEntity> list = blockingTestEntityRepository.findAllByOwnerIdInOrderByName(List.of(1L, 2L));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -159,7 +159,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Set<TestOwnable> findByOwnerId(Long ownerId)")
         void findByOwnerId() throws Throwable {
-            Set<TestOwnable> set = ownableRepository.findByOwnerId(1L);
+            Set<BlockingTestEntity> set = blockingTestEntityRepository.findByOwnerId(1L);
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -168,7 +168,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Optional<TestOwnable> findByName(String name)")
         void findByName() throws Throwable {
-            Optional<TestOwnable> optional = ownableRepository.findByName("foo");
+            Optional<BlockingTestEntity> optional = blockingTestEntityRepository.findByName("foo");
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -177,7 +177,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("List<TestOwnable> findByOwnerIdIn(List<Long> ownerIds)")
         void findByOwnerIdIn() throws Throwable {
-            List<TestOwnable> list = ownableRepository.findByOwnerIdIn(List.of(1L, 2L, 3L));
+            List<BlockingTestEntity> list = blockingTestEntityRepository.findByOwnerIdIn(List.of(1L, 2L, 3L));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -186,7 +186,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Page<TestOwnable> searchByNameLike(String keyword, Pageable pageable)")
         void searchByNameLike() throws Throwable {
-            Page<TestOwnable> page = ownableRepository.searchByNameLike("bar", PageRequest.of(0, 5));
+            Page<BlockingTestEntity> page = blockingTestEntityRepository.searchByNameLike("bar", PageRequest.of(0, 5));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
@@ -195,7 +195,7 @@ class BlackListFilterAspectTest {
         @WithLoginUser(email = "loki@pengcook.net")
         @DisplayName("Slice<TestOwnable> searchByNameLike(String keyword, Pageable pageable)")
         void searchByName() throws Throwable {
-            Slice<TestOwnable> page = ownableRepository.searchByName("bar", PageRequest.of(0, 5));
+            Slice<BlockingTestEntity> page = blockingTestEntityRepository.searchByName("bar", PageRequest.of(0, 5));
 
             verify(filterAspect).filterBlackList(any(ProceedingJoinPoint.class));
         }
