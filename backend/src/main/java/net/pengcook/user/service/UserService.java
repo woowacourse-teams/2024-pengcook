@@ -1,9 +1,6 @@
 package net.pengcook.user.service;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import net.pengcook.authentication.domain.UserInfo;
 import net.pengcook.block.domain.BlackList;
@@ -134,14 +131,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public BlackList getBlackList(long userId) {
-        Stream<User> blockees = userBlockRepository.findAllByBlockerId(userId).stream()
-                .map(UserBlock::getBlockee);
-        Stream<User> blockers = userBlockRepository.findAllByBlockeeId(userId).stream()
-                .map(UserBlock::getBlocker);
+        List<User> blockees = userBlockRepository.findAllByBlockerId(userId).stream()
+                .map(UserBlock::getBlockee)
+                .toList();
+        List<User> blockers = userBlockRepository.findAllByBlockeeId(userId).stream()
+                .map(UserBlock::getBlocker)
+                .toList();
 
-        return Stream.of(blockers, blockees)
-                .flatMap(Function.identity())
-                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlackList::new));
+        return new BlackList(blockees, blockers);
     }
 
     @Transactional
