@@ -1,15 +1,14 @@
 package net.pengcook.user.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.block.domain.BlackList;
 import net.pengcook.comment.service.CommentService;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.service.RecipeLikeService;
 import net.pengcook.recipe.service.RecipeService;
-import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.User;
 import net.pengcook.user.domain.UserBlock;
 import net.pengcook.user.domain.UserFollow;
@@ -137,11 +136,15 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public BlockedUserGroup getBlockedUserGroup(long blockerId) {
-
-        return userBlockRepository.findAllByBlockerId(blockerId).stream()
+    public BlackList getBlackList(long userId) {
+        List<User> blockees = userBlockRepository.findAllByBlockerId(userId).stream()
                 .map(UserBlock::getBlockee)
-                .collect(Collectors.collectingAndThen(Collectors.toSet(), BlockedUserGroup::new));
+                .toList();
+        List<User> blockers = userBlockRepository.findAllByBlockeeId(userId).stream()
+                .map(UserBlock::getBlocker)
+                .toList();
+
+        return new BlackList(blockees, blockers);
     }
 
     @Transactional

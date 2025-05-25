@@ -1,4 +1,4 @@
-package net.pengcook.user.domain;
+package net.pengcook.block.domain;
 
 public interface Ownable {
 
