@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.block.domain.BlackList;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
@@ -302,6 +303,20 @@ class UserServiceTest {
         List<UserBlockResponse> userBlockResponses = userService.getBlockeesOf(blockerId);
 
         assertThat(userBlockResponses).containsExactlyElementsOf(expected);
+    }
+
+    @Test
+    @DisplayName("차단하거나 당한 사용자들의 목록을 불러올 수 있다.")
+    void getBlackList() {
+        long userId = 1L;
+
+        BlackList blackList = userService.getBlackList(userId);
+
+        assertAll(
+                () -> assertThat(blackList.contains(2L)).isFalse(),
+                () -> assertThat(blackList.contains(3L)).isTrue(),
+                () -> assertThat(blackList.contains(4L)).isTrue()
+        );
     }
 
     @Test
