@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!--        Remove comment if you want to test loki on local -->
+    <springProfile name="local">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+    <springProfile name="test">
+        <property name="LOKI_URL" value="http://localhost:3100/loki/api/v1/push"/>
+    </springProfile>
+    <springProfile name="dev">
+        <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+    </springProfile>
+    <springProfile name="prod">
+        <property name="LOKI_URL" value="http://loki:3100/loki/api/v1/push"/>
+    </springProfile>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>${LOKI_URL}</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=Pengcook,host=${HOSTNAME},level=%level</pattern>
+                <readMarkers>true</readMarkers>
+            </label>
+            <message class="com.github.loki4j.logback.JsonLayout"/>
+        </format>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <springProfile name="local">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <springProfile name="dev">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <springProfile name="prod">
+            <appender-ref ref="LOKI"/>
+        </springProfile>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
