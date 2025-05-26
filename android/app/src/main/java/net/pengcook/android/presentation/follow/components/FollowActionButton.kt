@@ -1,4 +1,4 @@
-package net.pengcook.android.presentation.follow2.components
+package net.pengcook.android.presentation.follow.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.pengcook.android.R
-import net.pengcook.android.presentation.follow2.model.FollowInfo
+import net.pengcook.android.presentation.follow.model.FollowInfo
 
 @Composable
 fun FollowActionButton(
