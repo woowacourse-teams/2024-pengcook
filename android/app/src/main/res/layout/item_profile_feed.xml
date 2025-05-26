@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="net.pengcook.android.presentation.core.model.RecipeForList" />
+
+        <variable
+            name="profileFeedClickListener"
+            type="net.pengcook.android.presentation.profile.ProfileFeedClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <ImageView
+            android:id="@+id/iv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/image_placeholder_background"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:imageUrl="@{recipe.thumbnail}"
+            android:onClick="@{() -> profileFeedClickListener.onClick(recipe)}"
+            android:scaleType="centerCrop"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

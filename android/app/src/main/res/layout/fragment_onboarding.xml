@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.pengcook.android.presentation.onboarding.OnboardingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.onboarding.OnboardingFragment">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="160dp"
+            android:contentDescription="@string/onboarding_logo_image_desc"
+            android:src="@drawable/logo_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/ll_introduction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/iv_logo">
+
+            <TextView
+                android:id="@+id/tv_app_title"
+                style="@style/Headline.H1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onboarding_app_title"
+                android:textSize="40sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_app_introduction" />
+
+            <TextView
+                android:id="@+id/tv_app_introduction"
+                style="@style/Body.Regular.B1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/onboarding_introduction"
+                app:layout_constraintTop_toBottomOf="@id/tv_app_title" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <include
+                android:id="@+id/btn_google_sign_in"
+                layout="@layout/item_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:buttonClickListener="@{viewModel}"
+                app:content="@{@string/onboarding_google_sign_in}"
+                app:icon="@{@drawable/ic_google_40}" />
+
+            <TextView
+                android:id="@+id/tv_terms"
+                style="@style/Body.Regular.B2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/onboarding_terms"
+                android:textColor="@color/onboarding_contract_text"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/pb_onboarding"
+            layout="@layout/item_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

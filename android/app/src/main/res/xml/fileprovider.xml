@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <root-path
+        name="root"
+        path="." />
+
+    <cache-path
+        name="cache"
+        path="." /> <!--Context.getCacheDir() 내부 저장소-->
+    <files-path
+        name="files"
+        path="." /> <!--Context.getFilesDir() 내부 저장소-->
+
+    <external-path
+        name="external"
+        path="." />  <!--  Environment.getExternalStorageDirectory() 외부 저장소-->
+    <external-cache-path
+        name="external-cache"
+        path="." /> <!--  Context.getExternalCacheDir() 외부 저장소-->
+    <external-files-path
+        name="images"
+        path="Pictures" /> <!--  Context.getExternalFilesDir() 외부 저장소-->
+</paths>

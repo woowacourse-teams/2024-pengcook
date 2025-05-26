@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="buttonText"
+            type="String" />
+
+        <variable
+            name="enabled"
+            type="Boolean" />
+
+        <variable
+            name="buttonClickListener"
+            type="net.pengcook.android.presentation.signup.BottomButtonClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_bottom_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BasicButton.RadiusButton.BottomButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Next"
+            android:textColor="@color/button_text_color"
+            android:background="@drawable/selector_bottom_button"
+            android:enabled="@{enabled}"
+            android:text="@{buttonText}"
+            android:onClick="@{() -> buttonClickListener.onConfirm()}"
+            android:paddingVertical="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="categoryName"
+            type="String" />
+
+        <variable
+            name="viewModel"
+            type="net.pengcook.android.presentation.category.list.CategoryFeedListViewModel" />
+
+        <variable
+            name="adapter"
+            type="net.pengcook.android.presentation.category.list.CategoryFeedListAdapter" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.category.list.CategoryFeedListFragment">
+
+        <include
+            android:id="@+id/abl_category_feed_list"
+            layout="@layout/item_appbar_with_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:appbarEventListener="@{viewModel}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:title="@{categoryName}" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_category_feed_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="12dp"
+            android:adapter="@{adapter}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/abl_category_feed_list"
+            tools:listitem="@layout/item_feed" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

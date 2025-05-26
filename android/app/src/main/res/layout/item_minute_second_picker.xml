@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="minute"
+            type="String" />
+
+        <variable
+            name="second"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_form_hour_title"
+            style="@style/Body.Regular.B2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <EditText
+            android:id="@+id/et_minute"
+            style="@style/Body.Regular.B2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_radius_outlined"
+            android:gravity="center"
+            android:hint="Minute"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:maxLength="2"
+            android:padding="16dp"
+            android:text="@={minute}"
+            app:layout_constraintEnd_toStartOf="@id/et_second"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_form_hour_title"
+            tools:hint="Minute" />
+
+        <EditText
+            android:id="@+id/et_second"
+            style="@style/Body.Regular.B2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_radius_outlined"
+            android:gravity="center"
+            android:hint="Second"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:maxLength="2"
+            android:padding="16dp"
+            android:text="@={second}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_minute"
+            app:layout_constraintTop_toTopOf="@id/et_minute"
+            tools:hint="Second" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

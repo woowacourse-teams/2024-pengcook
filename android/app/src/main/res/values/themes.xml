@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Pengcook" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Pengcook" parent="Base.Theme.Pengcook">
+        <item name="android:windowBackground">@color/screen_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
+    </style>
+
+    <style name="Theme.Pengcook.Splash" parent="Theme.Pengcook">
+        <item name="android:windowSplashScreenBackground" tools:targetApi="S">@color/yellow_regular</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@drawable/pengcook_splash_icon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="S">@color/yellow_weak</item>
+    </style>
+</resources>

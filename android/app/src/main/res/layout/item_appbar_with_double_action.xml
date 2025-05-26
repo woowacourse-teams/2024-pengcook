@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="leftIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="rightIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="appbarEventListener"
+            type="net.pengcook.android.presentation.core.listener.AppbarDoubleActionEventListener" />
+    </data>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_action"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:layout_anchor="@+id/abl_default"
+            android:background="@color/screen_background">
+
+            <ImageView
+                android:id="@+id/iv_left_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> appbarEventListener.navigationAction()}"
+                android:padding="16dp"
+                android:src="@{leftIcon}"
+                app:tint="@color/icon_color"
+                tools:src="@drawable/ic_back_24" />
+
+            <TextView
+                style="@style/Headline.H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/notosans_medium"
+                android:gravity="center"
+                android:text="@{title}"
+                tools:text="Sign Up" />
+
+            <ImageView
+                android:id="@+id/iv_right_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> appbarEventListener.customAction()}"
+                android:src="@{rightIcon}"
+                tools:src="@drawable/ic_back_24" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</layout>

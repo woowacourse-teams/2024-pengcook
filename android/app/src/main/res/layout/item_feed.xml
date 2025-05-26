@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="net.pengcook.android.presentation.core.model.RecipeForList" />
+
+        <variable
+            name="eventListener"
+            type="net.pengcook.android.presentation.home.listener.FeedItemEventListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@color/screen_background"
+        android:onClick="@{() -> eventListener.onNavigateToDetail(recipe)}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/home_item_background">
+
+            <!-- Recipe image -->
+            <ImageView
+                android:id="@+id/recipe_image"
+                android:layout_width="0dp"
+                android:layout_height="343dp"
+                android:background="@color/image_placeholder_background"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{recipe.thumbnail}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- User profile picture -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profile_image"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="12dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{recipe.user.profile}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/roundImageView"
+                tools:src="@drawable/ic_launcher_background" />
+
+            <!-- Username -->
+            <TextView
+                android:id="@+id/username"
+                style="@style/Body.Medium.B2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="32dp"
+                android:maxLines="1"
+                android:text="@{recipe.user.username}"
+                app:layout_constraintBottom_toBottomOf="@id/profile_image"
+                app:layout_constraintEnd_toStartOf="@id/btn_menu"
+                app:layout_constraintStart_toEndOf="@id/profile_image"
+                app:layout_constraintTop_toTopOf="@id/profile_image"
+                tools:text="Username" />
+
+            <ImageButton
+                android:id="@+id/btn_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/item_feed_padding"
+                android:background="@android:color/transparent"
+                android:contentDescription="TODO"
+                android:padding="12dp"
+                android:src="@drawable/ic_menu_dots"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/profile_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/profile_image" />
+
+
+            <!-- Recipe title -->
+            <TextView
+                android:id="@+id/recipe_title"
+                style="@style/Headline.H4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/item_feed_padding"
+                android:text="@{recipe.title}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_image"
+                tools:text="Homemade Gimbap" />
+
+            <!-- Like icon and count -->
+            <ImageView
+                android:id="@+id/like_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="@dimen/item_feed_padding"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/icon_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@id/recipe_title" />
+
+            <TextView
+                android:id="@+id/like_count"
+                style="@style/Body.Regular.B3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:count="@{recipe.likeCount}"
+                app:layout_constraintBottom_toBottomOf="@id/like_icon"
+                app:layout_constraintStart_toEndOf="@id/like_icon"
+                app:layout_constraintTop_toTopOf="@id/like_icon"
+                tools:text="1.2k" />
+
+            <!-- Comment icon and count -->
+            <ImageView
+                android:id="@+id/comment_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:tint="@color/icon_color"
+                android:src="@drawable/ic_comment"
+                app:layout_constraintStart_toEndOf="@id/like_count"
+                app:layout_constraintTop_toBottomOf="@id/recipe_title" />
+
+            <TextView
+                android:id="@+id/comment_count"
+                style="@style/Body.Regular.B3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:count="@{recipe.commentCount}"
+                app:layout_constraintBottom_toBottomOf="@id/comment_icon"
+                app:layout_constraintStart_toEndOf="@id/comment_icon"
+                app:layout_constraintTop_toTopOf="@id/comment_icon"
+                tools:text="800" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Headline">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
+    </style>
+    <style name="Headline.H1" parent="Headline">
+        <item name="android:textSize">28sp</item>
+    </style>
+    <style name="Headline.H2" parent="Headline">
+        <item name="android:textSize">24sp</item>
+    </style>
+    <style name="Headline.H3" parent="Headline">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="Headline.H4" parent="Headline">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Headline.H5" parent="Headline">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Body">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:fontFamily">@font/notosans_regular</item>
+    </style>
+    <style name="Body.Regular" parent="Body">
+        <item name="android:fontFamily">@font/notosans_regular</item>
+    </style>
+    <style name="Body.Medium" parent="Body">
+        <item name="android:fontFamily">@font/notosans_medium</item>
+    </style>
+    <style name="Body.Regular.B1" parent="Body.Regular">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Body.Regular.B2" parent="Body.Regular">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="Body.Regular.B3" parent="Body.Regular">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Body.Medium.B1" parent="Body.Medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Body.Medium.B2" parent="Body.Medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

@@ -1,0 +1,161 @@
+<resources>
+    <string name="app_name">PengCook</string>
+    <string name="hello_blank_fragment">hello world</string>
+
+    <string name="likes_format_singular">%d like</string>
+    <string name="likes_format_plural">%,d likes</string>
+    <string name="likes_format_zero"> </string>
+    <string name="time_format_required">%d mins</string>
+    <string name="separator">,&#160;</string>
+
+    <string name="onboarding_app_title">PengCook</string>
+    <string name="onboarding_introduction">Easy Cook! Your Recipe!</string>
+    <string name="onboarding_google_sign_in">Sign In with Google</string>
+    <string name="onboarding_terms">
+        By creating an account, you agree to our&lt;br/>
+        &lt;a href="https://pengcook.net/terms-of-service">&lt;u>Terms&lt;/u>&lt;/a> and &lt;a href="https://pengcook.net/privacy-policy">&lt;u>Privacy Policy&lt;/u>&lt;/a>.
+    </string>
+    <string name="onboarding_logo_image_desc">logo</string>
+    <string name="onboarding_network_error">An unexpected error occurred.</string>
+    <string name="detail_error">Failed action</string>
+    <string name="signup_appbar">Sign Up</string>
+    <string name="signup_username_title">Username</string>
+    <string name="signup_username_hint">Enter Your Username</string>
+    <string name="signup_nickname_title">Nickname</string>
+    <string name="signup_nickname_hint">Enter Your Nickname</string>
+    <string name="signup_birth_date_title">Birth Date</string>
+    <string name="signup_country_title">Country</string>
+    <string name="signup_button_next">Next</string>
+    <string name="signup_message_invalid_username">Choose a username between 2 and 30 characters.</string>
+    <string name="signup_message_duplicated_username">The username already exists.</string>
+    <string name="signup_message_form_not_completed">Please complete the form.</string>
+    <string name="signup_message_invalid_nickname">Choose a nickname between 1 and 30 characters.</string>
+    <string name="signup_message_error">Server error occurred.</string>
+    <string-array name="signup_countries">
+        <item>Belgian</item>
+        <item>Chinese</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Indian</item>
+        <item>Indonesian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Turkish</item>
+        <item>Thai</item>
+        <item>Vietnam</item>
+    </string-array>
+
+    <string name="edit_recipe_title">Write Recipe title</string>
+
+    <string name="category_appbar">Category</string>
+
+    <string name="search_appbar">Search</string>
+    <string name="search_searchbar_hint">Search</string>
+    <string name="search_message_failure">Search Error Occurred.</string>
+
+    <string name="step_making_hint">Write Recipe Introduction</string>
+    <string name="making_step_title">Steps</string>
+    <string name="step_format">step %s</string>
+    <string name="making_appbar_title">Recipe Summary</string>
+    <string name="making_form_recipe_title">Recipe Title</string>
+    <string name="making_form_category">Category</string>
+    <string name="making_form_ingredient">Ingredient</string>
+    <string name="making_form_time_required">Time Required</string>
+    <string name="making_form_difficulty">Difficulty</string>
+    <string name="making_form_introduction">Introduction</string>
+
+    <string name="edit_appbar_title">Edit Recipe</string>
+
+    <string name="making_write_recipe_title">Write Recipe Title</string>
+    <string name="making_write_ingredient">Write Ingredient</string>
+    <string name="making_write_category">Write Categories</string>
+    <string name="making_write_recipe_introduction">Write Recipe Introduction</string>
+    <string name="making_next">Next</string>
+    <string name="making_step">Make Recipe Step</string>
+    <string name="making_next_step">Next Step</string>
+
+    <string name="making_uploading_image">Uploading Image...</string>
+    <string name="back_making_step">Back</string>
+    <string name="camera_permission_granted">Camera permission is allowed.</string>
+    <string name="camera_permission_needed">Camera permission is required.</string>
+    <string name="image_selection_failed">Image selection failed.</string>
+    <string name="photo_capture_failed">Failed to take a picture.</string>
+    <string name="image_upload_success">Image upload successful!</string>
+    <string name="image_upload_failed">Image upload failed!</string>
+    <string name="image_deletion_success">Step image has been deleted successfully.</string>
+    <string name="select_image_source">Select image source</string>
+    <string name="take_photo">Take a photo with a camera</string>
+    <string name="choose_from_album">Select photos from album</string>
+    <string name="making_upload">Upload</string>
+    <string name="making_saving_successful">Recipe has been successfully saved.</string>
+    <string name="making_saving_failure">Recipe has not been saved.</string>
+    <string name="making_restoration_successful">Recipe has been successfully restored.</string>
+    <string name="making_steps_title">Steps</string>
+    <string name="making_add_step_images">Add Images</string>
+
+    <string name="profile_numeric_indicators">%,d followers ・ %,d recipes</string>
+    <string name="profile_appbar_title">Profile</string>
+    <string name="profile_edit_button">Edit Profile</string>
+    <string name="profile_setting_button">Setting</string>
+    <string name="profile_follower_button">Remove</string>
+    <string name="profile_following_button">Unfollow</string>
+    <string name="profile_search_hint">Search</string>
+
+    <string name="setting_appbar_title">Setting</string>
+    <string name="setting_menu_likes">Likes</string>
+    <string name="setting_menu_comments">Comments</string>
+    <string name="setting_menu_blocked">Blocked</string>
+    <string name="setting_menu_language">Language</string>
+    <string name="setting_menu_privacy_policy">Privacy Policy</string>
+    <string name="setting_menu_privacy_terms">Terms of Use</string>
+    <string name="setting_menu_account">Account</string>
+    <string name="setting_account_appbar_title">Account</string>
+    <string name="setting_edit_profile_appbar_title">Edit Profile</string>
+    <string name="setting_edit_profile_save_button">Save</string>
+    <string name="making_warning_form_not_completed">Fill in the forms completely.</string>
+    <string name="making_warning_post_failure">Recipe Post Failed.</string>
+    <string name="following">Following</string>
+
+    <string name="comment_hint">Comment</string>
+    <string name="comment_empty_list">There is no comment yet.</string>
+    <string name="comment_appbar_title">Comments</string>
+    <string name="comment_format_none">No Comments</string>
+    <string name="comment_format_singular">Comment %d</string>
+    <string name="comment_format_plural">Comments %,d</string>
+
+    <string name="detail_appbar_title">Description</string>
+    <string name="detail_start">Start</string>
+    <string name="detail_comment_format_singular">%d Comment</string>
+    <string name="detail_comment_format_plural">%,d Comments</string>
+    <string name="setting_account_sign_out">Sign out</string>
+    <string name="setting_account_delete_account">Delete Account</string>
+
+    <string name="step_appbar_title">Recipe Step</string>
+
+    <string name="comment_reported">User %s Reported</string>
+    <string name="comment_deleted">Comment Deleted</string>
+    <string name="comment_menu_username">UserName :</string>
+    <string name="comment_menu_comment_content">Comment :</string>
+    <string name="comment_menu_delete">Delete my comment</string>
+    <string name="comment_menu_block">Block</string>
+    <string name="comment_menu_report">Report</string>
+
+    <string name="edit_step_appbar_title">Edit Step</string>
+
+    <string name="report_title_bottom">Please choose the reason of report</string>
+    <string name="report_title_dialog">Choose reason of report</string>
+    <string name="recipe_report_success">Recipe Report Success</string>
+    <string name="alert_message_fill_form">Please fill this form</string>
+    <string name="comments">Comments</string>
+    <string name="category_culinary_classwars">Culinary Class Wars</string>
+    <string name="category_korean">Korean</string>
+    <string name="category_japanese">Japanese</string>
+    <string name="category_chinese">Chinese</string>
+    <string name="comment_delete">Delete my comment</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_report">Report</string>
+    <string name="menu_block">Block</string>
+
+</resources>

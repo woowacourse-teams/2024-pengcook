@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="adapter"
+            type="net.pengcook.android.presentation.setting.SettingItemRecyclerViewAdapter" />
+
+        <variable
+            name="viewModel"
+            type="net.pengcook.android.presentation.setting.account.AccountSettingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.setting.account.AccountSettingFragment">
+
+        <include
+            android:id="@+id/abl_account_setting"
+            layout="@layout/item_appbar_with_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:appbarEventListener="@{viewModel}"
+            app:icon="@{@drawable/ic_back_24}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/setting_account_appbar_title}" />
+
+        <include
+            android:id="@+id/rv_account_setting"
+            layout="@layout/item_setting_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:adapter="@{adapter}"
+            app:layout_constraintTop_toBottomOf="@id/abl_account_setting" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

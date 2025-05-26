@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="selectedValue"
+            type="String" />
+
+        <variable
+            name="spinnerItemChangeListener"
+            type="net.pengcook.android.presentation.core.listener.SpinnerItemChangeListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_radius_outlined">
+
+        <Spinner
+            android:id="@+id/sp_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            bind:selectedValue="@{selectedValue}"
+            bind:spinnerItemChangeListener="@{spinnerItemChangeListener}"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="16dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.net.Uri" />
+
+        <variable
+            name="imageUri"
+            type="Uri" />
+
+        <variable
+            name="recipeMakingEventListener"
+            type="net.pengcook.android.presentation.making.listener.RecipeMakingEventListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{() -> recipeMakingEventListener.onAddImage()}">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/makingRecipeThumbnail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/bg_photo_with_plus"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:imageUri="@{imageUri}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

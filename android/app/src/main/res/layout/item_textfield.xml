@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="hintContent"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/et_default"
+            style="@style/Body.Regular.B2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_radius_outlined"
+            android:hint="@{hintContent}"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="16dp"
+            android:text="@={content}"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:hint="Hint" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

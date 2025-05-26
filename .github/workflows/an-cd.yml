@@ -1,0 +1,106 @@
+name: Android CD Pipeline
+
+on:
+  push:
+    branches:
+      - an/release
+
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Set Up Gradlew Permissions
+        run: chmod +x ./android/gradlew
+
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          echo $GOOGLE_SERVICES_JSON > ./android/app/google-services.json
+
+      - name: Set up environment variable for BuildConfig
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          BASE_URL_DEV: ${{ secrets.BASE_URL_DEV }}
+          BASE_URL_API: ${{ secrets.BASE_URL_API }}
+        run: |
+          echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
+          echo base_url_dev=\"$BASE_URL_DEV\" >> ./android/local.properties
+          echo base_url_release=\"$BASE_URL_API\" >> ./android/local.properties
+
+      - name: Build and test
+        run: ./gradlew build test
+        working-directory: ./android
+
+  distribute:
+    name: Deploy aab file to Google Play Console
+    needs: build_test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          echo $GOOGLE_SERVICES_JSON > ./android/app/google-services.json
+
+      - name: Set up environment variable for BuildConfig
+        env:
+          GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+          BASE_URL_DEV: ${{ secrets.BASE_URL_DEV }}
+          BASE_URL_API: ${{ secrets.BASE_URL_API }}
+        run: |
+          echo google_web_client_id=\"$GOOGLE_WEB_CLIENT_ID\" > ./android/local.properties
+          echo base_url_dev=\"$BASE_URL_DEV\" >> ./android/local.properties
+          echo base_url_release=\"$BASE_URL_API\" >> ./android/local.properties
+
+      - name: Bumping Version
+        uses: chkfung/android-version-actions@v1.2.3
+        with:
+          gradlePath: ./android/app/build.gradle.kts
+          versionCode: ${{ github.run_number }}
+
+      - name: Assemble Release Bundle
+        run: ./gradlew bundleRelease
+        working-directory: ./android
+
+      - name: Sign app aab
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: ./android/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+
+      - name: Set Up Authorization with Google Play
+        run: echo '${{ secrets.ANDROID_PLAY_AUTH }}' > service_account.json
+
+      - name: Deploy AAB to Google Play Console
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.ANDROID_PLAY_AUTH }}
+          packageName: net.pengcook.android
+          releaseFiles: ./android/app/build/outputs/bundle/release/app-release.aab
+          track: production
+          status: draft

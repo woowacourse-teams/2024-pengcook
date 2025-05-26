@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="net.pengcook.android.presentation.core.model.Comment" />
+
+        <variable
+            name="eventHandler"
+            type="net.pengcook.android.presentation.comment.CommentEventHandler" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_user_border"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_profile_user"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            android:translationZ="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_user_profile"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/shape_profile_user"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/penguin"
+            app:imageUrl="@{comment.userImage}"
+            android:translationZ="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:textStyle="bold"
+            app:tint="@color/text_color"
+            android:translationZ="1dp"
+            android:text="@{comment.userName}"
+            app:layout_constraintStart_toEndOf="@id/iv_user_profile"
+            app:layout_constraintTop_toTopOf="@id/iv_user_profile"
+            tools:text="Crong" />
+
+        <TextView
+            android:id="@+id/tv_mention_comment"
+            app:layout_constraintStart_toStartOf="@id/tv_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="20dp"
+            android:text="@{comment.message}"
+            tools:text="It was great!! I think the cabbage is replaceable with lettuce."
+            android:textColor="@color/text_color"
+            android:layout_marginTop="6dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/iv_comment_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/icon_color"
+            app:layout_constraintTop_toTopOf="@id/tv_user_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
+            android:src="@drawable/ic_menu_dots"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{() -> eventHandler.onMenuButtonClicked(comment)}"
+            android:padding="4dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mention_comment"
+            android:layout_marginTop="12dp"
+            app:dividerColor="@color/gray_300"
+            android:layout_width="0dp"
+            android:layout_height="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

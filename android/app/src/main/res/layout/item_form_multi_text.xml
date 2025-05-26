@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="hintContent"
+            type="String" />
+
+        <variable
+            name="content"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_form_text_title"
+            style="@style/Body.Regular.B2"
+            android:fontFamily="@font/notosans_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            bind:stepCount="@{title}"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <include
+            android:id="@+id/et_form_text_content"
+            layout="@layout/item_multi_textfield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:content="@={content}"
+            app:hintContent="@{hintContent}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_form_text_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
