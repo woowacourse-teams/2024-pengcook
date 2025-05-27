@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.pengcook.authentication.domain.JwtTokenManager;
 import net.pengcook.authentication.domain.TokenPayload;
 import net.pengcook.authentication.domain.TokenType;
@@ -21,6 +22,7 @@ import net.pengcook.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LoginService {
@@ -107,6 +109,7 @@ public class LoginService {
         try {
             return firebaseAuth.verifyIdToken(idToken);
         } catch (FirebaseAuthException e) {
+            log.error(e.getMessage(), e);
             throw new FirebaseTokenException("구글 인증에 실패했습니다.");
         }
     }
