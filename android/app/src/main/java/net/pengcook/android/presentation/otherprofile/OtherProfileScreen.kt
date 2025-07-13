@@ -5,16 +5,8 @@ package net.pengcook.android.presentation.otherprofile
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,12 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.pengcook.android.domain.model.profile.UserProfile
+import net.pengcook.android.presentation.core.components.TopBarWithNavigation
 import net.pengcook.android.presentation.core.model.RecipeForList
 import net.pengcook.android.presentation.core.model.User
 import net.pengcook.android.presentation.otherprofile.components.ButtonRow
 import net.pengcook.android.presentation.otherprofile.components.ImageGrid
 import net.pengcook.android.presentation.otherprofile.components.OtherProfileHeader
-import net.pengcook.android.ui.theme.Notosans
 import net.pengcook.android.ui.theme.PengCookTheme
 
 @Composable
@@ -64,29 +56,11 @@ fun OtherProfileScreen(
     val username = state.userProfile?.username ?: "Username"
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = username,
-                        style = Notosans.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                ),
-                navigationIcon = {
-                    IconButton(onClick = { onAction(OtherProfileAction.OnBackClick) }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimary,
-                        )
-                    }
-                },
+            TopBarWithNavigation(
+                name = username,
+                navigation = { onAction(OtherProfileAction.OnBackClick) },
             )
         },
-        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -111,7 +85,10 @@ fun OtherProfileScreen(
                 onBlockClick = { onAction(OtherProfileAction.OnBlockClick) },
                 modifier = Modifier.padding(top = 14.dp),
             )
-            ImageGrid(state.recipes)
+            ImageGrid(
+                recipes = state.recipes,
+                modifier = Modifier.padding(vertical = 12.dp),
+            )
         }
     }
 }
@@ -119,7 +96,7 @@ fun OtherProfileScreen(
 @Preview
 @Composable
 private fun OtherProfileScreenPreview() {
-    val recipes = List(12) {
+    val recipes = List(50) {
         RecipeForList(
             recipeId = it.toLong(),
             title = "Recipe $it",
