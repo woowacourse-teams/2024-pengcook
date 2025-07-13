@@ -29,6 +29,8 @@ import net.pengcook.android.ui.theme.PengCookTheme
 fun FollowListScreenRoot(
     viewModel: FollowListViewModel,
     navigateBack: () -> Unit,
+    navigateToProfile: () -> Unit,
+    navigateToOtherProfile: (Long) -> Unit,
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
 
@@ -37,6 +39,8 @@ fun FollowListScreenRoot(
         onAction = { action ->
             when (action) {
                 FollowListAction.NavigateBack -> navigateBack()
+                FollowListAction.NavigateToProfile -> navigateToProfile()
+                is FollowListAction.NavigateToOtherProfile -> navigateToOtherProfile(action.userId)
                 else -> viewModel.onAction(action)
             }
         },
@@ -93,6 +97,13 @@ fun FollowListScreen(
             if (state.selectedTabIndex == 0) {
                 FollowInfoList(
                     followers = state.followers,
+                    onUserClick = {
+                        if (state.userId == it) {
+                            onAction(FollowListAction.NavigateToProfile)
+                        } else {
+                            onAction(FollowListAction.NavigateToOtherProfile(it))
+                        }
+                    },
                     onButtonClick = { onAction(FollowListAction.ShowDialog(it)) },
                     isMine = state.isMine,
                     isFollowerInfo = true,
@@ -100,6 +111,13 @@ fun FollowListScreen(
             } else {
                 FollowInfoList(
                     followers = state.followings,
+                    onUserClick = {
+                        if (state.userId == it) {
+                            onAction(FollowListAction.NavigateToProfile)
+                        } else {
+                            onAction(FollowListAction.NavigateToOtherProfile(it))
+                        }
+                    },
                     onButtonClick = { onAction(FollowListAction.ShowDialog(it)) },
                     isMine = state.isMine,
                     isFollowerInfo = false,

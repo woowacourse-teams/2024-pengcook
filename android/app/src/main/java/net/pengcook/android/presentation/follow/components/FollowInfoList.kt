@@ -13,6 +13,7 @@ import net.pengcook.android.ui.theme.PengCookTheme
 @Composable
 fun FollowInfoList(
     followers: List<FollowInfo>,
+    onUserClick: (Long) -> Unit,
     onButtonClick: (Long) -> Unit,
     isMine: Boolean,
     isFollowerInfo: Boolean,
@@ -24,6 +25,7 @@ fun FollowInfoList(
         items(followers) { follower ->
             FollowInfoItem(
                 followInfo = follower,
+                onClick = { onUserClick(follower.userId) },
                 modifier = Modifier.padding(horizontal = 16.dp),
                 actionContent = {
                     if (isMine) {
@@ -52,6 +54,7 @@ private fun FollowersListPreview() {
     PengCookTheme {
         FollowInfoList(
             followers = followers,
+            onUserClick = {},
             onButtonClick = {},
             isMine = true,
             isFollowerInfo = true,
@@ -72,6 +75,7 @@ private fun FollowersListPreviewDarkMode() {
     PengCookTheme {
         FollowInfoList(
             followers = followers,
+            onUserClick = {},
             onButtonClick = {},
             isMine = true,
             isFollowerInfo = true,

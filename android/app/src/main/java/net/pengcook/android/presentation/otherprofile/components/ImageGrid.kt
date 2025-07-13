@@ -18,11 +18,13 @@ import net.pengcook.android.presentation.core.components.UrlImage
 import net.pengcook.android.presentation.core.model.RecipeForList
 
 @Composable
-fun ImageGrid(recipes: List<RecipeForList>) {
+fun ImageGrid(
+    recipes: List<RecipeForList>,
+    modifier: Modifier = Modifier,
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 12.dp),
+        modifier = modifier.fillMaxSize(),
     ) {
         items(recipes) { recipe ->
             UrlImage(
