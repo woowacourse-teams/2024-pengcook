@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import net.pengcook.android.ui.theme.PengCookTheme
@@ -35,6 +36,8 @@ class FollowListFragment : Fragment() {
                     FollowListScreenRoot(
                         viewModel = viewModel,
                         navigateBack = { navigateBack() },
+                        navigateToProfile = { navigateToProfile() },
+                        navigateToOtherProfile = { targetId -> navigateToOtherProfile(targetId) },
                     )
                 }
             }
@@ -42,5 +45,15 @@ class FollowListFragment : Fragment() {
 
     private fun navigateBack() {
         requireActivity().onBackPressedDispatcher.onBackPressed()
+    }
+
+    private fun navigateToProfile() {
+        val action = FollowListFragmentDirections.actionFollowListFragmentToProfileFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToOtherProfile(targetId: Long) {
+        val action = FollowListFragmentDirections.actionFollowListFragmentToOtherProfileFragment(targetId)
+        findNavController().navigate(action)
     }
 }

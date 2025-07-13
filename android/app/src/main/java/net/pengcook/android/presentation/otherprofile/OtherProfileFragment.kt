@@ -48,7 +48,7 @@ class OtherProfileFragment : Fragment() {
 
     private fun navigateToFollowList() {
         val action =
-            OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowList2Fragment(userId)
+            OtherProfileFragmentDirections.actionOtherProfileFragmentToFollowListFragment(userId)
         findNavController().navigate(action)
     }
 }

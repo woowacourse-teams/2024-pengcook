@@ -10,15 +10,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.pengcook.android.data.repository.profile.ProfileRepository
 import net.pengcook.android.data.repository.usercontrol.UserControlRepository
-import net.pengcook.android.presentation.profile.ProfilePagingSourceFactory
 
 class OtherProfileViewModel
     @AssistedInject
     constructor(
-        private val profilePagingSourceFactory: ProfilePagingSourceFactory,
         private val profileRepository: ProfileRepository,
         private val userControlRepository: UserControlRepository,
         @Assisted private val userId: Long,
@@ -26,6 +25,7 @@ class OtherProfileViewModel
         private var _state = MutableStateFlow(OtherProfileState())
         val state: StateFlow<OtherProfileState> = _state
             .onStart {
+                checkIsMyUserId()
                 fetchProfile()
                 fetchRecipes()
             }.stateIn(
@@ -73,6 +73,20 @@ class OtherProfileViewModel
 
                 else -> Unit
             }
+        }
+
+        private fun checkIsMyUserId() {
+            viewModelScope.launch {
+                _state.update {
+                    it.copy(
+                        isMine = isMyUserId(),
+                    )
+                }
+            }
+        }
+
+        private suspend fun isMyUserId(): Boolean {
+            return profileRepository.fetchMyUserInformation().getOrThrow().id == userId
         }
 
         companion object {

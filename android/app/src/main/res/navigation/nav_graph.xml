@@ -353,14 +353,10 @@
             app:argType="long" />
         <action
             android:id="@+id/action_FollowListFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-            app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_FollowListFragment_to_otherProfileFragment"
-            app:destination="@id/otherProfileFragment"
-            app:popUpTo="@id/otherProfileFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/otherProfileFragment" />
     </fragment>
 
     <fragment

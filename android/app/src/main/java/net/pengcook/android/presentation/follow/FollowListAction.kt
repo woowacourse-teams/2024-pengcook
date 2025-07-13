@@ -12,4 +12,8 @@ sealed interface FollowListAction {
     data class OnDeleteFollower(val userId: Long) : FollowListAction
 
     data class OnUnfollow(val userId: Long) : FollowListAction
+
+    data object NavigateToProfile : FollowListAction
+
+    data class NavigateToOtherProfile(val userId: Long) : FollowListAction
 }

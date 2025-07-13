@@ -158,17 +158,21 @@ class FollowListViewModel
 
         private fun checkIsMyUserId() {
             viewModelScope.launch {
+                val userId = fetchUserId()
                 _state.update {
                     it.copy(
-                        isMine = isMyUserId(),
+                        userId = userId,
+                        isMine = isMyUserId(userId),
                     )
                 }
             }
         }
 
-        private suspend fun isMyUserId(): Boolean {
-            return authorizationRepository.fetchUserInformation().getOrThrow().id == profileOwnerId
+        private  fun isMyUserId(userId: Long): Boolean {
+            return userId == profileOwnerId
         }
+
+    private suspend fun fetchUserId(): Long = authorizationRepository.fetchUserInformation().getOrThrow().id
 
         companion object {
             fun provideFactory(
