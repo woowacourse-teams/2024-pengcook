@@ -73,7 +73,7 @@ private fun FollowInfoItemPreview() {
         profileImageUrl = "https://randomuser.me/api/portraits",
         username = "Username",
     )
-    
+
     PengCookTheme {
         FollowInfoItem(
             followInfo = followInfo,

@@ -168,11 +168,11 @@ class FollowListViewModel
             }
         }
 
-        private  fun isMyUserId(userId: Long): Boolean {
+        private fun isMyUserId(userId: Long): Boolean {
             return userId == profileOwnerId
         }
 
-    private suspend fun fetchUserId(): Long = authorizationRepository.fetchUserInformation().getOrThrow().id
+        private suspend fun fetchUserId(): Long = authorizationRepository.fetchUserInformation().getOrThrow().id
 
         companion object {
             fun provideFactory(
