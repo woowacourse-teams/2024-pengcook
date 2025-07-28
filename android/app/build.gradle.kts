@@ -20,14 +20,14 @@ android {
     properties.load(FileInputStream(rootProject.file("local.properties")))
 
     namespace = "net.pengcook.android"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "net.pengcook.android"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 18
-        versionName = "1.0.0"
+        targetSdk = 36
+        versionCode = 28
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
