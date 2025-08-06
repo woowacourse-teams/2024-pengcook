@@ -11,8 +11,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.pengcook.block.domain.Ownable;
 import net.pengcook.recipe.domain.Recipe;
-import net.pengcook.user.domain.Ownable;
 import net.pengcook.user.domain.User;
 
 @Entity

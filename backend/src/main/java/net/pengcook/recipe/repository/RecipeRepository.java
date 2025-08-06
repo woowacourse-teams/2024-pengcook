@@ -2,13 +2,13 @@ package net.pengcook.recipe.repository;
 
 import jakarta.annotation.Nullable;
 import java.util.List;
+import net.pengcook.block.repository.OwnableRepository;
 import net.pengcook.recipe.domain.Recipe;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface RecipeRepository extends OwnableRepository<Recipe, Long> {
 
     @Query("""
             SELECT recipe

@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
 import net.pengcook.authentication.domain.UserInfo;
+import net.pengcook.block.domain.BlackList;
 import net.pengcook.comment.repository.CommentRepository;
 import net.pengcook.image.service.ImageClientService;
 import net.pengcook.like.repository.RecipeLikeRepository;
 import net.pengcook.recipe.repository.RecipeRepository;
-import net.pengcook.user.domain.BlockedUserGroup;
 import net.pengcook.user.domain.Reason;
 import net.pengcook.user.domain.Type;
 import net.pengcook.user.domain.User;
@@ -314,16 +314,16 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("차단한 사용자들의 목록을 불러올 수 있다.")
-    void getBlockedUserGroup() {
-        long blockerId = 1L;
+    @DisplayName("차단하거나 당한 사용자들의 목록을 불러올 수 있다.")
+    void getBlackList() {
+        long userId = 1L;
 
-        BlockedUserGroup blockedUserGroup = userService.getBlockedUserGroup(blockerId);
+        BlackList blackList = userService.getBlackList(userId);
 
         assertAll(
-                () -> assertThat(blockedUserGroup.isBlocked(2L)).isFalse(),
-                () -> assertThat(blockedUserGroup.isBlocked(3L)).isTrue(),
-                () -> assertThat(blockedUserGroup.isBlocked(4L)).isTrue()
+                () -> assertThat(blackList.contains(2L)).isFalse(),
+                () -> assertThat(blackList.contains(3L)).isTrue(),
+                () -> assertThat(blackList.contains(4L)).isTrue()
         );
     }
 

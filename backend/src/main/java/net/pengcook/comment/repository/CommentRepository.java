@@ -1,10 +1,10 @@
 package net.pengcook.comment.repository;
 
 import java.util.List;
+import net.pengcook.block.repository.OwnableRepository;
 import net.pengcook.comment.domain.Comment;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends OwnableRepository<Comment, Long> {
 
     List<Comment> findAllByRecipeId(long recipeId);
 
