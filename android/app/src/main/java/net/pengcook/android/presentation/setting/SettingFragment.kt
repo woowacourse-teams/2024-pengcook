@@ -65,8 +65,8 @@ class SettingFragment :
             MenuItem.COMMENTS -> {}
             MenuItem.BLOCKED -> findNavController().navigate(R.id.action_settingFragment_to_blockFragment)
             MenuItem.LANGUAGE -> {}
-            MenuItem.PRIVACY_POLICY -> navigateToBrowser("https://pengcook.net/privacy-policy")
-            MenuItem.TERMS_OF_USE -> navigateToBrowser("https://pengcook.net/terms-of-service")
+            MenuItem.PRIVACY_POLICY -> navigateToBrowser("https://pengcook.org/privacy-policy")
+            MenuItem.TERMS_OF_USE -> navigateToBrowser("https://pengcook.org/terms-of-service")
             MenuItem.ACCOUNT ->
                 findNavController().navigate(R.id.action_settingFragment_to_accountSettingFragment)
 
