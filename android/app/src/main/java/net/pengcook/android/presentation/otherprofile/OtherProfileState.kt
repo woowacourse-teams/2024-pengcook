@@ -8,5 +8,6 @@ data class OtherProfileState(
     val isLoading: Boolean = true,
     val userProfile: UserProfile? = null,
     val isFollowing: Boolean = false,
+    val isBlocked: Boolean = false,
     val recipes: List<RecipeForList> = emptyList(),
 )
