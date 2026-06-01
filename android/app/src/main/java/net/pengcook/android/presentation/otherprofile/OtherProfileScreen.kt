@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,8 +28,15 @@ fun OtherProfileScreenRoot(
     viewModel: OtherProfileViewModel,
     navigateBack: () -> Unit,
     navigateToFollowList: () -> Unit,
+    onBlocked: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.isBlocked) {
+        if (state.isBlocked) {
+            onBlocked()
+        }
+    }
 
     OtherProfileScreen(
         state = state,
@@ -37,8 +45,7 @@ fun OtherProfileScreenRoot(
                 is OtherProfileAction.OnBackClick -> navigateBack()
                 is OtherProfileAction.OnFollowClick -> viewModel.onAction(action)
                 is OtherProfileAction.OnUnfollowClick -> viewModel.onAction(action)
-                is OtherProfileAction.OnBlockClick -> { // TODO
-                }
+                is OtherProfileAction.OnBlockClick -> viewModel.onAction(action)
 
                 is OtherProfileAction.OnFollowListClick -> navigateToFollowList()
 
