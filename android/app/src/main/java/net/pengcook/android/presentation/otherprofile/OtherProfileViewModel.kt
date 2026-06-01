@@ -67,6 +67,14 @@ class OtherProfileViewModel
                     }
                 }
 
+                is OtherProfileAction.OnBlockClick -> {
+                    viewModelScope.launch {
+                        userControlRepository.blockUser(userId).onSuccess {
+                            _state.value = state.value.copy(isBlocked = true)
+                        }
+                    }
+                }
+
                 is OtherProfileAction.OnBackClick -> {
                     // navigateBack()
                 }
